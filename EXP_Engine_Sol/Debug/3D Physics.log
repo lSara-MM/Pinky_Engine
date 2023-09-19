@@ -2,4 +2,13 @@
   ModuleRenderer3D.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\corecrt_math_defines.h(28,1): warning C4005: 'M_PI': macro redefinition
 C:\Users\andreuns\Documents\GitHub\Motors\EXP_Engine_Sol\SDL\include\SDL_stdinc.h(619): message : see previous definition of 'M_PI'
-  3D Physics.vcxproj -> C:\Users\andreuns\Documents\GitHub\Motors\EXP_Engine_Sol\Debug\Pinky_Engine.exe
+C:\Users\andreuns\Documents\GitHub\Motors\EXP_Engine_Sol\ModuleRenderer3D.cpp(172,24): error C2065: 'io': undeclared identifier
+C:\Users\andreuns\Documents\GitHub\Motors\EXP_Engine_Sol\ModuleRenderer3D.cpp(172,47): error C2065: 'io': undeclared identifier
+C:\Users\andreuns\Documents\GitHub\Motors\EXP_Engine_Sol\ModuleRenderer3D.cpp(172,63): error C2660: 'glViewport': function does not take 2 arguments
+C:\Users\andreuns\Documents\GitHub\Motors\EXP_Engine_Sol\SDL\include\SDL_opengl.h(931,23): message : see declaration of 'glViewport'
+  ModuleWindow.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\corecrt_math_defines.h(28,1): warning C4005: 'M_PI': macro redefinition
+C:\Users\andreuns\Documents\GitHub\Motors\EXP_Engine_Sol\SDL\include\SDL_stdinc.h(619): message : see previous definition of 'M_PI'
+C:\Users\andreuns\Documents\GitHub\Motors\EXP_Engine_Sol\ModuleWindow.cpp(30,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\andreuns\Documents\GitHub\Motors\EXP_Engine_Sol\ModuleWindow.cpp(31,14): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+  Generating Code...

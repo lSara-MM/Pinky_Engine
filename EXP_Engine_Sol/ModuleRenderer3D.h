@@ -3,6 +3,10 @@
 #include "Globals.h"
 #include "Light.h"
 
+#include "ImGui/imgui.h"
+#include "ImGui/backends/imgui_impl_sdl.h"
+#include "ImGui/backends/imgui_impl_opengl3.h"
+
 #include "MathGeoLib/include/Math/float3x3.h"
 #include "MathGeoLib/include/Math/float4x4.h"
 #include "Primitive.h"
@@ -33,4 +37,9 @@ public:
 	
 	//You won't need this after using Frustum
 	mat4x4 ProjectionMatrix;
+
+	// 2nd window state
+	bool show_demo_window;
+	bool show_another_window;
+	ImVec4 clear_color;
 };
