@@ -156,6 +156,8 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
+	update_status ret = UPDATE_CONTINUE;
+
 	Grid.Render();
 
 	// Start the Dear ImGui frame
@@ -190,6 +192,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		ImGui::End();
 	}
 
+	ret = Toolbar();
+
 	// Rendering
 	ImGui::Render();
 	glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
@@ -198,7 +202,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	SDL_GL_SwapWindow(App->window->window);
 
-	return UPDATE_CONTINUE;
+	return ret;
 }
 
 // Called before quitting
@@ -229,4 +233,82 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+update_status ModuleRenderer3D::Toolbar()
+{
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("File"))
+		{
+			if (ImGui::MenuItem("New")) {}
+			if (ImGui::MenuItem("Open", "Ctrl+O")) {}
+			if (ImGui::BeginMenu("Open Recent"))
+			{
+				ImGui::MenuItem("fish_hat.c");
+				ImGui::MenuItem("fish_hat.inl");
+				ImGui::MenuItem("fish_hat.h");
+				ImGui::EndMenu();
+			}
+			if (ImGui::MenuItem("Save", "Ctrl+S")) {}
+			if (ImGui::MenuItem("Save As..")) {}
+
+			ImGui::Separator();
+			if (ImGui::BeginMenu("Options"))
+			{
+				static bool enabled = true;
+				ImGui::MenuItem("Enabled", "", &enabled);
+				
+				ImGui::BeginChild("child", ImVec2(0, 60), true);
+				for (int i = 0; i < 10; i++)
+					ImGui::Text("Scrolling Text %d", i);
+				ImGui::EndChild();
+				
+				static float f = 0.5f;
+				static int n = 0;
+				ImGui::SliderFloat("Value", &f, 0.0f, 1.0f);
+				ImGui::InputFloat("Input", &f, 0.1f);
+				ImGui::Combo("Combo", &n, "Yes\0No\0Maybe\0\0");
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Colors"))
+			{
+				float sz = ImGui::GetTextLineHeight();
+				for (int i = 0; i < ImGuiCol_COUNT; i++)
+				{
+					const char* name = ImGui::GetStyleColorName((ImGuiCol)i);
+					ImVec2 p = ImGui::GetCursorScreenPos();
+					ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(p.x + sz, p.y + sz), ImGui::GetColorU32((ImGuiCol)i));
+					ImGui::Dummy(ImVec2(sz, sz));
+					ImGui::SameLine();
+					ImGui::MenuItem(name);
+				}
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::MenuItem("Exit"))
+			{
+				ImGui::EndMenu();
+				ImGui::EndMainMenuBar();
+				return UPDATE_STOP;
+			}
+
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Edit"))
+		{
+			if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
+			if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
+			ImGui::Separator();
+			if (ImGui::MenuItem("Cut", "CTRL+X")) {}
+			if (ImGui::MenuItem("Copy", "CTRL+C")) {}
+			if (ImGui::MenuItem("Paste", "CTRL+V")) {}
+			ImGui::EndMenu();
+		}
+		ImGui::EndMainMenuBar();
+	}
+
+	return UPDATE_CONTINUE;
 }
