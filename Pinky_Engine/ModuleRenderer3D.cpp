@@ -272,7 +272,14 @@ update_status ModuleRenderer3D::Toolbar()
 				ImGui::EndMenu();
 			}
 
-			if (ImGui::BeginMenu("Colors"))
+
+			float sz = ImGui::GetTextLineHeight();
+			ImVec2 p = ImGui::GetCursorScreenPos();
+			float col[3] = { 0.2, 0.63, 0.55 };
+			ImGui::ColorPicker4("a", col);
+
+			
+			/*if (ImGui::BeginMenu("Colors"))
 			{
 				float sz = ImGui::GetTextLineHeight();
 				for (int i = 0; i < ImGuiCol_COUNT; i++)
@@ -285,7 +292,7 @@ update_status ModuleRenderer3D::Toolbar()
 					ImGui::MenuItem(name);
 				}
 				ImGui::EndMenu();
-			}
+			}*/
 
 			if (ImGui::MenuItem("Exit"))
 			{
