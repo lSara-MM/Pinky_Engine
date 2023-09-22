@@ -275,8 +275,8 @@ update_status ModuleRenderer3D::Toolbar()
 
 			float sz = ImGui::GetTextLineHeight();
 			ImVec2 p = ImGui::GetCursorScreenPos();
-			float col[3] = { 0.2, 0.63, 0.55 };
-			ImGui::ColorPicker4("a", col);
+			
+			ImGui::ColorPicker3("a", col);
 
 			
 			/*if (ImGui::BeginMenu("Colors"))
