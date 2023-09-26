@@ -40,10 +40,11 @@ bool ModuleEditor::Init()
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+	//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows	//TODO: preguntar perque peta xd
 
 	// Setup Dear ImGui style
-	ImGui::StyleColorsDark();
-	//ImGui::StyleColorsClassic();
+	ImGui::StyleColorsDark(); // dark mode default :D
 
 	// Setup Platform/Renderer backends
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
@@ -168,7 +169,7 @@ update_status ModuleEditor::Toolbar()
 					{
 						ImGui::StyleColorsClassic();
 					}
-					if (ImGui::MenuItem("Light"))
+					if (ImGui::MenuItem("Light (please don't)"))
 					{
 						ImGui::StyleColorsLight();
 					}
@@ -223,6 +224,21 @@ update_status ModuleEditor::Toolbar()
 			if (ImGui::MenuItem("Paste", "CTRL+V")) {}
 			ImGui::EndMenu();
 		}
+
+		if (ImGui::MenuItem("About"))
+		{
+			win_about = !win_about;
+		}
+
+		if (win_about)
+		{
+			ImGui::Begin("About", &win_about);                          // Create a window called "Hello, world!" and append into it.
+			ImGui::TextWrapped("MIT LicenseCopyright\n\n(c) 2023");
+			// TODO: mirar como hacer links
+			ImGui::TextWrapped("MIT LicenseCopyright\n\n(c) 2023 lSara-MM & AndyCubico\n\nPermission is hereby granted, free of charge, to any person obtaining a copyof this software and associated documentation files (the 'Software'), to dealin the Software without restriction, including without limitation the rightsto use, copy, modify, merge, publish, distribute, sublicense, and/or sellcopies of the Software, and to permit persons to whom the Software isfurnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in allcopies or substantial portions of the Software.THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS ORIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THEAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHERLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THESOFTWARE.");
+			ImGui::End();
+		}
+
 		ImGui::EndMainMenuBar();
 	}
 

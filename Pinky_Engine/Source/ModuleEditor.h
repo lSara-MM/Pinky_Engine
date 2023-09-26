@@ -37,4 +37,8 @@ public:
 	bool show_demo_window;
 	ImVec4 clear_color;
 	float col[3];
+
+private:
+
+	bool win_about = false;
 };
