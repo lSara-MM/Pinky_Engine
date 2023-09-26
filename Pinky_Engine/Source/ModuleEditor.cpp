@@ -100,12 +100,12 @@ update_status ModuleEditor::PostUpdate(float dt)
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
 		//TODO: FPS HISTOGRAM
 		char title[25];
-		AddFPS(io.Framerate);
-
+		AddFPS(mFPSLog, io.Framerate);
+		AddFPS(mSLog, 1000.0f / io.Framerate);
 		sprintf_s(title, 25, "Framerate %.1f", mFPSLog[mFPSLog.size() - 1]);
 		ImGui::PlotHistogram("##framerate ", &mFPSLog[0], mFPSLog.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100.0f));//TODO:values slides
-		sprintf_s(title, 25, "Milliseconds %0.1f", mFPSLog[mFPSLog.size() - 1]);
-		ImGui::PlotHistogram("##milliseconds ", &mFPSLog[0], mFPSLog.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100.0f));//TODO:values slides
+		sprintf_s(title, 25, "Milliseconds %0.1f", mSLog[mSLog.size() - 1]);
+		ImGui::PlotHistogram("##milliseconds ", &mSLog[0], mSLog.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100.0f));//TODO:values slides
 
 		ImGui::End();
 	}
@@ -254,17 +254,17 @@ update_status ModuleEditor::Toolbar()
 	return UPDATE_CONTINUE;
 }
 
-void ModuleEditor::AddFPS(const float aFPS)
+void ModuleEditor::AddFPS(std::vector<float>& vect, const float aFPS)
 {
-	if (mFPSLog.size() < 60)
+	if (vect.size() < 60)
 	{
-		mFPSLog.push_back(aFPS);
+		vect.push_back(aFPS);
 	}
 
 	else
 	{
-		std::rotate(mFPSLog.begin(), mFPSLog.begin() + 1, mFPSLog.end());//TODO: ta bien?
-		mFPSLog.pop_back();
-		mFPSLog.push_back(aFPS);
+		std::rotate(vect.begin(), vect.begin() + 1, vect.end());//TODO: ta bien?
+		vect.pop_back();
+		vect.push_back(aFPS);
 	}
 }

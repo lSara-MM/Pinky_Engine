@@ -39,8 +39,9 @@ public:
 	float col[3];
 
 
-	void AddFPS(const float aFPS);
+	void AddFPS(std::vector<float>& vect, const float aFPS);
 	std::vector<float> mFPSLog;
+	std::vector<float> mSLog;
 private:
 
 	bool win_about = false;
