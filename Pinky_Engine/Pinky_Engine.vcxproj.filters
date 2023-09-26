@@ -288,6 +288,9 @@
     <ClInclude Include="ImGui\backends\imgui_impl_sdl2.h">
       <Filter>Sources\ImGui\backends</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ModuleEditor.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MathGeoLib\include\Geometry\AABB.cpp">
@@ -442,6 +445,9 @@
     </ClCompile>
     <ClCompile Include="ImGui\backends\imgui_impl_sdl2.cpp">
       <Filter>Sources\ImGui\backends</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModuleEditor.cpp">
+      <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

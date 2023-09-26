@@ -39,9 +39,4 @@ public:
 	
 	//You won't need this after using Frustum
 	mat4x4 ProjectionMatrix;
-
-	// 2nd window state
-	bool show_demo_window;
-	ImVec4 clear_color;
-	float col[3];
 };
