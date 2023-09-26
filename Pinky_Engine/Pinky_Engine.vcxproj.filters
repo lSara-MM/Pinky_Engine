@@ -43,6 +43,9 @@
     <Filter Include="Sources\ImGui\backends">
       <UniqueIdentifier>{6a0b837b-2041-4e10-a91e-65bb53cd5bda}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\parson">
+      <UniqueIdentifier>{ae731301-8bf9-4b11-b1fc-afa7ae618cc3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MathGeoLib\include\MathBuildConfig.h">
@@ -291,6 +294,9 @@
     <ClInclude Include="Source\ModuleEditor.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="parson\parson.h">
+      <Filter>Sources\parson</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MathGeoLib\include\Geometry\AABB.cpp">
@@ -448,6 +454,9 @@
     </ClCompile>
     <ClCompile Include="Source\ModuleEditor.cpp">
       <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="parson\parson.c">
+      <Filter>Sources\parson</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
