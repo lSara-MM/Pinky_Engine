@@ -10,7 +10,7 @@
 #include "../MathGeoLib/include/Math/float3x3.h"
 #include "../MathGeoLib/include/Math/float4x4.h"
 #include "Primitive.h"
-
+#include<vector>
 //todo: REMOVE this before 1st delivery!!
 #include "glmath.h"
 
@@ -38,6 +38,9 @@ public:
 	ImVec4 clear_color;
 	float col[3];
 
+
+	void AddFPS(const float aFPS);
+	std::vector<float> mFPSLog;
 private:
 
 	bool win_about = false;
