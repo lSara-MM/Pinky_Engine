@@ -161,9 +161,26 @@ update_status ModuleEditor::Toolbar()
 				ImGui::SliderFloat("Value", &f, 0.0f, 1.0f);
 				ImGui::InputFloat("Input", &f, 0.1f);
 				ImGui::Combo("Combo", &n, "Yes\0No\0Maybe\0\0");
+
+				if (ImGui::BeginMenu("Theme"))
+				{
+					if (ImGui::MenuItem("Classic"))
+					{
+						ImGui::StyleColorsClassic();
+					}
+					if (ImGui::MenuItem("Light"))
+					{
+						ImGui::StyleColorsLight();
+					}
+					if (ImGui::MenuItem("Dark"))
+					{
+						ImGui::StyleColorsDark();
+					}
+					ImGui::EndMenu();
+				}
+
 				ImGui::EndMenu();
 			}
-
 
 			float sz = ImGui::GetTextLineHeight();
 			ImVec2 p = ImGui::GetCursorScreenPos();
