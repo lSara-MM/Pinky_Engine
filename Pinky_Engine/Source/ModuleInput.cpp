@@ -117,6 +117,10 @@ update_status ModuleInput::PreUpdate(float dt)
 					App->renderer3D->OnResize(e.window.data1, e.window.data2);
 			}
 		}
+
+		// Close window if viewports enabled
+		if (e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_CLOSE && e.window.windowID == SDL_GetWindowID(App->window->window))
+			quit = true;
 	}
 
 	if (quit == true || keyboard[SDL_SCANCODE_ESCAPE] == KEY_UP)
