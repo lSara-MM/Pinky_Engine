@@ -111,6 +111,16 @@ update_status ModuleEditor::PostUpdate(float dt)
 		ImGui::End();
 	}
 
+	//Log window, falta que app funcione en log
+	{
+		ImGui::Begin("Output");
+		ImGui::BeginChild("##output");
+		for (int n = 0; n < logVec.size(); n++)
+			ImGui::Text(logVec[n], n);
+		ImGui::EndChild();
+		ImGui::End();
+	}
+
 	ret = Toolbar();
 
 	// Rendering

@@ -43,6 +43,9 @@ public:
 	// FPS graph
 	std::vector<float> mFPSLog;
 	std::vector<float> mSLog;
+
+	//Log vector
+	std::vector<const char*> logVec;
 private:
 
 	bool win_about = false;
