@@ -55,6 +55,10 @@ bool ModuleEditor::Init()
 	show_demo_window = true;
 	clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+
+	aboutColor = ImVec4(1.0f, 0.0f, 1.0f, 1.0f);
+	aboutWin = false;
+
 	return ret;
 }
 
@@ -218,22 +222,6 @@ update_status ModuleEditor::Toolbar()
 			
 			ImGui::ColorPicker3("a", col);
 
-			
-			/*if (ImGui::BeginMenu("Colors"))
-			{
-				float sz = ImGui::GetTextLineHeight();
-				for (int i = 0; i < ImGuiCol_COUNT; i++)
-				{
-					const char* name = ImGui::GetStyleColorName((ImGuiCol)i);
-					ImVec2 p = ImGui::GetCursorScreenPos();
-					ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(p.x + sz, p.y + sz), ImGui::GetColorU32((ImGuiCol)i));
-					ImGui::Dummy(ImVec2(sz, sz));
-					ImGui::SameLine();
-					ImGui::MenuItem(name);
-				}
-				ImGui::EndMenu();
-			}*/
-
 			if (ImGui::MenuItem("Exit"))
 			{
 				ImGui::EndMenu();
@@ -255,48 +243,62 @@ update_status ModuleEditor::Toolbar()
 			ImGui::EndMenu();
 		}
 
-		// Open a modal pop up to show info about the project
-		if (ImGui::MenuItem("About"))
+		if (ImGui::BeginMenu("Help"))
 		{
-			//win_about = !win_about;
-			ImGui::OpenPopup("About");
-			about_color = ImVec4(1.0f, 0.0f, 1.0f, 1.0f);
-		}
-		if (ImGui::BeginPopupModal("About", NULL, ImGuiWindowFlags_AlwaysAutoResize))
-		{
-			// Always center this window when appearing
-			ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-			ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-
-			ImGui::BeginChild("left pane", ImVec2(150, 0), true);
-			ImGui::TextWrapped("MIT LicenseCopyright\n(c) 2023\n");
-			ImGui::TextWrapped("Permission is hereby granted, free of charge, to any person obtaining a copyof this software and associated documentation files (the 'Software'), to dealin the Software without restriction, including without limitation the rightsto use, copy, modify, merge, publish, distribute, sublicense, and/or sellcopies of the Software, and to permit persons to whom the Software isfurnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in allcopies or substantial portions of the Software.THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS ORIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THEAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHERLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THESOFTWARE.");
-			ImGui::EndChild();
-
-			ImGui::SameLine();
-
-			ImGui::BeginGroup();
-			ImGui::BeginChild("right pane", ImVec2(0, -ImGui::GetFrameHeightWithSpacing())); // Leave room for 1 line below us
-
-			ImGui::Text("Pinky Engine");
+			if (ImGui::MenuItem("Module Settings")) {}
+			if (ImGui::MenuItem("Information Output")) {}
 			ImGui::Separator();
-			ImGui::TextColored(about_color, "lSara-MM & AndyCubico");
-			ImGui::ColorEdit3("", (float*)&about_color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
-			ImGui::EndChild();
-
-
-			if (ImGui::Button("GitHub")) { OsOpenInShell("https://github.com/lSara-MM/Pinky_Engine"); }
-			ImGui::SetItemDefaultFocus();
-			ImGui::SameLine();
-			if (ImGui::Button("Close")) { ImGui::CloseCurrentPopup(); }
-			ImGui::EndGroup();
-			ImGui::EndPopup();
+			if (ImGui::MenuItem("About")) { aboutWin = true; }
+			ImGui::EndMenu();
 		}
+
+		About();
 
 		ImGui::EndMainMenuBar();
 	}
 
 	return UPDATE_CONTINUE;
+}
+
+void ModuleEditor::About()
+{
+	if (aboutWin)
+	{
+		// Open a modal pop up to show info about the project
+		ImGui::OpenPopup("About");
+		aboutWin = false;
+	}
+
+	if (ImGui::BeginPopupModal("About", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		// Always center this window when appearing
+		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+		ImGui::BeginChild("left pane", ImVec2(150, 0), true);
+		ImGui::TextWrapped("MIT LicenseCopyright\n(c) 2023\n");
+		ImGui::TextWrapped("Permission is hereby granted, free of charge, to any person obtaining a copyof this software and associated documentation files (the 'Software'), to dealin the Software without restriction, including without limitation the rightsto use, copy, modify, merge, publish, distribute, sublicense, and/or sellcopies of the Software, and to permit persons to whom the Software isfurnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in allcopies or substantial portions of the Software.THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS ORIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THEAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHERLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THESOFTWARE.");
+		ImGui::EndChild();
+
+		ImGui::SameLine();
+
+		ImGui::BeginGroup();
+		ImGui::BeginChild("right pane", ImVec2(0, -ImGui::GetFrameHeightWithSpacing())); // Leave room for 1 line below us
+
+		ImGui::Text("Pinky Engine");
+		ImGui::Separator();
+		ImGui::TextColored(aboutColor, "lSara-MM & AndyCubico");
+		ImGui::ColorEdit3("", (float*)&aboutColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+		ImGui::EndChild();
+
+
+		if (ImGui::Button("GitHub")) { OsOpenInShell("https://github.com/lSara-MM/Pinky_Engine"); }
+		ImGui::SetItemDefaultFocus();
+		ImGui::SameLine();
+		if (ImGui::Button("Close")) { ImGui::CloseCurrentPopup(); }
+		ImGui::EndGroup();
+		ImGui::EndPopup();
+	}
 }
 
 void ModuleEditor::AddFPS(std::vector<float>& vect, const float aFPS)
