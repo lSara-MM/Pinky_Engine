@@ -26,6 +26,8 @@ public:
 	bool CleanUp();
 
 	update_status Toolbar();
+	void AddFPS(std::vector<float>& vect, const float aFPS);
+	void OsOpenInShell(const char* path);	// https://stackoverflow.com/questions/71712920/how-to-open-a-webpage-in-imgui
 
 public:
 
@@ -38,8 +40,7 @@ public:
 	ImVec4 clear_color;
 	float col[3];
 
-
-	void AddFPS(std::vector<float>& vect, const float aFPS);
+	// FPS graph
 	std::vector<float> mFPSLog;
 	std::vector<float> mSLog;
 private:

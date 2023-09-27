@@ -252,11 +252,22 @@ update_status ModuleEditor::Toolbar()
 
 		if (win_about)
 		{
-			ImGui::Begin("About", &win_about);                          // Create a window called "Hello, world!" and append into it.
+			//ImGui::BeginPopupModal("About", &win_about);
+			//ImGui::OpenPopup("About");
+
+			//ImGui::Begin("About", &win_about);                          // Create a window called "Hello, world!" and append into it.
 			ImGui::TextWrapped("MIT LicenseCopyright\n\n(c) 2023");
 			// TODO: mirar como hacer links
+			
+			if (ImGui::Button("GitHub"))
+			{
+				OsOpenInShell("https://stackoverflow.com/questions/71712920/how-to-open-a-webpage-in-imgui");
+			}
+
+			//OsOpenInShell("https://stackoverflow.com/questions/71712920/how-to-open-a-webpage-in-imgui");
 			ImGui::TextWrapped("MIT LicenseCopyright\n\n(c) 2023 lSara-MM & AndyCubico\n\nPermission is hereby granted, free of charge, to any person obtaining a copyof this software and associated documentation files (the 'Software'), to dealin the Software without restriction, including without limitation the rightsto use, copy, modify, merge, publish, distribute, sublicense, and/or sellcopies of the Software, and to permit persons to whom the Software isfurnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in allcopies or substantial portions of the Software.THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS ORIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THEAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHERLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THESOFTWARE.");
-			ImGui::End();
+			ImGui::EndPopup();
+			//ImGui::End();
 		}
 
 		ImGui::EndMainMenuBar();
@@ -277,4 +288,21 @@ void ModuleEditor::AddFPS(std::vector<float>& vect, const float aFPS)
 		vect.pop_back();
 		vect.push_back(aFPS);
 	}
+}
+
+void ModuleEditor::OsOpenInShell(const char* path)
+{
+#ifdef _WIN32
+	// Note: executable path must use backslashes!
+	::ShellExecuteA(NULL, "open", path, NULL, NULL, SW_SHOWDEFAULT);
+#else
+#if __APPLE__
+	const char* open_executable = "open";
+#else
+	const char* open_executable = "xdg-open";
+#endif
+	char command[256];
+	snprintf(command, 256, "%s \"%s\"", open_executable, path);
+	system(command);
+#endif
 }
