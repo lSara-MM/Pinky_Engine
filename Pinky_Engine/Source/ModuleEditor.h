@@ -47,6 +47,5 @@ public:
 	//Log vector
 	std::vector<const char*> logVec;
 private:
-
-	bool win_about = false;
+	ImVec4 about_color;
 };

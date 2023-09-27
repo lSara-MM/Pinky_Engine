@@ -255,29 +255,42 @@ update_status ModuleEditor::Toolbar()
 			ImGui::EndMenu();
 		}
 
+		// Open a modal pop up to show info about the project
 		if (ImGui::MenuItem("About"))
 		{
-			win_about = !win_about;
+			//win_about = !win_about;
+			ImGui::OpenPopup("About");
+			about_color = ImVec4(1.0f, 0.0f, 1.0f, 1.0f);
 		}
-
-		if (win_about)
+		if (ImGui::BeginPopupModal("About", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 		{
-			//ImGui::BeginPopupModal("About", &win_about);
-			//ImGui::OpenPopup("About");
+			// Always center this window when appearing
+			ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+			ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
-			//ImGui::Begin("About", &win_about);                          // Create a window called "Hello, world!" and append into it.
-			ImGui::TextWrapped("MIT LicenseCopyright\n\n(c) 2023");
-			// TODO: mirar como hacer links
-			
-			if (ImGui::Button("GitHub"))
-			{
-				OsOpenInShell("https://stackoverflow.com/questions/71712920/how-to-open-a-webpage-in-imgui");
-			}
+			ImGui::BeginChild("left pane", ImVec2(150, 0), true);
+			ImGui::TextWrapped("MIT LicenseCopyright\n(c) 2023\n");
+			ImGui::TextWrapped("Permission is hereby granted, free of charge, to any person obtaining a copyof this software and associated documentation files (the 'Software'), to dealin the Software without restriction, including without limitation the rightsto use, copy, modify, merge, publish, distribute, sublicense, and/or sellcopies of the Software, and to permit persons to whom the Software isfurnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in allcopies or substantial portions of the Software.THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS ORIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THEAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHERLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THESOFTWARE.");
+			ImGui::EndChild();
 
-			//OsOpenInShell("https://stackoverflow.com/questions/71712920/how-to-open-a-webpage-in-imgui");
-			ImGui::TextWrapped("MIT LicenseCopyright\n\n(c) 2023 lSara-MM & AndyCubico\n\nPermission is hereby granted, free of charge, to any person obtaining a copyof this software and associated documentation files (the 'Software'), to dealin the Software without restriction, including without limitation the rightsto use, copy, modify, merge, publish, distribute, sublicense, and/or sellcopies of the Software, and to permit persons to whom the Software isfurnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in allcopies or substantial portions of the Software.THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS ORIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THEAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHERLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THESOFTWARE.");
+			ImGui::SameLine();
+
+			ImGui::BeginGroup();
+			ImGui::BeginChild("right pane", ImVec2(0, -ImGui::GetFrameHeightWithSpacing())); // Leave room for 1 line below us
+
+			ImGui::Text("Pinky Engine");
+			ImGui::Separator();
+			ImGui::TextColored(about_color, "lSara-MM & AndyCubico");
+			ImGui::ColorEdit3("", (float*)&about_color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+			ImGui::EndChild();
+
+
+			if (ImGui::Button("GitHub")) { OsOpenInShell("https://github.com/lSara-MM/Pinky_Engine"); }
+			ImGui::SetItemDefaultFocus();
+			ImGui::SameLine();
+			if (ImGui::Button("Close")) { ImGui::CloseCurrentPopup(); }
+			ImGui::EndGroup();
 			ImGui::EndPopup();
-			//ImGui::End();
 		}
 
 		ImGui::EndMainMenuBar();
