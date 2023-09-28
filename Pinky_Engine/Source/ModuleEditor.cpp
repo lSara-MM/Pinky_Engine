@@ -304,6 +304,17 @@ void ModuleEditor::ConfigWindow()
 			{
 				ImGui::SetTooltip("Change fullscreen desktop window");
 			}
+			ImGui::Text("Window size: %d x %d", SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
+
+			ImGui::Text("Brightness: %f", SDL_GetWindowBrightness(App->window->window));
+
+			//Todo: Vsync no està implementat, esperar per si profe explica
+			/*if (ImGui::Checkbox("Full desktop", &App->window->fullScreenDesktop))
+			{
+				(vSync_B) ? flags = SDL_RENDERER_ACCELERATED : flags |= SDL_RENDERER_PRESENTVSYNC;
+			}*/
+			ImGui::Text("Mouse position: %d x, %d y", App->input->GetMouseX(), App->input->GetMouseY());
+			//TODO: Input keys¿? Audio current volumes¿?
 		}
 		ImGui::End();
 	}

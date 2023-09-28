@@ -108,7 +108,7 @@ void Application::HardwareDetection()
 		ImGui::Separator();
 		ImGui::Text("CPUs: %d (Cache: %d kb) ", SDL_GetCPUCount(),SDL_GetCPUCacheLineSize());
 		ImGui::Text("System RAM: %d", SDL_GetSystemRAM);
-		ImGui::Text("Cpas: ", SDL_GetSystemRAM);
+		ImGui::Text("Caps: ", SDL_GetSystemRAM);
 		ImGui::SameLine();
 		if (SDL_Has3DNow)ImGui::Text("3Dnow ");
 		ImGui::SameLine();

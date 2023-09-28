@@ -29,8 +29,6 @@ public:
 
 	void OnResize(int width, int height);
 
-	update_status Toolbar();
-
 public:
 
 	Light lights[MAX_LIGHTS];
