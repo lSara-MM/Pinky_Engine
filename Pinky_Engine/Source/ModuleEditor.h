@@ -26,6 +26,9 @@ public:
 	bool CleanUp();
 
 	update_status Toolbar();
+	void ConfigWindow();
+	void OutputWindow();
+	void FpsWindow(ImGuiIO& io);
 
 	void About();
 

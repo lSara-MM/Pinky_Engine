@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleEditor.h"
+#include "ModuleWindow.h"
 #include "../SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -58,7 +59,6 @@ bool ModuleEditor::Init()
 
 	aboutColor = ImVec4(1.0f, 0.0f, 1.0f, 1.0f);
 	aboutWin = false;
-
 	return ret;
 }
 
@@ -80,7 +80,7 @@ update_status ModuleEditor::PostUpdate(float dt)
 	ImGui::NewFrame();
 
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-	ImGui::ShowDemoWindow();
+	//ImGui::ShowDemoWindow();
 
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
@@ -103,27 +103,18 @@ update_status ModuleEditor::PostUpdate(float dt)
 		}
 
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-		//TODO: FPS HISTOGRAM
-		char title[25];
-		AddFPS(mFPSLog, io.Framerate);
-		AddFPS(mSLog, 1000.0f / io.Framerate);
-		sprintf_s(title, 25, "Framerate %.1f", mFPSLog[mFPSLog.size() - 1]);
-		ImGui::PlotHistogram("##framerate ", &mFPSLog[0], mFPSLog.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100.0f));//TODO:values slides
-		sprintf_s(title, 25, "Milliseconds %0.1f", mSLog[mSLog.size() - 1]);
-		ImGui::PlotHistogram("##milliseconds ", &mSLog[0], mSLog.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100.0f));//TODO:values slides
+
+		//TODO: FPS HISTOGRAM IN
+		FpsWindow(io);
 
 		ImGui::End();
 	}
 
-	//Log window, falta que app funcione en log
-	{
-		ImGui::Begin("Output");
-		ImGui::BeginChild("##output");
-		for (int n = 0; n < logVec.size(); n++)
-			ImGui::Text(logVec[n], n);
-		ImGui::EndChild();
-		ImGui::End();
-	}
+	//LOG window, not working (error log.cpp)
+	OutputWindow();
+
+	//Configwindow, change to fullscreen and such
+	ConfigWindow();
 
 	ret = Toolbar();
 
@@ -258,6 +249,86 @@ update_status ModuleEditor::Toolbar()
 	}
 
 	return UPDATE_CONTINUE;
+}
+
+void ModuleEditor::ConfigWindow()
+{
+	{
+		ImGui::Begin("Configuration");
+		if (ImGui::CollapsingHeader("Window"))
+		{
+			if (ImGui::Checkbox("Fullscreen", &App->window->fullScreen))
+			{
+				(!App->window->fullScreen) ? App->window->flags = SDL_WINDOW_SHOWN : App->window->flags = SDL_WINDOW_FULLSCREEN;
+
+				SDL_SetWindowFullscreen(App->window->window, App->window->flags);
+			}
+
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetTooltip("Change fullscreen window");//TODO: noms millorables?
+			}
+			ImGui::SameLine();
+
+			if (ImGui::Checkbox("Resizable", &App->window->resizable))
+			{
+				SDL_SetWindowResizable(App->window->window, (SDL_bool)App->window->resizable);
+			}
+
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetTooltip("Change resizable window");
+			}
+
+			if (ImGui::Checkbox("Borderless", &App->window->borderless))
+			{
+				SDL_SetWindowResizable(App->window->window, (SDL_bool)App->window->borderless);
+			}
+
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetTooltip("Change borderless window");
+			}
+			ImGui::SameLine();
+
+			if (ImGui::Checkbox("Full desktop", &App->window->fullScreenDesktop))
+			{
+				(!App->window->fullScreenDesktop) ? App->window->flags = SDL_WINDOW_SHOWN : App->window->flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
+
+				SDL_SetWindowFullscreen(App->window->window, App->window->flags);
+			}
+
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetTooltip("Change fullscreen desktop window");
+			}
+		}
+		ImGui::End();
+	}
+}
+
+void ModuleEditor::OutputWindow()
+{
+	//Log window, falta que app funcione en log
+	{
+		ImGui::Begin("Console");
+		ImGui::BeginChild("##output");
+		for (int n = 0; n < logVec.size(); n++)
+			ImGui::Text(logVec[n], n);
+		ImGui::EndChild();
+		ImGui::End();
+	}
+}
+
+void ModuleEditor::FpsWindow(ImGuiIO& io)
+{
+	char title[25];
+	AddFPS(mFPSLog, io.Framerate);
+	AddFPS(mSLog, 1000.0f / io.Framerate);
+	sprintf_s(title, 25, "Framerate %.1f", mFPSLog[mFPSLog.size() - 1]);
+	ImGui::PlotHistogram("##framerate ", &mFPSLog[0], mFPSLog.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100.0f));
+	sprintf_s(title, 25, "Milliseconds %0.1f", mSLog[mSLog.size() - 1]);
+	ImGui::PlotHistogram("##milliseconds ", &mSLog[0], mSLog.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100.0f));
 }
 
 void ModuleEditor::About()
