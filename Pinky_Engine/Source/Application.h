@@ -34,6 +34,7 @@ public:
 	bool Init();
 	update_status Update();
 	bool CleanUp();
+	void HardwareDetection();//Ventana hardware, power dice de ponerla aquí
 
 private:
 

@@ -116,6 +116,8 @@ update_status ModuleEditor::PostUpdate(float dt)
 	//Configwindow, change to fullscreen and such
 	ConfigWindow();
 
+	App->HardwareDetection();
+
 	ret = Toolbar();
 
 	// Rendering
