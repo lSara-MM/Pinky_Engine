@@ -51,7 +51,7 @@ public:
 	std::vector<float> mSLog;
 
 	//Log vector
-	std::vector<const char*> logVec;
+	std::vector<std::string> logVec;
 private:
 	ImVec4 aboutColor;
 	bool aboutWin;

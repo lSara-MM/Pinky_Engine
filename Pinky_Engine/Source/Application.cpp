@@ -1,5 +1,7 @@
 #include "Application.h"
 
+extern Application* App = nullptr;
+
 Application::Application()
 {
 	window = new ModuleWindow(this);
@@ -34,6 +36,7 @@ Application::~Application()
 bool Application::Init()
 {
 	bool ret = true;
+	App = this;
 
 	// Call Init() in all modules
 	for (std::vector<Module*>::const_iterator it = list_modules.cbegin(); it != list_modules.cend() && ret; ++it)

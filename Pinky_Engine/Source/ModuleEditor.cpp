@@ -324,10 +324,12 @@ void ModuleEditor::OutputWindow()
 {
 	//Log window, falta que app funcione en log
 	{
-		ImGui::Begin("Console");
+		ImGui::Begin("Console", NULL, ImGuiWindowFlags_AlwaysVerticalScrollbar);
 		ImGui::BeginChild("##output");
 		for (int n = 0; n < logVec.size(); n++)
-			ImGui::Text(logVec[n], n);
+		{
+			ImGui::Text(logVec[n].c_str(), n);
+		}
 		ImGui::EndChild();
 		ImGui::End();
 	}
@@ -346,6 +348,11 @@ void ModuleEditor::FpsWindow(ImGuiIO& io)
 
 void ModuleEditor::About()
 {
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_UP)
+	{
+		LOG("hola");
+	}
+
 	if (aboutWin)
 	{
 		// Open a modal pop up to show info about the project
