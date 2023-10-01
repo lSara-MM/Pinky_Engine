@@ -98,6 +98,7 @@ bool Application::CleanUp()
 	for (std::vector<Module*>::reverse_iterator it = list_modules.rbegin(); it != list_modules.rend() && ret; ++it)
 	{
 		ret = (*it)->CleanUp();
+		*it = nullptr;
 	}
 	return ret;
 }
@@ -141,6 +142,11 @@ void Application::HardwareDetection()
 		
 		ImGui::End();
 	}
+}
+
+int Application::ListModulesSize()
+{
+	return list_modules.size();
 }
 
 void Application::AddModule(Module* mod)

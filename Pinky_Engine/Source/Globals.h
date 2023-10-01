@@ -6,6 +6,7 @@
 
 #include <windows.h>
 #include <stdio.h>
+#include<vector>
 
 #define LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
 
@@ -58,3 +59,24 @@ enum update_status
 	       x = nullptr;\
 		 }\
 	 }
+
+template <class T>
+void ClearVecNPtr(std::vector<T> &x)
+{
+	x.clear();
+	x.shrink_to_fit();
+}
+
+template <class T>
+void ClearVecPtr(std::vector<T> &x)
+{
+	for (auto it = x.rbegin(); it != x.rend(); it--)
+	{
+		// code
+		delete(*it);
+		(*it) = nullptr;
+	}
+
+	x.clear();
+	x.shrink_to_fit();
+}
