@@ -13,6 +13,8 @@
 #include "../ImGui/backends/imgui_impl_sdl2.h"
 #include "../ImGui/backends/imgui_impl_opengl3.h"
 
+#include "../mmgr/mmgr.h"
+
 #ifdef _DEBUG
 #pragma comment (lib, "MathGeoLib/libx86/libDebug/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
 #else
@@ -33,7 +35,9 @@ bool ModuleRenderer3D::Init()
 {
 	LOG("Creating 3D Renderer context");
 	bool ret = true;
-	
+	//Get RAM values
+	//statsVRAM = m_getMemoryStatistics();
+
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
 	if(context == NULL)
@@ -177,9 +181,11 @@ void ModuleRenderer3D::HardwareDetection()
 		ImGui::Begin("Hardware");
 		//Diapo sale cajita con active, no entiendo
 		//ImGui::Text("SDL Version: ", SDL_GetVersion);//TODO: c�mo pillar versi�n sdl
+
+		//CPU info
 		ImGui::Separator();
 		ImGui::Text("CPUs: %d (Cache: %d kb) ", SDL_GetCPUCount(), SDL_GetCPUCacheLineSize());
-		ImGui::Text("System RAM: %d", SDL_GetSystemRAM());
+		ImGui::Text("System RAM: %.2f GB", SDL_GetSystemRAM()* 0.001048576);
 		ImGui::Text("Caps: ", SDL_GetSystemRAM());
 		ImGui::SameLine();
 		if (SDL_Has3DNow())ImGui::Text("3Dnow ");
@@ -203,17 +209,24 @@ void ModuleRenderer3D::HardwareDetection()
 		if (SDL_HasSSE41())ImGui::Text("SSE41 ");
 		ImGui::SameLine();
 		if (SDL_HasSSE42())ImGui::Text("SSE42");
+
+		//GPU info
 		ImGui::Separator();
 		ImGui::Text("GPU: ");
 		ImGui::SameLine();
-		ImGui::Text((const char*)glGetString(GL_VENDOR));
+		ImGui::Text((const char*)glGetString(GL_RENDERER));
 		ImGui::Text("Brand: ");
 		ImGui::SameLine();
-		ImGui::Text((const char*)glGetString(GL_RENDERER));
+		ImGui::Text((const char*)glGetString(GL_VENDOR));
 		ImGui::Text("Version: ");
 		ImGui::SameLine();
 		ImGui::Text((const char*)glGetString(GL_VERSION));
-
+		ImGui::Text("VRAM Budget: %d", statsVRAM.accumulatedActualMemory);//TODO: no sé que representa cada cosa de estas
+		ImGui::Text("VRAM Usage: %d", statsVRAM.accumulatedReportedMemory);
+		ImGui::Text("VRAM Available: %d", statsVRAM.totalActualMemory);
+		ImGui::Text("VRAM Reserved: %d", statsVRAM.totalReportedMemory);
+		ImGui::Text("VRAM nose: %d", statsVRAM.peakActualMemory);
+		ImGui::Text("VRAM nose2: %d", statsVRAM.peakActualMemory);
 
 		ImGui::End();
 	}

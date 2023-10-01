@@ -11,6 +11,9 @@
 #include "../MathGeoLib/include/Math/float4x4.h"
 #include "Primitive.h"
 
+#include "../mmgr/mmgr.h"
+
+
 //todo: REMOVE this before 1st delivery!!
 #include "glmath.h"
 
@@ -29,6 +32,8 @@ public:
 
 	void OnResize(int width, int height);
 	void HardwareDetection();
+
+	sMStats statsVRAM;
 
 public:
 
