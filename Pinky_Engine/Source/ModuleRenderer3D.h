@@ -31,7 +31,10 @@ public:
 	bool CleanUp();
 
 	void OnResize(int width, int height);
-	void HardwareDetection();
+	void HardwareDetection(bool &infoOutputWin);
+
+	void DrawBox();
+	void Wireframe();
 
 	sMStats statsVRAM;
 
@@ -43,4 +46,6 @@ public:
 	
 	//You won't need this after using Frustum
 	mat4x4 ProjectionMatrix;
+
+	bool wireframe;
 };

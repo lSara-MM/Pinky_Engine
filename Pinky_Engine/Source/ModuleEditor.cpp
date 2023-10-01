@@ -57,6 +57,22 @@ bool ModuleEditor::Init()
 	clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 
+	// Module Settings
+	moduleSettingsWin = false;
+	//// OpenGL configuration
+	depthTest = true;
+	cullFace = true;
+	lightning = true;
+	colorMaterial = true;
+	texture2D = true;
+	blend = true;
+	lineSmooth = true;
+	normalize = true;
+
+	//
+	infoOutputWin = false;
+
+	// About
 	aboutColor = ImVec4(1.0f, 0.0f, 1.0f, 1.0f);
 	aboutWin = false;
 	return ret;
@@ -81,44 +97,21 @@ update_status ModuleEditor::PostUpdate(float dt)
 
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 	//ImGui::ShowDemoWindow();
-
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
-	// 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
-	{
-		static float f = 0.0f;
-		static int counter = 0;
-
-		ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-		ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-		ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-
-		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-		ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-		if (ImGui::Button("Exit"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-		{
-			return UPDATE_STOP;
-		}
-
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-
-		//TODO: FPS HISTOGRAM IN
-		FpsWindow(io);
-
-		ImGui::End();
-	}
-
-	//LOG window, not working (error log.cpp)
-	OutputWindow();
+	ret = Toolbar();
+	//FpsWindow(io);
+	
+	//LOG window
+	LogWindow();
 
 	//Configwindow, change to fullscreen and such
 	ConfigWindow();
+	App->renderer3D->HardwareDetection(infoOutputWin);
 
-	App->renderer3D->HardwareDetection();
 
-	ret = Toolbar();
+	// TODO: delete this later, just to test OpenGL options
+	App->renderer3D->DrawBox();
 
 	// Rendering
 	ImGui::Render();
@@ -242,14 +235,17 @@ update_status ModuleEditor::Toolbar()
 
 		if (ImGui::BeginMenu("Help"))
 		{
-			if (ImGui::MenuItem("Module Settings")) {}
-			if (ImGui::MenuItem("Information Output")) {}
+			if (ImGui::MenuItem("Module Settings")) { moduleSettingsWin = true; }
+			if (ImGui::MenuItem("Information Output")) { infoOutputWin = true; }
 			ImGui::Separator();
 			if (ImGui::MenuItem("About")) { aboutWin = true; }
 			ImGui::EndMenu();
 		}
 
-		About();
+		AboutWindow();
+
+
+		App->renderer3D->Wireframe();
 
 		ImGui::EndMainMenuBar();
 	}
@@ -259,8 +255,9 @@ update_status ModuleEditor::Toolbar()
 
 void ModuleEditor::ConfigWindow()
 {
+	if (moduleSettingsWin)
 	{
-		ImGui::Begin("Configuration");
+		ImGui::Begin("Configuration", &moduleSettingsWin);
 		if (ImGui::CollapsingHeader("Window"))
 		{
 			if (ImGui::Checkbox("Fullscreen", &App->window->fullScreen))
@@ -320,27 +317,137 @@ void ModuleEditor::ConfigWindow()
 			ImGui::Text("Mouse position: %d x, %d y", App->input->GetMouseX(), App->input->GetMouseY());
 			//TODO: Input keys¿? Audio current volumes¿?
 		}
+
+		if (ImGui::CollapsingHeader("OpenGl"))
+		{
+			// Depth test
+			if (ImGui::Checkbox("Depth testing", &depthTest))
+			{
+				(depthTest) ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
+			}
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetTooltip("If enabled, do depth comparisons and update the depth buffer. ");
+			}
+			ImGui::SameLine();
+
+			// Cull Face
+			if (ImGui::Checkbox("Cull face", &cullFace))
+			{
+				(cullFace) ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE);
+			}
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetTooltip("If enabled, cull polygons based on their winding in window coordinates.");
+			}
+			ImGui::SameLine();
+
+			// Lightning
+			if (ImGui::Checkbox("Lightning", &lightning))
+			{
+				(lightning) ? glEnable(GL_LIGHTING) : glDisable(GL_LIGHTING);
+			}
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetTooltip("If enabled and no vertex shader is active, use the current lighting parameters to compute the vertex color or index. Otherwise, simply associate the current color or index with each vertex.");
+			}
+			ImGui::SameLine();
+
+			// Color material
+			if (ImGui::Checkbox("Color material", &colorMaterial))
+			{
+				(colorMaterial) ? glEnable(GL_COLOR_MATERIAL) : glDisable(GL_COLOR_MATERIAL);
+			}
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetTooltip("If enabled, have one or more material parameters track the current color.");
+			}
+
+			//
+
+			// Texture 2D
+			if (ImGui::Checkbox("Texture 2D", &texture2D))
+			{
+				(texture2D) ? glEnable(GL_TEXTURE_2D) : glDisable(GL_TEXTURE_2D);
+			}
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetTooltip("If enabled and no fragment shader is active, two-dimensional texturing is performed.");
+			}
+			ImGui::SameLine();
+
+			// Blend
+			if (ImGui::Checkbox("Blend", &blend))
+			{
+				(blend) ? glEnable(GL_BLEND) : glDisable(GL_BLEND);
+			}
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetTooltip("If enabled, blend the computed fragment color values with the values in the color buffers.");
+			}
+			ImGui::SameLine();
+
+			// Line Smooth
+			if (ImGui::Checkbox("Line Smooth", &lineSmooth))
+			{
+				(lineSmooth) ? glEnable(GL_LINE_SMOOTH) : glDisable(GL_LINE_SMOOTH);
+			}
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetTooltip("If enabled, draw lines with correct filtering. Otherwise, draw aliased lines.");
+			}
+			ImGui::SameLine();
+
+			// Line Smooth
+			if (ImGui::Checkbox("Normalize", &normalize))
+			{
+				(normalize) ? glEnable(GL_NORMALIZE) : glDisable(GL_NORMALIZE);
+			}
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetTooltip("If enabled and no vertex shader is active, normal vectors are normalized to unit length after transformation and before lighting.");
+			}
+			ImGui::SameLine();
+		}
 		ImGui::End();
 	}
 }
 
-void ModuleEditor::OutputWindow()
+void ModuleEditor::LogWindow()
 {
-	//Log window, falta que app funcione en log
+	//Log window
+	ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiCond_FirstUseEver);
+	ImGui::Begin("Console", NULL, ImGuiWindowFlags_MenuBar);
+	ImGui::BeginMenuBar();
+	if (ImGui::Button("Clear"))
 	{
-		ImGui::Begin("Console", NULL, ImGuiWindowFlags_AlwaysVerticalScrollbar);
-		ImGui::BeginChild("##output");
-		for (int n = 0; n < logVec.size(); n++)
-		{
-			ImGui::Text(logVec[n].c_str(), n);
-		}
-		ImGui::EndChild();
-		ImGui::End();
+		ClearVec(logVec);
 	}
+	if (ImGui::Button("Add debug message"))
+	{
+		logVec.push_back("hola");
+	}
+	ImGui::EndMenuBar();
+
+	//const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
+	ImGui::BeginChild("##output", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
+	for (int n = 0; n < logVec.size(); n++)
+	{
+		ImGui::Text(logVec[n].c_str(), n);
+	}
+
+	// Keep up at the bottom of the scroll region if we were already at the bottom at the beginning of the frame.
+	// Using a scrollbar or mouse-wheel will take away from the bottom edge.
+	if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY()) { ImGui::SetScrollHereY(1.0f); }
+
+	ImGui::EndChild();
+	ImGui::End();
 }
 
 void ModuleEditor::FpsWindow(ImGuiIO& io)
 {
+	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+
 	char title[25];
 	AddFPS(mFPSLog, io.Framerate);
 	AddFPS(mSLog, 1000.0f / io.Framerate);
@@ -350,13 +457,22 @@ void ModuleEditor::FpsWindow(ImGuiIO& io)
 	ImGui::PlotHistogram("##milliseconds ", &mSLog[0], mSLog.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100.0f));
 }
 
-void ModuleEditor::About()
+void ModuleEditor::AddFPS(std::vector<float>& vect, const float aFPS)
 {
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_UP)
+	if (vect.size() < 60)
 	{
-		LOG("hola");
+		vect.push_back(aFPS);
 	}
+	else
+	{
+		std::rotate(vect.begin(), vect.begin() + 1, vect.end());//TODO: ta bien?
+		vect.pop_back();
+		vect.push_back(aFPS);
+	}
+}
 
+void ModuleEditor::AboutWindow()
+{
 	if (aboutWin)
 	{
 		// Open a modal pop up to show info about the project
@@ -364,13 +480,13 @@ void ModuleEditor::About()
 		aboutWin = false;
 	}
 
-	if (ImGui::BeginPopupModal("About", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	//ImGui::SetNextWindowSize(ImVec2(500, 100), ImGuiCond_FirstUseEver);
+	// Always center this window when appearing
+	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.4f, 0.3f));
+	if (ImGui::BeginPopupModal("About", &aboutWin))
 	{
-		// Always center this window when appearing
-		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-
-		ImGui::BeginChild("left pane", ImVec2(150, 0), true);
+		ImGui::BeginChild("left pane", ImVec2(150, 100), true);
 		ImGui::TextWrapped("MIT LicenseCopyright\n(c) 2023\n");
 		ImGui::TextWrapped("Permission is hereby granted, free of charge, to any person obtaining a copyof this software and associated documentation files (the 'Software'), to dealin the Software without restriction, including without limitation the rightsto use, copy, modify, merge, publish, distribute, sublicense, and/or sellcopies of the Software, and to permit persons to whom the Software isfurnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in allcopies or substantial portions of the Software.THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS ORIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THEAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHERLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THESOFTWARE.");
 		ImGui::EndChild();
@@ -378,7 +494,7 @@ void ModuleEditor::About()
 		ImGui::SameLine();
 
 		ImGui::BeginGroup();
-		ImGui::BeginChild("right pane", ImVec2(0, -ImGui::GetFrameHeightWithSpacing())); // Leave room for 1 line below us
+		ImGui::BeginChild("right pane", ImVec2(200, -ImGui::GetFrameHeightWithSpacing())); // Leave room for 1 line below us
 
 		ImGui::Text("Pinky Engine");
 		ImGui::Separator();
@@ -393,20 +509,6 @@ void ModuleEditor::About()
 		if (ImGui::Button("Close")) { ImGui::CloseCurrentPopup(); }
 		ImGui::EndGroup();
 		ImGui::EndPopup();
-	}
-}
-
-void ModuleEditor::AddFPS(std::vector<float>& vect, const float aFPS)
-{
-	if (vect.size() < 60)
-	{
-		vect.push_back(aFPS);
-	}
-	else
-	{
-		std::rotate(vect.begin(), vect.begin() + 1, vect.end());//TODO: ta bien?
-		vect.pop_back();
-		vect.push_back(aFPS);
 	}
 }
 

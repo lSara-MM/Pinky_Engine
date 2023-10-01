@@ -27,10 +27,10 @@ public:
 
 	update_status Toolbar();
 	void ConfigWindow();
-	void OutputWindow();
+	void LogWindow();
 	void FpsWindow(ImGuiIO& io);
 
-	void About();
+	void AboutWindow();
 
 	void AddFPS(std::vector<float>& vect, const float aFPS);
 	void OsOpenInShell(const char* path);	// https://stackoverflow.com/questions/71712920/how-to-open-a-webpage-in-imgui
@@ -39,7 +39,6 @@ public:
 
 	SDL_GLContext context;
 	CPlane Grid;
-	
 
 	// 2nd window state
 	bool show_demo_window;
@@ -53,6 +52,21 @@ public:
 	//Log vector
 	std::vector<std::string> logVec;
 private:
+
+	bool moduleSettingsWin;
+	bool infoOutputWin;
+
+	// Configuration OpenGL Options
+	bool depthTest;
+	bool cullFace;
+	bool lightning;
+	bool colorMaterial;
+	bool texture2D;
+	bool blend;
+	bool lineSmooth;
+	bool normalize;
+
+	// About window
 	ImVec4 aboutColor;
 	bool aboutWin;
 };
