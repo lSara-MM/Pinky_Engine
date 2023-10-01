@@ -46,6 +46,9 @@
     <Filter Include="Sources\parson">
       <UniqueIdentifier>{ae731301-8bf9-4b11-b1fc-afa7ae618cc3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\mmgr">
+      <UniqueIdentifier>{bf938baf-71a4-423e-9ba1-90e88a33d83d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MathGeoLib\include\MathBuildConfig.h">
@@ -297,6 +300,12 @@
     <ClInclude Include="parson\parson.h">
       <Filter>Sources\parson</Filter>
     </ClInclude>
+    <ClInclude Include="mmgr\nommgr.h">
+      <Filter>Sources\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="mmgr\mmgr.h">
+      <Filter>Sources\mmgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MathGeoLib\include\Geometry\AABB.cpp">
@@ -457,6 +466,9 @@
     </ClCompile>
     <ClCompile Include="parson\parson.c">
       <Filter>Sources\parson</Filter>
+    </ClCompile>
+    <ClCompile Include="mmgr\mmgr.cpp">
+      <Filter>Sources\mmgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
