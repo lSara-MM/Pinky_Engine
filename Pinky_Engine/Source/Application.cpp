@@ -103,46 +103,6 @@ bool Application::CleanUp()
 	return ret;
 }
 
-void Application::HardwareDetection()
-{
-	{
-		ImGui::Begin("Hardware");
-		//Diapo sale cajita con active, no entiendo
-		//ImGui::Text("SDL Version: ", SDL_GetVersion);//TODO: cómo pillar versión sdl
-		ImGui::Separator();
-		ImGui::Text("CPUs: %d (Cache: %d kb) ", SDL_GetCPUCount(),SDL_GetCPUCacheLineSize());
-		ImGui::Text("System RAM: %d", SDL_GetSystemRAM);
-		ImGui::Text("Caps: ", SDL_GetSystemRAM);
-		ImGui::SameLine();
-		if (SDL_Has3DNow)ImGui::Text("3Dnow ");
-		ImGui::SameLine();
-		if (SDL_HasAltiVec)ImGui::Text("AltiVec ");
-		ImGui::SameLine();
-		if (SDL_HasAVX)ImGui::Text("AVX ");
-		ImGui::SameLine();
-		if (SDL_HasAVX2)ImGui::Text("AVX2 ");
-		ImGui::SameLine();
-		if (SDL_HasMMX)ImGui::Text("MMX ");
-		ImGui::SameLine();
-		if (SDL_HasRDTSC)ImGui::Text("RDTSC ");
-		ImGui::SameLine();
-		if (SDL_HasSSE)ImGui::Text("SSE ");
-		ImGui::SameLine();
-		if (SDL_HasSSE2)ImGui::Text("SSE2 ");
-		ImGui::SameLine();
-		if (SDL_HasSSE3)ImGui::Text("SSE3 ");
-		ImGui::SameLine();
-		if (SDL_HasSSE41)ImGui::Text("SSE41 ");
-		ImGui::SameLine();
-		if (SDL_HasSSE42)ImGui::Text("SSE42");
-		ImGui::Separator();
-		ImGui::Text("Number of drivers: %d", SDL_GetNumVideoDrivers());//TODO: cómo pillar info drivers/ram
-		for (int n = 0; n < SDL_GetNumVideoDrivers(); n++)
-			ImGui::Text(SDL_GetVideoDriver(n));
-		
-		ImGui::End();
-	}
-}
 
 int Application::ListModulesSize()
 {

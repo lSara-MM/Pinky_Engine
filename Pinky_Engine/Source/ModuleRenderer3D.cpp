@@ -1,4 +1,4 @@
-#include "Globals.h"
+﻿#include "Globals.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 #include "../SDL\include\SDL_opengl.h"
@@ -169,4 +169,52 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+void ModuleRenderer3D::HardwareDetection()
+{
+	{
+		ImGui::Begin("Hardware");
+		//Diapo sale cajita con active, no entiendo
+		//ImGui::Text("SDL Version: ", SDL_GetVersion);//TODO: c�mo pillar versi�n sdl
+		ImGui::Separator();
+		ImGui::Text("CPUs: %d (Cache: %d kb) ", SDL_GetCPUCount(), SDL_GetCPUCacheLineSize());
+		ImGui::Text("System RAM: %d", SDL_GetSystemRAM());
+		ImGui::Text("Caps: ", SDL_GetSystemRAM());
+		ImGui::SameLine();
+		if (SDL_Has3DNow())ImGui::Text("3Dnow ");
+		ImGui::SameLine();
+		if (SDL_HasAltiVec)ImGui::Text("AltiVec ");
+		ImGui::SameLine();
+		if (SDL_HasAVX())ImGui::Text("AVX ");
+		ImGui::SameLine();
+		if (SDL_HasAVX2())ImGui::Text("AVX2 ");
+		ImGui::SameLine();
+		if (SDL_HasMMX())ImGui::Text("MMX ");
+		ImGui::SameLine();
+		if (SDL_HasRDTSC)ImGui::Text("RDTSC ");
+		ImGui::SameLine();
+		if (SDL_HasSSE())ImGui::Text("SSE ");
+		ImGui::SameLine();
+		if (SDL_HasSSE2())ImGui::Text("SSE2 ");
+		ImGui::SameLine();
+		if (SDL_HasSSE3())ImGui::Text("SSE3 ");
+		ImGui::SameLine();
+		if (SDL_HasSSE41())ImGui::Text("SSE41 ");
+		ImGui::SameLine();
+		if (SDL_HasSSE42())ImGui::Text("SSE42");
+		ImGui::Separator();
+		ImGui::Text("GPU: ");
+		ImGui::SameLine();
+		ImGui::Text((const char*)glGetString(GL_VENDOR));
+		ImGui::Text("Brand: ");
+		ImGui::SameLine();
+		ImGui::Text((const char*)glGetString(GL_RENDERER));
+		ImGui::Text("Version: ");
+		ImGui::SameLine();
+		ImGui::Text((const char*)glGetString(GL_VERSION));
+
+
+		ImGui::End();
+	}
 }
