@@ -146,9 +146,9 @@ bool ModuleEditor::CleanUp()
 {
 	LOG("Destroying 3D Renderer");
 
-	ClearVecNPtr(mFPSLog);
-	ClearVecNPtr(mSLog);
-	ClearVecNPtr(logVec);
+	ClearVec(mFPSLog);
+	ClearVec(mSLog);
+	ClearVec(logVec);
 
 	// Cleanup
 	ImGui_ImplOpenGL3_Shutdown();

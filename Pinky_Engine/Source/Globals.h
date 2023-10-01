@@ -60,13 +60,15 @@ enum update_status
 		 }\
 	 }
 
+// Clear a vector
 template <class T>
-void ClearVecNPtr(std::vector<T> &x)
+void ClearVec(std::vector<T> &x)
 {
 	x.clear();
 	x.shrink_to_fit();
 }
 
+// Clear a vector of pointers
 template <class T>
 void ClearVecPtr(std::vector<T> &x)
 {
