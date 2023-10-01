@@ -36,7 +36,7 @@ bool ModuleRenderer3D::Init()
 	LOG("Creating 3D Renderer context");
 	bool ret = true;
 	//Get RAM values
-	//statsVRAM = m_getMemoryStatistics();
+	statsVRAM = m_getMemoryStatistics();
 
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
@@ -183,7 +183,7 @@ void ModuleRenderer3D::HardwareDetection(bool& infoOutputWin)
 	{
 		ImGui::Begin("Hardware");
 		//Diapo sale cajita con active, no entiendo
-		//ImGui::Text("SDL Version: ", SDL_GetVersion);//TODO: c�mo pillar versi�n sdl
+		ImGui::Text("SDL Version: %d.%d.%d", versionSDL.major, versionSDL.minor, versionSDL.patch);
 
 		//CPU info
 		ImGui::Separator();

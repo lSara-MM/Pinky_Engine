@@ -26,7 +26,7 @@ void Timer::Stop()
 }
 
 // ---------------------------------------------
-Uint32 Timer::Read()
+Uint32 Timer::ReadMSec()
 {
 	if(running == true)
 	{
@@ -37,5 +37,11 @@ Uint32 Timer::Read()
 		return stopped_at - started_at;
 	}
 }
+
+Uint32 Timer::ReadSec()
+{
+	return (SDL_GetTicks() - started_at) / 1000;
+}
+
 
 

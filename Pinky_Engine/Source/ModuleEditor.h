@@ -49,6 +49,9 @@ public:
 	std::vector<float> mFPSLog;
 	std::vector<float> mSLog;
 
+	//Frame cap
+	bool frcap;
+
 	//Log vector
 	std::vector<std::string> logVec;
 private:

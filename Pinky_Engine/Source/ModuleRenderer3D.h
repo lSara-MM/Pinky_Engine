@@ -48,4 +48,7 @@ public:
 	mat4x4 ProjectionMatrix;
 
 	bool wireframe;
+
+	//Struct to get sdl version info
+	SDL_version versionSDL;
 };

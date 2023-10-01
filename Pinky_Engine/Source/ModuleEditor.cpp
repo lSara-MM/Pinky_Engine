@@ -53,12 +53,14 @@ bool ModuleEditor::Init()
 	ImGui_ImplOpenGL3_Init("#version 130");
 
 	// 2nd window state
-	show_demo_window = true;
+	//show_demo_window = true;
 	clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 
 	// Module Settings
 	moduleSettingsWin = false;
+	frcap = true;
+
 	//// OpenGL configuration
 	depthTest = true;
 	cullFace = true;
@@ -100,7 +102,7 @@ update_status ModuleEditor::PostUpdate(float dt)
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
 	ret = Toolbar();
-	//FpsWindow(io);
+	FpsWindow(io);
 	
 	//LOG window
 	LogWindow();
@@ -307,7 +309,7 @@ void ModuleEditor::ConfigWindow()
 			}
 			ImGui::Text("Window size: %d x %d", SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
 
-			ImGui::Text("Brightness: %f", SDL_GetWindowBrightness(App->window->window));
+			ImGui::Text("Brightness: %.2f", SDL_GetWindowBrightness(App->window->window));
 
 			//Todo: Vsync no està implementat, esperar per si profe explica
 			/*if (ImGui::Checkbox("Full desktop", &App->window->fullScreenDesktop))
@@ -315,6 +317,25 @@ void ModuleEditor::ConfigWindow()
 				(vSync_B) ? flags = SDL_RENDERER_ACCELERATED : flags |= SDL_RENDERER_PRESENTVSYNC;
 			}*/
 			ImGui::Text("Mouse position: %d x, %d y", App->input->GetMouseX(), App->input->GetMouseY());
+
+			if (ImGui::SliderFloat("Brightness", &App->window->brightness, 0.2350f, 1.0f, "%.2f"))
+			{
+				SDL_SetWindowBrightness(App->window->window, App->window->brightness);//TODO: falla a vegades
+			}
+
+			if (ImGui::SliderInt("Width", &App->window->width, 0, 1920, "%d"))
+			{
+				SDL_SetWindowSize(App->window->window,App->window->width, App->window->height);
+			}
+
+			if (ImGui::SliderInt("Height", &App->window->height, 0, 1920, "%d"))
+			{
+				SDL_SetWindowSize(App->window->window, App->window->width, App->window->height);
+			}
+
+
+			//ImGui::SliderInt("FPS cap", (int*)((App->maxFrameDuration*60)/1000), 0, 240, "%d");//TODO: cast mal fet, haig de revisar
+			
 			//TODO: Input keys¿? Audio current volumes¿?
 		}
 

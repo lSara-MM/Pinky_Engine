@@ -14,7 +14,8 @@ public:
 	void Start();
 	void Stop();
 
-	Uint32 Read();
+	Uint32 ReadMSec();
+	Uint32 ReadSec();
 
 private:
 

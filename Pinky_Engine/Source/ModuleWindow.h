@@ -33,6 +33,9 @@ public:
 	bool borderless;
 	bool resizable;
 	bool fullScreenDesktop;
+	float brightness;
+	int width;
+	int height;
 };
 
 #endif // __ModuleWindow_H__
