@@ -150,7 +150,7 @@ bool ModuleRenderer3D::Init()
 	//glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float));
 	//glEnableVertexAttribArray(3);
 
-	glBindVertexArray(0);
+	//glBindVertexArray(0);
 
 	return ret;
 }
