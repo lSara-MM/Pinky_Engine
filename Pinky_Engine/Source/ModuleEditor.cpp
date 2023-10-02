@@ -102,13 +102,12 @@ update_status ModuleEditor::PostUpdate(float dt)
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
 	ret = Toolbar();
-	FpsWindow(io);
 	
 	//LOG window
 	LogWindow();
 
 	//Configwindow, change to fullscreen and such
-	ConfigWindow();
+	ConfigWindow(io);
 	App->renderer3D->HardwareDetection(infoOutputWin);
 
 
@@ -246,7 +245,6 @@ update_status ModuleEditor::Toolbar()
 
 		AboutWindow();
 
-
 		App->renderer3D->Wireframe();
 
 		ImGui::EndMainMenuBar();
@@ -255,7 +253,7 @@ update_status ModuleEditor::Toolbar()
 	return UPDATE_CONTINUE;
 }
 
-void ModuleEditor::ConfigWindow()
+void ModuleEditor::ConfigWindow(ImGuiIO& io)
 {
 	if (moduleSettingsWin)
 	{
@@ -333,7 +331,7 @@ void ModuleEditor::ConfigWindow()
 				SDL_SetWindowSize(App->window->window, App->window->width, App->window->height);
 			}
 
-
+			FpsWindow(io);
 			//ImGui::SliderInt("FPS cap", (int*)((App->maxFrameDuration*60)/1000), 0, 240, "%d");//TODO: cast mal fet, haig de revisar
 			
 			//TODO: Input keys¿? Audio current volumes¿?
@@ -370,7 +368,7 @@ void ModuleEditor::ConfigWindow()
 			}
 			if (ImGui::IsItemHovered())
 			{
-				ImGui::SetTooltip("If enabled and no vertex shader is active, use the current lighting parameters to compute the vertex color or index. Otherwise, simply associate the current color or index with each vertex.");
+				ImGui::SetTooltip("If enabled and no vertex shader is active, use the current lighting parameters to compute the vertex\n color or index. Otherwise, simply associate the current color or index with each vertex.");
 			}
 			ImGui::SameLine();
 
@@ -426,7 +424,7 @@ void ModuleEditor::ConfigWindow()
 			}
 			if (ImGui::IsItemHovered())
 			{
-				ImGui::SetTooltip("If enabled and no vertex shader is active, normal vectors are normalized to unit length after transformation and before lighting.");
+				ImGui::SetTooltip("If enabled and no vertex shader is active, normal vectors are normalized \nto unit length after transformation and before lighting.");
 			}
 			ImGui::SameLine();
 		}
@@ -437,7 +435,8 @@ void ModuleEditor::ConfigWindow()
 void ModuleEditor::LogWindow()
 {
 	//Log window
-	ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(500, 200), ImGuiCond_FirstUseEver);
+	//ImGui::SetNextWindowPos(ImVec2(0, App->window->height - 200), ImGuiCond_Appearing, ImVec2(0.4f, 0.3f));
 	ImGui::Begin("Console", NULL, ImGuiWindowFlags_MenuBar);
 	ImGui::BeginMenuBar();
 	if (ImGui::Button("Clear"))
@@ -498,10 +497,8 @@ void ModuleEditor::AboutWindow()
 	{
 		// Open a modal pop up to show info about the project
 		ImGui::OpenPopup("About");
-		aboutWin = false;
 	}
 
-	//ImGui::SetNextWindowSize(ImVec2(500, 100), ImGuiCond_FirstUseEver);
 	// Always center this window when appearing
 	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.4f, 0.3f));
