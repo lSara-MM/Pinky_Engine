@@ -290,7 +290,7 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 
 			if (ImGui::Checkbox("Borderless", &App->window->borderless))
 			{
-				SDL_SetWindowResizable(App->window->window, (SDL_bool)App->window->borderless);
+				SDL_SetWindowBordered(App->window->window, (SDL_bool)App->window->borderless);
 			}
 
 			if (ImGui::IsItemHovered())
