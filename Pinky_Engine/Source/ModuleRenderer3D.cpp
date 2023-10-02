@@ -5,6 +5,7 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
+
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "glu32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "Glew/libx86/glew32.lib")
@@ -118,6 +119,39 @@ bool ModuleRenderer3D::Init()
 	Grid.axis = true;
 
 	wireframe = false;
+
+
+
+	//TODO: CLASSE DRAW WITH OPENGL
+	//VBO = 0;
+	//glGenBuffers(1, &VBO);
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(CubeVertices), CubeVertices, GL_STATIC_DRAW);
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	//EBO = 0;
+	//glGenBuffers(1, &EBO);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(CubeIndices), CubeIndices, GL_STATIC_DRAW);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	//VAO = 0;
+	//glGenVertexArrays(1, &VAO);
+	//glBindVertexArray(VAO);
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	//glEnableVertexAttribArray(0);
+
+	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (void*)(3 * sizeof(float)));
+	//glEnableVertexAttribArray(1);
+
+	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(float));
+	//glEnableVertexAttribArray(2);
+
+	//glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float));
+	//glEnableVertexAttribArray(3);
+
+	glBindVertexArray(0);
+
 	return ret;
 }
 
@@ -144,8 +178,37 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	update_status ret = UPDATE_CONTINUE;
 
+	glLineWidth(2.0f);
+	glBegin(GL_TRIANGLES);
+	glVertex3d(0, 0, 0);glVertex3d(1, 1, 0);glVertex3d(1, 0, 0);
+	glVertex3d(0, 0, 0); glVertex3d(0, 1, 0); glVertex3d(1, 1, 0);
+	glEnd();
+	glLineWidth(1.0f);
+
+
 	Grid.Render();
-	//SDL_GL_SwapWindow(App->window->window);
+	//SDL_GL_SwapWindow(App->window->window)
+
+
+
+	//TODO: CLASSE DRAW WITH OPENGL
+	//static const GLfloat CubeVertices[] = {
+
+	//};
+	//static const GLuint CubeIndices[] = {
+
+	//};
+
+	//glEnableClientState(GL_VERTEX_ARRAY);
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	//glVertexPointer(3, GL_FLOAT, 0, NULL);
+	//// … bind and use other buffers
+	//glDrawArrays(GL_TRIANGLES, 0, sizeof(g_vertex_buffer_data)/sizeof(float));
+	//glDisableClientState(GL_VERTEX_ARRAY);
+
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, CubeIndices);
+
 
 	return ret;
 }
@@ -157,6 +220,15 @@ bool ModuleRenderer3D::CleanUp()
 
 	// Cleanup
 
+
+
+	//TODO: CLASSE DRAW WITH OPENGL
+	//if (VBO!=0)
+	//{
+	//	glDeleteBuffers(1, &VBO);
+	//	VBO = 0;
+	//}
+	
 	SDL_GL_DeleteContext(context);
 	return true;
 }
