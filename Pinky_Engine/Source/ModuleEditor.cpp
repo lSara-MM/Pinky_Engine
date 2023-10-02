@@ -257,7 +257,12 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 {
 	if (moduleSettingsWin)
 	{
-		ImGui::Begin("Configuration", &moduleSettingsWin);
+		// Always center this window when appearing
+		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.7f));
+		ImGui::SetNextWindowSize(ImVec2(500, 200));
+		ImGui::Begin("Configuration", &moduleSettingsWin, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+		
 		if (ImGui::CollapsingHeader("Window"))
 		{
 			if (ImGui::Checkbox("Fullscreen", &App->window->fullScreen))
@@ -436,7 +441,6 @@ void ModuleEditor::LogWindow()
 {
 	//Log window
 	ImGui::SetNextWindowSize(ImVec2(500, 200), ImGuiCond_FirstUseEver);
-	//ImGui::SetNextWindowPos(ImVec2(0, App->window->height - 200), ImGuiCond_Appearing, ImVec2(0.4f, 0.3f));
 	ImGui::Begin("Console", NULL, ImGuiWindowFlags_MenuBar);
 	ImGui::BeginMenuBar();
 	if (ImGui::Button("Clear"))
