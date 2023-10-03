@@ -51,13 +51,8 @@ bool Application::Init()
 		(*it)->Start();
 	}
 	
-	//ms_timer.Start();//TODO:manera antigua medir tiempo
-
-	// Measure the amount of ms that takes to execute the App Start()
-	timer.Start();
-	startupTime.Start();
-	lastSecFrameTime.Start();
-	maxFrameDuration = 16;
+	ms_timer.Start();
+	maxFrameDuration = 1000/60;
 
 	return ret;
 }
@@ -65,43 +60,21 @@ bool Application::Init()
 // ---------------------------------------------
 void Application::PrepareUpdate()
 {
-	/*dt = (float)ms_timer.Read() / 1000.0f;
-	ms_timer.Start();*/
-	frameTime.Start();
+
+	if (maxFrameDuration > (float)ms_timer.Read())
+	{
+		SDL_Delay(maxFrameDuration - (float)ms_timer.Read());
+	}	
+
+	dt = (float)ms_timer.Read() / 1000.0f;
+
+	ms_timer.Start();
 }
 
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
-	// Time control maths
-	// Amount of frames since startup
-	frameCount++;
-	// Amount of time since game start (use a low resolution timer)
-	secondsSinceStartup = startupTime.ReadSec();
-	// Amount of ms took the last update
-	dt = frameTime.ReadMSec();
-	// Amount of frames during the last second
-	lastSecFrameCount++;
-
-	if (lastSecFrameTime.ReadMSec() > 1000) {
-		lastSecFrameTime.Start();
-		framesPerSecond = lastSecFrameCount;
-		lastSecFrameCount = 0;
-		// Average FPS for the whole game life
-		averageFps = (averageFps + framesPerSecond) / 2;
-	}
-
-	// Use SDL_Delay to make sure you get your capped framerate
-	// Measure accurately the amount of time SDL_Delay() actually waits compared to what was expected
-	float delay = float(maxFrameDuration) - dt;
-
-	if (maxFrameDuration > 0 && delay > 0 && App->editor->frcap)
-	{
-		SDL_Delay(delay);
-		dt = maxFrameDuration;
-	}
-	else {}
-
+	
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules

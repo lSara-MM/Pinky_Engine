@@ -37,20 +37,8 @@ public:
 	
 	int ListModulesSize();
 
-	//Frame cap 
-	Timer timer;
-	Timer startupTime;
-	Timer frameTime;
-	Timer lastSecFrameTime;
-
-	Uint64 frameCount = 0;
-	Uint32 framesPerSecond = 0;
-	Uint32 lastSecFrameCount = 0;
-
-	float averageFps = 0.0f;
-	float secondsSinceStartup = 0.0f;
-	int  secondsSinceStartupTempo = 0;
-	Uint32 maxFrameDuration = 0;
+	//frcap
+	uint maxFrameDuration;
 
 private:
 
