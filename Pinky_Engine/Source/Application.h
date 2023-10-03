@@ -40,6 +40,7 @@ public:
 	//frcap
 	uint maxFrameDuration;
 	int fps;
+	bool frcap;
 
 private:
 

@@ -338,8 +338,11 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 			}
 
 			FpsWindow(io);
+
+			ImGui::Checkbox("FPS Cap", &App->frcap);
+
 			ImGui::SliderInt("FPS cap", &App->fps, 1, 120, "%d");
-			
+
 			//TODO: Input keys¿? Audio current volumes¿?
 		}
 

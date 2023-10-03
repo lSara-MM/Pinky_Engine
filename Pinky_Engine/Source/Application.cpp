@@ -51,9 +51,11 @@ bool Application::Init()
 		(*it)->Start();
 	}
 	
+	//fps control
 	ms_timer.Start();
 	fps = 60;
 	maxFrameDuration = 1000/fps;
+	frcap = true;
 
 	return ret;
 }
@@ -63,7 +65,7 @@ void Application::PrepareUpdate()
 {
 	maxFrameDuration = 1000 / fps;
 
-	if (maxFrameDuration > (float)ms_timer.Read())
+	if (maxFrameDuration > (float)ms_timer.Read() && frcap)
 	{
 		SDL_Delay(maxFrameDuration - (float)ms_timer.Read());
 	}	
