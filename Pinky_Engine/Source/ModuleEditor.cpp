@@ -290,7 +290,7 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 
 			if (ImGui::Checkbox("Borderless", &App->window->borderless))
 			{
-				SDL_SetWindowBordered(App->window->window, (SDL_bool)App->window->borderless);
+				SDL_SetWindowBordered(App->window->window, (SDL_bool)!App->window->borderless);
 			}
 
 			if (ImGui::IsItemHovered())
@@ -319,6 +319,7 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 			{
 				(vSync_B) ? flags = SDL_RENDERER_ACCELERATED : flags |= SDL_RENDERER_PRESENTVSYNC;
 			}*/
+
 			ImGui::Text("Mouse position: %d x, %d y", App->input->GetMouseX(), App->input->GetMouseY());
 
 			if (ImGui::SliderFloat("Brightness", &App->window->brightness, 0.2350f, 1.0f, "%.2f"))
@@ -337,7 +338,7 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 			}
 
 			FpsWindow(io);
-			//ImGui::SliderInt("FPS cap", (int*)((App->maxFrameDuration*60)/1000), 0, 240, "%d");//TODO: cast mal fet, haig de revisar
+			ImGui::SliderInt("FPS cap", &App->fps, 1, 120, "%d");
 			
 			//TODO: Input keys¿? Audio current volumes¿?
 		}

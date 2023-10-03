@@ -52,7 +52,8 @@ bool Application::Init()
 	}
 	
 	ms_timer.Start();
-	maxFrameDuration = 1000/60;
+	fps = 60;
+	maxFrameDuration = 1000/fps;
 
 	return ret;
 }
@@ -60,6 +61,7 @@ bool Application::Init()
 // ---------------------------------------------
 void Application::PrepareUpdate()
 {
+	maxFrameDuration = 1000 / fps;
 
 	if (maxFrameDuration > (float)ms_timer.Read())
 	{
