@@ -112,7 +112,7 @@ update_status ModuleEditor::PostUpdate(float dt)
 
 
 	// TODO: delete this later, just to test OpenGL options
-	App->renderer3D->DrawBox();
+	//App->renderer3D->DrawBox();
 
 	// Rendering
 	ImGui::Render();
