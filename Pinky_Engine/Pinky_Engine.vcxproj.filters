@@ -49,6 +49,9 @@
     <Filter Include="Sources\mmgr">
       <UniqueIdentifier>{bf938baf-71a4-423e-9ba1-90e88a33d83d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Assimp">
+      <UniqueIdentifier>{5c672c23-3160-488b-b85e-db60521f6a49}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MathGeoLib\include\MathBuildConfig.h">
@@ -306,6 +309,9 @@
     <ClInclude Include="mmgr\mmgr.h">
       <Filter>Sources\mmgr</Filter>
     </ClInclude>
+    <ClInclude Include="Assimp\Assimp.h">
+      <Filter>Sources\Assimp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MathGeoLib\include\Geometry\AABB.cpp">
@@ -469,6 +475,9 @@
     </ClCompile>
     <ClCompile Include="mmgr\mmgr.cpp">
       <Filter>Sources\mmgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Assimp\Assimp.cpp">
+      <Filter>Sources\Assimp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

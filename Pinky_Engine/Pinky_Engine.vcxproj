@@ -80,6 +80,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Assimp\Assimp.h" />
     <ClInclude Include="ImGui\backends\imgui_impl_opengl3.h" />
     <ClInclude Include="ImGui\backends\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="ImGui\backends\imgui_impl_sdl2.h" />
@@ -167,6 +168,7 @@
     <ClInclude Include="Source\Timer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Assimp\Assimp.cpp" />
     <ClCompile Include="ImGui\backends\imgui_impl_opengl3.cpp" />
     <ClCompile Include="ImGui\backends\imgui_impl_sdl2.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
