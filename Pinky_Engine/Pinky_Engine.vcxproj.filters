@@ -49,7 +49,7 @@
     <Filter Include="Sources\mmgr">
       <UniqueIdentifier>{bf938baf-71a4-423e-9ba1-90e88a33d83d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Assimp">
+    <Filter Include="Sources\Importers">
       <UniqueIdentifier>{5c672c23-3160-488b-b85e-db60521f6a49}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -310,7 +310,7 @@
       <Filter>Sources\mmgr</Filter>
     </ClInclude>
     <ClInclude Include="Assimp\Assimp.h">
-      <Filter>Sources\Assimp</Filter>
+      <Filter>Sources\Importers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -477,7 +477,7 @@
       <Filter>Sources\mmgr</Filter>
     </ClCompile>
     <ClCompile Include="Assimp\Assimp.cpp">
-      <Filter>Sources\Assimp</Filter>
+      <Filter>Sources\Importers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
