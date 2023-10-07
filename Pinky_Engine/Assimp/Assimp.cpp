@@ -21,33 +21,41 @@ bool ai::LoadObject(const char* fileDir)
 	const aiScene* scene = aiImportFile(fileDir, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		const aiMesh* m = scene->mMeshes[0];
-		mesh* ourMesh = new mesh;
+		int a = 0;
 
-		// copy vertices
-		ourMesh->num_vertex = m->mNumVertices;
-		ourMesh->vertex = new float[ourMesh->num_vertex * 3];
-		memcpy(ourMesh->vertex, m->mVertices, sizeof(float) * ourMesh->num_vertex * 3);
-		LOG("New mesh with %d vertices", m->mNumVertices);
-
-		// copy faces
-		if (m->HasFaces())
+		// Use scene->mNumMeshes to iterate on scene->mMeshes array
+		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
-			ourMesh->num_index = m->mNumFaces * 3;
-			ourMesh->index = new uint[ourMesh->num_index]; // assume each face is a triangle
-			for (uint i = 0; i < m->mNumFaces; ++i)
+			a = i;
+			const aiMesh* m = scene->mMeshes[i];
+			mesh* ourMesh = new mesh;
+
+			// copy vertices
+			ourMesh->num_vertex = m->mNumVertices;
+			ourMesh->vertex = new float[ourMesh->num_vertex * 3];
+			memcpy(ourMesh->vertex, m->mVertices, sizeof(float) * ourMesh->num_vertex * 3);
+			LOG("New mesh with %d vertices", m->mNumVertices);
+
+			// copy faces
+			if (m->HasFaces())
 			{
-				if (m->mFaces[i].mNumIndices != 3)
+				ourMesh->num_index = m->mNumFaces * 3;
+				ourMesh->index = new uint[ourMesh->num_index]; // assume each face is a triangle
+				for (uint i = 0; i < m->mNumFaces; ++i)
 				{
-					LOG("WARNING, geometry face with != 3 indices!");
-				}
-				else
-				{
-					memcpy(&ourMesh->index[i * 3], m->mFaces[i].mIndices, 3 * sizeof(uint));
+					if (m->mFaces[i].mNumIndices != 3)
+					{
+						LOG("WARNING, geometry face with != 3 indices!");
+					}
+					else
+					{
+						memcpy(&ourMesh->index[i * 3], m->mFaces[i].mIndices, 3 * sizeof(uint));
+					}
 				}
 			}
 		}
-		// Use scene->mNumMeshes to iterate on scene->mMeshes array
+
+		LOG("%d meshes, for %d", scene->mNumMeshes, a);
 		aiReleaseImport(scene);
 	}
 	else
