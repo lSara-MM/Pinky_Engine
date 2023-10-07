@@ -58,6 +58,8 @@ public:
 		return mouse_y_motion;
 	}
 
+	char* dropped_filedir; // Pointer for directory of dropped file
+
 private:
 	KEY_STATE* keyboard;
 	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
@@ -67,6 +69,4 @@ private:
 	int mouse_x_motion;
 	int mouse_y_motion;
 	//int mouse_z_motion;
-
-	char* dropped_filedir; // Pointer for directory of dropped file
 };
