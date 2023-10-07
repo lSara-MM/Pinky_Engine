@@ -21,12 +21,9 @@ bool ai::LoadObject(const char* fileDir)
 	const aiScene* scene = aiImportFile(fileDir, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		int a = 0;
-
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
 		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
-			a = i;
 			const aiMesh* m = scene->mMeshes[i];
 			mesh* ourMesh = new mesh;
 
@@ -34,7 +31,9 @@ bool ai::LoadObject(const char* fileDir)
 			ourMesh->num_vertex = m->mNumVertices;
 			ourMesh->vertex = new float[ourMesh->num_vertex * 3];
 			memcpy(ourMesh->vertex, m->mVertices, sizeof(float) * ourMesh->num_vertex * 3);
-			LOG("New mesh with %d vertices", m->mNumVertices);
+
+			// TODO preguntar: como pillar el nombre del objeto y no la de dentro de la mesh "outliner id data operation" (abrir en blender pa explicar bien xd) 
+			LOG("New mesh %s with %d vertices", m->mName.C_Str(), m->mNumVertices);
 
 			// copy faces
 			if (m->HasFaces())
@@ -55,7 +54,7 @@ bool ai::LoadObject(const char* fileDir)
 			}
 		}
 
-		LOG("%d meshes, for %d", scene->mNumMeshes, a);
+		LOG("%d meshes loaded", scene->mNumMeshes);
 		aiReleaseImport(scene);
 	}
 	else
