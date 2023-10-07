@@ -1,8 +1,12 @@
+// Importer
+// TODO: cambiar de sitio cuando se cree donde tiene que estar
+// TODO preguntar: porque tiene que estar arriba de todo o sino peta el algorithm 
+#include "../Assimp/Assimp.h"
+
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleInput.h"
 #include "../ImGui/backends/imgui_impl_sdl2.h"
-
 
 #define MAX_KEYS 300
 
@@ -128,6 +132,9 @@ update_status ModuleInput::PreUpdate(float dt)
 					"File dropped on window", dropped_filedir, App->window->window);*/
 
 				LOG("File dropped from: %s", dropped_filedir);
+
+				ai::LoadObject(dropped_filedir);
+
 				SDL_free(dropped_filedir);    // Free dropped_filedir memory
 				break;
 			}
