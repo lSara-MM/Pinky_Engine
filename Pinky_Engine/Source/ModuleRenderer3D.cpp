@@ -1,4 +1,7 @@
-﻿#include "Globals.h"
+﻿// Importers
+#include "../Assimp/Assimp.h"
+
+#include "Globals.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 #include "../SDL\include\SDL_opengl.h"
@@ -232,15 +235,7 @@ bool ModuleRenderer3D::CleanUp()
 	LOG("Destroying 3D Renderer");
 
 	// Cleanup
-
-
-
-	//TODO: CLASSE DRAW WITH OPENGL
-	//if (VBO!=0)
-	//{
-	//	glDeleteBuffers(1, &VBO);
-	//	VBO = 0;
-	//}
+	ai::DeleteBuffers();
 	
 	SDL_GL_DeleteContext(context);
 	return true;

@@ -4,6 +4,7 @@
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
 #include "../Source/Globals.h"
+#include "../Glew/include/glew.h"
 
 namespace ai
 {
@@ -16,10 +17,18 @@ namespace ai
 		uint id_vertex = 0; // unique vertex in VRAM
 		uint num_vertex = 0;
 		float* vertex = nullptr;
+
+		GLuint VBO; // vertex buffer object
+		GLuint EBO; // element buffer object
+		GLuint VAO; // attribute buffer object
 	};
 
 	void EnableDebug();
 	void DisableDebug();
 
-	bool LoadObject(const char* fileDir);
+	bool ImportMesh(const char* fileDir);
+	bool InitMesh(mesh* m);
+	void DeleteBuffers();
+
+	//std::vector<mesh*> meshes;
 }

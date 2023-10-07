@@ -1,4 +1,4 @@
-// Importer
+// Importers
 // TODO: cambiar de sitio cuando se cree donde tiene que estar
 // TODO preguntar: porque tiene que estar arriba de todo o sino peta el algorithm 
 #include "../Assimp/Assimp.h"
@@ -133,7 +133,7 @@ update_status ModuleInput::PreUpdate(float dt)
 
 				LOG("File dropped from: %s", dropped_filedir);
 
-				ai::LoadObject(dropped_filedir);
+				ai::ImportMesh(dropped_filedir);
 
 				SDL_free(dropped_filedir);    // Free dropped_filedir memory
 				break;

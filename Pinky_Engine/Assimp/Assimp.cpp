@@ -16,13 +16,13 @@ void ai::DisableDebug()
 	LOG("Disable debug mode");
 }
 
-bool ai::LoadObject(const char* fileDir)
+bool ai::ImportMesh(const char* fileDir)
 {
 	const aiScene* scene = aiImportFile(fileDir, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
-		for (int i = 0; i < scene->mNumMeshes; i++)
+		for (auto i = 0; i < scene->mNumMeshes; i++)
 		{
 			const aiMesh* m = scene->mMeshes[i];
 			mesh* ourMesh = new mesh;
@@ -52,6 +52,8 @@ bool ai::LoadObject(const char* fileDir)
 					}
 				}
 			}
+
+			//App->renderer3D->meshes.push_back(ourMesh);
 		}
 
 		LOG("%d meshes loaded", scene->mNumMeshes);
@@ -63,4 +65,41 @@ bool ai::LoadObject(const char* fileDir)
 		return false;
 	}
 	return true;
+}
+
+bool ai::InitMesh(mesh* m)
+{
+	m->VBO = 0;
+	m->EBO = 0;
+	m->VAO = 0;
+	glGenBuffers(1, &m->VBO);
+	glGenBuffers(1, &m->EBO);
+	glGenVertexArrays(1, &m->VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, m->VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->num_vertex * 3, m->vertex, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m->EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * m->num_index * 3, m->index, GL_STATIC_DRAW);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	glBindVertexArray(m->VAO);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	glBindVertexArray(0);
+
+	return false;
+}
+
+void ai::DeleteBuffers()
+{
+	/*for (auto i = 0; i < meshes.size(); i++)
+	{
+		if (meshes.at(i)->VBO != 0)
+		{
+			glDeleteBuffers(1, &meshes.at(i)->VBO);
+			meshes.at(i)->VBO = 0;
+		}
+	}*/
 }

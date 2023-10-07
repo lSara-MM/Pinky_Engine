@@ -53,11 +53,4 @@ public:
 
 	//Struct to get sdl version info
 	SDL_version versionSDL;
-
-
-
-	//TODO: CLASSE DRAW WITH OPENGL
-	//GLuint VBO;//vertex buffer object
-	//GLuint EBO;//vertex buffer object
-	//GLuint VAO;//vertex buffer object
 };
