@@ -26,6 +26,12 @@
 *.lib
 !Game/Source/External/SDL/libx86/SDL2.lib
 !Game/Source/External/SDL/libx86/SDL2main.lib
+!Game/Source/External/SDL_image/libx86/SDL2_image.lib
+!Game/Source/External/SDL_mixer/libx86/SDL2_mixer.lib
+!Game/Source/External/Box2D/libx86/DebugLib/Box2D.lib
+!Game/Source/External/Box2D/libx86/DebugLib/Box2D.pdb
+!Game/Source/External/Box2D/libx86/ReleaseLib/Box2D.lib
+!Game/Source/External/Box2D/libx86/ReleaseLib/Box2D.pdb
 
 # Executables
 *.exe
@@ -74,15 +80,18 @@ ipch/
 *.opendb
 packages/
 
-!/Assimp
-!/Assimp/*
+
+!/SDL2_ttf-2.0.18
+!/SDL2_ttf-2.0.18/*
+
+!/SDL2_ttf
+!/SDL2_ttf/*
 
 !/Optick
 !/Optick/*
 
 
-!Game/Source/External/Assimp/libx86/assimp.lib
-!Game/Source/External/Assimp/libx86/zlibstatic.lib
+!Game/Source/External/SDL_ttf/libx86/SDL2_ttf.lib
 
 
 !Game/Source/External/Optick/lib/debugLib/OptickCore.dll

@@ -3,8 +3,6 @@
 #include "ModuleInput.h"
 #include "../ImGui/backends/imgui_impl_sdl2.h"
 
-// TODO: poner donde toque cuando este creado
-#include "../Assimp/Assimp.h"
 
 #define MAX_KEYS 300
 
@@ -130,10 +128,6 @@ update_status ModuleInput::PreUpdate(float dt)
 					"File dropped on window", dropped_filedir, App->window->window);*/
 
 				LOG("File dropped from: %s", dropped_filedir);
-				
-				// TODO: poner donde toque cuando este creado
-				//ai::LoadObject(dropped_filedir);
-
 				SDL_free(dropped_filedir);    // Free dropped_filedir memory
 				break;
 			}

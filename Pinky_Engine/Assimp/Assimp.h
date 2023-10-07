@@ -18,8 +18,5 @@ namespace ai
 		float* vertex = nullptr;
 	};
 
-	void EnableDebug();
-	void DisableDebug();
-
-	bool LoadObject(const char* fileDir);
+	bool LoadScene();
 }
