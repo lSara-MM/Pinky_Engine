@@ -1,4 +1,10 @@
 #pragma once
+
+// Importers
+// TODO: cambiar de sitio cuando se cree donde tiene que estar
+// TODO preguntar: porque tiene que estar arriba de todo o sino peta el algorithm 
+#include "../Assimp/Assimp.h"
+
 #include "Module.h"
 #include "Globals.h"
 #include "Light.h"
@@ -36,6 +42,8 @@ public:
 	void HardwareDetection(bool &infoOutputWin);
 
 	void DrawBox();
+	void DrawMesh(ai::mesh* mesh);
+
 	void Wireframe();
 
 	sMStats statsVRAM;
@@ -53,4 +61,6 @@ public:
 
 	//Struct to get sdl version info
 	SDL_version versionSDL;
+
+	std::vector<ai::mesh*> meshes;
 };

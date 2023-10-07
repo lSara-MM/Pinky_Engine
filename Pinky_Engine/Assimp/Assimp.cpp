@@ -1,4 +1,6 @@
+#pragma once
 #include "Assimp.h"
+#include "../Source/Application.h"
 
 void ai::EnableDebug()
 {
@@ -40,28 +42,39 @@ bool ai::ImportMesh(const char* fileDir)
 			{
 				ourMesh->num_index = m->mNumFaces * 3;
 				ourMesh->index = new uint[ourMesh->num_index]; // assume each face is a triangle
+
 				for (uint i = 0; i < m->mNumFaces; ++i)
 				{
 					if (m->mFaces[i].mNumIndices != 3)
 					{
-						LOG("WARNING, geometry face with != 3 indices!");
+						LOG("[WARNING], geometry face with != 3 indices!");
 					}
 					else
 					{
 						memcpy(&ourMesh->index[i * 3], m->mFaces[i].mIndices, 3 * sizeof(uint));
+
+						std::vector<uint> ind;
+
+						for (int i = 0; i < ourMesh->num_index; i++)
+						{
+							ind.push_back(*ourMesh->index + i);
+						}
 					}
 				}
 			}
 
-			//App->renderer3D->meshes.push_back(ourMesh);
+			if (InitMesh(ourMesh))
+			{
+				App->renderer3D->meshes.push_back(ourMesh);
+			}
 		}
 
-		LOG("%d meshes loaded", scene->mNumMeshes);
+		LOG("%d meshes loaded.", scene->mNumMeshes);
 		aiReleaseImport(scene);
 	}
 	else
 	{
-		LOG("Error loading scene % s", fileDir);
+		LOG("[ERROR] loading scene % s", fileDir);
 		return false;
 	}
 	return true;
@@ -72,34 +85,44 @@ bool ai::InitMesh(mesh* m)
 	m->VBO = 0;
 	m->EBO = 0;
 	m->VAO = 0;
+
 	glGenBuffers(1, &m->VBO);
 	glGenBuffers(1, &m->EBO);
 	glGenVertexArrays(1, &m->VAO);
 
+	if (m->VBO == 0 || m->EBO == 0 || m->VAO == 0)
+	{
+		LOG("[ERROR] buffer not created");
+		return false;
+	}
+
+	// VBO
 	glBindBuffer(GL_ARRAY_BUFFER, m->VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->num_vertex * 3, m->vertex, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+	// EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m->EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * m->num_index * 3, m->index, GL_STATIC_DRAW);
 	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
+	// VAO
 	glBindVertexArray(m->VAO);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 	glBindVertexArray(0);
 
-	return false;
+	return true;
 }
 
 void ai::DeleteBuffers()
 {
-	/*for (auto i = 0; i < meshes.size(); i++)
+	for (auto i = 0; i < App->renderer3D->meshes.size(); i++)
 	{
-		if (meshes.at(i)->VBO != 0)
+		if (App->renderer3D->meshes.at(i)->VBO != 0)
 		{
-			glDeleteBuffers(1, &meshes.at(i)->VBO);
-			meshes.at(i)->VBO = 0;
+			glDeleteBuffers(1, &App->renderer3D->meshes.at(i)->VBO);
+			App->renderer3D->meshes.at(i)->VBO = 0;
 		}
-	}*/
+	}
 }

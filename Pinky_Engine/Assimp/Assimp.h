@@ -1,3 +1,7 @@
+#ifndef __MESH_H__
+#define __MESH_H__
+
+#pragma once
 #include "../Assimp/include/cimport.h"
 #include "../Assimp/include/scene.h"
 #include "../Assimp/include/postprocess.h"
@@ -32,3 +36,4 @@ namespace ai
 
 	//std::vector<mesh*> meshes;
 }
+#endif //!__MESH_H__

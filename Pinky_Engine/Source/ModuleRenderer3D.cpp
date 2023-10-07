@@ -39,6 +39,7 @@ bool ModuleRenderer3D::Init()
 {
 	LOG("Creating 3D Renderer context");
 	bool ret = true;
+	
 	//Get RAM values
 	statsVRAM = m_getMemoryStatistics();
 
@@ -114,47 +115,48 @@ bool ModuleRenderer3D::Init()
 		lights[0].Active(true);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
+
+		glewInit();
 	}
 
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	Grid.axis = true;
-
 	wireframe = false;
 
 
+	{
+		//TODO: CLASSE DRAW WITH OPENGL
+		//VBO = 0;
+		//glGenBuffers(1, &VBO);
+		//glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		//glBufferData(GL_ARRAY_BUFFER, sizeof(CubeVertices), CubeVertices, GL_STATIC_DRAW);
+		//glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	//TODO: CLASSE DRAW WITH OPENGL
-	//VBO = 0;
-	//glGenBuffers(1, &VBO);
-	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(CubeVertices), CubeVertices, GL_STATIC_DRAW);
-	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+		//EBO = 0;
+		//glGenBuffers(1, &EBO);
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(CubeIndices), CubeIndices, GL_STATIC_DRAW);
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	//EBO = 0;
-	//glGenBuffers(1, &EBO);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(CubeIndices), CubeIndices, GL_STATIC_DRAW);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		//VAO = 0;
+		//glGenVertexArrays(1, &VAO);
+		//glBindVertexArray(VAO);
+		//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		//glEnableVertexAttribArray(0);
 
-	//VAO = 0;
-	//glGenVertexArrays(1, &VAO);
-	//glBindVertexArray(VAO);
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	//glEnableVertexAttribArray(0);
+		//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (void*)(3 * sizeof(float)));
+		//glEnableVertexAttribArray(1);
 
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (void*)(3 * sizeof(float)));
-	//glEnableVertexAttribArray(1);
+		//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(float));
+		//glEnableVertexAttribArray(2);
 
-	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(float));
-	//glEnableVertexAttribArray(2);
+		//glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float));
+		//glEnableVertexAttribArray(3);
 
-	//glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float));
-	//glEnableVertexAttribArray(3);
-
-	//glBindVertexArray(0);
-
+		//glBindVertexArray(0);
+	}
 	return ret;
 }
 
@@ -182,7 +184,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	update_status ret = UPDATE_CONTINUE;
 
 	//cube made with GL_TRIANGLES
-	glLineWidth(2.0f);
+	/*glLineWidth(2.0f);
 	glBegin(GL_TRIANGLES);
 
 	glVertex3d(0, 0, 0);glVertex3d(1, 1, 0);glVertex3d(1, 0, 0);
@@ -199,32 +201,20 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	glVertex3d(1, 0, 0); glVertex3d(1, 0, 1); glVertex3d(0, 0, 1);
 
 	glEnd();
-	glLineWidth(1.0f);
+	glLineWidth(1.0f);*/
 
 
 	Grid.Render();
-	//SDL_GL_SwapWindow(App->window->window)
+	
+	/*for (auto i = 0; i < meshes.size(); i++)
+	{
+		DrawMesh(meshes.at(i));
+	}*/
 
-
-
-	//TODO: CLASSE DRAW WITH OPENGL
-	//static const GLfloat CubeVertices[] = {
-
-	//};
-	//static const GLuint CubeIndices[] = {
-
-	//};
-
-	//glEnableClientState(GL_VERTEX_ARRAY);
-	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	//glVertexPointer(3, GL_FLOAT, 0, NULL);
-	//// … bind and use other buffers
-	//glDrawArrays(GL_TRIANGLES, 0, sizeof(g_vertex_buffer_data)/sizeof(float));
-	//glDisableClientState(GL_VERTEX_ARRAY);
-
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, CubeIndices);
-
+	for each (ai::mesh* i in meshes)
+	{
+		DrawMesh(i);
+	}
 
 	return ret;
 }
@@ -355,6 +345,28 @@ void ModuleRenderer3D::DrawBox()
 	glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, 1.0f, 1.0f);// Point 3 (Left)
 	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, -1.0f);// Point 4 (Left)
 	glEnd();// Done Drawing Quads
+}
+
+void ModuleRenderer3D::DrawMesh(ai::mesh* mesh)
+{
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glBindVertexArray(mesh->VAO);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->EBO);
+
+	std::vector<uint> ind;
+
+	for (int i = 0; i < mesh->num_index; i++)
+	{
+		ind.push_back(*mesh->index + i);
+	}
+
+	glDrawElements(GL_TRIANGLES, mesh->num_index, GL_UNSIGNED_INT, mesh->index);
+
+
+	//glDrawArrays(GL_TRIANGLES, 0, mesh->num_vertex);
+	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 void ModuleRenderer3D::Wireframe()
