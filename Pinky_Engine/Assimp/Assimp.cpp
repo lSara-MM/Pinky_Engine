@@ -52,13 +52,6 @@ bool ai::ImportMesh(const char* fileDir)
 					else
 					{
 						memcpy(&ourMesh->index[i * 3], m->mFaces[i].mIndices, 3 * sizeof(uint));
-
-						std::vector<uint> ind;
-
-						for (int i = 0; i < ourMesh->num_index; i++)
-						{
-							ind.push_back(*ourMesh->index + i);
-						}
 					}
 				}
 			}
@@ -104,13 +97,13 @@ bool ai::InitMesh(mesh* m)
 	// EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m->EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * m->num_index * 3, m->index, GL_STATIC_DRAW);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	// VAO
-	glBindVertexArray(m->VAO);
+	/*glBindVertexArray(m->VAO);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	glBindVertexArray(0);
+	glBindVertexArray(0);*/
 
 	return true;
 }

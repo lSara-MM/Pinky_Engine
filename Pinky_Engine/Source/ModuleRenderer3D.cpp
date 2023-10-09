@@ -205,11 +205,6 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 
 	Grid.Render();
-	
-	/*for (auto i = 0; i < meshes.size(); i++)
-	{
-		DrawMesh(meshes.at(i));
-	}*/
 
 	for each (ai::mesh* i in meshes)
 	{
@@ -351,20 +346,13 @@ void ModuleRenderer3D::DrawMesh(ai::mesh* mesh)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 
-	glBindVertexArray(mesh->VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->EBO);
 
-	std::vector<uint> ind;
-
-	for (int i = 0; i < mesh->num_index; i++)
-	{
-		ind.push_back(*mesh->index + i);
-	}
-
-	glDrawElements(GL_TRIANGLES, mesh->num_index, GL_UNSIGNED_INT, mesh->index);
-
-
+	glDrawElements(GL_TRIANGLES, mesh->num_index, GL_UNSIGNED_INT, NULL);
+    
+	glBindVertexArray(0);
 	//glDrawArrays(GL_TRIANGLES, 0, mesh->num_vertex);
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
