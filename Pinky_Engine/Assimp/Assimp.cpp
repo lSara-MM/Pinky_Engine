@@ -56,6 +56,27 @@ bool ai::ImportMesh(const char* fileDir)
 				}
 			}
 
+			//TODO: NO VA
+			////copy normals
+			//ourMesh->num_normals = m->mNumVertices;
+			//ourMesh->normals = new float[ourMesh->num_normals * 3];
+			//memcpy(ourMesh->normals, m->mNormals, sizeof(float) * ourMesh->num_normals * 3);
+
+			////copy texture coordinates
+			//uint uv_index = 0;
+
+			//if (m->HasTextureCoords(uv_index))
+			//{
+			//	ourMesh->num_tex = m->mNumVertices;
+			//	ourMesh->tex = new math::float2[ourMesh->num_tex * 3];
+			//	for (uint i = 0; i < ourMesh->num_tex; i++)
+			//	{
+			//		ourMesh->tex[i].x = m->mTextureCoords[uv_index][i].x;
+			//		ourMesh->tex[i].y = m->mTextureCoords[uv_index][i].y;
+			//	}
+
+			//}
+
 			if (InitMesh(ourMesh))
 			{
 				App->renderer3D->meshes.push_back(ourMesh);
@@ -104,6 +125,16 @@ bool ai::InitMesh(mesh* m)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 	glBindVertexArray(0);*/
+
+	//TODO: NO VA
+	////normals
+	//glBindBuffer(GL_ARRAY_BUFFER, m->id_normals);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->num_normals * 3, m->normals, GL_STATIC_DRAW);
+
+	////texture coordinates
+	//glBindBuffer(GL_ARRAY_BUFFER, m->id_tex);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->num_tex * 2, m->tex, GL_STATIC_DRAW);
+
 
 	return true;
 }

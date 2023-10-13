@@ -26,6 +26,8 @@
 #include "glmath.h"
 
 #define MAX_LIGHTS 8
+#define CHECKERS_HEIGHT 512
+#define CHECKERS_WIDTH 512
 
 class ModuleRenderer3D : public Module
 {
@@ -46,6 +48,9 @@ public:
 
 	void Wireframe();
 
+	//Loading textures
+	void loadTexture(uint* buffer);
+
 	sMStats statsVRAM;
 
 public:
@@ -63,4 +68,7 @@ public:
 	SDL_version versionSDL;
 
 	std::vector<ai::mesh*> meshes;
+
+	//init textures
+	uint texture_checker;
 };
