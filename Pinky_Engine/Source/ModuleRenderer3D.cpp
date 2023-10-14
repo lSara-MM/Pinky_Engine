@@ -125,7 +125,8 @@ bool ModuleRenderer3D::Init()
 	Grid.axis = true;
 	wireframe = false;
 
-	// lola no me ayuda
+	//TODO: NO VA
+	// 	texture_checker = 0;
 	//loadTexture(&texture_checker);
 
 	return ret;
@@ -319,9 +320,9 @@ void ModuleRenderer3D::DrawMesh(ai::mesh* mesh)
 	//normals
 	glEnableClientState(GL_NORMAL_ARRAY);
 
-	//TODO NO VA
-	////texture
-	//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	//TODO NO VA ahora si¿?
+	//texture
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
@@ -331,12 +332,11 @@ void ModuleRenderer3D::DrawMesh(ai::mesh* mesh)
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_normals);
 	glNormalPointer(GL_FLOAT, 0, NULL);
 
-	//TODO NO VA
-	//glBindBuffer(GL_ARRAY_BUFFER, mesh->id_tex);
-	//glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-	//glBindTexture(GL_TEXTURE_2D, mesh->id_tex)//invent
-	//glBindTexture(GL_TEXTURE_2D, 0); // Cleanning bind buffer;
-	//
+	//TODO NO VA ahora si¿?
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_tex);
+	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+	glBindTexture(GL_TEXTURE_2D, mesh->id_tex);//invent
+	glBindTexture(GL_TEXTURE_2D, 0); // Cleanning bind buffer;
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->EBO);
 
@@ -347,7 +347,7 @@ void ModuleRenderer3D::DrawMesh(ai::mesh* mesh)
 	//glDrawArrays(GL_TRIANGLES, 0, mesh->num_vertex);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
-	//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 }
 
@@ -360,7 +360,6 @@ void ModuleRenderer3D::Wireframe()
 
 void ModuleRenderer3D::loadTexture(uint* buffer)
 {
-	//TODO NO SÉ SI ESTÀ BÉ
 	GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
 		for (int j = 0; j < CHECKERS_WIDTH; j++) {

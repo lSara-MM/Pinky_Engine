@@ -62,19 +62,18 @@ bool ai::ImportMesh(const char* fileDir)
 			memcpy(ourMesh->normals, m->mNormals, sizeof(float) * ourMesh->num_normals * 3);
 
 			////copy texture coordinates
-			//uint uv_index = 0;
+			uint uv_index = 0;
 
-			//if (m->HasTextureCoords(uv_index))
-			//{
-			//	ourMesh->num_tex = m->mNumVertices;
-			//	ourMesh->tex = new math::float2[ourMesh->num_tex * 3];
-			//	for (uint i = 0; i < ourMesh->num_tex; i++)
-			//	{
-			//		ourMesh->tex[i].x = m->mTextureCoords[uv_index][i].x;
-			//		ourMesh->tex[i].y = m->mTextureCoords[uv_index][i].y;
-			//	}
-
-			//}
+			if (m->HasTextureCoords(uv_index))
+			{
+				ourMesh->num_tex = m->mNumVertices;
+				ourMesh->tex = new math::float2[ourMesh->num_tex * 3];
+				for (uint i = 0; i < ourMesh->num_tex; i++)
+				{
+					ourMesh->tex[i].x = m->mTextureCoords[uv_index][i].x;
+					ourMesh->tex[i].y = m->mTextureCoords[uv_index][i].y;
+				}
+			}
 
 			if (InitMesh(ourMesh))
 			{
@@ -105,9 +104,9 @@ bool ai::InitMesh(mesh* m)
 	//normals
 	glGenBuffers(1, &m->id_normals);
 	//texture coordinates
-	//glGenBuffers(1, (GLuint*)&m->id_tex);
+	glGenBuffers(1, &m->id_tex);
 
-	if (m->VBO == 0 || m->EBO == 0 || m->VAO == 0)
+	if (m->VBO == 0 || m->EBO == 0 || m->VAO == 0 || m->id_normals == 0|| m->id_tex == 0)
 	{
 		LOG("[ERROR] buffer not created");
 		return false;
@@ -120,7 +119,7 @@ bool ai::InitMesh(mesh* m)
 
 	// EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m->EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * m->num_index * 3, m->index, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * m->num_index * 3, m->index, GL_STATIC_DRAW);//TODO: ALERTA, A VECES PETA
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	// VAO
@@ -134,10 +133,10 @@ bool ai::InitMesh(mesh* m)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->num_normals * 3, m->normals, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	//TODO: NO VA
-	////texture coordinates
-	//glBindBuffer(GL_ARRAY_BUFFER, m->id_tex);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->num_tex * 2, m->tex, GL_STATIC_DRAW);
+	//TODO: NO VA, ahora si¿?
+	//texture coordinates
+	glBindBuffer(GL_ARRAY_BUFFER, m->id_tex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->num_tex * 2, m->tex, GL_STATIC_DRAW);
 
 
 	return true;
