@@ -11,9 +11,18 @@
 #include "../Glew/include/glew.h"
 #include "../MathGeoLib/include/MathGeoLib.h"
 
+#include <array>
 
 namespace ai
 {
+	enum class POLY_PRIMITIVE_TYPE
+	{
+		CUBE,	
+		SPHERE,
+		CYLINDER,
+		PLANE
+	};
+
 	struct mesh
 	{
 		//indices
@@ -39,15 +48,29 @@ namespace ai
 		GLuint VBO; // vertex buffer object
 		GLuint EBO; // element buffer object
 		GLuint VAO; // attribute buffer object
+
+		~mesh()
+		{
+			RELEASE_ARRAY(vertex);
+			RELEASE_ARRAY(normals);
+			RELEASE_ARRAY(tex);
+
+			VBO = 0;
+			EBO = 0;
+			VAO = 0;
+		}
 	};
 
 	void EnableDebug();
 	void DisableDebug();
 
+	void ImportFile(const char* fileDir);
+
 	bool ImportMesh(const char* fileDir);
 	bool InitMesh(mesh* m);
-	void DeleteBuffers();
+	void CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj);
 
-	//std::vector<mesh*> meshes;
+	void DeleteLastMesh();	// TODO: remove cuando se pueda seleccionar una mesh
+	void DeleteBuffers();
 }
 #endif //!__MESH_H__

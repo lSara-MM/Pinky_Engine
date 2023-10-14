@@ -234,6 +234,34 @@ update_status ModuleEditor::Toolbar()
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("Game Object"))
+		{
+			if (ImGui::BeginMenu("Create Primitive"))
+			{
+				if (ImGui::MenuItem("Cube"))
+				{
+					ai::CreatePolyPrimitive(ai::POLY_PRIMITIVE_TYPE::CUBE);
+				}
+				
+				if (ImGui::MenuItem("Sphere"))
+				{
+					ai::CreatePolyPrimitive(ai::POLY_PRIMITIVE_TYPE::SPHERE);
+				}
+				
+				if (ImGui::MenuItem("Cylinder"))
+				{
+					ai::CreatePolyPrimitive(ai::POLY_PRIMITIVE_TYPE::CYLINDER);
+				}
+				
+				if (ImGui::MenuItem("Plane"))
+				{
+					ai::CreatePolyPrimitive(ai::POLY_PRIMITIVE_TYPE::PLANE);
+				}
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenu();
+		}
+
 		if (ImGui::BeginMenu("Help"))
 		{
 			if (ImGui::MenuItem("Module Settings")) { moduleSettingsWin = true; }

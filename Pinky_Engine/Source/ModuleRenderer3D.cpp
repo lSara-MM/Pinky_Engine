@@ -183,6 +183,11 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		DrawMesh(i);
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN)
+	{
+		ai::DeleteLastMesh();
+	}
+
 	return ret;
 }
 
@@ -218,7 +223,7 @@ void ModuleRenderer3D::HardwareDetection(bool& infoOutputWin)
 {
 	if (infoOutputWin)
 	{
-		ImGui::Begin("Hardware");
+		ImGui::Begin("Hardware", &infoOutputWin);
 		//Diapo sale cajita con active, no entiendo
 		ImGui::Text("SDL Version: %d.%d.%d", versionSDL.major, versionSDL.minor, versionSDL.patch);
 
@@ -358,7 +363,7 @@ void ModuleRenderer3D::Wireframe()
 	(wireframe) ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
-void ModuleRenderer3D::loadTexture(uint* buffer)
+void ModuleRenderer3D::LoadTexture(uint* buffer)
 {
 	GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 	for (int i = 0; i < CHECKERS_HEIGHT; i++) {

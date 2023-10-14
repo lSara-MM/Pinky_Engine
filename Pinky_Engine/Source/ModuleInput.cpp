@@ -133,7 +133,7 @@ update_status ModuleInput::PreUpdate(float dt)
 
 				LOG("File dropped from: %s", dropped_filedir);
 
-				ai::ImportMesh(dropped_filedir);
+				ai::ImportFile(dropped_filedir);
 
 				SDL_free(dropped_filedir);    // Free dropped_filedir memory
 				break;

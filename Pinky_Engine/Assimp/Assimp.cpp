@@ -18,6 +18,29 @@ void ai::DisableDebug()
 	LOG("Disable debug mode");
 }
 
+void ai::ImportFile(const char* fileDir)
+{
+	std::string dir = fileDir;
+	std::array<std::string, 2> obj_ext = { ".png", ".jpg" };
+	std::array<std::string, 2> tex_ext = { ".fbx", ".obj" };
+
+	for (auto i = 0; i < obj_ext.size(); i++)
+	{
+		if (dir.find(obj_ext.at(i)) != std::string::npos)
+		{
+			ImportMesh(fileDir);
+		}
+	}
+	
+	for (auto i = 0; i < obj_ext.size(); i++)
+	{
+		if (dir.find(obj_ext.at(i)) != std::string::npos)
+		{
+			//ImportTex(fileDir);
+		}
+	}
+}
+
 bool ai::ImportMesh(const char* fileDir)
 {
 	const aiScene* scene = aiImportFile(fileDir, aiProcessPreset_TargetRealtime_MaxQuality);
@@ -140,6 +163,41 @@ bool ai::InitMesh(mesh* m)
 
 
 	return true;
+}
+
+void ai::CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj)
+{
+	switch (obj)
+	{
+	case ai::POLY_PRIMITIVE_TYPE::CUBE:
+		ImportMesh("../Assimp/3dObject/cube.fbx");
+		break;
+	case ai::POLY_PRIMITIVE_TYPE::SPHERE:
+		ImportMesh("../Assimp/3dObject/sphere.fbx");
+		break;
+	case ai::POLY_PRIMITIVE_TYPE::CYLINDER:
+		ImportMesh("../Assimp/3dObject/cylinder.fbx");
+		break;
+	case ai::POLY_PRIMITIVE_TYPE::PLANE:
+		ImportMesh("../Assimp/3dObject/plane.fbx");
+		break;
+	default:
+		break;
+	}
+}
+
+void ai::DeleteLastMesh()
+{
+	std::vector<ai::mesh*>* m = &App->renderer3D->meshes;
+
+	if (!m->empty())
+	{
+		LOG("Deleted last mesh created");
+
+		m->back()->~mesh();
+		m->erase(m->end() - 1);
+		m->shrink_to_fit();
+	}
 }
 
 void ai::DeleteBuffers()

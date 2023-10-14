@@ -49,7 +49,7 @@ public:
 	void Wireframe();
 
 	//Loading textures
-	void loadTexture(uint* buffer);
+	void LoadTexture(uint* buffer);
 
 	sMStats statsVRAM;
 
