@@ -56,11 +56,10 @@ bool ai::ImportMesh(const char* fileDir)
 				}
 			}
 
-			//TODO: NO VA
-			////copy normals
-			//ourMesh->num_normals = m->mNumVertices;
-			//ourMesh->normals = new float[ourMesh->num_normals * 3];
-			//memcpy(ourMesh->normals, m->mNormals, sizeof(float) * ourMesh->num_normals * 3);
+			//copy normals
+			ourMesh->num_normals = m->mNumVertices;
+			ourMesh->normals = new float[ourMesh->num_normals * 3];
+			memcpy(ourMesh->normals, m->mNormals, sizeof(float) * ourMesh->num_normals * 3);
 
 			////copy texture coordinates
 			//uint uv_index = 0;
@@ -103,6 +102,10 @@ bool ai::InitMesh(mesh* m)
 	glGenBuffers(1, &m->VBO);
 	glGenBuffers(1, &m->EBO);
 	glGenVertexArrays(1, &m->VAO);
+	//normals
+	glGenBuffers(1, &m->id_normals);
+	//texture coordinates
+	//glGenBuffers(1, (GLuint*)&m->id_tex);
 
 	if (m->VBO == 0 || m->EBO == 0 || m->VAO == 0)
 	{
@@ -126,11 +129,12 @@ bool ai::InitMesh(mesh* m)
 	glEnableVertexAttribArray(0);
 	glBindVertexArray(0);*/
 
-	//TODO: NO VA
-	////normals
-	//glBindBuffer(GL_ARRAY_BUFFER, m->id_normals);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->num_normals * 3, m->normals, GL_STATIC_DRAW);
+	//normals
+	glBindBuffer(GL_ARRAY_BUFFER, m->id_normals);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->num_normals * 3, m->normals, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+	//TODO: NO VA
 	////texture coordinates
 	//glBindBuffer(GL_ARRAY_BUFFER, m->id_tex);
 	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->num_tex * 2, m->tex, GL_STATIC_DRAW);
@@ -147,6 +151,12 @@ void ai::DeleteBuffers()
 		{
 			glDeleteBuffers(1, &App->renderer3D->meshes.at(i)->VBO);
 			App->renderer3D->meshes.at(i)->VBO = 0;
+			glDeleteBuffers(1, &App->renderer3D->meshes.at(i)->EBO);
+			App->renderer3D->meshes.at(i)->EBO = 0;
+			glDeleteBuffers(1, &App->renderer3D->meshes.at(i)->id_normals);
+			App->renderer3D->meshes.at(i)->id_normals = 0;
+			/*glDeleteBuffers(1, &App->renderer3D->meshes.at(i)->id_tex);
+			App->renderer3D->meshes.at(i)->id_tex = 0;*/
 		}
 	}
 }

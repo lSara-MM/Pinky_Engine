@@ -316,20 +316,22 @@ void ModuleRenderer3D::DrawBox()
 void ModuleRenderer3D::DrawMesh(ai::mesh* mesh)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
+	//normals
+	glEnableClientState(GL_NORMAL_ARRAY);
 
 	//TODO NO VA
-	////texture + normal
-	//glEnableClientState(GL_NORMAL_ARRAY);
+	////texture
 	//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
+	
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_normals);
+	glNormalPointer(GL_FLOAT, 0, NULL);
+
 	//TODO NO VA
-	//glBindBuffer(GL_ARRAY_BUFFER, mesh->id_normals);
-	//glNormalPointer(GL_FLOAT, 0, NULL);
-	// 
 	//glBindBuffer(GL_ARRAY_BUFFER, mesh->id_tex);
 	//glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 	//glBindTexture(GL_TEXTURE_2D, mesh->id_tex)//invent
@@ -344,6 +346,9 @@ void ModuleRenderer3D::DrawMesh(ai::mesh* mesh)
 
 	//glDrawArrays(GL_TRIANGLES, 0, mesh->num_vertex);
 	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
 }
 
 void ModuleRenderer3D::Wireframe()
