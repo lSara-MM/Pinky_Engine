@@ -183,7 +183,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		DrawMesh(i);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN || 
+		App->input->GetKey(SDL_SCANCODE_BACKSPACE) == KEY_DOWN)
 	{
 		ai::DeleteLastMesh();
 	}
