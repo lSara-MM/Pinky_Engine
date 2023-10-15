@@ -26,8 +26,8 @@
 #include "glmath.h"
 
 #define MAX_LIGHTS 8
-#define CHECKERS_HEIGHT 512
-#define CHECKERS_WIDTH 512
+#define CHECKERS_HEIGHT 64
+#define CHECKERS_WIDTH 64
 
 class ModuleRenderer3D : public Module
 {
@@ -49,7 +49,7 @@ public:
 	void Wireframe();
 
 	//Loading textures
-	void LoadTexture(uint* buffer);
+	void LoadTexture(GLuint buffer);
 
 	sMStats statsVRAM;
 

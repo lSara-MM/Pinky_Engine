@@ -23,15 +23,29 @@ namespace ai
 		PLANE
 	};
 
+	struct texture
+	{
+		//textures
+		GLuint id_tex = 0;
+		uint num_tex = 0;
+		math::float2* tex = nullptr;
+
+		~texture()
+		{
+			RELEASE_ARRAY(tex);
+
+			glDeleteBuffers(1, &id_tex);
+			id_tex = 0;
+		}
+	};
+
 	struct mesh
 	{
 		//indices
-		//uint id_index = 0; // index in VRAM esto son los buffer VBO y tal, eliminar
 		uint num_index = 0;
 		uint* index = nullptr;
 
 		//vertices
-		//uint id_vertex = 0; // unique vertex in VRAM
 		uint num_vertex = 0;
 		float* vertex = nullptr;
 
@@ -40,10 +54,7 @@ namespace ai
 		uint num_normals = 0;
 		float* normals = nullptr;
 
-		//textures
-		GLuint id_tex = 0;
-		uint num_tex = 0;
-		math::float2* tex = nullptr;
+		texture tex;
 
 		GLuint VBO; // vertex buffer object
 		GLuint EBO; // element buffer object
@@ -53,11 +64,15 @@ namespace ai
 		{
 			RELEASE_ARRAY(vertex);
 			RELEASE_ARRAY(normals);
-			RELEASE_ARRAY(tex);
-
-			VBO = 0;
-			EBO = 0;
-			VAO = 0;
+			tex.~texture();
+			
+			////DeleteMeshBuffers(this);
+			//glDeleteBuffers(1, &VBO);
+			//VBO = 0;
+			//glDeleteBuffers(1, &EBO);
+			//EBO = 0;
+			//glDeleteBuffers(1, &id_normals);
+			//id_normals = 0;
 		}
 	};
 
@@ -71,6 +86,6 @@ namespace ai
 	void CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj);
 
 	void DeleteLastMesh();	// TODO: remove cuando se pueda seleccionar una mesh
-	void DeleteBuffers();
+	void DeleteMeshBuffers(mesh* m);
 }
 #endif //!__MESH_H__
