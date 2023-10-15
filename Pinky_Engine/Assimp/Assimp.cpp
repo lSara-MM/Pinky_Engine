@@ -21,8 +21,8 @@ void ai::DisableDebug()
 void ai::ImportFile(const char* fileDir)
 {
 	std::string dir = fileDir;
-	std::array<std::string, 2> obj_ext = { ".png", ".jpg" };
-	std::array<std::string, 2> tex_ext = { ".fbx", ".obj" };
+	std::array<std::string, 3> obj_ext = { ".fbx", ".FBX", ".obj", };
+	std::array<std::string, 4> tex_ext = { ".png", ".PNG", ".jpg", ".JPG" };
 
 	for (auto i = 0; i < obj_ext.size(); i++)
 	{
