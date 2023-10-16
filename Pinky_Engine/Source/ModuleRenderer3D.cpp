@@ -125,10 +125,7 @@ bool ModuleRenderer3D::Init()
 
 	Grid.axis = true;
 	wireframe = false;
-
-	//TODO: NO VA
-	// 	texture_checker = 0;
-	//loadTexture(&texture_checker);
+	LoadCheckers();
 
 	return ret;
 }
@@ -177,9 +174,10 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	glLineWidth(1.0f);*/
 
 
+	glBindTexture(GL_TEXTURE_2D, 0);
 	Grid.Render();
 
-	Wireframe();
+	(wireframe) ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	for each (ai::mesh* i in meshes)
 	{
@@ -205,7 +203,6 @@ bool ModuleRenderer3D::CleanUp()
 	{
 		ai::DeleteLastMesh();
 	}
-
 	
 	SDL_GL_DeleteContext(context);
 	return true;
@@ -355,27 +352,22 @@ void ModuleRenderer3D::DrawMesh(ai::mesh* mesh)
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 	glBindTexture(GL_TEXTURE_2D, mesh->tex.id_tex);
 
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, 1); // Cleanning bind buffer;
+
 	// Draw mesh
 	glDrawElements(GL_TRIANGLES, mesh->num_index, GL_UNSIGNED_INT, NULL);
 	// Clean textures
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, 0); // Cleanning bind buffer;
-
 	//glDrawArrays(GL_TRIANGLES, 0, mesh->num_vertex);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
-void ModuleRenderer3D::Wireframe()
+void ModuleRenderer3D::LoadCheckers()
 {
-	// TODO: perque no funciona si esta dins del if, s'ha de fer el check cada vegada per que funcione? Te pinta que si :/
-	// Ahora ya no funciona xd
-	(wireframe) ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-}
-
-void ModuleRenderer3D::LoadTexture(GLuint buffer)
-{
+	GLuint buffer;
 	GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
 		for (int j = 0; j < CHECKERS_WIDTH; j++) {
@@ -390,13 +382,14 @@ void ModuleRenderer3D::LoadTexture(GLuint buffer)
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glGenTextures(1, &buffer);
 	glBindTexture(GL_TEXTURE_2D, buffer);
-	glTexImage2D(GL_TEXTURE_2D, 0, 3, CHECKERS_HEIGHT, CHECKERS_HEIGHT, 0, GL_RGB,
-		GL_UNSIGNED_BYTE, checkerImage);  // Create texture from image data
+	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	/*glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
-		0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);*/
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
+		0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
 
+	/*glTexImage2D(GL_TEXTURE_2D, 0, 3, CHECKERS_HEIGHT, CHECKERS_HEIGHT, 0, GL_RGB,
+		GL_UNSIGNED_BYTE, checkerImage);  // Create texture from image data*/
 }

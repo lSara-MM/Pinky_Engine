@@ -161,8 +161,6 @@ bool ai::InitMesh(mesh* m)
 	//texture coordinates
 	glBindBuffer(GL_ARRAY_BUFFER, m->tex.id_tex);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->tex.num_tex * 2, m->tex.tex, GL_STATIC_DRAW);
-
-	App->renderer3D->LoadTexture(m->tex.id_tex);
 	return true;
 }
 

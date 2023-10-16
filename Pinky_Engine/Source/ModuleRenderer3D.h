@@ -46,10 +46,8 @@ public:
 	void DrawBox();
 	void DrawMesh(ai::mesh* mesh);
 
-	void Wireframe();
-
 	//Loading textures
-	void LoadTexture(GLuint buffer);
+	void LoadCheckers();
 
 	sMStats statsVRAM;
 
