@@ -273,7 +273,7 @@ update_status ModuleEditor::Toolbar()
 
 		AboutWindow();
 
-		App->renderer3D->Wireframe();
+		ImGui::Checkbox("Wireframe", &App->renderer3D->wireframe);
 
 		ImGui::EndMainMenuBar();
 	}

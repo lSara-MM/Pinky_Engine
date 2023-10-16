@@ -179,6 +179,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	Grid.Render();
 
+	Wireframe();
+
 	for each (ai::mesh* i in meshes)
 	{
 		DrawMesh(i);
@@ -202,7 +204,6 @@ bool ModuleRenderer3D::CleanUp()
 	for (auto i = 0; i < meshes.size(); i++)
 	{
 		ai::DeleteLastMesh();
-		ai::DeleteMeshBuffers(meshes.at(i));
 	}
 
 	
@@ -370,7 +371,6 @@ void ModuleRenderer3D::Wireframe()
 {
 	// TODO: perque no funciona si esta dins del if, s'ha de fer el check cada vegada per que funcione? Te pinta que si :/
 	// Ahora ya no funciona xd
-	ImGui::Checkbox("Wireframe", &wireframe);
 	(wireframe) ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 

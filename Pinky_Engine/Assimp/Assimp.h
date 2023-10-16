@@ -65,14 +65,6 @@ namespace ai
 			RELEASE_ARRAY(vertex);
 			RELEASE_ARRAY(normals);
 			tex.~texture();
-			
-			////DeleteMeshBuffers(this);
-			//glDeleteBuffers(1, &VBO);
-			//VBO = 0;
-			//glDeleteBuffers(1, &EBO);
-			//EBO = 0;
-			//glDeleteBuffers(1, &id_normals);
-			//id_normals = 0;
 		}
 	};
 
