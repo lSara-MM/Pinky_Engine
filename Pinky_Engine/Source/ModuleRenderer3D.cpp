@@ -125,7 +125,7 @@ bool ModuleRenderer3D::Init()
 
 	Grid.axis = true;
 	wireframe = false;
-	LoadCheckers();
+	ai::LoadCheckers(texture_checker);
 
 	return ret;
 }
@@ -330,7 +330,6 @@ void ModuleRenderer3D::DrawMesh(ai::mesh* mesh)
 	//normals
 	glEnableClientState(GL_NORMAL_ARRAY);
 
-	//TODO NO VA ahora si¿?
 	//texture
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
@@ -347,49 +346,18 @@ void ModuleRenderer3D::DrawMesh(ai::mesh* mesh)
 	glNormalPointer(GL_FLOAT, 0, NULL);
 
 	// Textures
-	//TODO NO VA ahora si¿?
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->tex.id_tex);
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-	glBindTexture(GL_TEXTURE_2D, mesh->tex.id_tex);
-
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, 1); // Cleanning bind buffer;
+
+	(mesh->hasTex) ? glBindTexture(GL_TEXTURE_2D, mesh->tex.id_tex) : glBindTexture(GL_TEXTURE_2D, texture_checker);
 
 	// Draw mesh
 	glDrawElements(GL_TRIANGLES, mesh->num_index, GL_UNSIGNED_INT, NULL);
+
 	// Clean textures
-	//glDrawArrays(GL_TRIANGLES, 0, mesh->num_vertex);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindTexture(GL_TEXTURE_2D, 0); // Cleanning bind buffer;
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-}
-
-void ModuleRenderer3D::LoadCheckers()
-{
-	GLuint buffer;
-	GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
-	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
-		for (int j = 0; j < CHECKERS_WIDTH; j++) {
-			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
-			checkerImage[i][j][0] = (GLubyte)c;
-			checkerImage[i][j][1] = (GLubyte)c;
-			checkerImage[i][j][2] = (GLubyte)c;
-			checkerImage[i][j][3] = (GLubyte)255;
-		}
-	}
-
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(1, &buffer);
-	glBindTexture(GL_TEXTURE_2D, buffer);
-	
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
-		0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
-
-	/*glTexImage2D(GL_TEXTURE_2D, 0, 3, CHECKERS_HEIGHT, CHECKERS_HEIGHT, 0, GL_RGB,
-		GL_UNSIGNED_BYTE, checkerImage);  // Create texture from image data*/
 }

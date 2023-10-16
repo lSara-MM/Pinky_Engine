@@ -41,9 +41,9 @@ void ai::ImportFile(const char* fileDir)
 	}
 }
 
-bool ai::ImportMesh(const char* fileDir)
+bool ai::ImportMesh(const char* meshfileDir, const char* texfileDir)
 {
-	const aiScene* scene = aiImportFile(fileDir, aiProcessPreset_TargetRealtime_MaxQuality);
+	const aiScene* scene = aiImportFile(meshfileDir, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
@@ -100,6 +100,10 @@ bool ai::ImportMesh(const char* fileDir)
 
 			if (InitMesh(ourMesh))
 			{
+				BindTexture(ourMesh);
+
+				//(texfileDir != nullptr) ? ourMesh->hasTex = true : ourMesh->hasTex = false;
+
 				App->renderer3D->meshes.push_back(ourMesh);
 			}
 		}
@@ -109,7 +113,7 @@ bool ai::ImportMesh(const char* fileDir)
 	}
 	else
 	{
-		LOG("[ERROR] loading scene % s", fileDir);
+		LOG("[ERROR] loading scene % s", meshfileDir);
 		return false;
 	}
 	return true;
@@ -157,10 +161,6 @@ bool ai::InitMesh(mesh* m)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->num_normals * 3, m->normals, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	//TODO: NO VA, ahora si¿?
-	//texture coordinates
-	glBindBuffer(GL_ARRAY_BUFFER, m->tex.id_tex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->tex.num_tex * 2, m->tex.tex, GL_STATIC_DRAW);
 	return true;
 }
 
@@ -209,4 +209,37 @@ void ai::DeleteMeshBuffers(mesh* m)
 	m->EBO = 0;
 	glDeleteBuffers(1, &m->id_normals);
 	m->id_normals = 0;
+}
+
+void ai::LoadCheckers(GLuint& buffer)
+{
+	GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
+	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
+		for (int j = 0; j < CHECKERS_WIDTH; j++) {
+			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+			checkerImage[i][j][0] = (GLubyte)c;
+			checkerImage[i][j][1] = (GLubyte)c;
+			checkerImage[i][j][2] = (GLubyte)c;
+			checkerImage[i][j][3] = (GLubyte)255;
+		}
+	}
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(1, &buffer);
+	glBindTexture(GL_TEXTURE_2D, buffer);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
+		0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
+}
+
+bool ai::BindTexture(mesh* m)
+{
+	//texture coordinates
+	glBindBuffer(GL_ARRAY_BUFFER, m->tex.id_tex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->tex.num_tex * 2, m->tex.tex, GL_STATIC_DRAW);
+	return true;
 }

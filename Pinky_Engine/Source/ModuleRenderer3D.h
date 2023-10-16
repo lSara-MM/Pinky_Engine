@@ -46,9 +46,6 @@ public:
 	void DrawBox();
 	void DrawMesh(ai::mesh* mesh);
 
-	//Loading textures
-	void LoadCheckers();
-
 	sMStats statsVRAM;
 
 public:
@@ -68,5 +65,5 @@ public:
 	std::vector<ai::mesh*> meshes;
 
 	//init textures
-	uint texture_checker;
+	GLuint texture_checker;
 };

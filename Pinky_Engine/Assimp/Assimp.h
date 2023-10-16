@@ -55,6 +55,7 @@ namespace ai
 		float* normals = nullptr;
 
 		texture tex;
+		bool hasTex = false;	// TODO: nose algo pa activar o no el checkers
 
 		GLuint VBO; // vertex buffer object
 		GLuint EBO; // element buffer object
@@ -73,11 +74,15 @@ namespace ai
 
 	void ImportFile(const char* fileDir);
 
-	bool ImportMesh(const char* fileDir);
+	bool ImportMesh(const char* meshfileDir, const char* texfileDir = nullptr);
 	bool InitMesh(mesh* m);
 	void CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj);
 
 	void DeleteLastMesh();	// TODO: remove cuando se pueda seleccionar una mesh
 	void DeleteMeshBuffers(mesh* m);
+
+	// Textures
+	void LoadCheckers(GLuint& buffer);
+	bool BindTexture(mesh* m);
 }
 #endif //!__MESH_H__
