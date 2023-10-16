@@ -129,7 +129,7 @@ bool ai::InitMesh(mesh* m)
 	//texture coordinates
 	glGenBuffers(1, &m->tex.id_tex);
 
-	if (m->VBO == 0 || m->EBO == 0 || /*m->VAO == 0*/ ||
+	if (m->VBO == 0 || m->EBO == 0 || /*m->VAO == 0 ||*/
 		m->id_normals == 0|| m->tex.id_tex == 0)
 	{
 		LOG("[ERROR] buffer not created");
