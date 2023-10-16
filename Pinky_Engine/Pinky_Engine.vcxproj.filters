@@ -52,6 +52,9 @@
     <Filter Include="Sources\Importers">
       <UniqueIdentifier>{5c672c23-3160-488b-b85e-db60521f6a49}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\GameObject">
+      <UniqueIdentifier>{4d0764d0-039b-45f6-a8bc-2519764af026}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MathGeoLib\include\MathBuildConfig.h">
@@ -312,6 +315,9 @@
     <ClInclude Include="Assimp\Assimp.h">
       <Filter>Sources\Importers</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ModuleScene.h">
+      <Filter>Sources\GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MathGeoLib\include\Geometry\AABB.cpp">
@@ -478,6 +484,9 @@
     </ClCompile>
     <ClCompile Include="Assimp\Assimp.cpp">
       <Filter>Sources\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModuleScene.cpp">
+      <Filter>Sources\GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
