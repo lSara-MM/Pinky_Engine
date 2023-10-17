@@ -7,12 +7,9 @@
 #include "../ImGui/backends/imgui_impl_sdl2.h"
 #include "../ImGui/backends/imgui_impl_opengl3.h"
 
-#include "../MathGeoLib/include/Math/float3x3.h"
-#include "../MathGeoLib/include/Math/float4x4.h"
-#include "Primitive.h"
-
-//#include "GameObject.h"
 #include <vector>
+
+class GameObject;
 
 class ModuleScene : public Module
 {
@@ -29,7 +26,7 @@ public:
 	bool Hierarchy();
 
 public:
-	//GameObject* rootNode;
+	GameObject* rootNode;
 	bool showHierarchy;
 
 private:

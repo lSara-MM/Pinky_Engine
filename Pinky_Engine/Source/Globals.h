@@ -70,9 +70,9 @@ void ClearVec(std::vector<T> &x)
 
 // Clear a vector of pointers
 template <class T>
-void ClearVecPtr(std::vector<T> &x)
+void ClearVecPtr(std::vector<T*> &x)
 {
-	for (auto it = x.rbegin(); it != x.rend(); it--)
+	for (auto it = x.rbegin(); it != x.rend(); ++it)
 	{
 		// code
 		delete(*it);

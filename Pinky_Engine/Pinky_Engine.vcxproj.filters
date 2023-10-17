@@ -55,6 +55,9 @@
     <Filter Include="Sources\GameObject">
       <UniqueIdentifier>{4d0764d0-039b-45f6-a8bc-2519764af026}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Scene">
+      <UniqueIdentifier>{c9d27834-56b4-44a2-940b-f95b270cf006}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MathGeoLib\include\MathBuildConfig.h">
@@ -315,14 +318,18 @@
     <ClInclude Include="Assimp\Assimp.h">
       <Filter>Sources\Importers</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ModuleScene.h">
-      <Filter>Sources\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GameObject.h">
       <Filter>Sources\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component.h">
       <Filter>Sources\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModuleScene.h">
+      <Filter>Sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiWindows.h" />
+    <ClInclude Include="Source\ImGuiWindows.h">
+      <Filter>Sources\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -491,14 +498,18 @@
     <ClCompile Include="Assimp\Assimp.cpp">
       <Filter>Sources\Importers</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ModuleScene.cpp">
-      <Filter>Sources\GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GameObject.cpp">
       <Filter>Sources\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component.cpp">
       <Filter>Sources\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModuleScene.cpp">
+      <Filter>Sources\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuiWindows.cpp" />
+    <ClCompile Include="Source\ImGuiWindows.cpp">
+      <Filter>Sources\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

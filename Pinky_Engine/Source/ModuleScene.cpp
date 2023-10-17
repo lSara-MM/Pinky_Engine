@@ -20,6 +20,7 @@
 #pragma comment (lib, "MathGeoLib/libx86/libRelease/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
 #endif // _DEBUG
 
+#include "GameObject.h"
 
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -35,9 +36,8 @@ bool ModuleScene::Init()
 	LOG("Creating scene");
 	bool ret = true;
 	
-	//rootNode = new GameObject();
+	rootNode = new GameObject(true);		
 
-	
 	return ret;
 }
 
@@ -57,16 +57,16 @@ update_status ModuleScene::Update(float dt)
 update_status ModuleScene::PostUpdate(float dt)
 {
 	update_status ret = UPDATE_CONTINUE;
-	
-	//if (ImGui::Begin("Hierarchy", &showHierarchy))
-	//{
-	//	if (ImGui::TreeNode("Scene"))
-	//	{
+	/*
+	if (ImGui::Begin("Hierarchy", &showHierarchy))
+	{
+		if (ImGui::TreeNode("Scene"))
+		{
 
-	//		ImGui::TreePop();
-	//	}
-	//	ImGui::End();
-	//}
+			ImGui::TreePop();
+		}
+		ImGui::End();
+	}*/
 
 	return ret;
 }

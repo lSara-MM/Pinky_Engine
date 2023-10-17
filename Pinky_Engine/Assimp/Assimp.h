@@ -75,6 +75,8 @@ namespace ai
 	void ImportFile(const char* fileDir);
 
 	bool ImportMesh(const char* meshfileDir, const char* texfileDir = nullptr);
+	void MeshHierarchy(const aiScene* s, aiNode** children, int num);
+	
 	bool InitMesh(mesh* m);
 	void CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj);
 

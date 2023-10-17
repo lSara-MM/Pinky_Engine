@@ -22,9 +22,9 @@ Application::Application()
 	AddModule(input);
 
 	// Renderer last!
+	AddModule(scene);
 	AddModule(renderer3D);
 	AddModule(editor);
-	AddModule(scene);
 }
 
 Application::~Application()

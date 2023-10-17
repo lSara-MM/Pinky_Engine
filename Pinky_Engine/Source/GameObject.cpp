@@ -1,33 +1,28 @@
 #include "GameObject.h"
-#include "Application.h"
-#include "ModuleScene.h"
 
-GameObject::GameObject(/*GameObject* parent*/)
+
+GameObject::GameObject(GameObject* parent, std::string n, bool start_enabled)
 {
-	//pParent = App->scene->rootNode;
+	pParent = parent;
 
-	// TODO: transform default es aixi? si es aixi, hi ha alguna forma rapida de comprobar
-//	// si s'ha creat ja un transform o no o s'ha de fer el for si o si?
-//	/*transform->position = { 0, 0, 0 };
-//	transform->rotation = { 0, 0, 0, 0 };
-//	transform->scale = { 1, 1, 1 };*/
+	C_Transform* temp = new C_Transform(float3(0, 0, 0), Quat(0, 0, 0, 0), float3(1, 1, 1));
+	transform = temp;
+
+	parent->vChildren.push_back(this);
+}
+
+GameObject::GameObject(bool start_enabled)
+{
+	C_Transform* temp = new C_Transform(float3(0, 0, 0), Quat(0, 0, 0, 0), float3(1, 1, 1));
+	transform = temp;
 }
 
 GameObject::~GameObject()
 {
 	RELEASE(transform);
 
-	for (int i = 0; i < vComponents.size(); i++)
-	{
-		delete vComponents[i];
-		vComponents[i] = nullptr;
-	}
-
-	for (int i = 0; i < vChildren.size(); i++)
-	{
-		delete vChildren[i];
-		vChildren[i] = nullptr;
-	}
+	ClearVecPtr(vComponents);
+	ClearVecPtr(vChildren);
 }
 
 void GameObject::AddComponent(C_TYPE type)
