@@ -36,7 +36,7 @@ bool ModuleScene::Init()
 	LOG("Creating scene");
 	bool ret = true;
 	
-	rootNode = new GameObject(true);		
+	rootNode = new GameObject("Root node", true);		
 
 	return ret;
 }

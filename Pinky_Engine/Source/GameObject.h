@@ -16,8 +16,8 @@ class GameObject
 {
 public:
 	//GameObject();
-	GameObject(GameObject* parent = App->scene->rootNode, std::string n = "EmptyGameObject", bool start_enabled = true);
-	GameObject(bool start_enabled);
+	GameObject(std::string n = "EmptyGameObject", GameObject* parent = App->scene->rootNode, bool start_enabled = true);
+	GameObject(std::string n, bool a);
 	~GameObject();
 
 	void AddComponent(C_TYPE type);
@@ -31,4 +31,4 @@ public:
 	int id;
 	bool active;
 	C_Transform* transform;
-};
+} /**rootNode*/;	// TODO: preguntar com es millor, si aixi o un rootnode al scene

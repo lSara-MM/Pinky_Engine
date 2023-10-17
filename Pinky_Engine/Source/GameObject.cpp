@@ -1,9 +1,11 @@
 #include "GameObject.h"
 
 
-GameObject::GameObject(GameObject* parent, std::string n, bool start_enabled)
+GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 {
 	pParent = parent;
+	name = n;
+	active = start_enabled;
 
 	C_Transform* temp = new C_Transform(float3(0, 0, 0), Quat(0, 0, 0, 0), float3(1, 1, 1));
 	transform = temp;
@@ -11,8 +13,10 @@ GameObject::GameObject(GameObject* parent, std::string n, bool start_enabled)
 	parent->vChildren.push_back(this);
 }
 
-GameObject::GameObject(bool start_enabled)
+GameObject::GameObject(std::string n, bool a)
 {
+	name = n;
+	active = a;
 	C_Transform* temp = new C_Transform(float3(0, 0, 0), Quat(0, 0, 0, 0), float3(1, 1, 1));
 	transform = temp;
 }

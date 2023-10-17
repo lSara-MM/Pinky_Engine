@@ -327,7 +327,6 @@
     <ClInclude Include="Source\ModuleScene.h">
       <Filter>Sources\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="ImGuiWindows.h" />
     <ClInclude Include="Source\ImGuiWindows.h">
       <Filter>Sources\Scene</Filter>
     </ClInclude>
@@ -507,7 +506,6 @@
     <ClCompile Include="Source\ModuleScene.cpp">
       <Filter>Sources\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="ImGuiWindows.cpp" />
     <ClCompile Include="Source\ImGuiWindows.cpp">
       <Filter>Sources\Scene</Filter>
     </ClCompile>

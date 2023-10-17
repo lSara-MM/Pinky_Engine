@@ -12,6 +12,9 @@
 #include "../MathGeoLib/include/MathGeoLib.h"
 
 #include <array>
+//#include "../Source/GameObject.h"
+
+class GameObject;
 
 namespace ai
 {
@@ -75,7 +78,7 @@ namespace ai
 	void ImportFile(const char* fileDir);
 
 	bool ImportMesh(const char* meshfileDir, const char* texfileDir = nullptr);
-	void MeshHierarchy(const aiScene* s, aiNode** children, int num);
+	void MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent);
 	
 	bool InitMesh(mesh* m);
 	void CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj);
