@@ -81,12 +81,12 @@ packages/
 !/Optick/*
 
 
-!Game/Source/External/Assimp/libx86/assimp.lib
-!Game/Source/External/Assimp/libx86/zlibstatic.lib
+!Assimp/libx86/assimp.lib
+!Assimp/libx86/zlibstatic.lib
 
 
-!Game/Source/External/Optick/lib/debugLib/OptickCore.dll
-!Game/Source/External/Optick/lib/debugLib/OptickCore.lib
+!Optick/lib/debugLib/OptickCore.dll
+!Optick/lib/debugLib/OptickCore.lib
 
-!Game/Source/External/Optick/lib/releaseLib/OptickCore.dll
-!Game/Source/External/Optick/lib/releaseLib/OptickCore.lib
+!Optick/lib/releaseLib/OptickCore.dll
+!Optick/lib/releaseLib/OptickCore.lib
