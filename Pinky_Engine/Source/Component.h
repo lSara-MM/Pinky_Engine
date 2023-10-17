@@ -16,13 +16,14 @@ enum class C_TYPE
 {
 	TRANSFORM,
 	MESH,
-	MATERIAL
+	MATERIAL,
+	NONE
 };
 
 class Component
 {
 public:
-	Component(bool start_enabled = true);
+	Component(C_TYPE = C_TYPE::NONE, bool start_enabled = true);
 	~Component();
 
 	virtual void ShowInInspector();
@@ -30,6 +31,7 @@ public:
 public:
 	bool active;
 	std::string name;
+	C_TYPE type;
 };
 
 class C_Transform : public Component

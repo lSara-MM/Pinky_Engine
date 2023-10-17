@@ -37,7 +37,7 @@ bool ModuleScene::Init()
 	bool ret = true;
 	
 	rootNode = new GameObject("Root node", true);		
-
+	GO_num = 0;
 	return ret;
 }
 
@@ -57,16 +57,7 @@ update_status ModuleScene::Update(float dt)
 update_status ModuleScene::PostUpdate(float dt)
 {
 	update_status ret = UPDATE_CONTINUE;
-	/*
-	if (ImGui::Begin("Hierarchy", &showHierarchy))
-	{
-		if (ImGui::TreeNode("Scene"))
-		{
-
-			ImGui::TreePop();
-		}
-		ImGui::End();
-	}*/
+	
 
 	return ret;
 }

@@ -27,6 +27,7 @@ public:
 
 public:
 	GameObject* rootNode;
+	int GO_num;
 	bool showHierarchy;
 
 private:

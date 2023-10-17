@@ -77,6 +77,12 @@ bool ModuleEditor::Init()
 	// About
 	aboutColor = ImVec4(1.0f, 0.0f, 1.0f, 1.0f);
 	aboutWin = false;
+
+	Hierarchy* h = new Hierarchy();
+	vImGuiWindows.push_back(h);
+	Inspector* i = new Inspector();
+	vImGuiWindows.push_back(i);
+
 	return ret;
 }
 
@@ -109,10 +115,12 @@ update_status ModuleEditor::PostUpdate(float dt)
 	//Configwindow, change to fullscreen and such
 	ConfigWindow(io);
 	App->renderer3D->HardwareDetection(infoOutputWin);
-
-
-	// TODO: delete this later, just to test OpenGL options
-	//App->renderer3D->DrawBox();
+	
+	// Hierarchy - Inspector
+	for (int i = 0; i < vImGuiWindows.size(); i++)
+	{
+		vImGuiWindows[i]->ShowWindow();
+	}
 
 	// Rendering
 	ImGui::Render();

@@ -9,10 +9,9 @@
 
 #include "../MathGeoLib/include/Math/float3x3.h"
 #include "../MathGeoLib/include/Math/float4x4.h"
-#include "Primitive.h"
-#include<vector>
-//todo: REMOVE this before 1st delivery!!
-#include "glmath.h"
+
+#include "ImGuiWindows.h"
+#include <vector>
 
 class ModuleEditor : public Module
 {
@@ -55,6 +54,8 @@ public:
 	//Log vector
 	std::vector<std::string> logVec;
 private:
+
+	std::vector<ImGuiWindows*> vImGuiWindows;
 
 	bool moduleSettingsWin;
 	bool infoOutputWin;
