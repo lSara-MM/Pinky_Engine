@@ -1,6 +1,8 @@
 #pragma once
 #include "Assimp.h"
 #include "../Source/Application.h"
+#include "../Source/GameObject.h"
+#include "../Source/ModuleScene.h"
 
 void ai::EnableDebug()
 {
@@ -47,7 +49,7 @@ bool ai::ImportMesh(const char* meshfileDir, const char* texfileDir)
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren);
+		MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, App->scene->rootNode);
 
 		{
 			// Use scene->mNumMeshes to iterate on scene->mMeshes array
@@ -124,134 +126,77 @@ bool ai::ImportMesh(const char* meshfileDir, const char* texfileDir)
 	return true;
 }
 
-void ai::MeshHierarchy(const aiScene* s, aiNode** children, int num)
+void ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent)
 {
 	for (int i = 0; i < num; i++)
 	{
-		if (children[i]->mChildren != NULL)
+		if (children[i]->mNumMeshes > 0)
 		{
-			MeshHierarchy(s, children[i]->mChildren, children[i]->mNumChildren);
-		}
-
-		const aiMesh* m = s->mMeshes[children[i]->mMeshes[0]];
-		mesh* ourMesh = new mesh;
-
-		// copy vertices
-		ourMesh->num_vertex = m->mNumVertices;
-		ourMesh->vertex = new float[ourMesh->num_vertex * 3];
-		memcpy(ourMesh->vertex, m->mVertices, sizeof(float) * ourMesh->num_vertex * 3);
-
-		// TODO preguntar: como pillar el nombre del objeto y no la de dentro de la mesh "outliner id data operation" (abrir en blender pa explicar bien xd) 
-		LOG("New mesh %s with %d vertices", m->mName.C_Str(), m->mNumVertices);
-
-		// copy faces
-		if (m->HasFaces())
-		{
-			ourMesh->num_index = m->mNumFaces * 3;
-			ourMesh->index = new uint[ourMesh->num_index]; // assume each face is a triangle
-
-			for (uint i = 0; i < m->mNumFaces; ++i)
+			GameObject* obj = new GameObject(s->mMeshes[children[i]->mMeshes[0]]->mName.C_Str(), parent);
+			if (children[i]->mChildren != NULL)
 			{
-				if (m->mFaces[i].mNumIndices != 3)
+				MeshHierarchy(s, children[i]->mChildren, children[i]->mNumChildren, obj);
+			}
+
+			const aiMesh* m = s->mMeshes[children[i]->mMeshes[0]];
+			mesh* ourMesh = new mesh;
+
+			// copy vertices
+			ourMesh->num_vertex = m->mNumVertices;
+			ourMesh->vertex = new float[ourMesh->num_vertex * 3];
+			memcpy(ourMesh->vertex, m->mVertices, sizeof(float) * ourMesh->num_vertex * 3);
+
+			// TODO preguntar: como pillar el nombre del objeto y no la de dentro de la mesh "outliner id data operation" (abrir en blender pa explicar bien xd) 
+			LOG("New mesh %s with %d vertices", m->mName.C_Str(), m->mNumVertices);
+
+			// copy faces
+			if (m->HasFaces())
+			{
+				ourMesh->num_index = m->mNumFaces * 3;
+				ourMesh->index = new uint[ourMesh->num_index]; // assume each face is a triangle
+
+				for (uint i = 0; i < m->mNumFaces; ++i)
 				{
-					LOG("[WARNING], geometry face with != 3 indices!");
-				}
-				else
-				{
-					memcpy(&ourMesh->index[i * 3], m->mFaces[i].mIndices, 3 * sizeof(uint));
+					if (m->mFaces[i].mNumIndices != 3)
+					{
+						LOG("[WARNING], geometry face with != 3 indices!");
+					}
+					else
+					{
+						memcpy(&ourMesh->index[i * 3], m->mFaces[i].mIndices, 3 * sizeof(uint));
+					}
 				}
 			}
-		}
 
-		//copy normals
-		ourMesh->num_normals = m->mNumVertices;
-		ourMesh->normals = new float[ourMesh->num_normals * 3];
-		memcpy(ourMesh->normals, m->mNormals, sizeof(float) * ourMesh->num_normals * 3);
+			//copy normals
+			ourMesh->num_normals = m->mNumVertices;
+			ourMesh->normals = new float[ourMesh->num_normals * 3];
+			memcpy(ourMesh->normals, m->mNormals, sizeof(float) * ourMesh->num_normals * 3);
 
-		////copy texture coordinates
-		uint uv_index = 0;
+			////copy texture coordinates
+			uint uv_index = 0;
 
-		if (m->HasTextureCoords(uv_index))
-		{
-			ourMesh->tex.num_tex = m->mNumVertices;
-			ourMesh->tex.tex = new math::float2[ourMesh->tex.num_tex * 3];
-			for (uint i = 0; i < ourMesh->tex.num_tex; i++)
+			if (m->HasTextureCoords(uv_index))
 			{
-				ourMesh->tex.tex[i].x = m->mTextureCoords[uv_index][i].x;
-				ourMesh->tex.tex[i].y = m->mTextureCoords[uv_index][i].y;
+				ourMesh->tex.num_tex = m->mNumVertices;
+				ourMesh->tex.tex = new math::float2[ourMesh->tex.num_tex * 3];
+				for (uint i = 0; i < ourMesh->tex.num_tex; i++)
+				{
+					ourMesh->tex.tex[i].x = m->mTextureCoords[uv_index][i].x;
+					ourMesh->tex.tex[i].y = m->mTextureCoords[uv_index][i].y;
+				}
 			}
-		}
 
-		if (InitMesh(ourMesh))
-		{
-			BindTexture(ourMesh);
+			if (InitMesh(ourMesh))
+			{
+				BindTexture(ourMesh);
 
-			//(texfileDir != nullptr) ? ourMesh->hasTex = true : ourMesh->hasTex = false;
+				//(texfileDir != nullptr) ? ourMesh->hasTex = true : ourMesh->hasTex = false;
 
-			App->renderer3D->meshes.push_back(ourMesh);
+				App->renderer3D->meshes.push_back(ourMesh);
+			}
 		}
 	}
-
-	//for (auto i = 0; i < num; i++)
-	//{
-	//	const aiMesh* m = s->mMeshes[children[j]->mMeshes[i]];
-	//	mesh* ourMesh = new mesh;
-
-	//	// copy vertices
-	//	ourMesh->num_vertex = m->mNumVertices;
-	//	ourMesh->vertex = new float[ourMesh->num_vertex * 3];
-	//	memcpy(ourMesh->vertex, m->mVertices, sizeof(float) * ourMesh->num_vertex * 3);
-
-	//	// TODO preguntar: como pillar el nombre del objeto y no la de dentro de la mesh "outliner id data operation" (abrir en blender pa explicar bien xd) 
-	//	LOG("New mesh %s with %d vertices", m->mName.C_Str(), m->mNumVertices);
-
-	//	// copy faces
-	//	if (m->HasFaces())
-	//	{
-	//		ourMesh->num_index = m->mNumFaces * 3;
-	//		ourMesh->index = new uint[ourMesh->num_index]; // assume each face is a triangle
-
-	//		for (uint i = 0; i < m->mNumFaces; ++i)
-	//		{
-	//			if (m->mFaces[i].mNumIndices != 3)
-	//			{
-	//				LOG("[WARNING], geometry face with != 3 indices!");
-	//			}
-	//			else
-	//			{
-	//				memcpy(&ourMesh->index[i * 3], m->mFaces[i].mIndices, 3 * sizeof(uint));
-	//			}
-	//		}
-	//	}
-
-	//	//copy normals
-	//	ourMesh->num_normals = m->mNumVertices;
-	//	ourMesh->normals = new float[ourMesh->num_normals * 3];
-	//	memcpy(ourMesh->normals, m->mNormals, sizeof(float) * ourMesh->num_normals * 3);
-
-	//	////copy texture coordinates
-	//	uint uv_index = 0;
-
-	//	if (m->HasTextureCoords(uv_index))
-	//	{
-	//		ourMesh->tex.num_tex = m->mNumVertices;
-	//		ourMesh->tex.tex = new math::float2[ourMesh->tex.num_tex * 3];
-	//		for (uint i = 0; i < ourMesh->tex.num_tex; i++)
-	//		{
-	//			ourMesh->tex.tex[i].x = m->mTextureCoords[uv_index][i].x;
-	//			ourMesh->tex.tex[i].y = m->mTextureCoords[uv_index][i].y;
-	//		}
-	//	}
-
-	//	if (InitMesh(ourMesh))
-	//	{
-	//		BindTexture(ourMesh);
-
-	//		//(texfileDir != nullptr) ? ourMesh->hasTex = true : ourMesh->hasTex = false;
-
-	//		App->renderer3D->meshes.push_back(ourMesh);
-	//	}
-	//}
 }
 
 bool ai::InitMesh(mesh* m)
