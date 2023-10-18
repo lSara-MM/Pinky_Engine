@@ -49,12 +49,12 @@ void Hierarchy::ShowWindow()
 	ImGui::SetNextWindowSize(ImVec2(200, 600), ImGuiCond_Appearing);
 	if (ImGui::Begin("Hierarchy"), &show)
 	{
-		/*if (ImGui::TreeNode(App->scene->rootNode->name.c_str()))
+		if (ImGui::TreeNode(App->scene->rootNode->name.c_str()))
 		{
-			ShowChildren(App->scene->rootNode->vChildren);
+			ShowChildren(App->scene->rootNode->vChildren, App->scene->rootNode->vChildren.size());
 			ImGui::TreePop();
-		}*//*
-		ShowChildren(App->scene->rootNode->vChildren, App->scene->GO_num);*/
+		}
+		ShowChildren(App->scene->rootNode->vChildren, App->scene->GO_num);
 
 		ImGui::End();
 	}
@@ -73,7 +73,6 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> children, int num)
 
 		if (ImGui::TreeNode(children[i]->name.c_str()))
 		{
-
 			ImGui::TreePop();
 		}
 	}

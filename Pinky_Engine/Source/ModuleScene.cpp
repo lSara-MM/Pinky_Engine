@@ -38,6 +38,15 @@ bool ModuleScene::Init()
 	
 	rootNode = new GameObject("Root node", true);		
 	GO_num = 0;
+
+	GameObject* go = new GameObject("cube", rootNode);
+	GameObject* go1 = new GameObject("cube1", rootNode);
+	GameObject* go2 = new GameObject("cube2", go);
+	GameObject* go3 = new GameObject("cube3", go);
+	GameObject* go4 = new GameObject("cube4", rootNode);
+	GameObject* go5 = new GameObject("cube5", go3);
+	GameObject* go6 = new GameObject("cube6", go3);
+
 	return ret;
 }
 
