@@ -39,11 +39,6 @@ public:
 	SDL_GLContext context;
 	CPlane Grid;
 
-	// 2nd window state
-	bool show_demo_window;
-	ImVec4 clear_color;
-	float col[3];
-
 	// FPS graph
 	std::vector<float> mFPSLog;
 	std::vector<float> mSLog;
