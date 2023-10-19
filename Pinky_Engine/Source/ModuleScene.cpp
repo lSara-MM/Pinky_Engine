@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleScene.h"
 #include "ModuleWindow.h"
+#include "ImGuiWindows.h"
 #include "../SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -35,18 +36,27 @@ bool ModuleScene::Init()
 {
 	LOG("Creating scene");
 	bool ret = true;
-	
-	rootNode = new GameObject("Root node", true);		
+
 	GO_num = 0;
+	rootNode = new GameObject("Root node", true);	
 
 	// TODO: borrar cuando ya no se use
 	GameObject* go = new GameObject("cube", rootNode);
+		GameObject* go2 = new GameObject("cube2", go);
+			GameObject* go7 = new GameObject("cube7", go2);
+			GameObject* go9 = new GameObject("cube9", go2);
+		GameObject* go3 = new GameObject("cube3", go);
+			GameObject* go5 = new GameObject("cube5", go3);
+			GameObject* go6 = new GameObject("cube6", go3);
+
 	GameObject* go1 = new GameObject("cube1", rootNode);
-	GameObject* go2 = new GameObject("cube2", go);
-	GameObject* go3 = new GameObject("cube3", go);
+		//GameObject* go10 = new GameObject("cube10", go1);
+
 	GameObject* go4 = new GameObject("cube4", rootNode);
-	GameObject* go5 = new GameObject("cube5", go3);
-	GameObject* go6 = new GameObject("cube6", go3);
+		//GameObject* go8 = new GameObject("cube8", go4);
+	//GameObject* go11 = new GameObject("cube11", rootNode);
+
+
 
 	return ret;
 }
@@ -60,6 +70,13 @@ update_status ModuleScene::PreUpdate(float dt)
 
 update_status ModuleScene::Update(float dt)
 {
+	if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN ||
+		App->input->GetKey(SDL_SCANCODE_BACKSPACE) == KEY_DOWN)
+	{
+		ai::DeleteLastMesh();
+		//ai::DeleteSelectedMesh(h->GetSelected());
+	}
+
 	return UPDATE_CONTINUE;
 }
 

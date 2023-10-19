@@ -12,7 +12,7 @@ GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 
 	parent->vChildren.push_back(this);
 
-	App->scene->GO_num++;
+	id = App->scene->GO_num++;
 }
 
 GameObject::GameObject(std::string n, bool a)
@@ -22,7 +22,7 @@ GameObject::GameObject(std::string n, bool a)
 	C_Transform* temp = new C_Transform(float3(0, 0, 0), Quat(0, 0, 0, 0), float3(1, 1, 1));
 	transform = temp;
 
-	App->scene->GO_num++;
+	id = App->scene->GO_num++;
 }
 
 GameObject::~GameObject()
@@ -33,7 +33,7 @@ GameObject::~GameObject()
 	ClearVecPtr(vChildren);
 }
 
-void GameObject::AddComponent(C_TYPE type)
+void GameObject::AddComponent(C_TYPE type, Component* c)
 {
 	switch (type)
 	{

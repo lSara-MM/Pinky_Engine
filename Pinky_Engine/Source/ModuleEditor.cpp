@@ -74,8 +74,10 @@ bool ModuleEditor::Init()
 	aboutWin = false;
 
 	Hierarchy* h = new Hierarchy();
+	App->scene->h = h;
 	vImGuiWindows.push_back(h);
 	Inspector* i = new Inspector();
+	App->scene->i = i;
 	vImGuiWindows.push_back(i);
 
 	return ret;

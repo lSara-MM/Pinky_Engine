@@ -225,6 +225,10 @@ void ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 				//BindTexture(ourMesh);
 
 				//(texfileDir != nullptr) ? ourMesh->hasTex = true : ourMesh->hasTex = false;
+				
+				C_Mesh* mesh = new C_Mesh();
+				mesh->m = ourMesh;
+				obj->AddComponent(C_TYPE::MESH, mesh);
 
 				App->renderer3D->meshes.push_back(ourMesh);
 			}
@@ -318,6 +322,27 @@ void ai::DeleteLastMesh()
 	}
 }
 
+void ai::DeleteSelectedMesh(GameObject* obj)
+{
+	/*std::vector<mesh*> m;
+
+	for (auto i = 0; i < obj->vComponents.size(); i++)
+	{
+		if (obj->vComponents[i]->type == C_TYPE::MESH)
+		{
+			m.push_back(obj->vComponents[i]);
+		}
+	}
+
+	LOG("Deleted %s mesh created", m);
+
+	DeleteMeshBuffers(m);
+
+	m->~mesh();
+	App->renderer3D->meshes.erase(App->renderer3D->meshes.end() - 1);
+	App->renderer3D->meshes.shrink_to_fit();*/
+}
+
 void ai::DeleteMeshBuffers(mesh* m)
 {
 	glDeleteBuffers(1, &m->VBO);
@@ -363,7 +388,6 @@ bool ai::BindTexture(mesh* m)
 
 void ai::ImportTexture(const char* texturefileDir, mesh* m)
 {
-
 	ILuint imageID = 0;
 	ilGenImages(1, &imageID);
 	ilBindImage(imageID);

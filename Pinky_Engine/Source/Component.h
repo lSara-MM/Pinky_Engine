@@ -10,6 +10,7 @@
 #include "../MathGeoLib/include/Math/float4x4.h"
 #include "../MathGeoLib/include/Math/Quat.h"
 
+#include "../Assimp/Assimp.h"
 #include <vector>
 
 enum class C_TYPE
@@ -57,6 +58,8 @@ public:
 	C_Mesh(bool start_enabled = true);
 	~C_Mesh();
 
+public:
+	ai::mesh* m;
 private:
 
 };

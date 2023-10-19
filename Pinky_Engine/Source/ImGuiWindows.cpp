@@ -49,30 +49,59 @@ void Hierarchy::ShowWindow()
 	ImGui::SetNextWindowSize(ImVec2(200, 600), ImGuiCond_Appearing);
 	if (ImGui::Begin("Hierarchy"), &show)
 	{
+		/*ImGui::SetNextItemOpen(true);
 		if (ImGui::TreeNode(App->scene->rootNode->name.c_str()))
-		{
+		{*/
 			ShowChildren(App->scene->rootNode->vChildren, App->scene->rootNode->vChildren.size());
-			ImGui::TreePop();
-		}
+			if (node_clicked != -1)
+			{
+				// Update selection state
+				// (process outside of tree loop to avoid visual inconsistencies during the clicking frame)
+				if (ImGui::GetIO().KeyCtrl)
+					selection_mask ^= (1 << node_clicked);          // CTRL+click to toggle
+				else //if (!(selection_mask & (1 << node_clicked))) // Depending on selection behavior you want, may want to preserve selection when clicking on item that is part of the selection
+					selection_mask = (1 << node_clicked);           // Click to single-select
+			}
+
+			//ImGui::TreePop();
+		//}
 
 		ImGui::End();
 	}
 }
 
+GameObject* Hierarchy::GetSelected()
+{
+	return selectedGO;
+}
+
 bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 {
 	bool ret = true;
-
+	ImGuiTreeNodeFlags node_flags;
+	
 	for (int i = 0; i < num; i++)
 	{
-		ImGuiTreeNodeFlags node_flags;
+		std::string a = current[i]->name.c_str();
+		a.append(" - ");
+		a.append(std::to_string(current[i]->id));		
+
+		if (ImGui::IsItemClicked())
+		{
+			node_clicked = current[i]->id - 1;
+			selectedGO = current[i];
+		}
 
 		if (!current[i]->vChildren.empty())
 		{
 			node_flags |= node_flags = ImGuiTreeNodeFlags_OpenOnArrow |
-				ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+				ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
 
-			if (ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, current[i]->name.c_str()))
+			const bool is_selected = (selection_mask & (1 << current[i]->id)) != 0;
+			if (is_selected)
+				node_flags |= ImGuiTreeNodeFlags_Selected;
+
+			if (ImGui::TreeNodeEx((void*)(intptr_t)current[i]->id, node_flags, a.c_str()))
 			{
 				ShowChildren(current[i]->vChildren, current[i]->vChildren.size());
 				ImGui::TreePop();
@@ -81,10 +110,15 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 		else
 		{
 			node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+			
+			const bool is_selected = (selection_mask & (1 << current[i]->id)) != 0;
 
-			if (ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, current[i]->name.c_str()))
+			if (is_selected)
+				node_flags |= ImGuiTreeNodeFlags_Selected;
+
+			if (ImGui::TreeNodeEx((void*)(intptr_t)current[i]->id, node_flags, a.c_str()))
 			{
-
+				
 			}
 		}
 	}

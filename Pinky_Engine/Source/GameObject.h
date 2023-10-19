@@ -20,7 +20,7 @@ public:
 	GameObject(std::string n, bool a);
 	~GameObject();
 
-	void AddComponent(C_TYPE type);
+	void AddComponent(C_TYPE type, Component* c);
 
 public:
 	GameObject* pParent;
@@ -31,4 +31,7 @@ public:
 	int id;
 	bool active;
 	C_Transform* transform;
+
+	bool selected = false;
+
 } /**rootNode*/;	// TODO: preguntar com es millor, si aixi o un rootnode al scene

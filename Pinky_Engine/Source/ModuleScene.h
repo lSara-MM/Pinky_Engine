@@ -9,6 +9,8 @@
 
 #include <vector>
 
+#include "ImGuiWindows.h"
+
 class GameObject;
 
 class ModuleScene : public Module
@@ -26,6 +28,9 @@ public:
 public:
 	GameObject* rootNode;
 	int GO_num;
+
+	Hierarchy* h;
+	Inspector* i;
 
 private:
 

@@ -84,6 +84,7 @@ namespace ai
 	void CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj);
 
 	void DeleteLastMesh();	// TODO: remove cuando se pueda seleccionar una mesh
+	void DeleteSelectedMesh(GameObject* obj);
 	void DeleteMeshBuffers(mesh* m);
 
 	// Textures
