@@ -348,7 +348,7 @@ bool ai::BindTexture(mesh* m)
 void ai::ImportTexture(const char* texturefileDir, mesh* m)
 {
 
-	ILuint imageID;
+	ILuint imageID = 0;
 	ilGenImages(1, &imageID);
 	ilBindImage(imageID);
 	ilLoadImage(texturefileDir);
@@ -364,6 +364,9 @@ void ai::ImportTexture(const char* texturefileDir, mesh* m)
 	int const height = ilGetInteger(IL_IMAGE_HEIGHT);
 	int const type = ilGetInteger(IL_IMAGE_TYPE); 
 	int const format = ilGetInteger(IL_IMAGE_FORMAT); 
+	//BYTE* pixmap = new BYTE[width * height * 3];
+	//ilCopyPixels(0, 0, 0, width, height, 1, IL_RGB,
+	//	IL_UNSIGNED_BYTE, pixmap);
 
 	GLuint textureID;
 	glGenTextures(1, &textureID);
@@ -378,6 +381,8 @@ void ai::ImportTexture(const char* texturefileDir, mesh* m)
 	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, type, data);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
+	ilBindImage(0);
+	ilDeleteImage(imageID);
 	m->tex.id_tex = textureID;
 
 }
