@@ -39,6 +39,7 @@ bool ModuleScene::Init()
 	rootNode = new GameObject("Root node", true);		
 	GO_num = 0;
 
+	// TODO: borrar cuando ya no se use
 	GameObject* go = new GameObject("cube", rootNode);
 	GameObject* go1 = new GameObject("cube1", rootNode);
 	GameObject* go2 = new GameObject("cube2", go);
@@ -75,12 +76,7 @@ update_status ModuleScene::PostUpdate(float dt)
 bool ModuleScene::CleanUp()
 {
 	LOG("Destroying 3D Renderer");
-
-	return true;
-}
-
-bool ModuleScene::Hierarchy()
-{
-
+	
+	RELEASE(rootNode);
 	return true;
 }

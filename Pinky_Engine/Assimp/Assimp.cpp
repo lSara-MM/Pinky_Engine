@@ -66,7 +66,23 @@ bool ai::ImportMesh(const char* meshfileDir, const char* texfileDir)
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, App->scene->rootNode);
+		if (scene->mNumMeshes > 1)
+		{
+			std::string name = meshfileDir;
+			// Get file name
+			int posI = name.find_last_of("\\") + 1;
+			int posF = name.find_last_of(".");
+
+			name = name.substr(posI, posF - posI);	// first position, size of the string to get
+			//
+
+			GameObject* obj = new GameObject(name);
+			MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, obj);
+		}
+		else
+		{
+			MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, App->scene->rootNode);
+		}
 
 		{
 			// Use scene->mNumMeshes to iterate on scene->mMeshes array
@@ -347,7 +363,6 @@ bool ai::BindTexture(mesh* m)
 
 void ai::ImportTexture(const char* texturefileDir, mesh* m)
 {
-
 	ILuint imageID;
 	ilGenImages(1, &imageID);
 	ilBindImage(imageID);

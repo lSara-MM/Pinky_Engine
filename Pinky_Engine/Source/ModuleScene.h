@@ -23,12 +23,9 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
-	bool Hierarchy();
-
 public:
 	GameObject* rootNode;
 	int GO_num;
-	bool showHierarchy;
 
 private:
 
