@@ -4,6 +4,23 @@
 #include "../Source/GameObject.h"
 #include "../Source/ModuleScene.h"
 
+#include <gl/GL.h>
+#include <gl/GLU.h>
+
+
+#pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
+#pragma comment (lib, "glu32.lib") /* link Microsoft OpenGL lib   */
+#pragma comment (lib, "Glew/libx86/glew32.lib")
+
+#include "../DevIL/include/il.h"
+#include "../DevIL/include/ilu.h"
+#include "../DevIL/include/ilut.h"
+
+#pragma comment (lib, "../DevIL/libx86/DevIL.lib")
+#pragma comment (lib, "../DevIL/libx86/ILU.lib")
+#pragma comment (lib, "../DevIL/libx86/ILUT.lib")
+
+
 void ai::EnableDebug()
 {
 	// Stream log messages to Debug window
@@ -34,11 +51,11 @@ void ai::ImportFile(const char* fileDir)
 		}
 	}
 
-	for (auto i = 0; i < obj_ext.size(); i++)
+	for (auto i = 0; i < tex_ext.size(); i++)
 	{
-		if (dir.find(obj_ext.at(i)) != std::string::npos)
+		if (dir.find(tex_ext.at(i)) != std::string::npos)
 		{
-
+			ImportTexture(fileDir, *(App->renderer3D->meshes.end()-1));
 		}
 	}
 }
@@ -189,7 +206,7 @@ void ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 
 			if (InitMesh(ourMesh))
 			{
-				BindTexture(ourMesh);
+				//BindTexture(ourMesh);
 
 				//(texfileDir != nullptr) ? ourMesh->hasTex = true : ourMesh->hasTex = false;
 
@@ -240,6 +257,10 @@ bool ai::InitMesh(mesh* m)
 	glBindBuffer(GL_ARRAY_BUFFER, m->id_normals);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->num_normals * 3, m->normals, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	//texture coordinates
+	glBindBuffer(GL_ARRAY_BUFFER, m->tex.id_tex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->tex.num_tex * 2, m->tex.tex, GL_STATIC_DRAW);
 
 	return true;
 }
@@ -322,4 +343,41 @@ bool ai::BindTexture(mesh* m)
 	glBindBuffer(GL_ARRAY_BUFFER, m->tex.id_tex);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->tex.num_tex * 2, m->tex.tex, GL_STATIC_DRAW);
 	return true;
+}
+
+void ai::ImportTexture(const char* texturefileDir, mesh* m)
+{
+
+	ILuint imageID;
+	ilGenImages(1, &imageID);
+	ilBindImage(imageID);
+	ilLoadImage(texturefileDir);
+
+	ILubyte* data = ilGetData();
+	if (!data) {
+		ilBindImage(0);
+		ilDeleteImages(1, &imageID);
+		LOG("ERROR");
+	}
+
+	int const width = ilGetInteger(IL_IMAGE_WIDTH);
+	int const height = ilGetInteger(IL_IMAGE_HEIGHT);
+	int const type = ilGetInteger(IL_IMAGE_TYPE); 
+	int const format = ilGetInteger(IL_IMAGE_FORMAT); 
+
+	GLuint textureID;
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+
+	glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
+	glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+	glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+	glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); 
+
+	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, type, data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	m->tex.id_tex = textureID;
+
 }

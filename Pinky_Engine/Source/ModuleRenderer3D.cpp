@@ -16,6 +16,8 @@
 #include "../ImGui/imgui.h"
 #include "../ImGui/backends/imgui_impl_sdl2.h"
 #include "../ImGui/backends/imgui_impl_opengl3.h"
+#include "../DevIL/include/il.h"
+#include "../DevIL/include/ilu.h"
 #include "../DevIL/include/ilut.h"
 #include "../mmgr/mmgr.h"
 
@@ -118,6 +120,11 @@ bool ModuleRenderer3D::Init()
 
 		glEnable(GL_TEXTURE_2D);
 		glewInit();
+
+		//devil init¿?
+		iluInit();
+		ilInit();
+		ilutInit();
 	}
 
 	// Projection matrix for
@@ -350,7 +357,8 @@ void ModuleRenderer3D::DrawMesh(ai::mesh* mesh)
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 	glActiveTexture(GL_TEXTURE0);
 
-	(mesh->hasTex) ? glBindTexture(GL_TEXTURE_2D, mesh->tex.id_tex) : glBindTexture(GL_TEXTURE_2D, texture_checker);
+	glBindTexture(GL_TEXTURE_2D, mesh->tex.id_tex);
+	//(mesh->hasTex) ? glBindTexture(GL_TEXTURE_2D, mesh->tex.id_tex) : glBindTexture(GL_TEXTURE_2D, texture_checker);
 
 	// Draw mesh
 	glDrawElements(GL_TRIANGLES, mesh->num_index, GL_UNSIGNED_INT, NULL);
