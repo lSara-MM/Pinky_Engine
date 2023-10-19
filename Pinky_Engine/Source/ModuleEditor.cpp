@@ -52,11 +52,6 @@ bool ModuleEditor::Init()
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 	ImGui_ImplOpenGL3_Init("#version 130");
 
-	// 2nd window state
-	//show_demo_window = true;
-	clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
-
 	// Module Settings
 	moduleSettingsWin = false;
 	frcap = true;
@@ -215,11 +210,6 @@ update_status ModuleEditor::Toolbar()
 
 				ImGui::EndMenu();
 			}
-
-			float sz = ImGui::GetTextLineHeight();
-			ImVec2 p = ImGui::GetCursorScreenPos();
-			
-			ImGui::ColorPicker3("a", col);
 
 			if (ImGui::MenuItem("Exit"))
 			{

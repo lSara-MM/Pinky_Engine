@@ -54,26 +54,38 @@ void Hierarchy::ShowWindow()
 			ShowChildren(App->scene->rootNode->vChildren, App->scene->rootNode->vChildren.size());
 			ImGui::TreePop();
 		}
-		ShowChildren(App->scene->rootNode->vChildren, App->scene->GO_num);
 
 		ImGui::End();
 	}
 }
 
-bool Hierarchy::ShowChildren(std::vector<GameObject*> children, int num)
+bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 {
 	bool ret = true;
 
 	for (int i = 0; i < num; i++)
 	{
-		if (children[i]->vChildren.size() > 0)
-		{
-			ShowChildren(children[i]->vChildren, children[i]->vChildren.size());
-		}
+		ImGuiTreeNodeFlags node_flags;
 
-		if (ImGui::TreeNode(children[i]->name.c_str()))
+		if (!current[i]->vChildren.empty())
 		{
-			ImGui::TreePop();
+			node_flags |= node_flags = ImGuiTreeNodeFlags_OpenOnArrow |
+				ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+
+			if (ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, current[i]->name.c_str()))
+			{
+				ShowChildren(current[i]->vChildren, current[i]->vChildren.size());
+				ImGui::TreePop();
+			}
+		}
+		else
+		{
+			node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+
+			if (ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, current[i]->name.c_str()))
+			{
+
+			}
 		}
 	}
 
