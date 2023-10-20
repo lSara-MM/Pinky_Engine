@@ -7,11 +7,6 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
-
-#pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
-#pragma comment (lib, "glu32.lib") /* link Microsoft OpenGL lib   */
-#pragma comment (lib, "Glew/libx86/glew32.lib")
-
 #include "../DevIL/include/il.h"
 #include "../DevIL/include/ilu.h"
 #include "../DevIL/include/ilut.h"
@@ -409,20 +404,27 @@ void ai::ImportTexture(const char* texturefileDir, mesh* m)
 	//	IL_UNSIGNED_BYTE, pixmap);
 
 	GLuint textureID;
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glGenTextures(1, &textureID);
 	glBindTexture(GL_TEXTURE_2D, textureID);
 
-	glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
+	/*glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
 	glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
 	glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
 	glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); 
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); */
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, type, data);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	m->tex.id_tex = textureID;
 
 	ilBindImage(0);
-	ilDeleteImage(imageID);
-	m->tex.id_tex = textureID;
+	ilDeleteImages(1,&imageID);
 
 }
