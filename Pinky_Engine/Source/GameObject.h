@@ -20,18 +20,18 @@ public:
 	GameObject(std::string n, bool a);
 	~GameObject();
 
-	void AddComponent(C_TYPE type, Component* c);
+	Component* AddComponent(C_TYPE type, Component* c = nullptr);
 	void DeleteChild(GameObject* go);
 
 public:
-	GameObject* pParent;
+	GameObject* pParent = nullptr;
 	std::vector<GameObject*> vChildren;
 	std::vector<Component*> vComponents;
 
 	std::string name;
 	int id;
 	bool active;
-	C_Transform* transform;
+	C_Transform* transform = nullptr;
 
 	bool selected = false;
 } /**rootNode*/;	// TODO: preguntar com es millor, si aixi o un rootnode al scene

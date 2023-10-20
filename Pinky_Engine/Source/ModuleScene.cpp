@@ -70,6 +70,14 @@ update_status ModuleScene::PreUpdate(float dt)
 
 update_status ModuleScene::Update(float dt)
 {
+	if (h->GetSelected() != nullptr)
+	{
+		if (h->GetSelected() != i->GetSelected())
+		{
+			i->SetSelected(h->GetSelected());
+		}
+	}
+
 	if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN ||
 		App->input->GetKey(SDL_SCANCODE_BACKSPACE) == KEY_DOWN)
 	{

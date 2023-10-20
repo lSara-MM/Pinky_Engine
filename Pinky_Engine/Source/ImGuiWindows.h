@@ -19,9 +19,14 @@ public:
 	~ImGuiWindows();
 
 	virtual void ShowWindow() {};
+	virtual GameObject* GetSelected();
+	virtual void SetSelected(GameObject* go);
 
 public:
 	bool show;
+
+private:
+	GameObject* selectedGO = nullptr;
 };
 
 class Hierarchy : public ImGuiWindows
@@ -31,7 +36,6 @@ public:
 	~Hierarchy();
 
 	void ShowWindow();
-	GameObject* GetSelected();
 
 private:
 	bool ShowChildren(std::vector<GameObject*> children, int num);
@@ -39,8 +43,6 @@ private:
 private:
 	int selection_mask = (1 << 1);
 	int node_clicked = -1;
-
-	GameObject* selectedGO = nullptr;
 };
 
 class Inspector : public ImGuiWindows

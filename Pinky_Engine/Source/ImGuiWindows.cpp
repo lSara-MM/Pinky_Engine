@@ -33,6 +33,16 @@ ImGuiWindows::~ImGuiWindows()
 {
 }
 
+GameObject* ImGuiWindows::GetSelected()
+{
+	return selectedGO;
+}
+
+void ImGuiWindows::SetSelected(GameObject* go)
+{
+	selectedGO = go;
+}
+
 Hierarchy::Hierarchy()
 {
 }
@@ -66,11 +76,6 @@ void Hierarchy::ShowWindow()
 	}
 }
 
-GameObject* Hierarchy::GetSelected()
-{
-	return selectedGO;
-}
-
 bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 {
 	bool ret = true;
@@ -96,7 +101,7 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 			if (ImGui::IsItemClicked())
 			{
 				node_clicked = current[i]->id;
-				selectedGO = current[i];
+				SetSelected(current[i]);
 			}
 
 			if (open)
@@ -122,7 +127,7 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 			if (ImGui::IsItemClicked())
 			{
 				node_clicked = current[i]->id;
-				selectedGO = current[i];
+				SetSelected(current[i]);
 			}
 		}
 	}
@@ -144,7 +149,14 @@ void Inspector::ShowWindow()
 {
 	if (ImGui::Begin("Inspector"), &show)
 	{
-
+		if (GetSelected() != nullptr)
+		{
+			for (auto i = 0; i < GetSelected()->vComponents.size(); i++)
+			{
+				GetSelected()->vComponents[i]->ShowInInspector();
+			}
+		}
+		
 		ImGui::End();
 	}
 }

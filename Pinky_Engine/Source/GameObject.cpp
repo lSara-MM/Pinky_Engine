@@ -7,8 +7,7 @@ GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 	name = n;
 	active = start_enabled;
 
-	C_Transform* temp = new C_Transform(float3(0, 0, 0), Quat(0, 0, 0, 0), float3(1, 1, 1));
-	transform = temp;
+	AddComponent(C_TYPE::TRANSFORM);
 
 	parent->vChildren.push_back(this);
 
@@ -19,17 +18,18 @@ GameObject::GameObject(std::string n, bool a)
 {
 	name = n;
 	active = a;
-	C_Transform* temp = new C_Transform(float3(0, 0, 0), Quat(0, 0, 0, 0), float3(1, 1, 1));
-	transform = temp;
+
+	AddComponent(C_TYPE::TRANSFORM);
 
 	id = App->scene->GO_num++;
 }
 
 GameObject::~GameObject()
 {
-	RELEASE(transform);
-
 	ClearVecPtr(vComponents);
+
+	//RELEASE(transform);
+	transform = nullptr;
 
 	if (!vChildren.empty())
 	{
@@ -42,27 +42,33 @@ GameObject::~GameObject()
 	App->scene->GO_num--;
 }
 
-void GameObject::AddComponent(C_TYPE type, Component* c)
+Component* GameObject::AddComponent(C_TYPE type, Component* c)
 {
+	Component* temp;
+
 	switch (type)
 	{
 	case C_TYPE::TRANSFORM:
 		if (transform == nullptr)
 		{
-			C_Transform* temp = new C_Transform();
-			transform = temp;
+			temp = new C_Transform(float3(0, 0, 0), Quat(0, 0, 0, 0), float3(1, 1, 1));
+			transform = (C_Transform*)temp;
 			vComponents.push_back(transform);
 		}
 		break;
 	case C_TYPE::MESH:
-		vComponents.push_back(new C_Mesh());
+		temp = new C_Mesh();
+		vComponents.push_back(temp);
 		break;
 	case C_TYPE::MATERIAL:
-		vComponents.push_back(new C_Material());
+		temp = new C_Material();
+		vComponents.push_back(temp);
 		break;
 	default:
 		break;
 	}
+
+	return c;
 }
 
 void GameObject::DeleteChild(GameObject* go)

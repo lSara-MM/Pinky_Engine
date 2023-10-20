@@ -24,7 +24,8 @@ enum class C_TYPE
 class Component
 {
 public:
-	Component(C_TYPE = C_TYPE::NONE, bool start_enabled = true);
+	Component(C_TYPE t = C_TYPE::NONE, bool start_enabled = true, std::string n = "Component")
+		: type(t), active(start_enabled), name(n) {};
 	~Component();
 
 	virtual void ShowInInspector();
