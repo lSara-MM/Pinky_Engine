@@ -56,8 +56,6 @@ bool ModuleScene::Init()
 		//GameObject* go8 = new GameObject("cube8", go4);
 	//GameObject* go11 = new GameObject("cube11", rootNode);
 
-
-
 	return ret;
 }
 

@@ -89,8 +89,8 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 
 		if (!current[i]->vChildren.empty())
 		{
-			node_flags |= node_flags = ImGuiTreeNodeFlags_OpenOnArrow |
-				ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
+			node_flags = ImGuiTreeNodeFlags_OpenOnArrow |	ImGuiTreeNodeFlags_OpenOnDoubleClick
+				| ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
 
 			const bool is_selected = (selection_mask & (1 << current[i]->id)) != 0;
 			if (is_selected)

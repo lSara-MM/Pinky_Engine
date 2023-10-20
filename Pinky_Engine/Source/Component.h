@@ -28,7 +28,7 @@ public:
 		: type(t), active(start_enabled), name(n) {};
 	~Component();
 
-	virtual void ShowInInspector();
+	virtual void ShowInInspector() {};
 
 public:
 	bool active;
@@ -43,6 +43,12 @@ public:
 	C_Transform(float3 pos, Quat rot, float3 sc, bool start_enabled = true);
 	~C_Transform();
 
+	void ShowInInspector();
+
+private:
+	void SetTransform(float vec[3]);
+	void SetRotation(float vec[]);
+	void SetScale(float vec[3]);
 public:
 	float3 position;
 	Quat rotation;
@@ -58,6 +64,8 @@ public:
 	C_Mesh(bool start_enabled = true);
 	~C_Mesh();
 
+	void ShowInInspector();
+
 public:
 	ai::mesh* m;
 private:
@@ -69,6 +77,8 @@ class C_Material : public Component
 public:
 	C_Material(bool start_enabled = true);
 	~C_Material();
+
+	void ShowInInspector();
 
 private:
 
