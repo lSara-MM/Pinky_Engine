@@ -75,10 +75,9 @@ update_status ModuleScene::Update(float dt)
 	{
 		if (h->GetSelected() != nullptr)
 		{
-			h->GetSelected()->~GameObject();
+			//h->GetSelected()->~GameObject();
+			h->GetSelected()->pParent->DeleteChild(h->GetSelected());
 		}
-		//ai::DeleteLastMesh();
-		//ai::DeleteSelectedMesh(h->GetSelected());
 	}
 
 	return UPDATE_CONTINUE;

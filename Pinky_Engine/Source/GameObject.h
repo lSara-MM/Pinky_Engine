@@ -21,6 +21,7 @@ public:
 	~GameObject();
 
 	void AddComponent(C_TYPE type, Component* c);
+	void DeleteChild(GameObject* go);
 
 public:
 	GameObject* pParent;

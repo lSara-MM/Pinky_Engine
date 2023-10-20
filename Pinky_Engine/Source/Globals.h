@@ -82,15 +82,3 @@ void ClearVecPtr(std::vector<T*>& x)
 	x.clear();
 	x.shrink_to_fit();
 }
-
-template <class T>
-int FindInVec(std::vector<T*>& x, T* it)
-{
-	for (auto i = 0; i < x.size(); i++)
-	{
-		if (x[i] == it)
-		{
-			return i;
-		}
-	}
-}

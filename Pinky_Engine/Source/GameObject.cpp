@@ -37,6 +37,8 @@ GameObject::~GameObject()
 	}
 
 	//pParent->vChildren.erase(pParent->vChildren.begin() + FindInVec(pParent->vChildren, this));
+	// TODO: preguntar perque peta si esta aixo pero si es fa des del parent -> delete children si funciona
+
 	App->scene->GO_num--;
 }
 
@@ -61,4 +63,10 @@ void GameObject::AddComponent(C_TYPE type, Component* c)
 	default:
 		break;
 	}
+}
+
+void GameObject::DeleteChild(GameObject* go)
+{
+	go->~GameObject();
+	vChildren.erase(std::find(vChildren.begin(), vChildren.end(), go));
 }
