@@ -18,15 +18,22 @@ void Component::ShowInInspector()
 	}
 }
 
-C_Transform::C_Transform(bool start_enabled) : Component(C_TYPE::TRANSFORM, active, "Transform")
+C_Transform::C_Transform(bool start_enabled) : Component(C_TYPE::TRANSFORM, start_enabled, "Transform")
 {
+}
+
+C_Transform::C_Transform(float3 pos, Quat rot, float3 sc, bool start_enabled) : Component(C_TYPE::TRANSFORM, start_enabled, "Transform")
+{
+	position = pos;
+	rotation = rot;
+	scale = sc;
 }
 
 C_Transform::~C_Transform()
 {
 }
 
-C_Mesh::C_Mesh(bool start_enabled) : Component(C_TYPE::MESH, active, "Mesh")
+C_Mesh::C_Mesh(bool start_enabled) : Component(C_TYPE::MESH, start_enabled, "Mesh")
 {
 
 }
@@ -36,7 +43,7 @@ C_Mesh::~C_Mesh()
 	m->~mesh();
 }
 
-C_Material::C_Material(bool start_enabled) : Component(C_TYPE::MATERIAL, active, "Material")
+C_Material::C_Material(bool start_enabled) : Component(C_TYPE::MATERIAL, start_enabled, "Material")
 {
 }
 

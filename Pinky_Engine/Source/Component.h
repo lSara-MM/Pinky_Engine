@@ -40,8 +40,7 @@ class C_Transform : public Component
 {
 public:
 	C_Transform(bool start_enabled = true);
-	C_Transform(float3 pos, Quat rot, float3 sc, bool start_enabled = true) :
-		position(pos), rotation(rot), scale(sc) {};
+	C_Transform(float3 pos, Quat rot, float3 sc, bool start_enabled = true);
 	~C_Transform();
 
 public:
