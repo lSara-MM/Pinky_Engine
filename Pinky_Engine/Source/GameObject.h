@@ -20,7 +20,7 @@ public:
 	GameObject(std::string n, bool a);
 	~GameObject();
 
-	Component* AddComponent(C_TYPE type, Component* c = nullptr);
+	Component* AddComponent(C_TYPE type, ai::mesh* m = nullptr);
 	void DeleteChild(GameObject* go);
 
 public:
@@ -34,4 +34,7 @@ public:
 	C_Transform* transform = nullptr;
 
 	bool selected = false;
+
+	unsigned int numMeshes = 0;
+	unsigned int numMaterials = 0;
 } /**rootNode*/;	// TODO: preguntar com es millor, si aixi o un rootnode al scene

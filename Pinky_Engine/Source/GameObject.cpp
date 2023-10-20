@@ -42,7 +42,7 @@ GameObject::~GameObject()
 	App->scene->GO_num--;
 }
 
-Component* GameObject::AddComponent(C_TYPE type, Component* c)
+Component* GameObject::AddComponent(C_TYPE type, ai::mesh* m)
 {
 	Component* temp;
 
@@ -51,24 +51,29 @@ Component* GameObject::AddComponent(C_TYPE type, Component* c)
 	case C_TYPE::TRANSFORM:
 		if (transform == nullptr)
 		{
-			temp = new C_Transform(float3(0, 0, 0), Quat(0, 0, 0, 0), float3(1, 1, 1));
+			temp = new C_Transform(this, float3(0, 0, 0), Quat(0, 0, 0, 0), float3(1, 1, 1));
 			transform = (C_Transform*)temp;
 			vComponents.push_back(transform);
 		}
 		break;
 	case C_TYPE::MESH:
-		temp = new C_Mesh();
-		vComponents.push_back(temp);
+		if (m != nullptr)
+		{
+			temp = new C_Mesh(this, m, numMeshes);
+			vComponents.push_back(temp);
+			numMeshes++;
+		}		
 		break;
 	case C_TYPE::MATERIAL:
-		temp = new C_Material();
+		temp = new C_Material(this, numMaterials);
 		vComponents.push_back(temp);
+		numMaterials++;
 		break;
 	default:
 		break;
 	}
 
-	return c;
+	return temp;
 }
 
 void GameObject::DeleteChild(GameObject* go)

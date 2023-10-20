@@ -1,17 +1,25 @@
+#pragma once
 #include "Component.h"
 
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
+#include "GameObject.h"
+
 Component::~Component()
 {
 }
 
-C_Transform::C_Transform(bool start_enabled) : Component(C_TYPE::TRANSFORM, start_enabled, "Transform")
+int Component::GetID()
+{
+	return id;
+}
+
+C_Transform::C_Transform(GameObject* g, bool start_enabled) : Component(C_TYPE::TRANSFORM, g, start_enabled, "Transform")
 {
 }
 
-C_Transform::C_Transform(float3 pos, Quat rot, float3 sc, bool start_enabled) : Component(C_TYPE::TRANSFORM, start_enabled, "Transform")
+C_Transform::C_Transform(GameObject* g, float3 pos, Quat rot, float3 sc, bool start_enabled) : Component(C_TYPE::TRANSFORM, g, start_enabled, "Transform")
 {
 	position = pos;
 	rotation = rot;
@@ -24,8 +32,18 @@ C_Transform::~C_Transform()
 
 void C_Transform::ShowInInspector()
 {
-	if (ImGui::CollapsingHeader(name.c_str()))
+	std::string n = name.c_str();
+	n.append("##");
+	n.append(std::to_string(gameObject->id));
+
+	if (ImGui::CollapsingHeader(n.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 	{
+		ImGui::Text("x");
+		ImGui::SameLine();
+		ImGui::Text("x");
+		ImGui::SameLine();
+		ImGui::Text("x");
+
 		static float vec[3] = { position.x, position.y, position .z};
 		ImGui::DragFloat3("Position", vec);
 		SetTransform(vec);
@@ -37,10 +55,6 @@ void C_Transform::ShowInInspector()
 		static float vec2[3] = { scale.x, scale.y, scale.z};
 		ImGui::DragFloat3("Scale", vec2);
 		SetScale(vec2);
-
-		ImGui::Text("This is a drag and drop source");
-		ImGui::Text("This is a drag and drop source");
-		ImGui::Text("This is a drag and drop source");
 	}
 }
 
@@ -68,22 +82,75 @@ void C_Transform::SetScale(float vec[3])
 }
 
 
-C_Mesh::C_Mesh(bool start_enabled) : Component(C_TYPE::MESH, start_enabled, "Mesh")
+C_Mesh::C_Mesh(GameObject* g, ai::mesh* m, unsigned int i, bool start_enabled) : Component(C_TYPE::MESH, g, i, start_enabled, "Mesh")
 {
-
+	mesh = m;
 }
 
 C_Mesh::~C_Mesh()
 {
-	m->~mesh();
+	mesh->~mesh();
 }
 
 void C_Mesh::ShowInInspector()
 {
-	ImGui::Checkbox(" ", &active);
+	// Set ImGui ids
+	std::string checkbox = name.c_str();
+	std::string header = name.c_str();
+
+	checkbox.insert(checkbox.begin(), 2, '#');
+	checkbox.append(std::to_string(GetID()));
+
+	header.append("##");
+	header.append(std::to_string(GetID()));
+
+
+	ImGui::Checkbox(checkbox.c_str(), &active);
 	ImGui::SameLine();
 
-	if (ImGui::CollapsingHeader(name.c_str()))
+	if (ImGui::CollapsingHeader(header.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		if (!active) { ImGui::BeginDisabled(); }
+
+		// TODO: quitar cuando ponga que crear un mesh cree un cubo o una mesh 
+		if (mesh != nullptr)
+		{
+			ImGui::Text("Vertices: %d", mesh->num_vertex);
+		}
+		
+
+		ImGui::Text("This is a drag and drop source");
+
+		if (!active) { ImGui::EndDisabled(); }
+	}
+}
+
+
+C_Material::C_Material(GameObject* g, unsigned int i, bool start_enabled) : Component(C_TYPE::MATERIAL, g, i, start_enabled, "Material")
+{
+}
+
+C_Material::~C_Material()
+{
+}
+
+void C_Material::ShowInInspector()
+{	
+	// Set ImGui ids
+	std::string checkbox = name.c_str();
+	std::string header = name.c_str();
+
+	checkbox.insert(checkbox.begin(), 2, '#');
+	checkbox.append(std::to_string(GetID()));
+	
+	header.append("##");
+	header.append(std::to_string(GetID()));
+
+
+	ImGui::Checkbox(checkbox.c_str(), &active);
+	ImGui::SameLine();
+
+	if (ImGui::CollapsingHeader(header.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		if (!active) { ImGui::BeginDisabled(); }
 
@@ -93,25 +160,5 @@ void C_Mesh::ShowInInspector()
 		ImGui::Text("This is a drag and drop source");
 
 		if (!active) { ImGui::EndDisabled(); }
-	}
-}
-
-
-C_Material::C_Material(bool start_enabled) : Component(C_TYPE::MATERIAL, start_enabled, "Material")
-{
-}
-
-C_Material::~C_Material()
-{
-}
-
-void C_Material::ShowInInspector()
-{
-	if (ImGui::CollapsingHeader("Window"))
-	{
-		if (ImGui::Checkbox(name.c_str(), &active))
-		{
-
-		}
 	}
 }

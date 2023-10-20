@@ -52,6 +52,8 @@ public:
 	~Inspector();
 
 	void ShowWindow();
+	void AddComponentByType(int i);
 
 public:
+	int selected_fish = -1;
 };

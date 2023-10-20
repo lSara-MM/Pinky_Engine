@@ -56,7 +56,7 @@ void Hierarchy::ShowWindow()
 	// Always center this window when appearing
 	/*ImVec2 center = ImGui::GetMainViewport()->Pos;
 	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.7f));*/
-	ImGui::SetNextWindowSize(ImVec2(200, 600), ImGuiCond_Appearing);
+	ImGui::SetNextWindowSize(ImVec2(200, 500), ImGuiCond_Appearing);
 	if (ImGui::Begin("Hierarchy"), &show)
 	{
 		if (!App->scene->rootNode->vChildren.empty())
@@ -154,9 +154,56 @@ void Inspector::ShowWindow()
 			for (auto i = 0; i < GetSelected()->vComponents.size(); i++)
 			{
 				GetSelected()->vComponents[i]->ShowInInspector();
+				ImGui::Dummy(ImVec2(0, 10));
+			}
+
+
+			// --- Add components button ---
+			ImGui::Separator();
+			std::array<std::string, 3> components = { "Transform", "Mesh", "Material" };
+			
+			if (ImGui::Button("Add Component", ImVec2(110, 30)))
+			{
+				ImGui::OpenPopup("AddComponents");
+				ImGui::SameLine();
+				ImGui::TextUnformatted(selected_fish == -1 ? "<None>" : components[selected_fish].c_str());
+			}
+
+			if (ImGui::BeginPopup("AddComponents"))
+			{
+				ImGui::SeparatorText("Components");
+
+				// Skip transform
+				for (int i = 1; i < components.size(); i++)
+				{
+					if (ImGui::Selectable(components[i].c_str()))
+					{
+						AddComponentByType(i);
+					}
+				}
+					ImGui::EndPopup();
 			}
 		}
 		
 		ImGui::End();
+	}
+}
+
+void Inspector::AddComponentByType(int i)
+{
+	switch ((C_TYPE)i)
+	{
+	case C_TYPE::TRANSFORM:
+		break;
+	case C_TYPE::MESH:
+		GetSelected()->AddComponent(C_TYPE::MESH);
+		break;
+	case C_TYPE::MATERIAL:
+		GetSelected()->AddComponent(C_TYPE::MATERIAL);
+		break;
+	case C_TYPE::NONE:
+		break;
+	default:
+		break;
 	}
 }

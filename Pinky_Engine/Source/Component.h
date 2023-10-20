@@ -1,4 +1,4 @@
-#pragma 
+#pragma once
 #include "Globals.h"
 #include "Light.h"
 
@@ -21,26 +21,33 @@ enum class C_TYPE
 	NONE
 };
 
+class GameObject;
+
 class Component
 {
 public:
-	Component(C_TYPE t = C_TYPE::NONE, bool start_enabled = true, std::string n = "Component")
-		: type(t), active(start_enabled), name(n) {};
+	Component(C_TYPE t = C_TYPE::NONE, GameObject* g = nullptr, unsigned int i = 0, bool start_enabled = true, std::string n = "Component")
+		: type(t), gameObject(g), id(i), active(start_enabled), name(n) {};
 	~Component();
 
 	virtual void ShowInInspector() {};
+	int GetID();
 
 public:
 	bool active;
 	std::string name;
 	C_TYPE type;
+	GameObject* gameObject;
+
+private:
+	unsigned int id;
 };
 
 class C_Transform : public Component
 {
 public:
-	C_Transform(bool start_enabled = true);
-	C_Transform(float3 pos, Quat rot, float3 sc, bool start_enabled = true);
+	C_Transform(GameObject* g = nullptr, bool start_enabled = true);
+	C_Transform(GameObject* g, float3 pos, Quat rot, float3 sc, bool start_enabled = true);
 	~C_Transform();
 
 	void ShowInInspector();
@@ -61,25 +68,21 @@ public:
 class C_Mesh : public Component
 {
 public:
-	C_Mesh(bool start_enabled = true);
+	C_Mesh(GameObject* g = nullptr, ai::mesh* m = nullptr, unsigned int i = 0, bool start_enabled = true);
 	~C_Mesh();
 
 	void ShowInInspector();
-
 public:
-	ai::mesh* m;
-private:
-
+	ai::mesh* mesh = nullptr;
 };
 
 class C_Material : public Component
 {
 public:
-	C_Material(bool start_enabled = true);
+	C_Material(GameObject* g = nullptr, unsigned int i = 0, bool start_enabled = true);
 	~C_Material();
 
 	void ShowInInspector();
 
 private:
-
 };

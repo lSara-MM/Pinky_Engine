@@ -70,7 +70,7 @@ bool ModuleEditor::Init()
 	infoOutputWin = false;
 
 	// About
-	aboutColor = ImVec4(1.0f, 0.0f, 1.0f, 1.0f);
+	aboutColor = ImVec4(0.953f, 0.533f, 0.969f, 1.0f);
 	aboutWin = false;
 
 	Hierarchy* h = new Hierarchy();
