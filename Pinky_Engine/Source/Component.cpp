@@ -36,6 +36,7 @@ C_Mesh::C_Mesh(bool start_enabled) : Component(C_TYPE::MESH, active)
 
 C_Mesh::~C_Mesh()
 {
+	m->~mesh();
 }
 
 C_Material::C_Material(bool start_enabled) : Component(C_TYPE::MATERIAL, active)

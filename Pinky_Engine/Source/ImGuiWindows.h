@@ -37,7 +37,7 @@ private:
 	bool ShowChildren(std::vector<GameObject*> children, int num);
 
 private:
-	int selection_mask = (1 << 0);
+	int selection_mask = (1 << 1);
 	int node_clicked = -1;
 
 	GameObject* selectedGO = nullptr;

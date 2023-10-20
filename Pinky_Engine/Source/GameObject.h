@@ -33,5 +33,4 @@ public:
 	C_Transform* transform;
 
 	bool selected = false;
-
 } /**rootNode*/;	// TODO: preguntar com es millor, si aixi o un rootnode al scene

@@ -49,9 +49,8 @@ void Hierarchy::ShowWindow()
 	ImGui::SetNextWindowSize(ImVec2(200, 600), ImGuiCond_Appearing);
 	if (ImGui::Begin("Hierarchy"), &show)
 	{
-		/*ImGui::SetNextItemOpen(true);
-		if (ImGui::TreeNode(App->scene->rootNode->name.c_str()))
-		{*/
+		if (!App->scene->rootNode->vChildren.empty())
+		{
 			ShowChildren(App->scene->rootNode->vChildren, App->scene->rootNode->vChildren.size());
 			if (node_clicked != -1)
 			{
@@ -62,10 +61,7 @@ void Hierarchy::ShowWindow()
 				else //if (!(selection_mask & (1 << node_clicked))) // Depending on selection behavior you want, may want to preserve selection when clicking on item that is part of the selection
 					selection_mask = (1 << node_clicked);           // Click to single-select
 			}
-
-			//ImGui::TreePop();
-		//}
-
+		}
 		ImGui::End();
 	}
 }
@@ -86,12 +82,6 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 		a.append(" - ");
 		a.append(std::to_string(current[i]->id));		
 
-		if (ImGui::IsItemClicked())
-		{
-			node_clicked = current[i]->id - 1;
-			selectedGO = current[i];
-		}
-
 		if (!current[i]->vChildren.empty())
 		{
 			node_flags |= node_flags = ImGuiTreeNodeFlags_OpenOnArrow |
@@ -101,7 +91,15 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 			if (is_selected)
 				node_flags |= ImGuiTreeNodeFlags_Selected;
 
-			if (ImGui::TreeNodeEx((void*)(intptr_t)current[i]->id, node_flags, a.c_str()))
+			bool open = ImGui::TreeNodeEx((void*)(intptr_t)current[i]->id, node_flags, a.c_str());
+
+			if (ImGui::IsItemClicked())
+			{
+				node_clicked = current[i]->id;
+				selectedGO = current[i];
+			}
+
+			if (open)
 			{
 				ShowChildren(current[i]->vChildren, current[i]->vChildren.size());
 				ImGui::TreePop();
@@ -119,6 +117,12 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 			if (ImGui::TreeNodeEx((void*)(intptr_t)current[i]->id, node_flags, a.c_str()))
 			{
 				
+			}
+
+			if (ImGui::IsItemClicked())
+			{
+				node_clicked = current[i]->id;
+				selectedGO = current[i];
 			}
 		}
 	}

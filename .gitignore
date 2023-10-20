@@ -88,6 +88,8 @@ packages/
 !Assimp/libx86/zlibstatic.lib
 
 
+!DevIL/libx86
+
 !DevIL/libx86/DevIL.lib
 !DevIL/libx86/ILU.lib
 !DevIL/libx86/ILUT.lib

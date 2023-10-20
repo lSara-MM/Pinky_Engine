@@ -30,7 +30,14 @@ GameObject::~GameObject()
 	RELEASE(transform);
 
 	ClearVecPtr(vComponents);
-	ClearVecPtr(vChildren);
+
+	if (!vChildren.empty())
+	{
+		ClearVecPtr(vChildren);
+	}
+
+	//pParent->vChildren.erase(pParent->vChildren.begin() + FindInVec(pParent->vChildren, this));
+	App->scene->GO_num--;
 }
 
 void GameObject::AddComponent(C_TYPE type, Component* c)

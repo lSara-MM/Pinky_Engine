@@ -62,7 +62,7 @@ enum update_status
 
 // Clear a vector
 template <class T>
-void ClearVec(std::vector<T> &x)
+void ClearVec(std::vector<T>& x)
 {
 	x.clear();
 	x.shrink_to_fit();
@@ -70,7 +70,7 @@ void ClearVec(std::vector<T> &x)
 
 // Clear a vector of pointers
 template <class T>
-void ClearVecPtr(std::vector<T*> &x)
+void ClearVecPtr(std::vector<T*>& x)
 {
 	for (auto it = x.rbegin(); it != x.rend(); ++it)
 	{
@@ -81,4 +81,16 @@ void ClearVecPtr(std::vector<T*> &x)
 
 	x.clear();
 	x.shrink_to_fit();
+}
+
+template <class T>
+int FindInVec(std::vector<T*>& x, T* it)
+{
+	for (auto i = 0; i < x.size(); i++)
+	{
+		if (x[i] == it)
+		{
+			return i;
+		}
+	}
 }

@@ -73,7 +73,11 @@ update_status ModuleScene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN ||
 		App->input->GetKey(SDL_SCANCODE_BACKSPACE) == KEY_DOWN)
 	{
-		ai::DeleteLastMesh();
+		if (h->GetSelected() != nullptr)
+		{
+			h->GetSelected()->~GameObject();
+		}
+		//ai::DeleteLastMesh();
 		//ai::DeleteSelectedMesh(h->GetSelected());
 	}
 
