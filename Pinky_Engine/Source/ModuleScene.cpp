@@ -68,6 +68,8 @@ update_status ModuleScene::PreUpdate(float dt)
 
 update_status ModuleScene::Update(float dt)
 {
+	rootNode->Update(dt);
+
 	if (h->GetSelected() != nullptr)
 	{
 		if (h->GetSelected() != i->GetSelected())

@@ -81,8 +81,8 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 	for (int i = 0; i < num; i++)
 	{
 		std::string a = current[i]->name.c_str();
-		a.append(" - ");
-		a.append(std::to_string(current[i]->id));		
+		/*a.append(" - ");
+		a.append(std::to_string(current[i]->id));	*/	
 
 		if (!current[i]->vChildren.empty())
 		{

@@ -43,14 +43,28 @@ GameObject::~GameObject()
 	}
 
 	//pParent->vChildren.erase(pParent->vChildren.begin() + FindInVec(pParent->vChildren, this));
-	// TODO: preguntar perque peta si esta aixo pero si es fa des del parent -> delete children si funciona
+	//TODO: preguntar perque peta si esta aixo pero si es fa des del parent -> delete children si funciona
 
 	App->scene->GO_num--;
 }
 
-update_status GameObject::Update()
+update_status GameObject::Update(float dt)
 {
+	if (!vChildren.empty())
+	{
+		for (auto i = 0; i < vChildren.size(); i++)
+		{
+			vChildren[i]->Update(dt);
+		}
+	}
 
+	for (auto i = 0; i < vMeshes.size(); i++)
+	{
+		if (vMeshes[i]->type == C_TYPE::MESH && vMeshes[i]->active)
+		{
+			vMeshes[i]->Draw();
+		}
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -74,6 +88,7 @@ void GameObject::AddComponent(C_TYPE type, ai::mesh* m, ai::POLY_PRIMITIVE_TYPE 
 		{
 			temp = new C_Mesh(this, m, numMeshes);
 			vComponents.push_back(temp);
+			vMeshes.push_back((C_Mesh*)temp);
 			numMeshes++;
 		}
 		else

@@ -12,6 +12,7 @@
 #include <vector>
 #include "Component.h"
 #include "C_Transform.h"
+#include "C_Mesh.h"
 
 class GameObject
 {
@@ -21,7 +22,7 @@ public:
 	GameObject(std::string n, bool a);
 	~GameObject();
 
-	update_status Update();
+	update_status Update(float dt);
 
 	void AddComponent(C_TYPE type, ai::mesh* m = nullptr, ai::POLY_PRIMITIVE_TYPE poly = ai::POLY_PRIMITIVE_TYPE::SPHERE);
 	void DeleteChild(GameObject* go);
@@ -40,4 +41,8 @@ public:
 
 	unsigned int numMeshes = 0;
 	unsigned int numMaterials = 0;
+
+private:
+	// TODO: no hay una mejor forma de hacer esto sin hacer las funciones del mesh en el component de forma virtual?
+	std::vector<C_Mesh*> vMeshes;
 } /**rootNode*/;	// TODO: preguntar com es millor, si aixi o un rootnode al scene

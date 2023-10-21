@@ -22,6 +22,7 @@
 
 
 #include "ModuleScene.h"
+#include "GameObject.h"
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -238,6 +239,8 @@ update_status ModuleEditor::Toolbar()
 
 		if (ImGui::BeginMenu("Game Object"))
 		{
+			if (ImGui::MenuItem("Create Empty")) { new GameObject("Empty"); }
+
 			if (ImGui::BeginMenu("Create Primitive"))
 			{
 				std::array<std::string, 4> components = { "Cube", "Sphere", "Cylinder", "Plane" };

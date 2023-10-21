@@ -189,7 +189,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	(wireframe) ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	for each (ai::mesh* i in meshes)
+	/*for each (ai::mesh* i in meshes)
 	{
 		DrawMesh(i);
 		if (VertexNormals)
@@ -200,7 +200,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		{
 			DrawFaceNormals(i);
 		}
-	}
+	}*/
 
 	return ret;
 }
