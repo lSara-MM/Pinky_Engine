@@ -5,7 +5,6 @@
 #include "../Assimp/Assimp.h"
 #include <vector>
 
-#pragma once
 #include "Component.h"
 
 class C_Material : public Component

@@ -333,6 +333,15 @@
     <ClInclude Include="Source\ImGuiWindows.h">
       <Filter>Sources\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Source\C_Material.h">
+      <Filter>Sources\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\C_Mesh.h">
+      <Filter>Sources\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\C_Transform.h">
+      <Filter>Sources\GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MathGeoLib\include\Geometry\AABB.cpp">
@@ -511,6 +520,15 @@
     </ClCompile>
     <ClCompile Include="Source\ImGuiWindows.cpp">
       <Filter>Sources\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\C_Material.cpp">
+      <Filter>Sources\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\C_Mesh.cpp">
+      <Filter>Sources\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\C_Transform.cpp">
+      <Filter>Sources\GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

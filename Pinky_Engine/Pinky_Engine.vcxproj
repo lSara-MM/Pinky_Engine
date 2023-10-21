@@ -156,6 +156,9 @@
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Color.h" />
     <ClInclude Include="Source\Component.h" />
+    <ClInclude Include="Source\C_Material.h" />
+    <ClInclude Include="Source\C_Mesh.h" />
+    <ClInclude Include="Source\C_Transform.h" />
     <ClInclude Include="Source\GameObject.h" />
     <ClInclude Include="Source\glmath.h" />
     <ClInclude Include="Source\Globals.h" />
@@ -217,6 +220,9 @@
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Color.cpp" />
     <ClCompile Include="Source\Component.cpp" />
+    <ClCompile Include="Source\C_Material.cpp" />
+    <ClCompile Include="Source\C_Mesh.cpp" />
+    <ClCompile Include="Source\C_Transform.cpp" />
     <ClCompile Include="Source\GameObject.cpp" />
     <ClCompile Include="Source\glmath.cpp" />
     <ClCompile Include="Source\ImGuiWindows.cpp" />
