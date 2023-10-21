@@ -21,6 +21,8 @@
 #endif // _DEBUG
 
 
+#include "ModuleScene.h"
+
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 }
@@ -238,24 +240,14 @@ update_status ModuleEditor::Toolbar()
 		{
 			if (ImGui::BeginMenu("Create Primitive"))
 			{
-				if (ImGui::MenuItem("Cube"))
+				std::array<std::string, 4> components = { "Cube", "Sphere", "Cylinder", "Plane" };
+
+				for (int i = 0; i < components.size(); i++)
 				{
-					ai::CreatePolyPrimitive(ai::POLY_PRIMITIVE_TYPE::CUBE);
-				}
-				
-				if (ImGui::MenuItem("Sphere"))
-				{
-					ai::CreatePolyPrimitive(ai::POLY_PRIMITIVE_TYPE::SPHERE);
-				}
-				
-				if (ImGui::MenuItem("Cylinder"))
-				{
-					ai::CreatePolyPrimitive(ai::POLY_PRIMITIVE_TYPE::CYLINDER);
-				}
-				
-				if (ImGui::MenuItem("Plane"))
-				{
-					ai::CreatePolyPrimitive(ai::POLY_PRIMITIVE_TYPE::PLANE);
+					if (ImGui::MenuItem(components[i].c_str()))
+					{
+						ai::CreatePolyPrimitive(ai::POLY_PRIMITIVE_TYPE(i));
+					}
 				}
 				ImGui::EndMenu();
 			}

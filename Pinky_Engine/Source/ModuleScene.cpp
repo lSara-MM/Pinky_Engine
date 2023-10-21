@@ -83,6 +83,8 @@ update_status ModuleScene::Update(float dt)
 		{
 			//h->GetSelected()->~GameObject();
 			h->GetSelected()->pParent->DeleteChild(h->GetSelected());
+			h->SetSelected(nullptr);
+			i->SetSelected(nullptr);
 		}
 	}
 

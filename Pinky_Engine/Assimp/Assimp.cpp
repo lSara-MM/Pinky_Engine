@@ -315,25 +315,15 @@ void ai::DeleteLastMesh()
 	}
 }
 
-void ai::DeleteSelectedMesh(GameObject* obj)
+void ai::DeleteSelectedMesh(mesh* m)
 {
-	/*std::vector<mesh*> m;
+	std::vector<ai::mesh*>* vMesh = &App->renderer3D->meshes;
 
-	for (auto i = 0; i < obj->vComponents.size(); i++)
-	{
-		if (obj->vComponents[i]->type == C_TYPE::MESH)
-		{
-			m.push_back(obj->vComponents[i]);
-		}
-	}
-
-	LOG("Deleted %s mesh created", m);
-
+	LOG("Deleted mesh");
 	DeleteMeshBuffers(m);
 
-	m->~mesh();
-	App->renderer3D->meshes.erase(App->renderer3D->meshes.end() - 1);
-	App->renderer3D->meshes.shrink_to_fit();*/
+	App->renderer3D->meshes.erase(std::find(vMesh->begin(), vMesh->end(), m));
+	App->renderer3D->meshes.shrink_to_fit();
 }
 
 void ai::DeleteMeshBuffers(mesh* m)
