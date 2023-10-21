@@ -172,10 +172,27 @@ void Inspector::ShowWindow()
 			if (ImGui::BeginPopup("AddComponents"))
 			{
 				ImGui::SeparatorText("Components");
-
+				
 				// Skip transform
+
+				if (ImGui::BeginMenu("Mesh"))
+				{
+					std::array<std::string, 4> components = { "Cube", "Sphere", "Cylinder", "Plane" };
+
+					for (int i = 0; i < components.size(); i++)
+					{
+						if (ImGui::MenuItem(components[i].c_str()))
+						{
+							GetSelected()->AddComponent(C_TYPE::MESH, nullptr, ai::POLY_PRIMITIVE_TYPE(i));
+						}
+					}
+					ImGui::EndMenu();
+				}
+
 				for (int i = 1; i < components.size(); i++)
 				{
+					
+					
 					if (ImGui::Selectable(components[i].c_str()))
 					{
 						AddComponentByType(i);

@@ -42,7 +42,7 @@ GameObject::~GameObject()
 	App->scene->GO_num--;
 }
 
-Component* GameObject::AddComponent(C_TYPE type, ai::mesh* m)
+void GameObject::AddComponent(C_TYPE type, ai::mesh* m, ai::POLY_PRIMITIVE_TYPE poly)
 {
 	Component* temp;
 
@@ -62,7 +62,11 @@ Component* GameObject::AddComponent(C_TYPE type, ai::mesh* m)
 			temp = new C_Mesh(this, m, numMeshes);
 			vComponents.push_back(temp);
 			numMeshes++;
-		}		
+		}
+		else
+		{
+			ai::CreatePolyPrimitive(poly);
+		}
 		break;
 	case C_TYPE::MATERIAL:
 		temp = new C_Material(this, numMaterials);
@@ -72,8 +76,6 @@ Component* GameObject::AddComponent(C_TYPE type, ai::mesh* m)
 	default:
 		break;
 	}
-
-	return temp;
 }
 
 void GameObject::DeleteChild(GameObject* go)

@@ -6,20 +6,16 @@
 
 #include "GameObject.h"
 
-Component::~Component()
-{
-}
-
 int Component::GetID()
 {
 	return id;
 }
 
-C_Transform::C_Transform(GameObject* g, bool start_enabled) : Component(C_TYPE::TRANSFORM, g, start_enabled, "Transform")
+C_Transform::C_Transform(GameObject* g, bool start_enabled) : Component(C_TYPE::TRANSFORM, g, g->id, start_enabled, "Transform")
 {
 }
 
-C_Transform::C_Transform(GameObject* g, float3 pos, Quat rot, float3 sc, bool start_enabled) : Component(C_TYPE::TRANSFORM, g, start_enabled, "Transform")
+C_Transform::C_Transform(GameObject* g, float3 pos, Quat rot, float3 sc, bool start_enabled) : Component(C_TYPE::TRANSFORM, g, g->id, start_enabled, "Transform")
 {
 	position = pos;
 	rotation = rot;
@@ -44,15 +40,15 @@ void C_Transform::ShowInInspector()
 		ImGui::SameLine();
 		ImGui::Text("x");
 
-		static float vec[3] = { position.x, position.y, position .z};
+		float vec[3] = { position.x, position.y, position .z};
 		ImGui::DragFloat3("Position", vec);
 		SetTransform(vec);
 
-		static float vec1[3] = { rotation.x, rotation.y, rotation.z};
+		float vec1[3] = { rotation.x, rotation.y, rotation.z};
 		ImGui::DragFloat3("Rotation", vec1);
 		SetRotation(vec1);
 
-		static float vec2[3] = { scale.x, scale.y, scale.z};
+		float vec2[3] = { scale.x, scale.y, scale.z};
 		ImGui::DragFloat3("Scale", vec2);
 		SetScale(vec2);
 	}
@@ -89,7 +85,8 @@ C_Mesh::C_Mesh(GameObject* g, ai::mesh* m, unsigned int i, bool start_enabled) :
 
 C_Mesh::~C_Mesh()
 {
-	mesh->~mesh();
+	//mesh->~mesh();
+	ai::DeleteSelectedMesh(mesh);
 }
 
 void C_Mesh::ShowInInspector()
