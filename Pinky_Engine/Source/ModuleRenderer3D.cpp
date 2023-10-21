@@ -385,7 +385,7 @@ void ModuleRenderer3D::DrawVertexNormals(ai::mesh* mesh)
 		LineSegment NormalDirection(math::float3(mesh->vertex[i], mesh->vertex[i+1], mesh->vertex[i + 2]),
 			math::float3(mesh->vertex[i] + mesh->normals[i], mesh->vertex[i + 1] + mesh->normals[i+1], mesh->vertex[i + 2] + mesh->normals[i+2]));
 
-		//NormalDirection.Transform(math::float4(1,1,1,1));
+		//NormalDirection.Transform());
 
 		glVertex3f(NormalDirection.a.x, NormalDirection.a.y, NormalDirection.a.z);
 		glVertex3f(NormalDirection.b.x, NormalDirection.b.y, NormalDirection.b.z);
@@ -414,6 +414,19 @@ void ModuleRenderer3D::DrawFaceNormals(ai::mesh* mesh)
 		glVertex3f(vx + (mesh->normals[i] * normal_lenght),
 			vy + (mesh->normals[i + 1] * normal_lenght),
 			vz + (mesh->normals[i + 2]) * normal_lenght);
+
+	/*	math::float3 v0(mesh->vertex[i], mesh->vertex[i + 1], mesh->vertex[i + 2]);
+		math::float3 v1(mesh->vertex[i + 3], mesh->vertex[i + 4], mesh->vertex[i + 5]);
+		math::float3 v2(mesh->vertex[i + 6], mesh->vertex[i + 7], mesh->vertex[i + 8]);
+
+		math::float3 x1 = v0 - v2;
+		math::float3 x2 = v1 - v2;
+		math::float3 n = v0.Cross(v1);
+		math::float3 n_norm = v0.Normalized();
+
+		glVertex3f(vx + (n_norm.x * normal_lenght),
+			vy + (n_norm.y * normal_lenght),
+			vz + (n_norm.z) * normal_lenght);*/
 	}
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
