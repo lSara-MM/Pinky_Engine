@@ -50,7 +50,10 @@ void ai::ImportFile(const char* fileDir)
 	{
 		if (dir.find(tex_ext.at(i)) != std::string::npos)
 		{
-			ImportTexture(fileDir, *(App->renderer3D->meshes.end()-1));
+			for each (ai::mesh * i in App->renderer3D->meshes)
+			{
+				i->tex.id_tex = ImportTexture(fileDir);
+			}
 		}
 	}
 }
@@ -379,50 +382,57 @@ bool ai::BindTexture(mesh* m)
 	return true;
 }
 
-void ai::ImportTexture(const char* texturefileDir, mesh* m)
+GLuint ai::ImportTexture(const char* texturefileDir)
 {
 	ILuint imageID = 0;
+	ILuint textureID;
 	ilGenImages(1, &imageID);
 	ilBindImage(imageID);
-	ilLoadImage(texturefileDir);
-
 	ILubyte* data = ilGetData();
-	if (!data) {
-		ilBindImage(0);
-		ilDeleteImages(1, &imageID);
-		LOG("ERROR");
-	}
 
-	int const width = ilGetInteger(IL_IMAGE_WIDTH);
-	int const height = ilGetInteger(IL_IMAGE_HEIGHT);
-	int const type = ilGetInteger(IL_IMAGE_TYPE); 
-	int const format = ilGetInteger(IL_IMAGE_FORMAT); 
-	//BYTE* pixmap = new BYTE[width * height * 3];
-	//ilCopyPixels(0, 0, 0, width, height, 1, IL_RGB,
-	//	IL_UNSIGNED_BYTE, pixmap);
-
-	GLuint textureID;
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glGenTextures(1, &textureID);
 	glBindTexture(GL_TEXTURE_2D, textureID);
 
-	/*glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
-	glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-	glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-	glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); */
+	ILboolean success;
+	success = ilLoadImage(texturefileDir);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	if (ilLoadImage(texturefileDir))
+	{
+		ILinfo ImageInfo;
+		iluGetImageInfo(&ImageInfo);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, type, data);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		//Flip the image into the right way
+		if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT)
+		{
+			iluFlipImage();
+		}
 
-	m->tex.id_tex = textureID;
+		// Convert the image into a suitable format to work with
+		if (!ilConvertImage(ilGetInteger(IL_IMAGE_FORMAT), IL_UNSIGNED_BYTE))
+		{
+			LOG("%s", iluErrorString(ilGetError()));
+		}
 
-	ilBindImage(0);
-	ilDeleteImages(1,&imageID);
+		int const width = ilGetInteger(IL_IMAGE_WIDTH);
+		int const height = ilGetInteger(IL_IMAGE_HEIGHT);
+		int const type = ilGetInteger(IL_IMAGE_TYPE);
+		int const format = ilGetInteger(IL_IMAGE_FORMAT);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, ilGetData());
+	}
+	else
+	{
+		LOG("%s", iluErrorString(ilGetError()));
+	}
+
+	//ilBindImage(0);
+	ilDeleteImages(1, &textureID);
+
+	return textureID;
 
 }

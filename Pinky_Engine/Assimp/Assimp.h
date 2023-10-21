@@ -90,6 +90,6 @@ namespace ai
 	// Textures
 	void LoadCheckers(GLuint& buffer);
 	bool BindTexture(mesh* m);
-	void ImportTexture(const char* texturefileDir,  mesh* m);
+	GLuint ImportTexture(const char* texturefileDir);
 }
 #endif //!__MESH_H__

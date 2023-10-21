@@ -7,7 +7,7 @@
 #include "../SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
-
+#include "../MathGeoLib/include/MathGeoLib.h"
 
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "glu32.lib") /* link Microsoft OpenGL lib   */
@@ -132,6 +132,9 @@ bool ModuleRenderer3D::Init()
 
 	Grid.axis = true;
 	wireframe = false;
+	VertexNormals = false;
+	FaceNormals = true;
+
 	ai::LoadCheckers(texture_checker);
 
 	return ret;
@@ -189,6 +192,14 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	for each (ai::mesh* i in meshes)
 	{
 		DrawMesh(i);
+		if (VertexNormals)
+		{
+			DrawVertexNormals(i);
+		}
+		if (FaceNormals)
+		{
+			DrawFaceNormals(i);
+		}
 	}
 
 	return ret;
@@ -362,4 +373,51 @@ void ModuleRenderer3D::DrawMesh(ai::mesh* mesh)
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+}
+
+void ModuleRenderer3D::DrawVertexNormals(ai::mesh* mesh)
+{
+	glBegin(GL_LINES);
+	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
+
+	for (uint i = 0; i < mesh->num_vertex*3; i+=3)
+	{
+		LineSegment NormalDirection(math::float3(mesh->vertex[i], mesh->vertex[i+1], mesh->vertex[i + 2]),
+			math::float3(mesh->vertex[i] + mesh->normals[i], mesh->vertex[i + 1] + mesh->normals[i+1], mesh->vertex[i + 2] + mesh->normals[i+2]));
+
+		//NormalDirection.Transform(math::float4(1,1,1,1));
+
+		glVertex3f(NormalDirection.a.x, NormalDirection.a.y, NormalDirection.a.z);
+		glVertex3f(NormalDirection.b.x, NormalDirection.b.y, NormalDirection.b.z);
+	}
+
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glEnd();
+}
+
+void ModuleRenderer3D::DrawFaceNormals(ai::mesh* mesh)
+{
+	float normal_lenght = 0.5f;
+
+	//vertices normals
+	glBegin(GL_LINES);
+	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
+
+	for (size_t i = 0; i < mesh->num_vertex * 3; i += 3)
+	{
+		float vx = (mesh->vertex[i] + mesh->vertex[i + 3] + mesh->vertex[i + 6]) / 3;
+		float vy = (mesh->vertex[i + 1] + mesh->vertex[i + 4] + mesh->vertex[i + 7]) / 3;
+		float vz = (mesh->vertex[i + 2] + mesh->vertex[i + 5] + mesh->vertex[i + 8]) / 3;
+
+		glVertex3f(vx, vy, vz);
+
+		glVertex3f(vx + (mesh->normals[i] * normal_lenght),
+			vy + (mesh->normals[i + 1] * normal_lenght),
+			vz + (mesh->normals[i + 2]) * normal_lenght);
+	}
+
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+	glEnd();
+	
 }

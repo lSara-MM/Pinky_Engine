@@ -45,6 +45,8 @@ public:
 
 	void DrawBox();
 	void DrawMesh(ai::mesh* mesh);
+	void DrawVertexNormals(ai::mesh* mesh);
+	void DrawFaceNormals(ai::mesh* mesh);
 
 	sMStats statsVRAM;
 
@@ -58,6 +60,8 @@ public:
 	mat4x4 ProjectionMatrix;
 
 	bool wireframe;
+	bool VertexNormals;
+	bool FaceNormals;
 
 	//Struct to get sdl version info
 	SDL_version versionSDL;
