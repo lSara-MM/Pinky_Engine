@@ -21,6 +21,8 @@ public:
 	GameObject(std::string n, bool a);
 	~GameObject();
 
+	update_status Update();
+
 	void AddComponent(C_TYPE type, ai::mesh* m = nullptr, ai::POLY_PRIMITIVE_TYPE poly = ai::POLY_PRIMITIVE_TYPE::SPHERE);
 	void DeleteChild(GameObject* go);
 

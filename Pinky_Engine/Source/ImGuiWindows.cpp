@@ -25,12 +25,9 @@
 #pragma comment (lib, "MathGeoLib/libx86/libRelease/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
 #endif // _DEBUG
 
-ImGuiWindows::ImGuiWindows()
-{
-}
-
 ImGuiWindows::~ImGuiWindows()
 {
+	selectedGO = nullptr;
 }
 
 GameObject* ImGuiWindows::GetSelected()

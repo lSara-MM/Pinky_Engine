@@ -6,6 +6,7 @@
 #include "C_Mesh.h"
 #include "C_Material.h"
 
+
 GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 {
 	pParent = parent;
@@ -45,6 +46,13 @@ GameObject::~GameObject()
 	// TODO: preguntar perque peta si esta aixo pero si es fa des del parent -> delete children si funciona
 
 	App->scene->GO_num--;
+}
+
+update_status GameObject::Update()
+{
+
+
+	return UPDATE_CONTINUE;
 }
 
 void GameObject::AddComponent(C_TYPE type, ai::mesh* m, ai::POLY_PRIMITIVE_TYPE poly)

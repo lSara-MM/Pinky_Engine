@@ -14,6 +14,8 @@ public:
 	~C_Mesh();
 
 	void ShowInInspector();
+	void Draw();
+	void DrawVertexNormals();
 public:
 	ai::mesh* mesh = nullptr;
 };

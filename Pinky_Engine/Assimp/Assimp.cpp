@@ -89,70 +89,6 @@ bool ai::ImportMesh(const char* meshfileDir, GameObject* go, const char* texfile
 			MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, App->scene->rootNode);
 		}
 
-		{
-			// Use scene->mNumMeshes to iterate on scene->mMeshes array
-			//for (auto i = 0; i < scene->mNumMeshes; i++)
-			//{
-			//	const aiMesh* m = scene->mMeshes[i];
-			//	mesh* ourMesh = new mesh;
-
-			//	// copy vertices
-			//	ourMesh->num_vertex = m->mNumVertices;
-			//	ourMesh->vertex = new float[ourMesh->num_vertex * 3];
-			//	memcpy(ourMesh->vertex, m->mVertices, sizeof(float) * ourMesh->num_vertex * 3);
-
-			//	// TODO preguntar: como pillar el nombre del objeto y no la de dentro de la mesh "outliner id data operation" (abrir en blender pa explicar bien xd) 
-			//	LOG("New mesh %s with %d vertices", m->mName.C_Str(), m->mNumVertices);
-
-			//	// copy faces
-			//	if (m->HasFaces())
-			//	{
-			//		ourMesh->num_index = m->mNumFaces * 3;
-			//		ourMesh->index = new uint[ourMesh->num_index]; // assume each face is a triangle
-
-			//		for (uint i = 0; i < m->mNumFaces; ++i)
-			//		{
-			//			if (m->mFaces[i].mNumIndices != 3)
-			//			{
-			//				LOG("[WARNING], geometry face with != 3 indices!");
-			//			}
-			//			else
-			//			{
-			//				memcpy(&ourMesh->index[i * 3], m->mFaces[i].mIndices, 3 * sizeof(uint));
-			//			}
-			//		}
-			//	}
-
-			//	//copy normals
-			//	ourMesh->num_normals = m->mNumVertices;
-			//	ourMesh->normals = new float[ourMesh->num_normals * 3];
-			//	memcpy(ourMesh->normals, m->mNormals, sizeof(float) * ourMesh->num_normals * 3);
-
-			//	////copy texture coordinates
-			//	uint uv_index = 0;
-
-			//	if (m->HasTextureCoords(uv_index))
-			//	{
-			//		ourMesh->tex.num_tex = m->mNumVertices;
-			//		ourMesh->tex.tex = new math::float2[ourMesh->tex.num_tex * 3];
-			//		for (uint i = 0; i < ourMesh->tex.num_tex; i++)
-			//		{
-			//			ourMesh->tex.tex[i].x = m->mTextureCoords[uv_index][i].x;
-			//			ourMesh->tex.tex[i].y = m->mTextureCoords[uv_index][i].y;
-			//		}
-			//	}
-
-			//	if (InitMesh(ourMesh))
-			//	{
-			//		BindTexture(ourMesh);
-
-			//		//(texfileDir != nullptr) ? ourMesh->hasTex = true : ourMesh->hasTex = false;
-
-			//		App->renderer3D->meshes.push_back(ourMesh);
-			//	}
-			//}
-		}
-
 		LOG("%d meshes loaded.", scene->mNumMeshes);
 		aiReleaseImport(scene);
 	}
@@ -244,8 +180,12 @@ void ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 
 				App->renderer3D->meshes.push_back(ourMesh);
 			}
+
+			ourMesh = nullptr;
 		}
 	}
+
+	obj = nullptr;
 }
 
 bool ai::InitMesh(mesh* m)

@@ -512,9 +512,6 @@
     <ClCompile Include="Source\GameObject.cpp">
       <Filter>Sources\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component.cpp">
-      <Filter>Sources\GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ModuleScene.cpp">
       <Filter>Sources\Scene</Filter>
     </ClCompile>

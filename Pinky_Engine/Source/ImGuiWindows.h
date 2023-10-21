@@ -15,7 +15,7 @@ class GameObject;
 class ImGuiWindows
 {
 public:
-	ImGuiWindows();
+	ImGuiWindows() {};
 	~ImGuiWindows();
 
 	virtual void ShowWindow() {};
