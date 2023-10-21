@@ -43,46 +43,46 @@ private:
 	unsigned int id;
 };
 
-class C_Transform : public Component
-{
-public:
-	C_Transform(GameObject* g = nullptr, bool start_enabled = true);
-	C_Transform(GameObject* g, float3 pos, Quat rot, float3 sc, bool start_enabled = true);
-	~C_Transform();
-
-	void ShowInInspector();
-
-private:
-	void SetTransform(float vec[3]);
-	void SetRotation(float vec[]);
-	void SetScale(float vec[3]);
-public:
-	float3 position;
-	Quat rotation;
-	float3 scale;
-
-	float4x4 globalMatrix;
-	float4x4 localMatrix;
-};
-
-class C_Mesh : public Component
-{
-public:
-	C_Mesh(GameObject* g = nullptr, ai::mesh* m = nullptr, unsigned int i = 0, bool start_enabled = true);
-	~C_Mesh();
-
-	void ShowInInspector();
-public:
-	ai::mesh* mesh = nullptr;
-};
-
-class C_Material : public Component
-{
-public:
-	C_Material(GameObject* g = nullptr, unsigned int i = 0, bool start_enabled = true);
-	~C_Material();
-
-	void ShowInInspector();
-
-private:
-};
+//class C_Transform : public Component
+//{
+//public:
+//	C_Transform(GameObject* g = nullptr, bool start_enabled = true);
+//	C_Transform(GameObject* g, float3 pos, Quat rot, float3 sc, bool start_enabled = true);
+//	~C_Transform();
+//
+//	void ShowInInspector();
+//
+//private:
+//	void SetTransform(float vec[3]);
+//	void SetRotation(float vec[]);
+//	void SetScale(float vec[3]);
+//public:
+//	float3 position;
+//	Quat rotation;
+//	float3 scale;
+//
+//	float4x4 globalMatrix;
+//	float4x4 localMatrix;
+//};
+//
+//class C_Mesh : public Component
+//{
+//public:
+//	C_Mesh(GameObject* g = nullptr, ai::mesh* m = nullptr, unsigned int i = 0, bool start_enabled = true);
+//	~C_Mesh();
+//
+//	void ShowInInspector();
+//public:
+//	ai::mesh* mesh = nullptr;
+//};
+//
+//class C_Material : public Component
+//{
+//public:
+//	C_Material(GameObject* g = nullptr, unsigned int i = 0, bool start_enabled = true);
+//	~C_Material();
+//
+//	void ShowInInspector();
+//
+//private:
+//};

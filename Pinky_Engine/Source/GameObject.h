@@ -11,6 +11,7 @@
 
 #include <vector>
 #include "Component.h"
+#include "C_Transform.h"
 
 class GameObject
 {
