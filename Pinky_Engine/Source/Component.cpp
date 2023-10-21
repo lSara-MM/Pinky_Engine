@@ -114,7 +114,6 @@ void C_Mesh::ShowInInspector()
 		{
 			ImGui::Text("Vertices: %d", mesh->num_vertex);
 		}
-		
 
 		ImGui::Text("This is a drag and drop source");
 

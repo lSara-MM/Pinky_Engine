@@ -136,7 +136,7 @@ bool ModuleRenderer3D::Init()
 	FaceNormals = true;
 
 	ai::LoadCheckers(texture_checker);
-
+	meshes = {};
 	return ret;
 }
 
@@ -211,10 +211,7 @@ bool ModuleRenderer3D::CleanUp()
 	LOG("Destroying 3D Renderer");
 
 	// Cleanup
-	for (auto i = 0; i < meshes.size(); i++)
-	{
-		ai::DeleteLastMesh();
-	}
+	ClearVecPtr(meshes);
 	
 	SDL_GL_DeleteContext(context);
 	return true;

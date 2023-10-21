@@ -58,13 +58,20 @@ void ai::ImportFile(const char* fileDir)
 	}
 }
 
-bool ai::ImportMesh(const char* meshfileDir, const char* texfileDir)
+bool ai::ImportMesh(const char* meshfileDir, GameObject* go, const char* texfileDir)
 {
 	const aiScene* scene = aiImportFile(meshfileDir, aiProcessPreset_TargetRealtime_MaxQuality);
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		if (scene->mNumMeshes > 1)
+		if (go != nullptr)
+		{
+			MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, go, true);
+		}
+
+		// If the imported 3D model has many meshes at the same level, create a new GameObject with the
+		// file name as a parent to group them all
+		else if (scene->mNumMeshes > 1)
 		{
 			std::string name = meshfileDir;
 			// Get file name
@@ -73,7 +80,7 @@ bool ai::ImportMesh(const char* meshfileDir, const char* texfileDir)
 
 			name = name.substr(posI, posF - posI);	// first position, size of the string to get
 			//
-
+			
 			GameObject* obj = new GameObject(name);
 			MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, obj);
 		}
@@ -157,13 +164,23 @@ bool ai::ImportMesh(const char* meshfileDir, const char* texfileDir)
 	return true;
 }
 
-void ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent)
+void ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component)
 {
+	GameObject* obj = nullptr;
+
 	for (int i = 0; i < num; i++)
 	{
 		if (children[i]->mNumMeshes > 0)
 		{
-			GameObject* obj = new GameObject(s->mMeshes[children[i]->mMeshes[0]]->mName.C_Str(), parent);
+			if (component)
+			{
+				obj = parent;
+			}
+			else
+			{
+				obj = new GameObject(s->mMeshes[children[i]->mMeshes[0]]->mName.C_Str(), parent);
+			}
+
 			if (children[i]->mChildren != NULL)
 			{
 				MeshHierarchy(s, children[i]->mChildren, children[i]->mNumChildren, obj);
@@ -177,7 +194,6 @@ void ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 			ourMesh->vertex = new float[ourMesh->num_vertex * 3];
 			memcpy(ourMesh->vertex, m->mVertices, sizeof(float) * ourMesh->num_vertex * 3);
 
-			// TODO preguntar: como pillar el nombre del objeto y no la de dentro de la mesh "outliner id data operation" (abrir en blender pa explicar bien xd) 
 			LOG("New mesh %s with %d vertices", m->mName.C_Str(), m->mNumVertices);
 
 			// copy faces
@@ -281,21 +297,21 @@ bool ai::InitMesh(mesh* m)
 	return true;
 }
 
-void ai::CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj)
+void ai::CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go)
 {
 	switch (obj)
 	{
 	case ai::POLY_PRIMITIVE_TYPE::CUBE:
-		ImportMesh("../Assimp/3dObject/cube.fbx");
+		ImportMesh("../Assimp/3dObject/cube.fbx", go);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::SPHERE:
-		ImportMesh("../Assimp/3dObject/sphere.fbx");
+		ImportMesh("../Assimp/3dObject/sphere.fbx", go);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::CYLINDER:
-		ImportMesh("../Assimp/3dObject/cylinder.fbx");
+		ImportMesh("../Assimp/3dObject/cylinder.fbx", go);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::PLANE:
-		ImportMesh("../Assimp/3dObject/plane.fbx");
+		ImportMesh("../Assimp/3dObject/plane.fbx", go);
 		break;
 	default:
 		break;
@@ -325,8 +341,11 @@ void ai::DeleteSelectedMesh(mesh* m)
 	LOG("Deleted mesh");
 	DeleteMeshBuffers(m);
 
-	App->renderer3D->meshes.erase(std::find(vMesh->begin(), vMesh->end(), m));
-	App->renderer3D->meshes.shrink_to_fit();
+	if (!vMesh->empty())
+	{
+		App->renderer3D->meshes.erase(std::find(vMesh->begin(), vMesh->end(), m));
+		App->renderer3D->meshes.shrink_to_fit();
+	}
 }
 
 void ai::DeleteMeshBuffers(mesh* m)
@@ -424,5 +443,4 @@ GLuint ai::ImportTexture(const char* texturefileDir)
 	ilDeleteImages(1, &textureID);
 
 	return textureID;
-
 }

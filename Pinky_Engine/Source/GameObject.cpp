@@ -65,7 +65,7 @@ void GameObject::AddComponent(C_TYPE type, ai::mesh* m, ai::POLY_PRIMITIVE_TYPE 
 		}
 		else
 		{
-			ai::CreatePolyPrimitive(poly);
+			ai::CreatePolyPrimitive(poly, this);
 		}
 		break;
 	case C_TYPE::MATERIAL:

@@ -174,7 +174,6 @@ void Inspector::ShowWindow()
 				ImGui::SeparatorText("Components");
 				
 				// Skip transform
-
 				if (ImGui::BeginMenu("Mesh"))
 				{
 					std::array<std::string, 4> components = { "Cube", "Sphere", "Cylinder", "Plane" };
@@ -189,16 +188,14 @@ void Inspector::ShowWindow()
 					ImGui::EndMenu();
 				}
 
-				for (int i = 1; i < components.size(); i++)
+				for (int i = 2; i < components.size(); i++)
 				{
-					
-					
 					if (ImGui::Selectable(components[i].c_str()))
 					{
 						AddComponentByType(i);
 					}
 				}
-					ImGui::EndPopup();
+				ImGui::EndPopup();
 			}
 		}
 		

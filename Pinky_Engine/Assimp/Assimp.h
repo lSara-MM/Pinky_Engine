@@ -12,7 +12,6 @@
 #include "../MathGeoLib/include/MathGeoLib.h"
 
 #include <array>
-//#include "../Source/GameObject.h"
 
 class GameObject;
 
@@ -77,11 +76,11 @@ namespace ai
 
 	void ImportFile(const char* fileDir);
 
-	bool ImportMesh(const char* meshfileDir, const char* texfileDir = nullptr);
-	void MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent);
+	bool ImportMesh(const char* meshfileDir, GameObject* go = nullptr, const char* texfileDir = nullptr);
+	void MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component = false);
 	
 	bool InitMesh(mesh* m);
-	void CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj);
+	void CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go = nullptr);
 
 	void DeleteLastMesh();	// TODO: remove cuando se pueda seleccionar una mesh
 	void DeleteSelectedMesh(mesh* m);
