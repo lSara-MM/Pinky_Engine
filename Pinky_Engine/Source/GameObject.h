@@ -25,7 +25,7 @@ public:
 
 	update_status Update(float dt);
 
-	void AddComponent(C_TYPE type, ai::mesh* m = nullptr, ai::POLY_PRIMITIVE_TYPE poly = ai::POLY_PRIMITIVE_TYPE::SPHERE);
+	bool AddComponent(C_TYPE type, ai::mesh* m = nullptr, ai::POLY_PRIMITIVE_TYPE poly = ai::POLY_PRIMITIVE_TYPE::SPHERE);
 	
 	std::vector<C_Mesh*> GetComponentsMesh();
 	std::vector<C_Material*> GetComponentsMaterial();

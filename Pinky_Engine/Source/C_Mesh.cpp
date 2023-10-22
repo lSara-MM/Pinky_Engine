@@ -36,7 +36,7 @@ C_Mesh::~C_Mesh()
 
 void C_Mesh::ShowInInspector()
 {
-	// Set ImGui ids
+	// --- Set ImGui ids ---
 	std::string checkbox = name.c_str();
 	std::string header = name.c_str();
 
@@ -46,6 +46,7 @@ void C_Mesh::ShowInInspector()
 	header.append("##");
 	header.append(std::to_string(GetID()));
 
+	// ---------------------------------------------
 
 	ImGui::Checkbox(checkbox.c_str(), &active);
 	ImGui::SameLine();
@@ -53,8 +54,7 @@ void C_Mesh::ShowInInspector()
 	if (ImGui::CollapsingHeader(header.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		if (!active) { ImGui::BeginDisabled(); }
-
-		// TODO: quitar cuando ponga que crear un mesh cree un cubo o una mesh 
+ 
 		if (mesh != nullptr)
 		{
 			ImGui::Text("Vertices: %d", mesh->num_vertex);
@@ -87,6 +87,8 @@ void C_Mesh::Draw(bool checkered)
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_normals);
 	glNormalPointer(GL_FLOAT, 0, NULL);
 
+	// ---------------------------------------------
+
 	// Textures
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->tex.id_tex);
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
@@ -94,6 +96,8 @@ void C_Mesh::Draw(bool checkered)
 
 	glBindTexture(GL_TEXTURE_2D, mesh->tex.id_tex);
 	(!checkered) ? glBindTexture(GL_TEXTURE_2D, mesh->tex.id_tex) : glBindTexture(GL_TEXTURE_2D, App->renderer3D->texture_checker);
+
+	// ---------------------------------------------
 
 	// Draw mesh
 	glDrawElements(GL_TRIANGLES, mesh->num_index, GL_UNSIGNED_INT, NULL);

@@ -7,9 +7,10 @@
 #include "GameObject.h"
 #include "Component.h"
 
-C_Material::C_Material(GameObject* g, ai::texture* t, unsigned int i, bool start_enabled) : Component(C_TYPE::MATERIAL, g, i, start_enabled, "Material")
+C_Material::C_Material(GameObject* g, ai::texture* t, bool check, unsigned int i, bool start_enabled) : Component(C_TYPE::MATERIAL, g, i, start_enabled, "Material")
 {
 	tex = t;
+	checkered = check;
 }
 
 C_Material::~C_Material()
@@ -18,9 +19,10 @@ C_Material::~C_Material()
 
 void C_Material::ShowInInspector()
 {	
-	// Set ImGui ids
+	// --- Set ImGui ids ---
 	std::string checkbox = name.c_str();
 	std::string header = name.c_str();
+	std::string toogle = "Checkered##";
 
 	checkbox.insert(checkbox.begin(), 2, '#');
 	checkbox.append(std::to_string(GetID()));
@@ -28,6 +30,9 @@ void C_Material::ShowInInspector()
 	header.append("##");
 	header.append(std::to_string(GetID()));
 
+	toogle.append(std::to_string(GetID()));
+
+	// ---------------------------------------------
 
 	ImGui::Checkbox(checkbox.c_str(), &active);
 	ImGui::SameLine();
@@ -36,9 +41,9 @@ void C_Material::ShowInInspector()
 	{
 		if (!active) { ImGui::BeginDisabled(); }
 
-		if (ImGui::Checkbox("Checkered", &checkered))
+		if (ImGui::ToggleButton(toogle.c_str(), &checkered))
 		{
-			//gameObject->vComponents.
+
 		}
 
 		ImGui::Text("This is a drag and drop source");

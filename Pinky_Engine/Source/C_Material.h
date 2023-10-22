@@ -10,7 +10,7 @@
 class C_Material : public Component
 {
 public:
-	C_Material(GameObject* g = nullptr, ai::texture* t = nullptr, unsigned int i = 0, bool start_enabled = true);
+	C_Material(GameObject* g = nullptr, ai::texture* t = nullptr, bool check = false, unsigned int i = 0, bool start_enabled = true);
 	~C_Material();
 
 	void ShowInInspector();

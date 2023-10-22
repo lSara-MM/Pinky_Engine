@@ -27,7 +27,7 @@ void ai::EnableDebug()
 
 void ai::DisableDebug()
 {
-	// detach log stream
+	// Detach log stream
 	aiDetachAllLogStreams();
 	LOG("Disable debug mode");
 }
@@ -74,12 +74,12 @@ bool ai::ImportMesh(const char* meshfileDir, GameObject* go, const char* texfile
 		else if (scene->mNumMeshes > 1)
 		{
 			std::string name = meshfileDir;
-			// Get file name
+			// --- Get file name ---
 			int posI = name.find_last_of("\\") + 1;
 			int posF = name.find_last_of(".");
 
 			name = name.substr(posI, posF - posI);	// first position, size of the string to get
-			//
+			// ---------------------------------------------
 			
 			GameObject* obj = new GameObject(name);
 			MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, obj);
@@ -114,6 +114,7 @@ void ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 			}
 			else
 			{
+				// --- Create new GameObject to store the mesh ---
 				obj = new GameObject(s->mMeshes[children[i]->mMeshes[0]]->mName.C_Str(), parent);
 			}
 
@@ -177,6 +178,7 @@ void ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 				//(texfileDir != nullptr) ? ourMesh->hasTex = true : ourMesh->hasTex = false;
 				
 				obj->AddComponent(C_TYPE::MESH, ourMesh);
+				obj->AddComponent(C_TYPE::MATERIAL);
 
 				App->renderer3D->meshes.push_back(ourMesh);
 			}

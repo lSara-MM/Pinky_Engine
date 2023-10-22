@@ -154,7 +154,6 @@ void Inspector::ShowWindow()
 				ImGui::Dummy(ImVec2(0, 10));
 			}
 
-
 			// --- Add components button ---
 			ImGui::Separator();
 			std::array<std::string, 3> components = { "Transform", "Mesh", "Material" };
@@ -169,27 +168,34 @@ void Inspector::ShowWindow()
 			if (ImGui::BeginPopup("AddComponents"))
 			{
 				ImGui::SeparatorText("Components");
-				
-				// Skip transform
-				if (ImGui::BeginMenu("Mesh"))
-				{
-					std::array<std::string, 4> components = { "Cube", "Sphere", "Cylinder", "Plane" };
 
-					for (int i = 0; i < components.size(); i++)
+				// Skip transform
+				// --- Add component Mesh ---
+				 
+				if (GetSelected()->numMeshes == 0)
+				{
+					if (ImGui::BeginMenu("Mesh"))
 					{
-						if (ImGui::MenuItem(components[i].c_str()))
+						std::array<std::string, 4> components = { "Cube", "Sphere", "Cylinder", "Plane" };
+
+						for (int i = 0; i < components.size(); i++)
 						{
-							GetSelected()->AddComponent(C_TYPE::MESH, nullptr, ai::POLY_PRIMITIVE_TYPE(i));
+							if (ImGui::MenuItem(components[i].c_str()))
+							{
+								GetSelected()->AddComponent(C_TYPE::MESH, nullptr, ai::POLY_PRIMITIVE_TYPE(i));
+							}
 						}
+						ImGui::EndMenu();
 					}
-					ImGui::EndMenu();
 				}
 
-				for (int i = 2; i < components.size(); i++)
+				// --- Add component Material ---
+
+				if (GetSelected()->numMaterials == 0)
 				{
-					if (ImGui::Selectable(components[i].c_str()))
+					if (ImGui::MenuItem("Material"))
 					{
-						AddComponentByType(i);
+						GetSelected()->AddComponent(C_TYPE::MATERIAL);
 					}
 				}
 				ImGui::EndPopup();
@@ -197,24 +203,5 @@ void Inspector::ShowWindow()
 		}
 		
 		ImGui::End();
-	}
-}
-
-void Inspector::AddComponentByType(int i)
-{
-	switch ((C_TYPE)i)
-	{
-	case C_TYPE::TRANSFORM:
-		break;
-	case C_TYPE::MESH:
-		GetSelected()->AddComponent(C_TYPE::MESH);
-		break;
-	case C_TYPE::MATERIAL:
-		GetSelected()->AddComponent(C_TYPE::MATERIAL);
-		break;
-	case C_TYPE::NONE:
-		break;
-	default:
-		break;
 	}
 }

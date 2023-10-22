@@ -46,20 +46,20 @@
     <Filter Include="Sources\Utils\Helpers">
       <UniqueIdentifier>{121f8e6b-df36-4ab0-be0d-601ddfc9e503}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Utils\ImGui">
-      <UniqueIdentifier>{7f28cfa7-8b87-4bc2-b687-4ebfd58d265c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Utils\ImGui\backends">
-      <UniqueIdentifier>{6a0b837b-2041-4e10-a91e-65bb53cd5bda}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Utils\mmgr">
-      <UniqueIdentifier>{bf938baf-71a4-423e-9ba1-90e88a33d83d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Utils\parson">
-      <UniqueIdentifier>{ae731301-8bf9-4b11-b1fc-afa7ae618cc3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Utils\Tools">
       <UniqueIdentifier>{7e4dfaf7-022c-4f7d-92aa-f3b3fa9d6248}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Externals\parson">
+      <UniqueIdentifier>{ae731301-8bf9-4b11-b1fc-afa7ae618cc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Externals\ImGui">
+      <UniqueIdentifier>{7f28cfa7-8b87-4bc2-b687-4ebfd58d265c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Externals\ImGui\backends">
+      <UniqueIdentifier>{6a0b837b-2041-4e10-a91e-65bb53cd5bda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Externals\mmgr">
+      <UniqueIdentifier>{bf938baf-71a4-423e-9ba1-90e88a33d83d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -244,28 +244,28 @@
       <Filter>Externals\MathGeoLib\Time</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imconfig.h">
-      <Filter>Sources\Utils\ImGui</Filter>
+      <Filter>Externals\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imgui.h">
-      <Filter>Sources\Utils\ImGui</Filter>
+      <Filter>Externals\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imgui_internal.h">
-      <Filter>Sources\Utils\ImGui</Filter>
+      <Filter>Externals\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imstb_rectpack.h">
-      <Filter>Sources\Utils\ImGui</Filter>
+      <Filter>Externals\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imstb_textedit.h">
-      <Filter>Sources\Utils\ImGui</Filter>
+      <Filter>Externals\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imstb_truetype.h">
-      <Filter>Sources\Utils\ImGui</Filter>
+      <Filter>Externals\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\backends\imgui_impl_opengl3.h">
-      <Filter>Sources\Utils\ImGui\backends</Filter>
+      <Filter>Externals\ImGui\backends</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\backends\imgui_impl_opengl3_loader.h">
-      <Filter>Sources\Utils\ImGui\backends</Filter>
+      <Filter>Externals\ImGui\backends</Filter>
     </ClInclude>
     <ClInclude Include="Source\Module.h">
       <Filter>Sources\Modules</Filter>
@@ -304,19 +304,19 @@
       <Filter>Sources\Utils\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\backends\imgui_impl_sdl2.h">
-      <Filter>Sources\Utils\ImGui\backends</Filter>
+      <Filter>Externals\ImGui\backends</Filter>
     </ClInclude>
     <ClInclude Include="Source\ModuleEditor.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
     <ClInclude Include="parson\parson.h">
-      <Filter>Sources\Utils\parson</Filter>
+      <Filter>Externals\parson</Filter>
     </ClInclude>
     <ClInclude Include="mmgr\nommgr.h">
-      <Filter>Sources\Utils\mmgr</Filter>
+      <Filter>Externals\mmgr</Filter>
     </ClInclude>
     <ClInclude Include="mmgr\mmgr.h">
-      <Filter>Sources\Utils\mmgr</Filter>
+      <Filter>Externals\mmgr</Filter>
     </ClInclude>
     <ClInclude Include="Assimp\Assimp.h">
       <Filter>Sources\Importers</Filter>
@@ -441,22 +441,22 @@
       <Filter>Externals\MathGeoLib\Time</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\imgui.cpp">
-      <Filter>Sources\Utils\ImGui</Filter>
+      <Filter>Externals\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\imgui_demo.cpp">
-      <Filter>Sources\Utils\ImGui</Filter>
+      <Filter>Externals\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\imgui_draw.cpp">
-      <Filter>Sources\Utils\ImGui</Filter>
+      <Filter>Externals\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\imgui_tables.cpp">
-      <Filter>Sources\Utils\ImGui</Filter>
+      <Filter>Externals\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\imgui_widgets.cpp">
-      <Filter>Sources\Utils\ImGui</Filter>
+      <Filter>Externals\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\backends\imgui_impl_opengl3.cpp">
-      <Filter>Sources\Utils\ImGui\backends</Filter>
+      <Filter>Externals\ImGui\backends</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModuleCamera3D.cpp">
       <Filter>Sources\Modules</Filter>
@@ -495,16 +495,16 @@
       <Filter>Sources\Utils\Helpers</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\backends\imgui_impl_sdl2.cpp">
-      <Filter>Sources\Utils\ImGui\backends</Filter>
+      <Filter>Externals\ImGui\backends</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModuleEditor.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="parson\parson.c">
-      <Filter>Sources\Utils\parson</Filter>
+      <Filter>Externals\parson</Filter>
     </ClCompile>
     <ClCompile Include="mmgr\mmgr.cpp">
-      <Filter>Sources\Utils\mmgr</Filter>
+      <Filter>Externals\mmgr</Filter>
     </ClCompile>
     <ClCompile Include="Assimp\Assimp.cpp">
       <Filter>Sources\Importers</Filter>

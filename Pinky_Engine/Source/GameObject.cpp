@@ -61,11 +61,12 @@ update_status GameObject::Update(float dt)
 	if (vComponents.size() > 1)
 	{
 		std::vector<C_Mesh*> vMeshes = GetComponentsMesh();
+		std::vector<C_Material*> vMaterials = GetComponentsMaterial();
 		for (auto i = 0; i < vMeshes.size(); i++)
 		{
 			if (vMeshes[i]->active)
 			{
-				vMeshes[i]->Draw(true);
+				vMeshes[i]->Draw(vMaterials[i]->checkered);
 			}
 		}
 	}
@@ -73,9 +74,10 @@ update_status GameObject::Update(float dt)
 	return UPDATE_CONTINUE;
 }
 
-void GameObject::AddComponent(C_TYPE type, ai::mesh* m, ai::POLY_PRIMITIVE_TYPE poly)
+bool GameObject::AddComponent(C_TYPE type, ai::mesh* m, ai::POLY_PRIMITIVE_TYPE poly)
 {
 	Component* temp;
+	bool ret = true;
 
 	switch (type)
 	{
@@ -86,28 +88,41 @@ void GameObject::AddComponent(C_TYPE type, ai::mesh* m, ai::POLY_PRIMITIVE_TYPE 
 			transform = (C_Transform*)temp;
 			vComponents.push_back(transform);
 		}
+		else { ret = false; }
 		break;
 	case C_TYPE::MESH:
-		if (m != nullptr)
+		// A gameObject can't have more than one mesh
+		if (numMeshes == 0)	
 		{
-			temp = new C_Mesh(this, m, numMeshes);
-			vComponents.push_back(temp);
-			//vMeshes.push_back((C_Mesh*)temp);
-			numMeshes++;
+			if (m != nullptr)
+			{
+				temp = new C_Mesh(this, m, numMeshes);
+				vComponents.push_back(temp);
+				numMeshes++;
+			}
+			else
+			{
+				ai::CreatePolyPrimitive(poly, this);
+			}
 		}
-		else
-		{
-			ai::CreatePolyPrimitive(poly, this);
-		}
+		else { ret = false; }
 		break;
 	case C_TYPE::MATERIAL:
-		temp = new C_Material(this, nullptr, numMaterials);
-		vComponents.push_back(temp);
-		numMaterials++;
+		// A gameObject can't have more than one material
+		// In unity there can be more than one if embeded (?) see snowman for reference 
+		if (numMaterials == 0)	
+		{
+			temp = new C_Material(this, nullptr, numMaterials);
+			vComponents.push_back(temp);
+			numMaterials++;
+		}
+		else { ret = false; }
 		break;
 	default:
 		break;
 	}
+
+	return ret;
 }
 
 std::vector<C_Mesh*> GameObject::GetComponentsMesh()
