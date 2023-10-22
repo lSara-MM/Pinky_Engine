@@ -189,7 +189,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	(wireframe) ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	/*for each (ai::mesh* i in meshes)
+	for each (ai::mesh* i in meshes)
 	{
 		DrawMesh(i);
 		if (VertexNormals)
@@ -200,7 +200,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		{
 			DrawFaceNormals(i);
 		}
-	}*/
+	}
 
 	return ret;
 }
@@ -374,18 +374,19 @@ void ModuleRenderer3D::DrawMesh(ai::mesh* mesh)
 
 void ModuleRenderer3D::DrawVertexNormals(ai::mesh* mesh)
 {
+	float normal_lenght = 1.0f;
 	glBegin(GL_LINES);
 	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
 
-	for (uint i = 0; i < mesh->num_vertex*3; i+=3)
+	for (uint i = 0; i < mesh->num_vertex * 3; i += 3)
 	{
-		LineSegment NormalDirection(math::float3(mesh->vertex[i], mesh->vertex[i+1], mesh->vertex[i + 2]),
-			math::float3(mesh->vertex[i] + mesh->normals[i], mesh->vertex[i + 1] + mesh->normals[i+1], mesh->vertex[i + 2] + mesh->normals[i+2]));
+		LineSegment NormalDirection(math::float3(mesh->vertex[i], mesh->vertex[i + 1], mesh->vertex[i + 2]),
+			math::float3(mesh->vertex[i] + mesh->normals[i], mesh->vertex[i + 1] + mesh->normals[i + 1], mesh->vertex[i + 2] + mesh->normals[i + 2]));
 
 		//NormalDirection.Transform());
 
-		glVertex3f(NormalDirection.a.x, NormalDirection.a.y, NormalDirection.a.z);
-		glVertex3f(NormalDirection.b.x, NormalDirection.b.y, NormalDirection.b.z);
+		glVertex3f(NormalDirection.a.x * normal_lenght, NormalDirection.a.y * normal_lenght, NormalDirection.a.z * normal_lenght);
+		glVertex3f(NormalDirection.b.x * normal_lenght, NormalDirection.b.y * normal_lenght, NormalDirection.b.z * normal_lenght);
 	}
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -394,40 +395,42 @@ void ModuleRenderer3D::DrawVertexNormals(ai::mesh* mesh)
 
 void ModuleRenderer3D::DrawFaceNormals(ai::mesh* mesh)
 {
-	float normal_lenght = 0.5f;
+	float normal_lenght = 1.0f;
 
 	//vertices normals
 	glBegin(GL_LINES);
 	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
 
-	for (size_t i = 0; i < mesh->num_vertex * 3; i += 3)
+	for (size_t i = 0; i < mesh->num_index ; i += 3)
 	{
-		float vx = (mesh->vertex[i] + mesh->vertex[i + 3] + mesh->vertex[i + 6]) / 3;
-		float vy = (mesh->vertex[i + 1] + mesh->vertex[i + 4] + mesh->vertex[i + 7]) / 3;
-		float vz = (mesh->vertex[i + 2] + mesh->vertex[i + 5] + mesh->vertex[i + 8]) / 3;
+		uint index1 = mesh->index[i] * 3;
+		uint index2 = mesh->index[i + 1] * 3;
+		uint index3 = mesh->index[i + 2] * 3;
+
+		math::float3 vec1(mesh->vertex[index1], mesh->vertex[index1 + 1], mesh->vertex[index1 + 2]);
+		math::float3 vec2(mesh->vertex[index2], mesh->vertex[index2 + 1], mesh->vertex[index2 + 2]);
+		math::float3 vec3(mesh->vertex[index3], mesh->vertex[index3 + 1], mesh->vertex[index3 + 2]);
+		
+		math::float3 v0 = vec2 - vec1;
+		math::float3 v1 = vec3 - vec1;
+		math::float3 crossV = math::Cross(v0, v1);
+
+		math::float3 crossNorm = crossV.Normalized();
+
+		GLfloat vx = (vec1.x + vec2.x + vec3.x) / 3;
+		GLfloat vy = (vec1.y + vec2.y + vec3.y) / 3;
+		GLfloat vz = (vec1.z + vec2.z + vec3.z) / 3;
+
+		GLfloat vx_norm = crossNorm.x;
+		GLfloat vy_norm = crossNorm.y;
+		GLfloat vz_norm = crossNorm.z;
 
 		glVertex3f(vx, vy, vz);
-
-		glVertex3f(vx + (mesh->normals[i] * normal_lenght),
-			vy + (mesh->normals[i + 1] * normal_lenght),
-			vz + (mesh->normals[i + 2]) * normal_lenght);
-
-	/*	math::float3 v0(mesh->vertex[i], mesh->vertex[i + 1], mesh->vertex[i + 2]);
-		math::float3 v1(mesh->vertex[i + 3], mesh->vertex[i + 4], mesh->vertex[i + 5]);
-		math::float3 v2(mesh->vertex[i + 6], mesh->vertex[i + 7], mesh->vertex[i + 8]);
-
-		math::float3 x1 = v0 - v2;
-		math::float3 x2 = v1 - v2;
-		math::float3 n = v0.Cross(v1);
-		math::float3 n_norm = v0.Normalized();
-
-		glVertex3f(vx + (n_norm.x * normal_lenght),
-			vy + (n_norm.y * normal_lenght),
-			vz + (n_norm.z) * normal_lenght);*/
+		glVertex3f(vx + (vx_norm * normal_lenght), vy + (vy_norm * normal_lenght), vz + (vz_norm * normal_lenght));
 	}
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
 	glEnd();
-	
+
 }
