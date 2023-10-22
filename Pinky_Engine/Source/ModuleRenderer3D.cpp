@@ -128,7 +128,8 @@ bool ModuleRenderer3D::Init()
 		}
 		else
 		{
-			LOG("Using Glew %d.%d.%d", GLEW_VERSION_MAJOR, GLEW_VERSION_MINOR, GLEW_VERSION_MICRO);
+			LOG("Correct Glew initialization");
+			LOG("->Version: % d. % d. % d", GLEW_VERSION_MAJOR, GLEW_VERSION_MINOR, GLEW_VERSION_MICRO);
 		}
 
 		iluInit();
