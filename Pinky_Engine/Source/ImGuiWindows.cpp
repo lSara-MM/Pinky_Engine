@@ -18,6 +18,7 @@
 #include "../ImGui/imgui.h"
 #include "../ImGui/backends/imgui_impl_sdl2.h"
 #include "../ImGui/backends/imgui_impl_opengl3.h"
+#include "../ImGui/misc/cpp/imgui_stdlib.h"
 
 #ifdef _DEBUG
 #pragma comment (lib, "MathGeoLib/libx86/libDebug/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
@@ -148,6 +149,18 @@ void Inspector::ShowWindow()
 	{
 		if (GetSelected() != nullptr)
 		{
+			// --- Set ImGui ids ---
+			std::string name = GetSelected()->name;
+			name.insert(name.begin(), 2, '#');
+			name.append(std::to_string(GetSelected()->id));
+
+			 ImGui::Checkbox(name.c_str(), &GetSelected()->active);		ImGui::SameLine();
+			
+			if (!GetSelected()->active) { ImGui::BeginDisabled(); }
+			
+			ImGui::InputText(name.c_str(), &GetSelected()->name);
+			ImGui::Dummy(ImVec2(0, 10));
+
 			for (auto i = 0; i < GetSelected()->vComponents.size(); i++)
 			{
 				GetSelected()->vComponents[i]->ShowInInspector();
@@ -156,6 +169,7 @@ void Inspector::ShowWindow()
 
 			// --- Add components button ---
 			ImGui::Separator();
+			ImGui::Dummy(ImVec2(0, 10));
 			std::array<std::string, 3> components = { "Transform", "Mesh", "Material" };
 			
 			if (ImGui::Button("Add Component", ImVec2(110, 30)))
@@ -200,6 +214,8 @@ void Inspector::ShowWindow()
 				}
 				ImGui::EndPopup();
 			}
+
+			if (!GetSelected()->active) { ImGui::EndDisabled(); }
 		}
 		
 		ImGui::End();

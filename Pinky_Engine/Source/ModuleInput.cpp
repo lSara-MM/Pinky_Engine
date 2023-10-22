@@ -160,7 +160,5 @@ bool ModuleInput::CleanUp()
 {
 	LOG("Quitting SDL input event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
-
-	dropped_filedir = nullptr;
 	return true;
 }

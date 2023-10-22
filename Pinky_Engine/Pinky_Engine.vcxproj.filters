@@ -61,6 +61,9 @@
     <Filter Include="Externals\mmgr">
       <UniqueIdentifier>{bf938baf-71a4-423e-9ba1-90e88a33d83d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Externals\ImGui\misc">
+      <UniqueIdentifier>{e7de0dd9-b7a9-4752-9b57-6fbbec8bfedc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MathGeoLib\include\MathBuildConfig.h">
@@ -342,6 +345,9 @@
     <ClInclude Include="Source\C_Transform.h">
       <Filter>Sources\GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="ImGui\misc\cpp\imgui_stdlib.h">
+      <Filter>Externals\ImGui\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MathGeoLib\include\Geometry\AABB.cpp">
@@ -526,6 +532,9 @@
     </ClCompile>
     <ClCompile Include="Source\C_Transform.cpp">
       <Filter>Sources\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\misc\cpp\imgui_stdlib.cpp">
+      <Filter>Externals\ImGui\misc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
