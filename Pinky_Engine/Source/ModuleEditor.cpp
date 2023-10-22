@@ -91,7 +91,6 @@ bool ModuleEditor::Init()
 // PreUpdate: clear buffer
 update_status ModuleEditor::PreUpdate(float dt)
 {
-
 	return UPDATE_CONTINUE;
 }
 
@@ -99,6 +98,7 @@ update_status ModuleEditor::PreUpdate(float dt)
 update_status ModuleEditor::PostUpdate(float dt)
 {
 	update_status ret = UPDATE_CONTINUE;
+	App->renderer3D->statsVRAM = m_getMemoryStatistics();
 
 	// Start the Dear ImGui frame
 	ImGui_ImplOpenGL3_NewFrame();
@@ -512,9 +512,9 @@ void ModuleEditor::FpsWindow(ImGuiIO& io)
 void ModuleEditor::MemWindow() 
 {
 	char title[25];
-	AddMem(MemLog, App->renderer3D->statsVRAM.totalReportedMemory);
-	sprintf_s(title, 25, "Reported Memory %0.1f", MemLog[MemLog.size() - 1]);
-	ImGui::PlotHistogram("##memory ", &MemLog[0], MemLog.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100.0f));
+	AddMem(MemLog, App->renderer3D->statsVRAM.peakReportedMemory);
+	ImGui::Text("Reported Memory % 0.1f", MemLog[MemLog.size() - 1]);
+	ImGui::PlotHistogram("", &MemLog[0], MemLog.size(), 0, "", 0.0f, 40.0f, ImVec2(310, 100.0f));
 }
 
 void ModuleEditor::AddFPS(std::vector<float>& vect, const float aFPS)
