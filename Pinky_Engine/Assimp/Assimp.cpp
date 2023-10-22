@@ -178,7 +178,7 @@ void ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 				//(texfileDir != nullptr) ? ourMesh->hasTex = true : ourMesh->hasTex = false;
 				
 				obj->AddComponent(C_TYPE::MESH, ourMesh);
-				obj->AddComponent(C_TYPE::MATERIAL);
+				if (!component) { obj->AddComponent(C_TYPE::MATERIAL); }
 
 				App->renderer3D->meshes.push_back(ourMesh);
 			}
