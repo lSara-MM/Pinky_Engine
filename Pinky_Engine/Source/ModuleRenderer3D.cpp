@@ -374,6 +374,7 @@ void ModuleRenderer3D::DrawMesh(ai::mesh* mesh)
 
 void ModuleRenderer3D::DrawVertexNormals(ai::mesh* mesh)
 {
+	//TODO: adjust length value with editor
 	float normal_lenght = 1.0f;
 	glBegin(GL_LINES);
 	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
@@ -382,8 +383,6 @@ void ModuleRenderer3D::DrawVertexNormals(ai::mesh* mesh)
 	{
 		LineSegment NormalDirection(math::float3(mesh->vertex[i], mesh->vertex[i + 1], mesh->vertex[i + 2]),
 			math::float3(mesh->vertex[i] + mesh->normals[i], mesh->vertex[i + 1] + mesh->normals[i + 1], mesh->vertex[i + 2] + mesh->normals[i + 2]));
-
-		//NormalDirection.Transform());
 
 		glVertex3f(NormalDirection.a.x * normal_lenght, NormalDirection.a.y * normal_lenght, NormalDirection.a.z * normal_lenght);
 		glVertex3f(NormalDirection.b.x * normal_lenght, NormalDirection.b.y * normal_lenght, NormalDirection.b.z * normal_lenght);
@@ -395,9 +394,9 @@ void ModuleRenderer3D::DrawVertexNormals(ai::mesh* mesh)
 
 void ModuleRenderer3D::DrawFaceNormals(ai::mesh* mesh)
 {
-	float normal_lenght = 1.0f;
+	//TODO: adjust length value with editor
 
-	//vertices normals
+	float normal_lenght = 1.0f;
 	glBegin(GL_LINES);
 	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
 
@@ -430,7 +429,5 @@ void ModuleRenderer3D::DrawFaceNormals(ai::mesh* mesh)
 	}
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-
 	glEnd();
-
 }
