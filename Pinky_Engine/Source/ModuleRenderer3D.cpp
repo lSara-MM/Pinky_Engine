@@ -121,7 +121,6 @@ bool ModuleRenderer3D::Init()
 		glEnable(GL_TEXTURE_2D);
 		glewInit();
 
-		//devil init¿?
 		iluInit();
 		ilInit();
 		ilutInit();
@@ -134,6 +133,7 @@ bool ModuleRenderer3D::Init()
 	wireframe = false;
 	VertexNormals = false;
 	FaceNormals = true;
+	Vsync = true;
 
 	ai::LoadCheckers(texture_checker);
 	meshes = {};
@@ -280,13 +280,15 @@ void ModuleRenderer3D::HardwareDetection(bool& infoOutputWin)
 		ImGui::Text("Version: ");
 		ImGui::SameLine();
 		ImGui::Text((const char*)glGetString(GL_VERSION));
-		ImGui::Text("VRAM Budget: %d", statsVRAM.accumulatedActualMemory);//TODO: no sé que representa cada cosa de estas
-		ImGui::Text("VRAM Usage: %d", statsVRAM.accumulatedReportedMemory);
-		ImGui::Text("VRAM Available: %d", statsVRAM.totalActualMemory);
-		ImGui::Text("VRAM Reserved: %d", statsVRAM.totalReportedMemory);
-		ImGui::Text("VRAM nose: %d", statsVRAM.peakActualMemory);
-		ImGui::Text("VRAM nose2: %d", statsVRAM.peakActualMemory);
-
+		ImGui::Text("Total Reported Memory: %d", statsVRAM.totalReportedMemory);
+		ImGui::Text("Total Actual Memory: %d", statsVRAM.totalActualMemory);
+		ImGui::Text("Max Reported Memory: %d", statsVRAM.peakReportedMemory);
+		ImGui::Text("Max Actual Mem: %d", statsVRAM.peakActualMemory);
+		ImGui::Text("Accumulated Reported Mem: %d", statsVRAM.accumulatedReportedMemory);
+		ImGui::Text("Accumulated Actual Mem: %d", statsVRAM.accumulatedActualMemory);
+		ImGui::Text("Accumulated Alloc Unit Count: %d", statsVRAM.accumulatedAllocUnitCount);
+		ImGui::Text("Total Alloc Unit Count: %d", statsVRAM.totalAllocUnitCount);
+		ImGui::Text("Peak Alloc Unit Count: %d", statsVRAM.peakAllocUnitCount);
 		ImGui::End();
 	}
 }
@@ -429,4 +431,30 @@ void ModuleRenderer3D::DrawFaceNormals(ai::mesh* mesh)
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glEnd();
+}
+
+void ModuleRenderer3D::SetVsync(bool enable)
+{
+	if (enable)
+	{
+		if (SDL_GL_SetSwapInterval(1) == -1)
+		{
+			LOG("VSYNC not supported: %s\n", SDL_GetError());
+		}
+		else
+		{
+			LOG("VSYNC enabled");
+		}
+	}
+	else
+	{
+		if (SDL_GL_SetSwapInterval(0) == -1)
+		{
+			LOG("VSYNC not supported: %s\n", SDL_GetError());
+		}
+		else
+		{
+			LOG("VSYNC disabled");
+		}
+	}
 }

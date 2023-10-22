@@ -151,6 +151,7 @@ bool ModuleEditor::CleanUp()
 	ClearVec(mFPSLog);
 	ClearVec(mSLog);
 	ClearVec(logVec);
+	ClearVec(MemLog);
 
 	// Cleanup
 	ImGui_ImplOpenGL3_Shutdown();
@@ -297,7 +298,7 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 
 			if (ImGui::IsItemHovered())
 			{
-				ImGui::SetTooltip("Change fullscreen window");//TODO: noms millorables?
+				ImGui::SetTooltip("Change fullscreen window");
 			}
 			ImGui::SameLine();
 
@@ -337,12 +338,6 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 
 			ImGui::Text("Brightness: %.2f", SDL_GetWindowBrightness(App->window->window));
 
-			//Todo: Vsync no està implementat, esperar per si profe explica
-			/*if (ImGui::Checkbox("Full desktop", &App->window->fullScreenDesktop))
-			{
-				(vSync_B) ? flags = SDL_RENDERER_ACCELERATED : flags |= SDL_RENDERER_PRESENTVSYNC;
-			}*/
-
 			ImGui::Text("Mouse position: %d x, %d y", App->input->GetMouseX(), App->input->GetMouseY());
 
 			if (ImGui::SliderFloat("Brightness", &App->window->brightness, 0.2350f, 1.0f, "%.2f"))
@@ -366,7 +361,9 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 
 			ImGui::SliderInt("FPS cap", &App->fps, 1, 120, "%d");
 
-			//TODO: Input keys¿? Audio current volumes¿?
+			ImGui::Checkbox("VSync", &App->renderer3D->Vsync);
+
+			MemWindow();
 		}
 
 		if (ImGui::CollapsingHeader("OpenGl"))
@@ -508,6 +505,14 @@ void ModuleEditor::FpsWindow(ImGuiIO& io)
 	ImGui::PlotHistogram("##milliseconds ", &mSLog[0], mSLog.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100.0f));
 }
 
+void ModuleEditor::MemWindow() 
+{
+	char title[25];
+	AddMem(MemLog, App->renderer3D->statsVRAM.totalReportedMemory);
+	sprintf_s(title, 25, "Reported Memory %0.1f", MemLog[MemLog.size() - 1]);
+	ImGui::PlotHistogram("##memory ", &MemLog[0], MemLog.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100.0f));
+}
+
 void ModuleEditor::AddFPS(std::vector<float>& vect, const float aFPS)
 {
 	if (vect.size() < 60)
@@ -516,9 +521,23 @@ void ModuleEditor::AddFPS(std::vector<float>& vect, const float aFPS)
 	}
 	else
 	{
-		std::rotate(vect.begin(), vect.begin() + 1, vect.end());//TODO: ta bien?
+		std::rotate(vect.begin(), vect.begin() + 1, vect.end());
 		vect.pop_back();
 		vect.push_back(aFPS);
+	}
+}
+
+void ModuleEditor::AddMem(std::vector<float>& vect, const float repMem)
+{
+	if (vect.size() < 100)
+	{
+		vect.push_back(repMem);
+	}
+	else
+	{
+		std::rotate(vect.begin(), vect.begin() + 1, vect.end());
+		vect.pop_back();
+		vect.push_back(repMem);
 	}
 }
 

@@ -28,10 +28,12 @@ public:
 	void ConfigWindow(ImGuiIO& io);
 	void LogWindow();
 	void FpsWindow(ImGuiIO& io);
+	void MemWindow();
 
 	void AboutWindow();
 
 	void AddFPS(std::vector<float>& vect, const float aFPS);
+	void AddMem(std::vector<float>& vect, const float repMem);
 	void OsOpenInShell(const char* path);	// https://stackoverflow.com/questions/71712920/how-to-open-a-webpage-in-imgui
 
 public:
@@ -42,6 +44,8 @@ public:
 	// FPS graph
 	std::vector<float> mFPSLog;
 	std::vector<float> mSLog;
+	//Memory graph
+	std::vector<float> MemLog;
 
 	//Frame cap
 	bool frcap;

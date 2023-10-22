@@ -46,7 +46,7 @@ public:
 	void DrawMesh(ai::mesh* mesh);
 	void DrawVertexNormals(ai::mesh* mesh);
 	void DrawFaceNormals(ai::mesh* mesh);
-
+	void SetVsync(bool enable);
 	sMStats statsVRAM;
 
 public:
@@ -61,6 +61,7 @@ public:
 	bool wireframe;
 	bool VertexNormals;
 	bool FaceNormals;
+	bool Vsync;
 
 	//Struct to get sdl version info
 	SDL_version versionSDL;
