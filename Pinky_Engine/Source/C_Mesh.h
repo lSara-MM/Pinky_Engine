@@ -14,8 +14,10 @@ public:
 	~C_Mesh();
 
 	void ShowInInspector();
-	void Draw();
+	void Draw(bool checkered = false);
 	void DrawVertexNormals();
 public:
 	ai::mesh* mesh = nullptr;
+
+	//GLuint texture_checker;
 };

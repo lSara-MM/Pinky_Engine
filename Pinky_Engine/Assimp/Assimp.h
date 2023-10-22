@@ -32,6 +32,8 @@ namespace ai
 		uint num_tex = 0;
 		math::float2* tex = nullptr;
 
+		std::string path;
+
 		~texture()
 		{
 			RELEASE_ARRAY(tex);

@@ -1,7 +1,6 @@
 #pragma once
 #include "C_Mesh.h"
 
-
 #include "../SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -22,6 +21,7 @@
 
 #include "GameObject.h"
 #include "Component.h"
+#include "ModuleRenderer3D.h"	// TODO: no se donde tendria que estar el gluint del checkers pa que no se repita por cada mesh
 
 C_Mesh::C_Mesh(GameObject* g, ai::mesh* m, unsigned int i, bool start_enabled) : Component(C_TYPE::MESH, g, i, start_enabled, "Mesh")
 {
@@ -66,7 +66,7 @@ void C_Mesh::ShowInInspector()
 	}
 }
 
-void C_Mesh::Draw()
+void C_Mesh::Draw(bool checkered)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	//normals
@@ -93,7 +93,7 @@ void C_Mesh::Draw()
 	glActiveTexture(GL_TEXTURE0);
 
 	glBindTexture(GL_TEXTURE_2D, mesh->tex.id_tex);
-	//(mesh->hasTex) ? glBindTexture(GL_TEXTURE_2D, mesh->tex.id_tex) : glBindTexture(GL_TEXTURE_2D, texture_checker);
+	(!checkered) ? glBindTexture(GL_TEXTURE_2D, mesh->tex.id_tex) : glBindTexture(GL_TEXTURE_2D, App->renderer3D->texture_checker);
 
 	// Draw mesh
 	glDrawElements(GL_TRIANGLES, mesh->num_index, GL_UNSIGNED_INT, NULL);

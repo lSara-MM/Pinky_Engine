@@ -58,11 +58,15 @@ update_status GameObject::Update(float dt)
 		}
 	}
 
-	for (auto i = 0; i < vMeshes.size(); i++)
+	if (vComponents.size() > 1)
 	{
-		if (vMeshes[i]->type == C_TYPE::MESH && vMeshes[i]->active)
+		std::vector<C_Mesh*> vMeshes = GetComponentsMesh();
+		for (auto i = 0; i < vMeshes.size(); i++)
 		{
-			vMeshes[i]->Draw();
+			if (vMeshes[i]->active)
+			{
+				vMeshes[i]->Draw(true);
+			}
 		}
 	}
 
@@ -88,7 +92,7 @@ void GameObject::AddComponent(C_TYPE type, ai::mesh* m, ai::POLY_PRIMITIVE_TYPE 
 		{
 			temp = new C_Mesh(this, m, numMeshes);
 			vComponents.push_back(temp);
-			vMeshes.push_back((C_Mesh*)temp);
+			//vMeshes.push_back((C_Mesh*)temp);
 			numMeshes++;
 		}
 		else
@@ -97,13 +101,39 @@ void GameObject::AddComponent(C_TYPE type, ai::mesh* m, ai::POLY_PRIMITIVE_TYPE 
 		}
 		break;
 	case C_TYPE::MATERIAL:
-		temp = new C_Material(this, numMaterials);
+		temp = new C_Material(this, nullptr, numMaterials);
 		vComponents.push_back(temp);
 		numMaterials++;
 		break;
 	default:
 		break;
 	}
+}
+
+std::vector<C_Mesh*> GameObject::GetComponentsMesh()
+{
+	std::vector<C_Mesh*> vec = {};
+	for (auto i = 0; i < vComponents.size(); i++)
+	{
+		if (vComponents[i]->type == C_TYPE::MESH)
+		{
+			vec.push_back((C_Mesh*)vComponents[i]);
+		}
+	}
+	return vec;
+}
+
+std::vector<C_Material*> GameObject::GetComponentsMaterial()
+{
+	std::vector<C_Material*> vec = {};
+	for (auto i = 0; i < vComponents.size(); i++)
+	{
+		if (vComponents[i]->type == C_TYPE::MATERIAL)
+		{
+			vec.push_back((C_Material*)vComponents[i]);
+		}
+	}
+	return vec;
 }
 
 void GameObject::DeleteChild(GameObject* go)
