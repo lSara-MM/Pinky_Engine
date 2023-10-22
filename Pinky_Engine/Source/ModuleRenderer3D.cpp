@@ -395,7 +395,6 @@ void ModuleRenderer3D::DrawVertexNormals(ai::mesh* mesh)
 void ModuleRenderer3D::DrawFaceNormals(ai::mesh* mesh)
 {
 	//TODO: adjust length value with editor
-
 	float normal_lenght = 1.0f;
 	glBegin(GL_LINES);
 	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
