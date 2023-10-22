@@ -8,8 +8,23 @@ struct Color
 	Color() : r(0.0f), g(0.0f), b(0.0f), a(1.0f)
 	{}
 
-	Color(float r, float g, float b, float a = 1.0f) : r(r), g(g), b(b), a(a)
-	{}
+	Color(float red, float green, float blue, float alpha = 1.0f)
+	{
+		if (red > 1.0f)
+		{
+			r = red / 255;
+			g = green / 255;
+			b = blue / 255;
+			a = alpha / 255;
+		}
+		else
+		{
+			r = red;
+			g = green;
+			b = blue;
+			a = alpha;
+		}
+	}
 
 	void Set(float r, float g, float b, float a = 1.0f)
 	{

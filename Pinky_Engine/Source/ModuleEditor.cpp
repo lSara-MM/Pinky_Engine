@@ -79,9 +79,11 @@ bool ModuleEditor::Init()
 	Hierarchy* h = new Hierarchy();
 	App->scene->h = h;
 	vImGuiWindows.push_back(h);
+	h = nullptr;
 	Inspector* i = new Inspector();
 	App->scene->i = i;
 	vImGuiWindows.push_back(i);
+	i = nullptr;
 
 	return ret;
 }
@@ -152,6 +154,8 @@ bool ModuleEditor::CleanUp()
 	ClearVec(mSLog);
 	ClearVec(logVec);
 	ClearVec(MemLog);
+
+	ClearVecPtr(vImGuiWindows);
 
 	// Cleanup
 	ImGui_ImplOpenGL3_Shutdown();
