@@ -119,11 +119,31 @@ bool ModuleRenderer3D::Init()
 		glEnable(GL_COLOR_MATERIAL);
 
 		glEnable(GL_TEXTURE_2D);
-		glewInit();
+
+		error = glewInit();
+		if (error != GL_NO_ERROR)
+		{
+			LOG("Error initializing glew library! %s", SDL_GetError());
+			ret = false;
+		}
+		else
+		{
+			LOG("Using Glew %d.%d.%d", GLEW_VERSION_MAJOR, GLEW_VERSION_MINOR, GLEW_VERSION_MICRO);
+		}
 
 		iluInit();
 		ilInit();
 		ilutInit();
+
+		if (ilutRenderer(ILUT_OPENGL)) 
+		{
+			LOG("Correct DevIL initialization");
+		}
+
+		LOG("Correct OpenGL initialization");
+		LOG("->Vendor: %s", glGetString(GL_VENDOR));
+		LOG("->Renderer: %s", glGetString(GL_RENDERER));
+		LOG("->OpenGL version supported %s", glGetString(GL_VERSION));
 	}
 
 	// Projection matrix for
