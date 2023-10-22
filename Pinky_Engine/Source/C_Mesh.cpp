@@ -111,6 +111,8 @@ void C_Mesh::Draw(bool checkered)
 
 void C_Mesh::DrawVertexNormals()
 {
+	//TODO: adjust length value with editor
+	float normal_lenght = 1.0f;
 	glBegin(GL_LINES);
 	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
 
@@ -119,10 +121,47 @@ void C_Mesh::DrawVertexNormals()
 		LineSegment NormalDirection(math::float3(mesh->vertex[i], mesh->vertex[i + 1], mesh->vertex[i + 2]),
 			math::float3(mesh->vertex[i] + mesh->normals[i], mesh->vertex[i + 1] + mesh->normals[i + 1], mesh->vertex[i + 2] + mesh->normals[i + 2]));
 
-		//NormalDirection.Transform());
+		glVertex3f(NormalDirection.a.x * normal_lenght, NormalDirection.a.y * normal_lenght, NormalDirection.a.z * normal_lenght);
+		glVertex3f(NormalDirection.b.x * normal_lenght, NormalDirection.b.y * normal_lenght, NormalDirection.b.z * normal_lenght);
+	}
 
-		glVertex3f(NormalDirection.a.x, NormalDirection.a.y, NormalDirection.a.z);
-		glVertex3f(NormalDirection.b.x, NormalDirection.b.y, NormalDirection.b.z);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glEnd();
+}
+
+void C_Mesh::DrawFaceNormals()
+{
+	//TODO: adjust length value with editor
+	float normal_lenght = 1.0f;
+	glBegin(GL_LINES);
+	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
+
+	for (size_t i = 0; i < mesh->num_index; i += 3)
+	{
+		uint index1 = mesh->index[i] * 3;
+		uint index2 = mesh->index[i + 1] * 3;
+		uint index3 = mesh->index[i + 2] * 3;
+
+		math::float3 vec1(mesh->vertex[index1], mesh->vertex[index1 + 1], mesh->vertex[index1 + 2]);
+		math::float3 vec2(mesh->vertex[index2], mesh->vertex[index2 + 1], mesh->vertex[index2 + 2]);
+		math::float3 vec3(mesh->vertex[index3], mesh->vertex[index3 + 1], mesh->vertex[index3 + 2]);
+
+		math::float3 v0 = vec2 - vec1;
+		math::float3 v1 = vec3 - vec1;
+		math::float3 crossV = math::Cross(v0, v1);
+
+		math::float3 crossNorm = crossV.Normalized();
+
+		GLfloat vx = (vec1.x + vec2.x + vec3.x) / 3;
+		GLfloat vy = (vec1.y + vec2.y + vec3.y) / 3;
+		GLfloat vz = (vec1.z + vec2.z + vec3.z) / 3;
+
+		GLfloat vx_norm = crossNorm.x;
+		GLfloat vy_norm = crossNorm.y;
+		GLfloat vz_norm = crossNorm.z;
+
+		glVertex3f(vx, vy, vz);
+		glVertex3f(vx + (vx_norm * normal_lenght), vy + (vy_norm * normal_lenght), vz + (vz_norm * normal_lenght));
 	}
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);

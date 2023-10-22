@@ -16,6 +16,7 @@ public:
 	void ShowInInspector();
 	void Draw(bool checkered = false);
 	void DrawVertexNormals();
+	void DrawFaceNormals();
 public:
 	ai::mesh* mesh = nullptr;
 
