@@ -1248,6 +1248,16 @@ bool ImGui::ToggleButton(const char* str_id, bool* v, ImVec4 bg_color, bool anim
 
     draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), col_bg, height * 0.5f);
     draw_list->AddCircleFilled(ImVec2(p.x + radius + t * (width - radius * 2.0f), p.y + radius), radius - 1.5f, IM_COL32(255, 255, 255, 255));
+
+    // --- Text position ---
+    const char* label_end = FindRenderedTextEnd(str_id);
+    if (str_id != label_end)
+    {
+        SameLine(width * 1.5f, g.Style.ItemInnerSpacing.x);
+        SameLine(width * 1.5f, g.Style.ItemInnerSpacing.x);
+        TextEx(str_id, label_end);
+    }
+    // ---------------------
     return v;
 }
 
@@ -2559,6 +2569,17 @@ bool ImGui::DragScalarN(const char* label, ImGuiDataType data_type, void* p_data
     PushID(label);
     PushMultiItemsWidths(components, CalcItemWidth());
     size_t type_size = GDataTypeInfo[data_type].Size;
+
+    // --- Text position ---
+    static float label_size = CalcTextSize(label, NULL, true).x;
+    const char* label_end = FindRenderedTextEnd(label);
+    if (label != label_end)
+    {
+        TextEx(label, label_end);
+        SameLine(75, g.Style.ItemInnerSpacing.x);
+    }
+    // ---------------------
+
     for (int i = 0; i < components; i++)
     {
         PushID(i);
@@ -2571,12 +2592,7 @@ bool ImGui::DragScalarN(const char* label, ImGuiDataType data_type, void* p_data
     }
     PopID();
 
-    const char* label_end = FindRenderedTextEnd(label);
-    if (label != label_end)
-    {
-        SameLine(0, g.Style.ItemInnerSpacing.x);
-        TextEx(label, label_end);
-    }
+    
 
     EndGroup();
     return value_changed;

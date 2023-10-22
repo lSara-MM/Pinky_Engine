@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "Component.h"
+#include "Color.h"
 
 class C_Mesh : public Component
 {
@@ -14,7 +15,7 @@ public:
 	~C_Mesh();
 
 	void ShowInInspector();
-	void Draw(bool checkered = false);
+	void Draw(bool checkered = false, Color color = { 255, 255, 255, 255});
 	void DrawVertexNormals();
 	void DrawFaceNormals();
 public:

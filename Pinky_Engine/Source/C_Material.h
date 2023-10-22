@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "Component.h"
+#include "Color.h"
 
 class C_Material : public Component
 {
@@ -19,5 +20,5 @@ public:
 	ai::texture* tex;
 	bool checkered;
 
-private:
+	Color color{};
 };

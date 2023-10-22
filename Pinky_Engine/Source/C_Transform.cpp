@@ -30,11 +30,11 @@ void C_Transform::ShowInInspector()
 
 	if (ImGui::CollapsingHeader(n.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		ImGui::Text("x");
-		ImGui::SameLine();
-		ImGui::Text("x");
-		ImGui::SameLine();
-		ImGui::Text("x");
+		//TODO: buscar forma de hacerlo dependiendo del tamaño de la window
+		/*ImGui::Dummy(ImVec2(150, 0));	ImGui::SameLine(150);
+		ImGui::Text("X");				ImGui::SameLine(250);
+		ImGui::Text("Y");				ImGui::SameLine(350);
+		ImGui::Text("Z");*/
 
 		float vec[3] = { position.x, position.y, position .z};
 		ImGui::DragFloat3("Position", vec);

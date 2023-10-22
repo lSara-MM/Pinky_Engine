@@ -68,7 +68,7 @@ update_status GameObject::Update(float dt)
 			{
 				if (!vMaterials.empty())
 				{
-					vMeshes[i]->Draw(vMaterials[i]->checkered);
+					vMeshes[i]->Draw(vMaterials[i]->checkered, vMaterials[i]->color);
 				}
 				else
 				{

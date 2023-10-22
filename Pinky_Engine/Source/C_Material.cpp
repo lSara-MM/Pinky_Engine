@@ -11,6 +11,7 @@ C_Material::C_Material(GameObject* g, ai::texture* t, bool check, unsigned int i
 {
 	tex = t;
 	checkered = check;
+	color = { 255, 255, 255, 255 };
 }
 
 C_Material::~C_Material()
@@ -45,10 +46,9 @@ void C_Material::ShowInInspector()
 		{
 
 		}
+		ImGui::SetItemTooltip("Use checkered texture");
 
-		ImGui::Text("This is a drag and drop source");
-		ImGui::Text("This is a drag and drop source");
-		ImGui::Text("This is a drag and drop source");
+		ImGui::ColorEdit3("Color", (float*)&color, ImGuiColorEditFlags_NoInputs);
 
 		if (!active) { ImGui::EndDisabled(); }
 	}

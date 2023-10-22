@@ -48,8 +48,7 @@ void C_Mesh::ShowInInspector()
 
 	// ---------------------------------------------
 
-	ImGui::Checkbox(checkbox.c_str(), &active);
-	ImGui::SameLine();
+	ImGui::Checkbox(checkbox.c_str(), &active);		ImGui::SameLine();
 
 	if (ImGui::CollapsingHeader(header.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 	{
@@ -66,7 +65,7 @@ void C_Mesh::ShowInInspector()
 	}
 }
 
-void C_Mesh::Draw(bool checkered)
+void C_Mesh::Draw(bool checkered, Color color)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	//normals
@@ -89,6 +88,9 @@ void C_Mesh::Draw(bool checkered)
 
 	// ---------------------------------------------
 
+
+	glColor4f(color.r, color.g, color.b, color.a);
+
 	// Textures
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->tex.id_tex);
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
@@ -107,6 +109,9 @@ void C_Mesh::Draw(bool checkered)
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 void C_Mesh::DrawVertexNormals()
