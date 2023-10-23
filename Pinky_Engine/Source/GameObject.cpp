@@ -13,6 +13,10 @@ GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 	name = n;
 	active = start_enabled;
 
+	// ---
+	selected = false;
+	hidden = false;
+
 	AddComponent(C_TYPE::TRANSFORM);
 
 	parent->vChildren.push_back(this);
@@ -24,6 +28,10 @@ GameObject::GameObject(std::string n, bool a)
 {
 	name = n;
 	active = a;
+
+	// ---
+	selected = false;
+	hidden = false;
 
 	AddComponent(C_TYPE::TRANSFORM);
 

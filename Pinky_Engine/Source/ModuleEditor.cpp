@@ -76,11 +76,11 @@ bool ModuleEditor::Init()
 	aboutColor = ImVec4(0.953f, 0.533f, 0.969f, 1.0f);
 	aboutWin = false;
 
-	Hierarchy* h = new Hierarchy();
+	Hierarchy* h = new Hierarchy(vImGuiWindows.size());
 	App->scene->h = h;
 	vImGuiWindows.push_back(h);
 	h = nullptr;
-	Inspector* i = new Inspector();
+	Inspector* i = new Inspector(vImGuiWindows.size());
 	App->scene->i = i;
 	vImGuiWindows.push_back(i);
 	i = nullptr;
@@ -261,6 +261,19 @@ update_status ModuleEditor::Toolbar()
 					}
 				}
 				ImGui::EndMenu();
+			}
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Window"))
+		{
+			if (ImGui::MenuItem("Hierarchy"))
+			{
+				vImGuiWindows.push_back(new Hierarchy(vImGuiWindows.size()));
+			}
+			if (ImGui::MenuItem("Inspector"))
+			{
+				vImGuiWindows.push_back(new Inspector(vImGuiWindows.size()));
 			}
 			ImGui::EndMenu();
 		}

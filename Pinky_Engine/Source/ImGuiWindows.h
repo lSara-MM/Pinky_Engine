@@ -15,24 +15,28 @@ class GameObject;
 class ImGuiWindows
 {
 public:
-	ImGuiWindows() {};
+	ImGuiWindows(int i);
 	~ImGuiWindows();
 
 	virtual void ShowWindow() {};
 	virtual GameObject* GetSelected();
 	virtual void SetSelected(GameObject* go);
+	virtual void SetUnselected();
 
 public:
 	bool show;
+	int id;
 
 private:
 	GameObject* selectedGO = nullptr;
+
+	std::vector<GameObject*> selectedGOs;
 };
 
 class Hierarchy : public ImGuiWindows
 {
 public:
-	Hierarchy();
+	Hierarchy(int i) : ImGuiWindows(i) {};
 	~Hierarchy();
 
 	void ShowWindow();
@@ -48,7 +52,7 @@ private:
 class Inspector : public ImGuiWindows
 {
 public:
-	Inspector();
+	Inspector(int i) : ImGuiWindows(i) {};
 	~Inspector();
 
 	void ShowWindow();

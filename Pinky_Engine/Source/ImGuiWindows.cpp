@@ -26,6 +26,13 @@
 #pragma comment (lib, "MathGeoLib/libx86/libRelease/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
 #endif // _DEBUG
 
+ImGuiWindows::ImGuiWindows(int i)
+{
+	id = i;
+	selectedGO = nullptr;
+	selectedGOs = {};
+}
+
 ImGuiWindows::~ImGuiWindows()
 {
 	selectedGO = nullptr;
@@ -40,10 +47,21 @@ GameObject* ImGuiWindows::GetSelected()
 void ImGuiWindows::SetSelected(GameObject* go)
 {
 	selectedGO = go;
+	selectedGOs.push_back(go);
+	go->selected = !go->selected;
+	
+	for (auto i = 0; i < go->vChildren.size(); i++)
+	{
+		go->vChildren[i]->selected = go->selected;
+	}
 }
 
-Hierarchy::Hierarchy()
+void ImGuiWindows::SetUnselected()
 {
+	/*for (size_t i = 0; i < length; i++)
+	{
+
+	}*/
 }
 
 Hierarchy::~Hierarchy()
@@ -55,8 +73,13 @@ void Hierarchy::ShowWindow()
 	// Always center this window when appearing
 	/*ImVec2 center = ImGui::GetMainViewport()->Pos;
 	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.7f));*/
+	
+	std::string title = "Hierarchy";
+	title.append("##");
+	title.append(std::to_string(id));
+
 	ImGui::SetNextWindowSize(ImVec2(200, 500), ImGuiCond_Appearing);
-	if (ImGui::Begin("Hierarchy"), &show)
+	if (ImGui::Begin(title.c_str(), &show))
 	{
 		//static const char* names[9] =
 		//{
@@ -101,10 +124,10 @@ void Hierarchy::ShowWindow()
 			{
 				// Update selection state
 				// (process outside of tree loop to avoid visual inconsistencies during the clicking frame)
-				if (ImGui::GetIO().KeyCtrl)
-					selection_mask ^= (1 << node_clicked);          // CTRL+click to toggle
-				else //if (!(selection_mask & (1 << node_clicked))) // Depending on selection behavior you want, may want to preserve selection when clicking on item that is part of the selection
-					selection_mask = (1 << node_clicked);           // Click to single-select
+				//if (ImGui::GetIO().KeyCtrl)
+					//selection_mask ^= (1 << node_clicked);          // CTRL+click to toggle
+				//else //if (!(selection_mask & (1 << node_clicked))) // Depending on selection behavior you want, may want to preserve selection when clicking on item that is part of the selection
+					//selection_mask = (1 << node_clicked);           // Click to single-select
 			}
 		}
 		ImGui::End();
@@ -129,13 +152,10 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 			node_flags = ImGuiTreeNodeFlags_OpenOnArrow |	ImGuiTreeNodeFlags_OpenOnDoubleClick
 				| ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
 
-
-			const bool is_selected = (selection_mask & (1 << current[i]->id)) != 0;
-			if (is_selected)
+			if (current[i]->selected)
 			{
 				node_flags |= ImGuiTreeNodeFlags_Selected;
-			}
-			
+			}			
 
 			bool open = ImGui::TreeNodeEx((void*)(intptr_t)current[i]->id, node_flags, a.c_str());
 
@@ -149,18 +169,17 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 			{
 				ShowChildren(current[i]->vChildren, current[i]->vChildren.size());
 				ImGui::TreePop();
-			}
-			
+			}			
 		}
 		else
 		{
 			node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 			
-			const bool is_selected = (selection_mask & (1 << current[i]->id)) != 0;
-
-			if (is_selected)
+			if (current[i]->selected)
+			{
 				node_flags |= ImGuiTreeNodeFlags_Selected;
-
+			}
+			
 			if (ImGui::TreeNodeEx((void*)(intptr_t)current[i]->id, node_flags, a.c_str()))
 			{
 				
@@ -168,10 +187,12 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 
 			if (ImGui::IsItemClicked())
 			{
+
 				node_clicked = current[i]->id;
 				SetSelected(current[i]);
 			}
 		}
+
 		//ImGui::PopID();
 	}
 
@@ -180,17 +201,19 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 
 //
 
-Inspector::Inspector()
-{
-}
-
 Inspector::~Inspector()
 {
 }
 
 void Inspector::ShowWindow()
 {
-	if (ImGui::Begin("Inspector"), &show)
+	std::string title = "Inspector";
+	title.append("##");
+	title.append(std::to_string(id));
+
+	ImGui::SetNextWindowSize(ImVec2(200, 500), ImGuiCond_Appearing);
+	ImGui::SetWindowPos(ImVec2(700, 50), ImGuiCond_Appearing);
+	if (ImGui::Begin(title.c_str(), &show))
 	{
 		if (GetSelected() != nullptr)
 		{
