@@ -140,14 +140,19 @@ update_status ModuleCamera3D::Update(float dt)
 
 	//	Position = Reference + Z * Position.Length();
 	//}
+	
+	else if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT)
+	{
+		LookAt(math::float3(0, 0, 0));
+	}
 	else 
 	{
-		Zoom(newPos, speed);
-		Position += newPos;
-		Reference += newPos;
+			Zoom(newPos, speed);
+			Position += newPos;
+			Reference += newPos;
 	}
 
-	//LookAt(Reference);
+	LookAt(Reference);
 
 	// Recalculate matrix -------------
 	CalculateViewMatrix();
