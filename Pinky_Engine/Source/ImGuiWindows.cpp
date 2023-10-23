@@ -154,7 +154,10 @@ void Inspector::ShowWindow()
 			name.insert(name.begin(), 2, '#');
 			name.append(std::to_string(GetSelected()->id));
 
-			 ImGui::Checkbox(name.c_str(), &GetSelected()->active);		ImGui::SameLine();
+			std::string checkbox = "##Checkbox ";
+			checkbox.append(GetSelected()->name + std::to_string(GetSelected()->id));
+
+			ImGui::Checkbox(checkbox.c_str(), &GetSelected()->active);		ImGui::SameLine();
 			
 			if (!GetSelected()->active) { ImGui::BeginDisabled(); }
 			
