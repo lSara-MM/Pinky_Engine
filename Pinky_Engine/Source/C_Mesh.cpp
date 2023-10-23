@@ -92,12 +92,12 @@ void C_Mesh::Draw(bool checkered, Color color)
 	glColor4f(color.r, color.g, color.b, color.a);
 
 	// Textures
-	glBindBuffer(GL_ARRAY_BUFFER, mesh->tex.id_tex);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_tex_uvs);
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 	glActiveTexture(GL_TEXTURE0);
 
-	glBindTexture(GL_TEXTURE_2D, mesh->tex.id_tex);
-	(!checkered) ? glBindTexture(GL_TEXTURE_2D, mesh->tex.id_tex) : glBindTexture(GL_TEXTURE_2D, App->renderer3D->texture_checker);
+	glBindTexture(GL_TEXTURE_2D, mesh->tex.tex_id);
+	(!checkered) ? glBindTexture(GL_TEXTURE_2D, mesh->tex.tex_id) : glBindTexture(GL_TEXTURE_2D, App->renderer3D->texture_checker);
 
 	// ---------------------------------------------
 

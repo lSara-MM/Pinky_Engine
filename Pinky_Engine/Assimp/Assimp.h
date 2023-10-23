@@ -27,19 +27,15 @@ namespace ai
 
 	struct texture
 	{
-		//textures
-		GLuint id_tex = 0;
-		uint num_tex = 0;
-		math::float2* tex = nullptr;
+		uint tex_id = 0;
+		uint tex_width = 0;
+		uint tex_height = 0;
 
 		std::string path;
 
 		~texture()
 		{
-			RELEASE_ARRAY(tex);
 
-			glDeleteBuffers(1, &id_tex);
-			id_tex = 0;
 		}
 	};
 
@@ -58,7 +54,13 @@ namespace ai
 		uint num_normals = 0;
 		float* normals = nullptr;
 
+		//texture UVs
+		GLuint id_tex_uvs = 0;
+		uint num_tex_uvs = 0;
+		math::float2* tex_uvs = nullptr;
+
 		texture tex;
+
 		bool hasTex = false;	// TODO: nose algo pa activar o no el checkers
 
 		GLuint VBO; // vertex buffer object
@@ -69,7 +71,9 @@ namespace ai
 		{
 			RELEASE_ARRAY(vertex);
 			RELEASE_ARRAY(normals);
-			tex.~texture();
+			RELEASE_ARRAY(tex_uvs);
+
+			//tex_uvs.~texture();
 		}
 	};
 

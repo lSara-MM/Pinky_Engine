@@ -378,11 +378,11 @@ void ModuleRenderer3D::DrawMesh(ai::mesh* mesh)
 	glNormalPointer(GL_FLOAT, 0, NULL);
 
 	// Textures
-	glBindBuffer(GL_ARRAY_BUFFER, mesh->tex.id_tex);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_tex_uvs);
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 	glActiveTexture(GL_TEXTURE0);
 
-	glBindTexture(GL_TEXTURE_2D, mesh->tex.id_tex);
+	glBindTexture(GL_TEXTURE_2D, mesh->tex.tex_id);
 	//(mesh->hasTex) ? glBindTexture(GL_TEXTURE_2D, mesh->tex.id_tex) : glBindTexture(GL_TEXTURE_2D, texture_checker);
 
 	// Draw mesh

@@ -47,13 +47,13 @@ GameObject* ImGuiWindows::GetSelected()
 void ImGuiWindows::SetSelected(GameObject* go)
 {
 	selectedGO = go;
-	selectedGOs.push_back(go);
+	/*selectedGOs.push_back(go);
 	go->selected = !go->selected;
 	
 	for (auto i = 0; i < go->vChildren.size(); i++)
 	{
 		go->vChildren[i]->selected = go->selected;
-	}
+	}*/
 }
 
 void ImGuiWindows::SetUnselected()

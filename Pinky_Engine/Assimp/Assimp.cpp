@@ -52,7 +52,7 @@ void ai::ImportFile(const char* fileDir)
 		{
 			for each (ai::mesh * i in App->renderer3D->meshes)
 			{
-				i->tex.id_tex = ImportTexture(fileDir);
+				i->tex.tex_id = ImportTexture(fileDir);
 			}
 		}
 	}
@@ -162,12 +162,12 @@ void ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 
 			if (m->HasTextureCoords(uv_index))
 			{
-				ourMesh->tex.num_tex = m->mNumVertices;
-				ourMesh->tex.tex = new math::float2[ourMesh->tex.num_tex * 3];
-				for (uint i = 0; i < ourMesh->tex.num_tex; i++)
+				ourMesh->num_tex_uvs = m->mNumVertices;
+				ourMesh->tex_uvs = new math::float2[ourMesh->num_tex_uvs * 3];
+				for (uint i = 0; i < ourMesh->num_tex_uvs; i++)
 				{
-					ourMesh->tex.tex[i].x = m->mTextureCoords[uv_index][i].x;
-					ourMesh->tex.tex[i].y = m->mTextureCoords[uv_index][i].y;
+					ourMesh->tex_uvs[i].x = m->mTextureCoords[uv_index][i].x;
+					ourMesh->tex_uvs[i].y = m->mTextureCoords[uv_index][i].y;
 				}
 			}
 
@@ -180,6 +180,7 @@ void ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 				obj->AddComponent(C_TYPE::MESH, ourMesh);
 				if (!component) { obj->AddComponent(C_TYPE::MATERIAL); }
 
+				//TODO: pushback elsewhere
 				App->renderer3D->meshes.push_back(ourMesh);
 			}
 
@@ -203,10 +204,10 @@ bool ai::InitMesh(mesh* m)
 	//normals
 	glGenBuffers(1, &m->id_normals);
 	//texture coordinates
-	glGenBuffers(1, &m->tex.id_tex);
+	glGenBuffers(1, &m->id_tex_uvs);
 
 	if (m->VBO == 0 || m->EBO == 0 || /*m->VAO == 0 ||*/
-		m->id_normals == 0 || m->tex.id_tex == 0)
+		m->id_normals == 0 || m->id_tex_uvs == 0)
 	{
 		LOG("[ERROR] buffer not created");
 		return false;
@@ -234,8 +235,8 @@ bool ai::InitMesh(mesh* m)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	//texture coordinates
-	glBindBuffer(GL_ARRAY_BUFFER, m->tex.id_tex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->tex.num_tex * 2, m->tex.tex, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m->id_tex_uvs);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * m->num_tex_uvs * 2, m->tex_uvs, GL_STATIC_DRAW);
 
 	return true;
 }
@@ -299,6 +300,8 @@ void ai::DeleteMeshBuffers(mesh* m)
 	m->EBO = 0;
 	glDeleteBuffers(1, &m->id_normals);
 	m->id_normals = 0;
+	glDeleteBuffers(1, &m->id_tex_uvs);
+	m->id_tex_uvs = 0;
 }
 
 void ai::LoadCheckers(GLuint& buffer)
@@ -329,8 +332,8 @@ void ai::LoadCheckers(GLuint& buffer)
 bool ai::BindTexture(mesh* m)
 {
 	//texture coordinates
-	glBindBuffer(GL_ARRAY_BUFFER, m->tex.id_tex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->tex.num_tex * 2, m->tex.tex, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, m->id_tex_uvs);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->num_tex_uvs * 2, m->tex_uvs, GL_STATIC_DRAW);
 	return true;
 }
 
