@@ -29,6 +29,7 @@
 ImGuiWindows::~ImGuiWindows()
 {
 	selectedGO = nullptr;
+	show = true;
 }
 
 GameObject* ImGuiWindows::GetSelected()
@@ -57,6 +58,42 @@ void Hierarchy::ShowWindow()
 	ImGui::SetNextWindowSize(ImVec2(200, 500), ImGuiCond_Appearing);
 	if (ImGui::Begin("Hierarchy"), &show)
 	{
+		//static const char* names[9] =
+		//{
+		//	"Bobby", "Beatrice", "Betty",
+		//	"Brianna", "Barry", "Bernard",
+		//	"Bibi", "Blaine", "Bryn"
+		//};
+		//for (int n = 0; n < IM_ARRAYSIZE(names); n++)
+		//{
+		//	ImGui::PushID(n);
+
+		//	// Our buttons are both drag sources and drag targets here!
+		//	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+		//	{
+		//		// Set payload to carry the index of our item (could be anything)
+		//		ImGui::SetDragDropPayload("a", &n, sizeof(int));
+
+		//		// Display preview (could be anything, e.g. when dragging an image we could decide to display
+		//		// the filename and a small preview of the image, etc.)
+		//		ImGui::EndDragDropSource();
+		//	}
+		//	if (ImGui::BeginDragDropTarget())
+		//	{
+		//		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("a"))
+		//		{
+		//			IM_ASSERT(payload->DataSize == sizeof(int));
+		//			int payload_n = *(const int*)payload->Data;
+		//			
+		//			//if (mode == Mode_Move)
+		//			{
+		//			}
+		//		}
+		//		ImGui::EndDragDropTarget();
+		//	}
+		//	ImGui::PopID();
+		//}
+
 		if (!App->scene->rootNode->vChildren.empty())
 		{
 			ShowChildren(App->scene->rootNode->vChildren, App->scene->rootNode->vChildren.size());
@@ -85,14 +122,20 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 		/*a.append(" - ");
 		a.append(std::to_string(current[i]->id));	*/	
 
+		//ImGui::PushID(current[i]->id);
+
 		if (!current[i]->vChildren.empty())
 		{
 			node_flags = ImGuiTreeNodeFlags_OpenOnArrow |	ImGuiTreeNodeFlags_OpenOnDoubleClick
 				| ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
 
+
 			const bool is_selected = (selection_mask & (1 << current[i]->id)) != 0;
 			if (is_selected)
+			{
 				node_flags |= ImGuiTreeNodeFlags_Selected;
+			}
+			
 
 			bool open = ImGui::TreeNodeEx((void*)(intptr_t)current[i]->id, node_flags, a.c_str());
 
@@ -107,6 +150,7 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 				ShowChildren(current[i]->vChildren, current[i]->vChildren.size());
 				ImGui::TreePop();
 			}
+			
 		}
 		else
 		{
@@ -128,6 +172,7 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 				SetSelected(current[i]);
 			}
 		}
+		//ImGui::PopID();
 	}
 
 	return ret;

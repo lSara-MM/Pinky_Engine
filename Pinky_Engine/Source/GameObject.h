@@ -43,6 +43,7 @@ public:
 	C_Transform* transform = nullptr;
 
 	bool selected = false;
+	bool hidden = false;
 
 	unsigned int numMeshes = 0;
 	unsigned int numMaterials = 0;

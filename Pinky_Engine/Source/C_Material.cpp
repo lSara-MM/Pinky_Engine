@@ -42,10 +42,10 @@ void C_Material::ShowInInspector()
 	{
 		if (!active) { ImGui::BeginDisabled(); }
 
-		//if (ImGui::ToggleButton(toogle.c_str(), &checkered))
-		//{
+		if (ImGui::ToggleButton(toogle.c_str(), &checkered))
+		{
 
-		//}
+		}
 		ImGui::SetItemTooltip("Use checkered texture");
 
 		ImGui::ColorEdit3("Color", (float*)&color, ImGuiColorEditFlags_NoInputs);

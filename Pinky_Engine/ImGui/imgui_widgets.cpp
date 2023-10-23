@@ -1206,60 +1206,60 @@ bool ImGui::CheckboxFlags(const char* label, ImU64* flags, ImU64 flags_value)
     return CheckboxFlagsT(label, flags, flags_value);
 }
 
-//bool ImGui::ToggleButton(const char* str_id, bool* v, ImVec4 bg_color, bool anim)
-//{
-//    ImVec2 p = ImGui::GetCursorScreenPos();
-//    ImDrawList* draw_list = ImGui::GetWindowDrawList();
-//
-//    float height = ImGui::GetFrameHeight();
-//    float width = height * 1.55f;
-//    float radius = height * 0.50f;
-//
-//    ImGui::InvisibleButton(str_id, ImVec2(width, height));
-//    if (ImGui::IsItemClicked())
-//        *v = !*v;
-//
-//    float t = *v ? 1.0f : 0.0f;
-//
-//    ImGuiContext& g = *GImGui;
-//    float ANIM_SPEED = 0.08f;
-//    if (g.LastActiveId == g.CurrentWindow->GetID(str_id))// && g.LastActiveIdTimer < ANIM_SPEED)
-//    {
-//        float t_anim = ImSaturate(g.LastActiveIdTimer / ANIM_SPEED);
-//        t = *v ? (t_anim) : (1.0f - t_anim);
-//    }
-//
-//    ImU32 col_bg;
-//
-//    if (!anim)
-//    {
-//        if (ImGui::IsItemHovered())
-//            col_bg = *v ? IM_COL32(145 + 20, 211, 68 + 20, 255) : IM_COL32(bg_color.x - 20, bg_color.y - 20, bg_color.z - 20, bg_color.w);
-//        else
-//            col_bg = *v ? IM_COL32(145, 211, 68, 255) : IM_COL32(bg_color.x, bg_color.y, bg_color.z, bg_color.w);
-//    }
-//    else
-//    {
-//        if (ImGui::IsItemHovered())
-//            col_bg = ImGui::GetColorU32(ImLerp(ImVec4(0.78f, 0.78f, 0.78f, 1.0f), ImVec4(bg_color.x - 20 / 255, bg_color.y - 20 / 255, bg_color.z - 20 / 255, bg_color.w / 255), t));
-//        else
-//            col_bg = ImGui::GetColorU32(ImLerp(ImVec4(0.85f, 0.85f, 0.85f, 1.0f), ImVec4(bg_color.x / 255, bg_color.y / 255, bg_color.z / 255, bg_color.w / 255), t));
-//    }
-//
-//    draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), col_bg, height * 0.5f);
-//    draw_list->AddCircleFilled(ImVec2(p.x + radius + t * (width - radius * 2.0f), p.y + radius), radius - 1.5f, IM_COL32(255, 255, 255, 255));
-//
-//    // --- Text position ---
-//    const char* label_end = FindRenderedTextEnd(str_id);
-//    if (str_id != label_end)
-//    {
-//        SameLine(width * 1.5f, g.Style.ItemInnerSpacing.x);
-//        SameLine(width * 1.5f, g.Style.ItemInnerSpacing.x);
-//        TextEx(str_id, label_end);
-//    }
-//    // ---------------------
-//    return v;
-//}
+bool ImGui::ToggleButton(const char* str_id, bool* v, ImVec4 bg_color, bool anim)
+{
+    ImVec2 p = ImGui::GetCursorScreenPos();
+    ImDrawList* draw_list = ImGui::GetWindowDrawList();
+
+    float height = ImGui::GetFrameHeight();
+    float width = height * 1.55f;
+    float radius = height * 0.50f;
+
+    ImGui::InvisibleButton(str_id, ImVec2(width, height));
+    if (ImGui::IsItemClicked())
+        *v = !*v;
+
+    float t = *v ? 1.0f : 0.0f;
+
+    ImGuiContext& g = *GImGui;
+    float ANIM_SPEED = 0.08f;
+    if (g.LastActiveId == g.CurrentWindow->GetID(str_id))// && g.LastActiveIdTimer < ANIM_SPEED)
+    {
+        float t_anim = ImSaturate(g.LastActiveIdTimer / ANIM_SPEED);
+        t = *v ? (t_anim) : (1.0f - t_anim);
+    }
+
+    ImU32 col_bg;
+
+    if (!anim)
+    {
+        if (ImGui::IsItemHovered())
+            col_bg = *v ? IM_COL32(145 + 20, 211, 68 + 20, 255) : IM_COL32(bg_color.x - 20, bg_color.y - 20, bg_color.z - 20, bg_color.w);
+        else
+            col_bg = *v ? IM_COL32(145, 211, 68, 255) : IM_COL32(bg_color.x, bg_color.y, bg_color.z, bg_color.w);
+    }
+    else
+    {
+        if (ImGui::IsItemHovered())
+            col_bg = ImGui::GetColorU32(ImLerp(ImVec4(0.78f, 0.78f, 0.78f, 1.0f), ImVec4(bg_color.x - 20 / 255, bg_color.y - 20 / 255, bg_color.z - 20 / 255, bg_color.w / 255), t));
+        else
+            col_bg = ImGui::GetColorU32(ImLerp(ImVec4(0.85f, 0.85f, 0.85f, 1.0f), ImVec4(bg_color.x / 255, bg_color.y / 255, bg_color.z / 255, bg_color.w / 255), t));
+    }
+
+    draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), col_bg, height * 0.5f);
+    draw_list->AddCircleFilled(ImVec2(p.x + radius + t * (width - radius * 2.0f), p.y + radius), radius - 1.5f, IM_COL32(255, 255, 255, 255));
+
+    // --- Text position ---
+    const char* label_end = FindRenderedTextEnd(str_id);
+    if (str_id != label_end)
+    {
+        SameLine(width * 1.5f, g.Style.ItemInnerSpacing.x);
+        SameLine(width * 1.5f, g.Style.ItemInnerSpacing.x);
+        TextEx(str_id, label_end);
+    }
+    // ---------------------
+    return *v;
+}
 
 
 bool ImGui::RadioButton(const char* label, bool active)

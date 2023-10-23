@@ -183,6 +183,7 @@ void ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 				App->renderer3D->meshes.push_back(ourMesh);
 			}
 
+			m = nullptr;
 			ourMesh = nullptr;
 		}
 	}

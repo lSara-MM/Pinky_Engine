@@ -121,7 +121,10 @@ update_status ModuleEditor::PostUpdate(float dt)
 	// Hierarchy - Inspector
 	for (int i = 0; i < vImGuiWindows.size(); i++)
 	{
-		vImGuiWindows[i]->ShowWindow();
+		if (vImGuiWindows[i]->show)
+		{
+			vImGuiWindows[i]->ShowWindow();
+		}
 	}
 
 	// Rendering
