@@ -72,7 +72,7 @@ update_status GameObject::Update(float dt)
 		std::vector<C_Material*> vMaterials = GetComponentsMaterial();
 		for (auto i = 0; i < vMeshes.size(); i++)
 		{
-			if (vMeshes[i]->active)
+			if (active && vMeshes[i]->active)
 			{
 				if (!vMaterials.empty() && vMaterials[i]->active)
 				{
