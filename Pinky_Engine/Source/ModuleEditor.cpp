@@ -269,11 +269,19 @@ update_status ModuleEditor::Toolbar()
 		{
 			if (ImGui::MenuItem("Hierarchy"))
 			{
-				vImGuiWindows.push_back(new Hierarchy(vImGuiWindows.size()));
+				if (App->scene->h != nullptr)
+				{
+					App->scene->h->show = !App->scene->h->show;
+				}				
+				//vImGuiWindows.push_back(new Hierarchy(vImGuiWindows.size()));
 			}
 			if (ImGui::MenuItem("Inspector"))
 			{
-				vImGuiWindows.push_back(new Inspector(vImGuiWindows.size()));
+				if (App->scene->i != nullptr)
+				{
+					App->scene->i->show = !App->scene->i->show;
+				}
+				//vImGuiWindows.push_back(new Inspector(vImGuiWindows.size()));
 			}
 			ImGui::EndMenu();
 		}

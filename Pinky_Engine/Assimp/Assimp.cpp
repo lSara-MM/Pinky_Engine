@@ -71,7 +71,7 @@ bool ai::ImportMesh(const char* meshfileDir, GameObject* go, const char* texfile
 
 		// If the imported 3D model has many meshes at the same level, create a new GameObject with the
 		// file name as a parent to group them all
-		else if (scene->mNumMeshes > 1)
+		else if (scene->mRootNode->mNumChildren > 1)
 		{
 			std::string name = meshfileDir;
 			// --- Get file name ---
@@ -80,7 +80,7 @@ bool ai::ImportMesh(const char* meshfileDir, GameObject* go, const char* texfile
 
 			name = name.substr(posI, posF - posI);	// first position, size of the string to get
 			// ---------------------------------------------
-			
+
 			GameObject* obj = new GameObject(name);
 			MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, obj);
 		}
@@ -106,23 +106,27 @@ void ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 
 	for (int i = 0; i < num; i++)
 	{
+		if (component)
+		{
+			obj = parent;
+		}
+		else
+		{
+			// --- Create new GameObject to store the mesh ---
+			std::string name = children[i]->mName.C_Str();
+			int pos = name.find_first_of("$");
+
+			// TODO: questionable quick fix 
+			(pos == std::string::npos) ? obj = new GameObject(name, parent) : obj = parent;
+		}
+
+		if (children[i]->mChildren != NULL)
+		{
+			MeshHierarchy(s, children[i]->mChildren, children[i]->mNumChildren, obj);
+		}
+
 		if (children[i]->mNumMeshes > 0)
 		{
-			if (component)
-			{
-				obj = parent;
-			}
-			else
-			{
-				// --- Create new GameObject to store the mesh ---
-				obj = new GameObject(s->mMeshes[children[i]->mMeshes[0]]->mName.C_Str(), parent);
-			}
-
-			if (children[i]->mChildren != NULL)
-			{
-				MeshHierarchy(s, children[i]->mChildren, children[i]->mNumChildren, obj);
-			}
-
 			const aiMesh* m = s->mMeshes[children[i]->mMeshes[0]];
 			mesh* ourMesh = new mesh;
 
@@ -176,7 +180,7 @@ void ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 				//BindTexture(ourMesh);
 
 				//(texfileDir != nullptr) ? ourMesh->hasTex = true : ourMesh->hasTex = false;
-				
+
 				obj->AddComponent(C_TYPE::MESH, ourMesh);
 				if (!component) { obj->AddComponent(C_TYPE::MATERIAL); }
 
@@ -246,16 +250,16 @@ void ai::CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go)
 	switch (obj)
 	{
 	case ai::POLY_PRIMITIVE_TYPE::CUBE:
-		ImportMesh("../Assimp/3dObject/cube.fbx", go);
+		ImportMesh("..\\Game\\Assets\\3dObject\\cube.fbx", go);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::SPHERE:
-		ImportMesh("../Assimp/3dObject/sphere.fbx", go);
+		ImportMesh("..\\Game\\Assets\\3dObject\\sphere.fbx", go);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::CYLINDER:
-		ImportMesh("../Assimp/3dObject/cylinder.fbx", go);
+		ImportMesh("..\\Game\\Assets\\3dObject\\cylinder.fbx", go);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::PLANE:
-		ImportMesh("../Assimp/3dObject/plane.fbx", go);
+		ImportMesh("..\\Game\\Assets\\3dObject\\plane.fbx", go);
 		break;
 	default:
 		break;

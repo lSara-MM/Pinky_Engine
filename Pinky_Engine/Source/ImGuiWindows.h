@@ -29,7 +29,6 @@ public:
 
 private:
 	GameObject* selectedGO = nullptr;
-
 	std::vector<GameObject*> selectedGOs;
 };
 

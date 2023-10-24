@@ -211,7 +211,7 @@ void Inspector::ShowWindow()
 	title.append("##");
 	title.append(std::to_string(id));
 
-	ImGui::SetNextWindowSize(ImVec2(200, 500), ImGuiCond_Appearing);
+	ImGui::SetNextWindowSize(ImVec2(250, 500), ImGuiCond_Appearing);
 	ImGui::SetWindowPos(ImVec2(700, 50), ImGuiCond_Appearing);
 	if (ImGui::Begin(title.c_str(), &show))
 	{
