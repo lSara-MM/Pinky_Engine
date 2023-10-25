@@ -119,8 +119,6 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 		/*a.append(" - ");
 		a.append(std::to_string(current[i]->id));	*/
 
-		//ImGui::PushID(current[i]->id);
-
 		if (!current[i]->vChildren.empty())
 		{
 			node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
@@ -215,8 +213,6 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 				SetSelected(current[i]);
 			}
 		}
-
-		//ImGui::PopID();
 	}
 
 	return ret;

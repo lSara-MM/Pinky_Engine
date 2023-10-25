@@ -21,6 +21,7 @@ public:
 	//GameObject();
 	GameObject(std::string n = "EmptyGameObject", GameObject* parent = App->scene->rootNode, bool start_enabled = true);
 	GameObject(std::string n, bool a);
+	GameObject(GameObject* go);
 	~GameObject();
 
 	update_status Update(float dt);
@@ -30,7 +31,8 @@ public:
 
 	std::vector<C_Mesh*> GetComponentsMesh();
 	std::vector<C_Material*> GetComponentsMaterial();
-	
+
+	void AddChild(GameObject* go);
 	void DeleteChild(GameObject* go);
 	void RemoveChild(GameObject* go);
 
@@ -47,8 +49,8 @@ public:
 	bool selected = false;
 	bool hidden = false;
 
-	unsigned int numMeshes = 0;
-	unsigned int numMaterials = 0;
+	unsigned int numMeshes;
+	unsigned int numMaterials;
 
 private:
 } /**rootNode*/;	// TODO: preguntar com es millor, si aixi o un rootnode al scene

@@ -9,7 +9,7 @@
 
 GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 {
-	pParent = parent;
+	parent->AddChild(this);
 	name = n;
 	active = start_enabled;
 
@@ -19,9 +19,9 @@ GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 
 	AddComponent(C_TYPE::TRANSFORM);
 
-	parent->vChildren.push_back(this);
-
 	id = App->scene->GO_num++;
+	numMeshes = 0;
+	numMaterials = 0;
 }
 
 GameObject::GameObject(std::string n, bool a)
@@ -36,6 +36,34 @@ GameObject::GameObject(std::string n, bool a)
 	AddComponent(C_TYPE::TRANSFORM);
 
 	id = App->scene->GO_num++;
+	numMeshes = 0;
+	numMaterials = 0;
+}
+
+// ---Constructor Copia---
+GameObject::GameObject(GameObject* go)
+{
+	go->pParent->AddChild(this);
+	name = go->name;
+	active = go->active;
+	
+	const int j = go->vChildren.size();
+	for (auto i = 0; i < j; i++)
+	{
+		GameObject* g = new GameObject(go->vChildren[i]);
+		vChildren.push_back(g);
+		g = nullptr;
+	}
+
+	// ---
+	selected = false;
+	hidden = false;
+
+	AddComponent(C_TYPE::TRANSFORM);
+
+	id = App->scene->GO_num++;
+	numMeshes = go->numMeshes;
+	numMaterials = go->numMaterials;
 }
 
 GameObject::~GameObject()
@@ -176,6 +204,12 @@ std::vector<C_Material*> GameObject::GetComponentsMaterial()
 		}
 	}
 	return vec;
+}
+
+void GameObject::AddChild(GameObject* go)
+{
+	go->pParent = this;
+	vChildren.push_back(go);
 }
 
 void GameObject::DeleteChild(GameObject* go)
