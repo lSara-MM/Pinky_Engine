@@ -21,6 +21,8 @@ public:
 	virtual void ShowWindow() {};
 	virtual GameObject* GetSelected();
 	virtual void SetSelected(GameObject* go);
+	virtual GameObject* GetDragged();
+	virtual void SetDragged(GameObject* go);
 	virtual void SetUnselected();
 
 public:
@@ -29,6 +31,7 @@ public:
 
 private:
 	GameObject* selectedGO = nullptr;
+	GameObject* draggedGO = nullptr;
 	std::vector<GameObject*> selectedGOs;
 };
 

@@ -144,6 +144,14 @@ bool GameObject::AddComponent(C_TYPE type, ai::mesh* m, ai::POLY_PRIMITIVE_TYPE 
 	return ret;
 }
 
+void GameObject::ChangeParent(GameObject* newParent)
+{
+	pParent->RemoveChild(this);
+
+	pParent = newParent;
+	pParent->vChildren.push_back(this);
+}
+
 std::vector<C_Mesh*> GameObject::GetComponentsMesh()
 {
 	std::vector<C_Mesh*> vec = {};
@@ -173,5 +181,11 @@ std::vector<C_Material*> GameObject::GetComponentsMaterial()
 void GameObject::DeleteChild(GameObject* go)
 {
 	go->~GameObject();
+	RemoveChild(go);
+}
+
+void GameObject::RemoveChild(GameObject* go)
+{
 	vChildren.erase(std::find(vChildren.begin(), vChildren.end(), go));
+	vChildren.shrink_to_fit();
 }

@@ -49,11 +49,21 @@ void ImGuiWindows::SetSelected(GameObject* go)
 	selectedGO = go;
 	/*selectedGOs.push_back(go);
 	go->selected = !go->selected;
-	
+
 	for (auto i = 0; i < go->vChildren.size(); i++)
 	{
 		go->vChildren[i]->selected = go->selected;
 	}*/
+}
+
+GameObject* ImGuiWindows::GetDragged()
+{
+	return draggedGO;
+}
+
+void ImGuiWindows::SetDragged(GameObject* go)
+{
+	draggedGO = go;
 }
 
 void ImGuiWindows::SetUnselected()
@@ -73,7 +83,7 @@ void Hierarchy::ShowWindow()
 	// Always center this window when appearing
 	/*ImVec2 center = ImGui::GetMainViewport()->Pos;
 	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.7f));*/
-	
+
 	std::string title = "Hierarchy";
 	title.append("##");
 	title.append(std::to_string(id));
@@ -81,42 +91,6 @@ void Hierarchy::ShowWindow()
 	ImGui::SetNextWindowSize(ImVec2(200, 500), ImGuiCond_Appearing);
 	if (ImGui::Begin(title.c_str(), &show))
 	{
-		//static const char* names[9] =
-		//{
-		//	"Bobby", "Beatrice", "Betty",
-		//	"Brianna", "Barry", "Bernard",
-		//	"Bibi", "Blaine", "Bryn"
-		//};
-		//for (int n = 0; n < IM_ARRAYSIZE(names); n++)
-		//{
-		//	ImGui::PushID(n);
-
-		//	// Our buttons are both drag sources and drag targets here!
-		//	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
-		//	{
-		//		// Set payload to carry the index of our item (could be anything)
-		//		ImGui::SetDragDropPayload("a", &n, sizeof(int));
-
-		//		// Display preview (could be anything, e.g. when dragging an image we could decide to display
-		//		// the filename and a small preview of the image, etc.)
-		//		ImGui::EndDragDropSource();
-		//	}
-		//	if (ImGui::BeginDragDropTarget())
-		//	{
-		//		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("a"))
-		//		{
-		//			IM_ASSERT(payload->DataSize == sizeof(int));
-		//			int payload_n = *(const int*)payload->Data;
-		//			
-		//			//if (mode == Mode_Move)
-		//			{
-		//			}
-		//		}
-		//		ImGui::EndDragDropTarget();
-		//	}
-		//	ImGui::PopID();
-		//}
-
 		if (!App->scene->rootNode->vChildren.empty())
 		{
 			ShowChildren(App->scene->rootNode->vChildren, App->scene->rootNode->vChildren.size());
@@ -138,27 +112,52 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 {
 	bool ret = true;
 	ImGuiTreeNodeFlags node_flags;
-	
+
 	for (int i = 0; i < num; i++)
 	{
 		std::string a = current[i]->name.c_str();
 		/*a.append(" - ");
-		a.append(std::to_string(current[i]->id));	*/	
+		a.append(std::to_string(current[i]->id));	*/
 
 		//ImGui::PushID(current[i]->id);
 
 		if (!current[i]->vChildren.empty())
 		{
-			node_flags = ImGuiTreeNodeFlags_OpenOnArrow |	ImGuiTreeNodeFlags_OpenOnDoubleClick
+			node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
 				| ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
 
 			if (current[i]->selected)
 			{
 				node_flags |= ImGuiTreeNodeFlags_Selected;
-			}			
+			}
 
 			bool open = ImGui::TreeNodeEx((void*)(intptr_t)current[i]->id, node_flags, a.c_str());
 
+			// ---Drag and Drop event---
+			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+			{
+				// Set payload to carry the index of our item (could be anything)
+				ImGui::SetDragDropPayload("GameObject", current[i], sizeof(GameObject*));
+
+				SetDragged(current[i]);
+
+				// Display preview (could be anything, e.g. when dragging an image we could decide to display
+				// the filename and a small preview of the image, etc.)
+				ImGui::EndDragDropSource();
+			}
+
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
+				{
+					GetDragged()->ChangeParent(current[i]);
+				}
+				ImGui::EndDragDropTarget();
+			}
+			// ------
+
+
+			// ---Click event---
 			if (ImGui::IsItemClicked())
 			{
 				node_clicked = current[i]->id;
@@ -169,25 +168,49 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 			{
 				ShowChildren(current[i]->vChildren, current[i]->vChildren.size());
 				ImGui::TreePop();
-			}			
+			}
 		}
 		else
 		{
 			node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-			
+
 			if (current[i]->selected)
 			{
 				node_flags |= ImGuiTreeNodeFlags_Selected;
 			}
-			
+
 			if (ImGui::TreeNodeEx((void*)(intptr_t)current[i]->id, node_flags, a.c_str()))
 			{
-				
+
 			}
 
+			// ---Drag and Drop event---
+			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+			{
+				// Set payload to carry the index of our item (could be anything)
+				ImGui::SetDragDropPayload("GameObject", current[i], sizeof(GameObject*));
+
+				SetDragged(current[i]);
+
+				// Display preview (could be anything, e.g. when dragging an image we could decide to display
+				// the filename and a small preview of the image, etc.)
+				ImGui::EndDragDropSource();
+			}
+
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
+				{
+					GetDragged()->ChangeParent(current[i]);
+				}
+				ImGui::EndDragDropTarget();
+			}
+			// ------
+
+
+			// ---Click event---
 			if (ImGui::IsItemClicked())
 			{
-
 				node_clicked = current[i]->id;
 				SetSelected(current[i]);
 			}
@@ -226,9 +249,9 @@ void Inspector::ShowWindow()
 			checkbox.append(GetSelected()->name + std::to_string(GetSelected()->id));
 
 			ImGui::ToggleButton(checkbox.c_str(), &GetSelected()->active);		ImGui::SameLine();
-			
+
 			if (!GetSelected()->active) { ImGui::BeginDisabled(); }
-			
+
 			ImGui::InputText(name.c_str(), &GetSelected()->name);
 			ImGui::Dummy(ImVec2(0, 10));
 
@@ -242,7 +265,7 @@ void Inspector::ShowWindow()
 			ImGui::Separator();
 			ImGui::Dummy(ImVec2(0, 10));
 			std::array<std::string, 3> components = { "Transform", "Mesh", "Material" };
-			
+
 			if (ImGui::Button("Add Component", ImVec2(110, 30)))
 			{
 				ImGui::OpenPopup("AddComponents");
@@ -256,7 +279,6 @@ void Inspector::ShowWindow()
 
 				// Skip transform
 				// --- Add component Mesh ---
-				 
 				if (GetSelected()->numMeshes == 0)
 				{
 					if (ImGui::BeginMenu("Mesh"))
@@ -275,7 +297,6 @@ void Inspector::ShowWindow()
 				}
 
 				// --- Add component Material ---
-
 				if (GetSelected()->numMaterials == 0)
 				{
 					if (ImGui::MenuItem("Material"))
@@ -288,7 +309,7 @@ void Inspector::ShowWindow()
 
 			if (!GetSelected()->active) { ImGui::EndDisabled(); }
 		}
-		
+
 		ImGui::End();
 	}
 }
