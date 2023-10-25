@@ -58,30 +58,33 @@ GameObject::~GameObject()
 
 update_status GameObject::Update(float dt)
 {
-	if (!vChildren.empty())
+	if (active)
 	{
-		for (auto i = 0; i < vChildren.size(); i++)
+		if (!vChildren.empty())
 		{
-			vChildren[i]->Update(dt);
-		}
-	}
-
-	if (vComponents.size() > 1)
-	{
-		std::vector<C_Mesh*> vMeshes = GetComponentsMesh();
-		std::vector<C_Material*> vMaterials = GetComponentsMaterial();
-		for (auto i = 0; i < vMeshes.size(); i++)
-		{
-			if (active && vMeshes[i]->active)
+			for (auto i = 0; i < vChildren.size(); i++)
 			{
-				if (!vMaterials.empty() && vMaterials[i]->active)
+				vChildren[i]->Update(dt);
+			}
+		}
+
+		if (vComponents.size() > 1)
+		{
+			std::vector<C_Mesh*> vMeshes = GetComponentsMesh();
+			std::vector<C_Material*> vMaterials = GetComponentsMaterial();
+			for (auto i = 0; i < vMeshes.size(); i++)
+			{
+				if (vMeshes[i]->active)
 				{
-					vMeshes[i]->Draw(vMaterials[i]->checkered, vMaterials[i]->color);
-				}
-				else
-				{
-					// If it has no material, draw checkers
-					vMeshes[i]->Draw(true);
+					if (!vMaterials.empty() && vMaterials[i]->active)
+					{
+						vMeshes[i]->Draw(vMaterials[i]->checkered, vMaterials[i]->color);
+					}
+					else
+					{
+						// If it has no material, draw checkers
+						vMeshes[i]->Draw(true);
+					}
 				}
 			}
 		}

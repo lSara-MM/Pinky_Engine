@@ -6,6 +6,7 @@
 
 #include "GameObject.h"
 #include "Component.h"
+#include "../ImGui/misc/cpp/imgui_stdlib.h"
 
 C_Material::C_Material(GameObject* g, ai::texture* t, bool check, unsigned int i, bool start_enabled) : Component(C_TYPE::MATERIAL, g, i, start_enabled, "Material")
 {
