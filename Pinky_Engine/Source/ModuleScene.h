@@ -27,7 +27,6 @@ public:
 
 public:
 	GameObject* rootNode;
-	int GO_num;
 
 	Hierarchy* h;
 	Inspector* i;

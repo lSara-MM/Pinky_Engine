@@ -7,11 +7,11 @@
 #include "GameObject.h"
 #include "Component.h"
 
-C_Transform::C_Transform(GameObject* g, bool start_enabled) : Component(C_TYPE::TRANSFORM, g, g->id, start_enabled, "Transform")
+C_Transform::C_Transform(GameObject* g, bool start_enabled) : Component(C_TYPE::TRANSFORM, g, g->GetUid(), start_enabled, "Transform")
 {
 }
 
-C_Transform::C_Transform(GameObject* g, float3 pos, Quat rot, float3 sc, bool start_enabled) : Component(C_TYPE::TRANSFORM, g, g->id, start_enabled, "Transform")
+C_Transform::C_Transform(GameObject* g, float3 pos, Quat rot, float3 sc, bool start_enabled) : Component(C_TYPE::TRANSFORM, g, g->GetUid(), start_enabled, "Transform")
 {
 	position = pos;
 	rotation = rot;
@@ -24,11 +24,7 @@ C_Transform::~C_Transform()
 
 void C_Transform::ShowInInspector()
 {
-	std::string n = name.c_str();
-	n.append("##");
-	n.append(std::to_string(gameObject->id));
-
-	if (ImGui::CollapsingHeader(n.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+	if (ImGui::CollapsingHeader(name.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		//TODO: buscar forma de hacerlo dependiendo del tamaño de la window
 		/*ImGui::Dummy(ImVec2(150, 0));	ImGui::SameLine(150);

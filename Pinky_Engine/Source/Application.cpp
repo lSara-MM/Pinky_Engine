@@ -25,6 +25,9 @@ Application::Application()
 	AddModule(scene);
 	AddModule(renderer3D);
 	AddModule(editor);
+
+	//------
+	randomLCG = new LCG();
 }
 
 Application::~Application()

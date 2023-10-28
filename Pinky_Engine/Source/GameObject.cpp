@@ -9,6 +9,8 @@
 
 GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 {
+	uid = App->randomLCG->Int();
+
 	parent->AddChild(this);
 	name = n;
 	active = start_enabled;
@@ -19,13 +21,14 @@ GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 
 	AddComponent(C_TYPE::TRANSFORM);
 
-	id = App->scene->GO_num++;
 	numMeshes = 0;
 	numMaterials = 0;
 }
 
 GameObject::GameObject(std::string n, bool a)
 {
+	uid = App->randomLCG->Int();
+
 	name = n;
 	active = a;
 
@@ -35,7 +38,6 @@ GameObject::GameObject(std::string n, bool a)
 
 	AddComponent(C_TYPE::TRANSFORM);
 
-	id = App->scene->GO_num++;
 	numMeshes = 0;
 	numMaterials = 0;
 }
@@ -43,6 +45,8 @@ GameObject::GameObject(std::string n, bool a)
 // ---Constructor Copia---
 GameObject::GameObject(GameObject* go)
 {
+	uid = App->randomLCG->Int();
+
 	go->pParent->AddChild(this);
 	name = go->name;
 	active = go->active;
@@ -61,7 +65,6 @@ GameObject::GameObject(GameObject* go)
 
 	AddComponent(C_TYPE::TRANSFORM);
 
-	id = App->scene->GO_num++;
 	numMeshes = go->numMeshes;
 	numMaterials = go->numMaterials;
 }
@@ -80,8 +83,11 @@ GameObject::~GameObject()
 
 	//pParent->vChildren.erase(pParent->vChildren.begin() + FindInVec(pParent->vChildren, this));
 	//TODO: preguntar perque peta si esta aixo pero si es fa des del parent -> delete children si funciona
+}
 
-	App->scene->GO_num--;
+u32 GameObject::GetUid()
+{
+	return uid;
 }
 
 update_status GameObject::Update(float dt)

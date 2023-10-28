@@ -10,6 +10,8 @@
 #include "ModuleEditor.h"
 #include "ModuleScene.h"
 
+#include "../MathGeoLib/include/Algorithm/Random/LCG.h"
+
 #include <vector>
 
 class Application
@@ -22,6 +24,9 @@ public:
 
 	ModuleEditor* editor;
 	ModuleScene* scene;
+
+
+	LCG* randomLCG;
 
 private:
 

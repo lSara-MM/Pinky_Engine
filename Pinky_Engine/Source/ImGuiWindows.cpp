@@ -129,7 +129,7 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 				node_flags |= ImGuiTreeNodeFlags_Selected;
 			}
 
-			bool open = ImGui::TreeNodeEx((void*)(intptr_t)current[i]->id, node_flags, a.c_str());
+			bool open = ImGui::TreeNodeEx((void*)(intptr_t)current[i]->GetUid(), node_flags, a.c_str());
 
 			// ---Drag and Drop event---
 			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
@@ -158,7 +158,7 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 			// ---Click event---
 			if (ImGui::IsItemClicked())
 			{
-				node_clicked = current[i]->id;
+				node_clicked = current[i]->GetUid();
 				SetSelected(current[i]);
 			}
 
@@ -177,7 +177,7 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 				node_flags |= ImGuiTreeNodeFlags_Selected;
 			}
 
-			if (ImGui::TreeNodeEx((void*)(intptr_t)current[i]->id, node_flags, a.c_str()))
+			if (ImGui::TreeNodeEx((void*)(intptr_t)current[i]->GetUid(), node_flags, a.c_str()))
 			{
 
 			}
@@ -209,7 +209,7 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 			// ---Click event---
 			if (ImGui::IsItemClicked())
 			{
-				node_clicked = current[i]->id;
+				node_clicked = current[i]->GetUid();
 				SetSelected(current[i]);
 			}
 		}
@@ -239,10 +239,10 @@ void Inspector::ShowWindow()
 			// --- Set ImGui ids ---
 			std::string name = GetSelected()->name;
 			name.insert(name.begin(), 2, '#');
-			name.append(std::to_string(GetSelected()->id));
+			name.append(std::to_string(GetSelected()->GetUid()));
 
 			std::string checkbox = "##Checkbox ";
-			checkbox.append(GetSelected()->name + std::to_string(GetSelected()->id));
+			checkbox.append(GetSelected()->name + std::to_string(GetSelected()->GetUid()));
 
 			ImGui::ToggleButton(checkbox.c_str(), &GetSelected()->active);		ImGui::SameLine();
 

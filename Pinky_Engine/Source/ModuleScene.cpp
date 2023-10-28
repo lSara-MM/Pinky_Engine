@@ -37,7 +37,6 @@ bool ModuleScene::Init()
 	LOG("Creating scene");
 	bool ret = true;
 
-	GO_num = 0;
 	rootNode = new GameObject("Root node", true);	
 
 	// TODO: borrar cuando ya no se use

@@ -24,6 +24,9 @@ public:
 	GameObject(GameObject* go);
 	~GameObject();
 
+
+	u32 GetUid();
+
 	update_status Update(float dt);
 
 	bool AddComponent(C_TYPE type, ai::mesh* m = nullptr, ai::POLY_PRIMITIVE_TYPE poly = ai::POLY_PRIMITIVE_TYPE::SPHERE);
@@ -42,7 +45,6 @@ public:
 	std::vector<Component*> vComponents;
 
 	std::string name;
-	int id;
 	bool active;
 	C_Transform* transform = nullptr;
 
@@ -53,4 +55,5 @@ public:
 	unsigned int numMaterials;
 
 private:
+	u32 uid;
 } /**rootNode*/;	// TODO: preguntar com es millor, si aixi o un rootnode al scene
