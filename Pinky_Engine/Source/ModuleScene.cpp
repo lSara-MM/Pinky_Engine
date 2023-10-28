@@ -70,21 +70,30 @@ update_status ModuleScene::Update(float dt)
 {
 	rootNode->Update(dt);
 
-	if (h->GetSelected() != nullptr)
+	if (!h->GetSelectedGOs().empty())
 	{
-		if (h->GetSelected() != i->GetSelected())
+		if (h->GetSelectedGOs() != i->GetSelectedGOs())
 		{
-			i->SetSelected(h->GetSelected());
+			i->SetSelected(h->GetSelectedGOs());
 		}
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_G) == KEY_DOWN)
+	{
+		rootNode->DeleteChild(rootNode->vChildren[0]);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN ||
 		App->input->GetKey(SDL_SCANCODE_BACKSPACE) == KEY_DOWN)
 	{
-		if (h->GetSelected() != nullptr)
+		// Delete all selected go
+		if (!h->GetSelectedGOs().empty())
 		{
-			//h->GetSelected()->~GameObject();
-			h->GetSelected()->pParent->DeleteChild(h->GetSelected());
+			for (auto j = 0; j < h->GetSelectedGOs().size(); j++)
+			{
+				h->GetSelectedGOs()[j]->pParent->DeleteChild(h->GetSelectedGOs()[j]);
+			}
+
 			h->SetSelected(nullptr);
 			i->SetSelected(nullptr);
 		}

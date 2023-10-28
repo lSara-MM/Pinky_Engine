@@ -19,37 +19,37 @@ public:
 	~ImGuiWindows();
 
 	virtual void ShowWindow() {};
-	virtual GameObject* GetSelected();
-	virtual void SetSelected(GameObject* go);
-	virtual GameObject* GetDragged();
-	virtual void SetDragged(GameObject* go);
-	virtual void SetUnselected();
+
+	// Hierarchy and Inspector use the same functions
+	std::vector<GameObject*> GetSelectedGOs();
+	void SetSelected(std::vector<GameObject*> vSelected);
+	void SetSelected(GameObject* go);
 
 public:
 	bool show;
 	int id;
 
 private:
-	GameObject* selectedGO = nullptr;
-	GameObject* draggedGO = nullptr;
 	std::vector<GameObject*> selectedGOs;
 };
 
 class Hierarchy : public ImGuiWindows
 {
 public:
-	Hierarchy(int i) : ImGuiWindows(i) {};
+	Hierarchy(int i);
 	~Hierarchy();
 
 	void ShowWindow();
+
+	GameObject* GetDragged();
+	void SetDragged(GameObject* go);
 
 private:
 	bool ShowChildren(std::vector<GameObject*> children, int num);
 	void MouseEvents(GameObject* current);
 
 private:
-	int selection_mask = (1 << 1);
-	int node_clicked = -1;
+	GameObject* draggedGO;
 };
 
 class Inspector : public ImGuiWindows

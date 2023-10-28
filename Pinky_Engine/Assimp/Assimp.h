@@ -65,8 +65,6 @@ namespace ai
 
 		texture tex;
 
-		bool hasTex = false;	// TODO: nose algo pa activar o no el checkers
-
 		GLuint VBO; // vertex buffer object
 		GLuint EBO; // element buffer object
 		GLuint VAO; // attribute buffer object

@@ -28,54 +28,73 @@
 
 ImGuiWindows::ImGuiWindows(int i)
 {
-	id = i;
-	selectedGO = nullptr;
 	selectedGOs = {};
+	id = i;
 }
 
 ImGuiWindows::~ImGuiWindows()
 {
-	selectedGO = nullptr;
+	ClearVec(selectedGOs);
 	show = true;
 }
 
-GameObject* ImGuiWindows::GetSelected()
+std::vector<GameObject*> ImGuiWindows::GetSelectedGOs()
 {
-	return selectedGO;
+	return selectedGOs;
+}
+
+void ImGuiWindows::SetSelected(std::vector<GameObject*> vSelected)
+{
+	selectedGOs = vSelected;
 }
 
 void ImGuiWindows::SetSelected(GameObject* go)
 {
-	selectedGO = go;
-	/*selectedGOs.push_back(go);
-	go->selected = !go->selected;
-
-	for (auto i = 0; i < go->vChildren.size(); i++)
+	if (go != nullptr)
 	{
-		go->vChildren[i]->selected = go->selected;
-	}*/
-}
+		// If ctrl not pressed, set everything to false clear and the selected go's vector 
+		if (!ImGui::GetIO().KeyCtrl)
+		{
+			for (auto i = 0; i < selectedGOs.size(); i++)
+			{
+				selectedGOs[i]->selected = false;
+			}
+			ClearVec(selectedGOs);
+		}
 
-GameObject* ImGuiWindows::GetDragged()
-{
-	return draggedGO;
-}
+		// On click select or deselect item
+		go->selected = !go->selected;
+		
+		// If the item was selected, add it to the vec, otherwise remove it
+		if (go->selected)
+		{
+			selectedGOs.push_back(go);
+		}
+		else 
+		{
+			selectedGOs.erase(std::find(selectedGOs.begin(), selectedGOs.end(), go));
+		}
 
-void ImGuiWindows::SetDragged(GameObject* go)
-{
-	draggedGO = go;
-}
-
-void ImGuiWindows::SetUnselected()
-{
-	/*for (size_t i = 0; i < length; i++)
+		// Set selected go children to the same state as the clicked item
+		for (auto i = 0; i < go->vChildren.size(); i++)
+		{
+			go->vChildren[i]->selected = go->selected;
+		}
+	}
+	else
 	{
-
-	}*/
+		ClearVec(selectedGOs);
+	}
 }
+//------
 
+Hierarchy::Hierarchy(int i) : ImGuiWindows(i) 
+{ draggedGO = nullptr; }
+
+//---Hierarchy---
 Hierarchy::~Hierarchy()
 {
+	draggedGO = nullptr;
 }
 
 void Hierarchy::ShowWindow()
@@ -110,15 +129,6 @@ void Hierarchy::ShowWindow()
 		if (!App->scene->rootNode->vChildren.empty())
 		{
 			ShowChildren(App->scene->rootNode->vChildren, App->scene->rootNode->vChildren.size());
-			if (node_clicked != -1)
-			{
-				// Update selection state
-				// (process outside of tree loop to avoid visual inconsistencies during the clicking frame)
-				//if (ImGui::GetIO().KeyCtrl)
-					//selection_mask ^= (1 << node_clicked);          // CTRL+click to toggle
-				//else //if (!(selection_mask & (1 << node_clicked))) // Depending on selection behavior you want, may want to preserve selection when clicking on item that is part of the selection
-					//selection_mask = (1 << node_clicked);           // Click to single-select
-			}
 		}
 
 		ImGui::TreePop();
@@ -162,11 +172,7 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 				node_flags |= ImGuiTreeNodeFlags_Selected;
 			}
 
-			if (ImGui::TreeNodeEx((void*)(intptr_t)current[i]->GetUid(), node_flags, current[i]->name.c_str()))
-			{
-
-			}
-
+			ImGui::TreeNodeEx((void*)(intptr_t)current[i]->GetUid(), node_flags, current[i]->name.c_str());
 			MouseEvents(current[i]);
 		}
 	}
@@ -207,14 +213,23 @@ void Hierarchy::MouseEvents(GameObject* current)
 	// ---Click event---
 	if (ImGui::IsItemClicked())
 	{
-		node_clicked = current->GetUid();
 		SetSelected(current);
 	}
 	// ------
 }
 
-//
+GameObject* Hierarchy::GetDragged()
+{
+	return draggedGO;
+}
 
+void Hierarchy::SetDragged(GameObject* go)
+{
+	draggedGO = go;
+}
+//------
+
+//---Inspector---
 Inspector::~Inspector()
 {
 }
@@ -229,26 +244,28 @@ void Inspector::ShowWindow()
 	ImGui::SetWindowPos(ImVec2(700, 50), ImGuiCond_Appearing);
 	if (ImGui::Begin(title.c_str(), &show))
 	{
-		if (GetSelected() != nullptr)
+		if (!GetSelectedGOs().empty())
 		{
+			GameObject* go = GetSelectedGOs().back();
+
 			// --- Set ImGui ids ---
-			std::string name = GetSelected()->name;
+			std::string name = go->name;
 			name.insert(name.begin(), 2, '#');
-			name.append(std::to_string(GetSelected()->GetUid()));
+			name.append(std::to_string(go->GetUid()));
 
 			std::string checkbox = "##Checkbox ";
-			checkbox.append(GetSelected()->name + std::to_string(GetSelected()->GetUid()));
+			checkbox.append(go->name + std::to_string(go->GetUid()));
 
-			ImGui::ToggleButton(checkbox.c_str(), &GetSelected()->active);		ImGui::SameLine();
+			ImGui::ToggleButton(checkbox.c_str(), &go->active);		ImGui::SameLine();
 
-			if (!GetSelected()->active) { ImGui::BeginDisabled(); }
+			if (!go->active) { ImGui::BeginDisabled(); }
 
-			ImGui::InputText(name.c_str(), &GetSelected()->name);
+			ImGui::InputText(name.c_str(), &go->name);
 			ImGui::Dummy(ImVec2(0, 10));
 
-			for (auto i = 0; i < GetSelected()->vComponents.size(); i++)
+			for (auto i = 0; i < go->vComponents.size(); i++)
 			{
-				GetSelected()->vComponents[i]->ShowInInspector();
+				go->vComponents[i]->ShowInInspector();
 				ImGui::Dummy(ImVec2(0, 10));
 			}
 
@@ -270,7 +287,7 @@ void Inspector::ShowWindow()
 
 				// Skip transform
 				// --- Add component Mesh ---
-				if (GetSelected()->numMeshes == 0)
+				if (go->numMeshes == 0)
 				{
 					if (ImGui::BeginMenu("Mesh"))
 					{
@@ -280,7 +297,7 @@ void Inspector::ShowWindow()
 						{
 							if (ImGui::MenuItem(components[i].c_str()))
 							{
-								GetSelected()->AddComponent(C_TYPE::MESH, nullptr, ai::POLY_PRIMITIVE_TYPE(i));
+								go->AddComponent(C_TYPE::MESH, nullptr, ai::POLY_PRIMITIVE_TYPE(i));
 							}
 						}
 						ImGui::EndMenu();
@@ -288,19 +305,23 @@ void Inspector::ShowWindow()
 				}
 
 				// --- Add component Material ---
-				if (GetSelected()->numMaterials == 0)
+				if (go->numMaterials == 0)
 				{
 					if (ImGui::MenuItem("Material"))
 					{
-						GetSelected()->AddComponent(C_TYPE::MATERIAL);
+						go->AddComponent(C_TYPE::MATERIAL);
 					}
 				}
 				ImGui::EndPopup();
 			}
 
-			if (!GetSelected()->active) { ImGui::EndDisabled(); }
+			if (!go->active) { ImGui::EndDisabled(); }
+
+
+			go = nullptr;
 		}
 
 		ImGui::End();
 	}
 }
+//------
