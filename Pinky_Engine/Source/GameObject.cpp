@@ -11,7 +11,11 @@ GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 {
 	uid = App->randomLCG->Int();
 
-	parent->AddChild(this);
+	if (parent != nullptr)
+	{
+		parent->AddChild(this);
+	}
+
 	name = n;
 	active = start_enabled;
 
@@ -25,22 +29,6 @@ GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 	numMaterials = 0;
 }
 
-GameObject::GameObject(std::string n, bool a)
-{
-	uid = App->randomLCG->Int();
-
-	name = n;
-	active = a;
-
-	// ---
-	selected = false;
-	hidden = false;
-
-	AddComponent(C_TYPE::TRANSFORM);
-
-	numMeshes = 0;
-	numMaterials = 0;
-}
 
 // ---Constructor Copia---
 GameObject::GameObject(GameObject* go)

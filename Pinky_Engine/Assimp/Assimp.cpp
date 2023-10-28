@@ -61,7 +61,7 @@ void ai::ImportFile(const char* fileDir)
 bool ai::ImportMesh(const char* meshfileDir, GameObject* go, const char* texfileDir)
 {
 	const aiScene* scene = aiImportFile(meshfileDir, aiProcessPreset_TargetRealtime_MaxQuality);
-
+	
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		if (go != nullptr)
@@ -181,7 +181,30 @@ void ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 
 				//(texfileDir != nullptr) ? ourMesh->hasTex = true : ourMesh->hasTex = false;
 
+				//---Transform---
+				aiVector3D pos, scale;
+				aiQuaternion rot;
+				children[i]->mTransformation.Decompose(scale, rot, pos);
+		
+
+				float temp[3] = { pos.x , pos.y, pos.z };
+				obj->transform->SetTransform(temp);
+
+				float temp1[4] = { rot.x , rot.y, rot.z, rot.w };
+				float3 euler = Quat(temp1).ToEulerXYZ();
+				float eulerF[3] = { euler.x * RADTODEG, euler.y * RADTODEG, euler.z * RADTODEG };
+				obj->transform->SetRotation(eulerF);
+				
+				float temp2[3] = { scale.x, scale.y, scale.z };
+				obj->transform->SetScale(temp2);
+
+				obj->transform->globalMatrix = math::float4x4::FromTRS(obj->transform->position, 
+					obj->transform->rotation, obj->transform->scale);
+				//------
+
+				//---Mesh---
 				obj->AddComponent(C_TYPE::MESH, ourMesh);
+				//---Material---
 				if (!component) { obj->AddComponent(C_TYPE::MATERIAL); }
 
 				//TODO: pushback elsewhere

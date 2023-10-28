@@ -20,7 +20,6 @@ class GameObject
 public:
 	//GameObject();
 	GameObject(std::string n = "EmptyGameObject", GameObject* parent = App->scene->rootNode, bool start_enabled = true);
-	GameObject(std::string n, bool a);
 	GameObject(GameObject* go);
 	~GameObject();
 

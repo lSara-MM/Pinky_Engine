@@ -7,15 +7,15 @@
 #include "GameObject.h"
 #include "Component.h"
 
-C_Transform::C_Transform(GameObject* g, bool start_enabled) : Component(C_TYPE::TRANSFORM, g, g->GetUid(), start_enabled, "Transform")
-{
-}
 
 C_Transform::C_Transform(GameObject* g, float3 pos, Quat rot, float3 sc, bool start_enabled) : Component(C_TYPE::TRANSFORM, g, g->GetUid(), start_enabled, "Transform")
 {
 	position = pos;
 	rotation = rot;
 	scale = sc;
+
+	globalMatrix = math::float4x4::FromTRS(pos, rot, sc);
+	localMatrix = math::float4x4::identity;
 }
 
 C_Transform::~C_Transform()
@@ -33,38 +33,30 @@ void C_Transform::ShowInInspector()
 		ImGui::Text("Z");*/
 
 		float vec[3] = { position.x, position.y, position .z};
-		ImGui::DragFloat3("Position", vec);
+		ImGui::DragFloat3("Position", vec, 0.1f);
 		SetTransform(vec);
 
 		float vec1[3] = { rotation.x, rotation.y, rotation.z};
-		ImGui::DragFloat3("Rotation", vec1);
+		ImGui::DragFloat3("Rotation", vec1, 0.1f);
 		SetRotation(vec1);
 
 		float vec2[3] = { scale.x, scale.y, scale.z};
-		ImGui::DragFloat3("Scale", vec2);
+		ImGui::DragFloat3("Scale", vec2, 0.1f);
 		SetScale(vec2);
 	}
 }
 
 void C_Transform::SetTransform(float vec[3])
 {
-	for (int i = 0; i < 3; i++)
-	{
-		position[i] = vec[i];
-	}
+	position = float3(vec);
 }
 
 void C_Transform::SetRotation(float vec[])
 {
-	rotation.x = vec[0];
-	rotation.y = vec[1];
-	rotation.z = vec[2];
+	rotation = Quat(vec);
 }
 
 void C_Transform::SetScale(float vec[3])
 {
-	for (int i = 0; i < 3; i++)
-	{
-		scale[i] = vec[i];
-	}
+	scale = float3(vec);
 }

@@ -37,7 +37,7 @@ bool ModuleScene::Init()
 	LOG("Creating scene");
 	bool ret = true;
 
-	rootNode = new GameObject("Root node", true);	
+	rootNode = new GameObject("Root node", nullptr);	
 
 	// TODO: borrar cuando ya no se use
 	GameObject* go = new GameObject("cube", rootNode);
