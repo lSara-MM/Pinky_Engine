@@ -70,20 +70,30 @@ void ImGuiWindows::SetSelected(GameObject* go)
 		{
 			selectedGOs.push_back(go);
 		}
-		else 
+		else if (!selectedGOs.empty())
 		{
 			selectedGOs.erase(std::find(selectedGOs.begin(), selectedGOs.end(), go));
 		}
 
 		// Set selected go children to the same state as the clicked item
-		for (auto i = 0; i < go->vChildren.size(); i++)
-		{
-			go->vChildren[i]->selected = go->selected;
-		}
+		SetSelectedState(go);
 	}
 	else
 	{
 		ClearVec(selectedGOs);
+	}
+}
+
+void ImGuiWindows::SetSelectedState(GameObject* go)
+{
+	for (auto i = 0; i < go->vChildren.size(); i++)
+	{
+		if (!go->vChildren.empty())
+		{
+			SetSelectedState(go->vChildren[i]);
+		}
+
+		go->vChildren[i]->selected = go->selected;
 	}
 }
 //------
@@ -151,6 +161,12 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 			if (current[i]->selected)
 			{
 				node_flags |= ImGuiTreeNodeFlags_Selected;
+			}
+
+			if (current[i]->active)
+			{
+				ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, 0.6f, 0.6f));
+				ImGui::PopStyleColor(1);
 			}
 
 			bool open = ImGui::TreeNodeEx((void*)(intptr_t)current[i]->GetUid(), node_flags, current[i]->name.c_str());

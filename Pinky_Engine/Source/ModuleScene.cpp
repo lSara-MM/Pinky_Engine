@@ -83,8 +83,8 @@ update_status ModuleScene::Update(float dt)
 		rootNode->DeleteChild(rootNode->vChildren[0]);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN ||
-		App->input->GetKey(SDL_SCANCODE_BACKSPACE) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN /* ||
+		App->input->GetKey(SDL_SCANCODE_BACKSPACE) == KEY_DOWN*/)
 	{
 		// Delete all selected go
 		if (!h->GetSelectedGOs().empty())

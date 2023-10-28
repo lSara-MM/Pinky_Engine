@@ -24,6 +24,7 @@ public:
 	std::vector<GameObject*> GetSelectedGOs();
 	void SetSelected(std::vector<GameObject*> vSelected);
 	void SetSelected(GameObject* go);
+	void SetSelectedState(GameObject* go);
 
 public:
 	bool show;
