@@ -73,6 +73,7 @@ namespace ai
 
 		~mesh()
 		{
+			RELEASE_ARRAY(index);
 			RELEASE_ARRAY(vertex);
 			RELEASE_ARRAY(normals);
 			RELEASE_ARRAY(tex_uvs);
