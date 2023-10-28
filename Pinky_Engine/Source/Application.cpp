@@ -120,6 +120,7 @@ bool Application::CleanUp()
 		ret = (*it)->CleanUp();
 	}
 
+	RELEASE(randomLCG);
 	return ret;
 }
 

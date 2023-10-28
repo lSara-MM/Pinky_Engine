@@ -175,10 +175,11 @@ bool GameObject::AddComponent(C_TYPE type, ai::mesh* m, ai::POLY_PRIMITIVE_TYPE 
 		break;
 	}
 
+	temp = nullptr;
 	return ret;
 }
 
-void GameObject::ChangeParent(GameObject* newParent)
+void GameObject::ReParent(GameObject* newParent)
 {
 	pParent->RemoveChild(this);
 
@@ -228,4 +229,20 @@ void GameObject::RemoveChild(GameObject* go)
 {
 	vChildren.erase(std::find(vChildren.begin(), vChildren.end(), go));
 	vChildren.shrink_to_fit();
+}
+
+GameObject* GameObject::FindChild(u32 idToFind)
+{
+	for (auto i = 0; i < vChildren.size(); i++)
+	{
+		if (!vChildren[i]->vChildren.empty())
+		{
+			vChildren[i]->FindChild(idToFind);
+		}
+		if (idToFind == vChildren[i]->GetUid())
+		{
+			return vChildren[i];
+		}
+	}
+	return nullptr;
 }

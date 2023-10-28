@@ -45,6 +45,7 @@ public:
 
 private:
 	bool ShowChildren(std::vector<GameObject*> children, int num);
+	void MouseEvents(GameObject* current);
 
 private:
 	int selection_mask = (1 << 1);

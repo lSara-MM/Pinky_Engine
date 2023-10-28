@@ -91,6 +91,22 @@ void Hierarchy::ShowWindow()
 	ImGui::SetNextWindowSize(ImVec2(200, 500), ImGuiCond_Appearing);
 	if (ImGui::Begin(title.c_str(), &show))
 	{
+		// ---Root node---
+		ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
+			| ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
+
+		ImGui::TreeNodeEx((void*)(intptr_t)App->scene->rootNode->GetUid(), node_flags, App->scene->rootNode->name.c_str());
+
+		// Root node only target, can't be dragged
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
+			{
+				GetDragged()->ReParent(App->scene->rootNode);
+			}
+			ImGui::EndDragDropTarget();
+		}
+
 		if (!App->scene->rootNode->vChildren.empty())
 		{
 			ShowChildren(App->scene->rootNode->vChildren, App->scene->rootNode->vChildren.size());
@@ -104,6 +120,8 @@ void Hierarchy::ShowWindow()
 					//selection_mask = (1 << node_clicked);           // Click to single-select
 			}
 		}
+
+		ImGui::TreePop();
 		ImGui::End();
 	}
 }
@@ -115,10 +133,6 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 
 	for (int i = 0; i < num; i++)
 	{
-		std::string a = current[i]->name.c_str();
-		/*a.append(" - ");
-		a.append(std::to_string(current[i]->id));	*/
-
 		if (!current[i]->vChildren.empty())
 		{
 			node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
@@ -129,38 +143,9 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 				node_flags |= ImGuiTreeNodeFlags_Selected;
 			}
 
-			bool open = ImGui::TreeNodeEx((void*)(intptr_t)current[i]->GetUid(), node_flags, a.c_str());
+			bool open = ImGui::TreeNodeEx((void*)(intptr_t)current[i]->GetUid(), node_flags, current[i]->name.c_str());
 
-			// ---Drag and Drop event---
-			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
-			{
-				// Set payload to carry the index of our item (could be anything)
-				ImGui::SetDragDropPayload("GameObject", current[i], sizeof(GameObject*));
-
-				SetDragged(current[i]);
-
-				// Display preview (could be anything, e.g. when dragging an image we could decide to display
-				// the filename and a small preview of the image, etc.)
-				ImGui::EndDragDropSource();
-			}
-
-			if (ImGui::BeginDragDropTarget())
-			{
-				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
-				{
-					GetDragged()->ChangeParent(current[i]);
-				}
-				ImGui::EndDragDropTarget();
-			}
-			// ------
-
-
-			// ---Click event---
-			if (ImGui::IsItemClicked())
-			{
-				node_clicked = current[i]->GetUid();
-				SetSelected(current[i]);
-			}
+			MouseEvents(current[i]);
 
 			if (open)
 			{
@@ -177,45 +162,55 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 				node_flags |= ImGuiTreeNodeFlags_Selected;
 			}
 
-			if (ImGui::TreeNodeEx((void*)(intptr_t)current[i]->GetUid(), node_flags, a.c_str()))
+			if (ImGui::TreeNodeEx((void*)(intptr_t)current[i]->GetUid(), node_flags, current[i]->name.c_str()))
 			{
 
 			}
 
-			// ---Drag and Drop event---
-			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
-			{
-				// Set payload to carry the index of our item (could be anything)
-				ImGui::SetDragDropPayload("GameObject", current[i], sizeof(GameObject*));
-
-				SetDragged(current[i]);
-
-				// Display preview (could be anything, e.g. when dragging an image we could decide to display
-				// the filename and a small preview of the image, etc.)
-				ImGui::EndDragDropSource();
-			}
-
-			if (ImGui::BeginDragDropTarget())
-			{
-				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
-				{
-					GetDragged()->ChangeParent(current[i]);
-				}
-				ImGui::EndDragDropTarget();
-			}
-			// ------
-
-
-			// ---Click event---
-			if (ImGui::IsItemClicked())
-			{
-				node_clicked = current[i]->GetUid();
-				SetSelected(current[i]);
-			}
+			MouseEvents(current[i]);
 		}
 	}
 
 	return ret;
+}
+
+void Hierarchy::MouseEvents(GameObject* current)
+{
+	// ---Drag and Drop event---
+	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+	{
+		// Set payload to carry the index of our item (could be anything)
+		ImGui::SetDragDropPayload("GameObject", current, sizeof(GameObject*));
+
+		SetDragged(current);
+
+		// Display preview (could be anything, e.g. when dragging an image we could decide to display
+		// the filename and a small preview of the image, etc.)
+		ImGui::EndDragDropSource();
+	}
+
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
+		{
+			// If dragged go is parent of target go, don't do anything
+			if (GetDragged()->FindChild(current->GetUid()) == nullptr)
+			{
+				GetDragged()->ReParent(current);
+			}
+		}
+		ImGui::EndDragDropTarget();
+	}
+	// ------
+
+
+	// ---Click event---
+	if (ImGui::IsItemClicked())
+	{
+		node_clicked = current->GetUid();
+		SetSelected(current);
+	}
+	// ------
 }
 
 //

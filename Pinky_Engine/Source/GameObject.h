@@ -30,7 +30,7 @@ public:
 	update_status Update(float dt);
 
 	bool AddComponent(C_TYPE type, ai::mesh* m = nullptr, ai::POLY_PRIMITIVE_TYPE poly = ai::POLY_PRIMITIVE_TYPE::SPHERE);
-	void ChangeParent(GameObject* newParent);
+	void ReParent(GameObject* newParent);
 
 	std::vector<C_Mesh*> GetComponentsMesh();
 	std::vector<C_Material*> GetComponentsMaterial();
@@ -38,6 +38,8 @@ public:
 	void AddChild(GameObject* go);
 	void DeleteChild(GameObject* go);
 	void RemoveChild(GameObject* go);
+	// Return nullptr if gameobject not found
+	GameObject* FindChild(u32 idToFind);
 
 public:
 	GameObject* pParent = nullptr;
