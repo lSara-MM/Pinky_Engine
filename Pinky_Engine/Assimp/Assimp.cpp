@@ -392,7 +392,7 @@ GLuint ai::ImportTexture(const char* texturefileDir)
 		// Convert the image into a suitable format to work with
 		if (!ilConvertImage(ilGetInteger(IL_IMAGE_FORMAT), IL_UNSIGNED_BYTE))
 		{
-			LOG("%s", iluErrorString(ilGetError()));
+			LOG("[ERROR] %s", iluErrorString(ilGetError()));
 		}
 
 		int const width = ilGetInteger(IL_IMAGE_WIDTH);
@@ -409,7 +409,7 @@ GLuint ai::ImportTexture(const char* texturefileDir)
 	}
 	else
 	{
-		LOG("%s", iluErrorString(ilGetError()));
+		LOG("[ERROR] %s", iluErrorString(ilGetError()));
 	}
 
 	//ilBindImage(0);
