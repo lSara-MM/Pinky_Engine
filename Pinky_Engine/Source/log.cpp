@@ -18,7 +18,7 @@ void log(const char file[], int line, const char* format, ...)
 	{
 		if (App->editor != nullptr && App->ListModulesSize() != 0)
 		{
-			App->editor->logVec.push_back(tmp_string);
+			App->editor->vLog.push_back(tmp_string);
 		}
 	}
 }

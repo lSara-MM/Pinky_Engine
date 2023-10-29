@@ -51,7 +51,7 @@ public:
 	bool frcap;
 
 	//Log vector
-	std::vector<std::string> logVec;
+	std::vector<std::string> vLog;
 private:
 
 	std::vector<ImGuiWindows*> vImGuiWindows;

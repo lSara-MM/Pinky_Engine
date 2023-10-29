@@ -37,7 +37,7 @@ bool ModuleScene::Init()
 	LOG("Creating scene");
 	bool ret = true;
 
-	rootNode = new GameObject("Root node", nullptr);	
+	rootNode = new GameObject("Root node", nullptr);
 
 	// TODO: borrar cuando ya no se use
 	GameObject* go = new GameObject("cube", rootNode);
@@ -78,10 +78,6 @@ update_status ModuleScene::Update(float dt)
 		}
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_G) == KEY_DOWN)
-	{
-		rootNode->DeleteChild(rootNode->vChildren[0]);
-	}
 
 	if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN /* ||
 		App->input->GetKey(SDL_SCANCODE_BACKSPACE) == KEY_DOWN*/)
@@ -118,4 +114,9 @@ bool ModuleScene::CleanUp()
 	
 	RELEASE(rootNode);
 	return true;
+}
+
+void ModuleScene::BakerHouse()
+{
+	ai::ImportFile("..\\Game\\Assets\\3dObject\\baker_house\\BakerHouse.fbx");
 }

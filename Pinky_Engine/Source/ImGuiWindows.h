@@ -24,7 +24,7 @@ public:
 	std::vector<GameObject*> GetSelectedGOs();
 	void SetSelected(std::vector<GameObject*> vSelected);
 	void SetSelected(GameObject* go);
-	void SetSelectedState(GameObject* go);
+	void SetSelectedState(GameObject* go, bool selected);
 
 public:
 	bool show;
@@ -47,10 +47,13 @@ public:
 
 private:
 	bool ShowChildren(std::vector<GameObject*> children, int num);
+	bool TreeNode(GameObject* current, ImGuiTreeNodeFlags node_flags);
 	void MouseEvents(GameObject* current);
 
 private:
 	GameObject* draggedGO;
+	ImVec4 disabledColor;
+	ImVec4 hiddenColor;
 };
 
 class Inspector : public ImGuiWindows
@@ -60,6 +63,7 @@ public:
 	~Inspector();
 
 	void ShowWindow();
+	void SetActiveState(GameObject* go, bool active);
 
 public:
 	int selected_fish = -1;
