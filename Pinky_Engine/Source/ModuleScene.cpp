@@ -78,10 +78,6 @@ update_status ModuleScene::Update(float dt)
 		}
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_G) == KEY_DOWN)
-	{
-		rootNode->DeleteChild(rootNode->vChildren[0]);
-	}
 
 	if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN /* ||
 		App->input->GetKey(SDL_SCANCODE_BACKSPACE) == KEY_DOWN*/)

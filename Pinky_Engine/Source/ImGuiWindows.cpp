@@ -57,7 +57,7 @@ void ImGuiWindows::SetSelected(GameObject* go)
 		{
 			for (auto i = 0; i < selectedGOs.size(); i++)
 			{
-				selectedGOs[i]->selected = false;
+				SetSelectedState(selectedGOs[i], false);
 			}
 			ClearVec(selectedGOs);
 		}
@@ -69,14 +69,14 @@ void ImGuiWindows::SetSelected(GameObject* go)
 		if (go->selected)
 		{
 			selectedGOs.push_back(go);
+			// Set selected go children to the same state as the clicked item
+			SetSelectedState(go, go->selected);
 		}
 		else if (!selectedGOs.empty())
 		{
+			SetSelectedState(go, false);
 			selectedGOs.erase(std::find(selectedGOs.begin(), selectedGOs.end(), go));
 		}
-
-		// Set selected go children to the same state as the clicked item
-		SetSelectedState(go);
 	}
 	else
 	{
@@ -84,22 +84,27 @@ void ImGuiWindows::SetSelected(GameObject* go)
 	}
 }
 
-void ImGuiWindows::SetSelectedState(GameObject* go)
+void ImGuiWindows::SetSelectedState(GameObject* go, bool selected)
 {
+	// Must change go value manually. In "active" not necessary since it changes from the toggle
+	go->selected = selected;
 	for (auto i = 0; i < go->vChildren.size(); i++)
 	{
 		if (!go->vChildren.empty())
 		{
-			SetSelectedState(go->vChildren[i]);
+			SetSelectedState(go->vChildren[i], selected);
 		}
 
-		go->vChildren[i]->selected = go->selected;
+		go->vChildren[i]->selected = selected;
 	}
 }
 //------
 
 Hierarchy::Hierarchy(int i) : ImGuiWindows(i) 
-{ draggedGO = nullptr; }
+{
+	draggedGO = nullptr; 
+	disabledColor = ImVec4(0.675f, 0.675f, 0.675f, 1.0f);
+}
 
 //---Hierarchy---
 Hierarchy::~Hierarchy()
@@ -124,7 +129,9 @@ void Hierarchy::ShowWindow()
 		ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
 			| ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
 
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.953f, 0.533f, 0.969f, 1.0f));
 		ImGui::TreeNodeEx((void*)(intptr_t)App->scene->rootNode->GetUid(), node_flags, App->scene->rootNode->name.c_str());
+		ImGui::PopStyleColor(1);
 
 		// Root node only target, can't be dragged
 		if (ImGui::BeginDragDropTarget())
@@ -157,20 +164,8 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 		{
 			node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
 				| ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
-
-			if (current[i]->selected)
-			{
-				node_flags |= ImGuiTreeNodeFlags_Selected;
-			}
-
-			if (current[i]->active)
-			{
-				ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, 0.6f, 0.6f));
-				ImGui::PopStyleColor(1);
-			}
-
-			bool open = ImGui::TreeNodeEx((void*)(intptr_t)current[i]->GetUid(), node_flags, current[i]->name.c_str());
-
+	
+			bool open = TreeNode(current[i], node_flags);
 			MouseEvents(current[i]);
 
 			if (open)
@@ -188,9 +183,34 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 				node_flags |= ImGuiTreeNodeFlags_Selected;
 			}
 
-			ImGui::TreeNodeEx((void*)(intptr_t)current[i]->GetUid(), node_flags, current[i]->name.c_str());
+			TreeNode(current[i], node_flags);
 			MouseEvents(current[i]);
 		}
+	}
+
+	return ret;
+}
+
+bool Hierarchy::TreeNode(GameObject* current, ImGuiTreeNodeFlags node_flags)
+{
+	bool ret = false;
+
+	if (current->selected)
+	{
+		node_flags |= ImGuiTreeNodeFlags_Selected;
+	}
+
+	// TODO: en release parpadea nose porque
+	if (!current->active)
+	{
+		//ImGui::PushStyleColor(ImGuiCol_Text, disabledColor);
+	}
+
+	ret = ImGui::TreeNodeEx((void*)(intptr_t)current->GetUid(), node_flags, current->name.c_str());
+
+	if (!current->active)
+	{
+		//ImGui::PopStyleColor(1);
 	}
 
 	return ret;
@@ -272,7 +292,11 @@ void Inspector::ShowWindow()
 			std::string checkbox = "##Checkbox ";
 			checkbox.append(go->name + std::to_string(go->GetUid()));
 
-			ImGui::ToggleButton(checkbox.c_str(), &go->active);		ImGui::SameLine();
+			if (ImGui::ToggleButton(checkbox.c_str(), &go->active))
+			{
+				SetActiveState(go, go->active);
+			} 
+			ImGui::SameLine();
 
 			if (!go->active) { ImGui::BeginDisabled(); }
 
@@ -338,6 +362,19 @@ void Inspector::ShowWindow()
 		}
 
 		ImGui::End();
+	}
+}
+
+void Inspector::SetActiveState(GameObject* go, bool active)
+{
+	for (auto i = 0; i < go->vChildren.size(); i++)
+	{
+		if (!go->vChildren.empty())
+		{
+			SetActiveState(go->vChildren[i], active);
+		}
+
+		go->vChildren[i]->active = active;
 	}
 }
 //------

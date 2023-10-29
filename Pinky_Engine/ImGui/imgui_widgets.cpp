@@ -1208,6 +1208,7 @@ bool ImGui::CheckboxFlags(const char* label, ImU64* flags, ImU64 flags_value)
 
 bool ImGui::ToggleButton(const char* str_id, bool* v, ImVec4 bg_color, bool anim)
 {
+    bool toggle = false;
     ImVec2 p = ImGui::GetCursorScreenPos();
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
@@ -1217,7 +1218,10 @@ bool ImGui::ToggleButton(const char* str_id, bool* v, ImVec4 bg_color, bool anim
 
     ImGui::InvisibleButton(str_id, ImVec2(width, height));
     if (ImGui::IsItemClicked())
+    {
         *v = !*v;
+        toggle = true;
+    }
 
     float t = *v ? 1.0f : 0.0f;
 
@@ -1258,7 +1262,7 @@ bool ImGui::ToggleButton(const char* str_id, bool* v, ImVec4 bg_color, bool anim
         TextEx(str_id, label_end);
     }
     // ---------------------
-    return *v;
+    return toggle;
 }
 
 
