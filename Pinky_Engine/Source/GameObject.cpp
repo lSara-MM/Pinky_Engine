@@ -30,7 +30,7 @@ GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 }
 
 
-// ---Constructor Copia---
+// ---Copy Constructor---
 GameObject::GameObject(GameObject* go)
 {
 	uid = App->randomLCG->Int();

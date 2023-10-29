@@ -85,6 +85,8 @@ bool ModuleEditor::Init()
 	vImGuiWindows.push_back(i);
 	i = nullptr;
 
+	// Load Baker House at the start by default
+	App->scene->BakerHouse();
 	return ret;
 }
 
@@ -155,7 +157,7 @@ bool ModuleEditor::CleanUp()
 
 	ClearVec(mFPSLog);
 	ClearVec(mSLog);
-	ClearVec(logVec);
+	ClearVec(vLog);
 	ClearVec(MemLog);
 
 	ClearVecPtr(vImGuiWindows);
@@ -497,19 +499,33 @@ void ModuleEditor::LogWindow()
 	ImGui::BeginMenuBar();
 	if (ImGui::Button("Clear"))
 	{
-		ClearVec(logVec);
+		ClearVec(vLog);
 	}
-	if (ImGui::Button("Add debug message"))
+	if (ImGui::Button("Add Error message"))
 	{
-		logVec.push_back("hola");
+		vLog.push_back("[ERROR] debug error message");
 	}
+	if (ImGui::Button("Add Warning message"))
+	{
+		vLog.push_back("[WARNING] debug warning message");
+	}
+	ImGui::Dummy(ImVec2(ImGui::GetFontSize() * 20, 0));
+	static ImGuiTextFilter filter;
+	filter.Draw("Search", ImGui::GetFontSize() * 15);
+
 	ImGui::EndMenuBar();
 
 	//const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
 	ImGui::BeginChild("##output", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
-	for (int n = 0; n < logVec.size(); n++)
+	
+	for (int n = 0; n < vLog.size(); n++)
 	{
-		ImGui::Text(logVec[n].c_str(), n);
+		if (filter.PassFilter(vLog[n].c_str()))
+		{
+			if (strstr(vLog[n].c_str(), "[ERROR")) { ImGui::TextColored(ImVec4(0.9f, 0.0f, 0.0f, 1.0f), vLog[n].c_str()); }
+			else if (strstr(vLog[n].c_str(), "[WARNING")) { ImGui::TextColored(ImVec4(1.0f, 0.7f, 0.0f, 1.0f), vLog[n].c_str()); }
+			else { ImGui::Text(vLog[n].c_str(), n); }
+		}
 	}
 
 	// Keep up at the bottom of the scroll region if we were already at the bottom at the beginning of the frame.
