@@ -158,6 +158,7 @@
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Color.h" />
     <ClInclude Include="Source\Component.h" />
+    <ClInclude Include="Source\C_Camera.h" />
     <ClInclude Include="Source\C_Material.h" />
     <ClInclude Include="Source\C_Mesh.h" />
     <ClInclude Include="Source\C_Transform.h" />
@@ -223,6 +224,7 @@
     <ClCompile Include="parson\parson.c" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Color.cpp" />
+    <ClCompile Include="Source\C_Camera.cpp" />
     <ClCompile Include="Source\C_Material.cpp" />
     <ClCompile Include="Source\C_Mesh.cpp" />
     <ClCompile Include="Source\C_Transform.cpp" />
