@@ -25,7 +25,9 @@
 
 C_Mesh::C_Mesh(GameObject* g, ai::mesh* m, unsigned int i, bool start_enabled) : Component(C_TYPE::MESH, g, i, start_enabled, "Mesh")
 {
-	mesh = m;
+	mesh = m; 
+	showVertexNormals = false;
+	showFacesNormals = false;
 }
 
 C_Mesh::~C_Mesh()
@@ -59,7 +61,10 @@ void C_Mesh::ShowInInspector()
 			ImGui::Text("Vertices: %d", mesh->num_vertex);
 		}
 
-		ImGui::Text("This is a drag and drop source");
+		ImGui::Checkbox("Vertex Normals", &showVertexNormals);
+		ImGui::Checkbox("Faces Normals", &showFacesNormals);
+			
+		ImGui::SameLine();
 
 		if (!active) { ImGui::EndDisabled(); }
 	}

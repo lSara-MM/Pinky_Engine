@@ -317,175 +317,191 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 		ImGui::SetNextWindowSize(ImVec2(500, 200));
 		ImGui::Begin("Configuration", &moduleSettingsWin, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 		
-		if (ImGui::CollapsingHeader("Window"))
+		static ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_Reorderable | ImGuiTabBarFlags_TabListPopupButton;
+		if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
 		{
-			if (ImGui::Checkbox("Fullscreen", &App->window->fullScreen))
+			if (ImGui::BeginTabItem("Window"))
 			{
-				(!App->window->fullScreen) ? App->window->flags = SDL_WINDOW_SHOWN : App->window->flags = SDL_WINDOW_FULLSCREEN;
+				if (ImGui::Checkbox("Fullscreen", &App->window->fullScreen))
+				{
+					(!App->window->fullScreen) ? App->window->flags = SDL_WINDOW_SHOWN : App->window->flags = SDL_WINDOW_FULLSCREEN;
 
-				SDL_SetWindowFullscreen(App->window->window, App->window->flags);
+					SDL_SetWindowFullscreen(App->window->window, App->window->flags);
+				}
+
+				if (ImGui::IsItemHovered())
+				{
+					ImGui::SetTooltip("Change fullscreen window");
+				}
+				ImGui::SameLine();
+
+				if (ImGui::Checkbox("Resizable", &App->window->resizable))
+				{
+					SDL_SetWindowResizable(App->window->window, (SDL_bool)App->window->resizable);
+				}
+
+				if (ImGui::IsItemHovered())
+				{
+					ImGui::SetTooltip("Change resizable window");
+				}
+
+				if (ImGui::Checkbox("Borderless", &App->window->borderless))
+				{
+					SDL_SetWindowBordered(App->window->window, (SDL_bool)!App->window->borderless);
+				}
+
+				if (ImGui::IsItemHovered())
+				{
+					ImGui::SetTooltip("Change borderless window");
+				}
+				ImGui::SameLine();
+
+				if (ImGui::Checkbox("Full desktop", &App->window->fullScreenDesktop))
+				{
+					(!App->window->fullScreenDesktop) ? App->window->flags = SDL_WINDOW_SHOWN : App->window->flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
+
+					SDL_SetWindowFullscreen(App->window->window, App->window->flags);
+				}
+
+				if (ImGui::IsItemHovered())
+				{
+					ImGui::SetTooltip("Change fullscreen desktop window");
+				}
+				ImGui::Separator();
+
+				ImGui::Text("Window size: %d x %d", SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
+				if (ImGui::SliderInt("Width", &App->window->width, 0, 1920, "%d"))
+				{
+					SDL_SetWindowSize(App->window->window, App->window->width, App->window->height);
+				}
+
+				if (ImGui::SliderInt("Height", &App->window->height, 0, 1920, "%d"))
+				{
+					SDL_SetWindowSize(App->window->window, App->window->width, App->window->height);
+				}
+				ImGui::Separator();
+				
+				ImGui::Text("Brightness: %.2f", SDL_GetWindowBrightness(App->window->window));
+				if (ImGui::SliderFloat("Brightness", &App->window->brightness, 0.2350f, 1.0f, "%.2f"))
+				{
+					SDL_SetWindowBrightness(App->window->window, App->window->brightness);//TODO: falla a vegades
+				}
+				ImGui::Separator();
+
+				ImGui::Text("Mouse position: %d x, %d y", App->input->GetMouseX(), App->input->GetMouseY());
+				ImGui::Separator();
+
+				FpsWindow(io);
+
+				ImGui::Checkbox("FPS Cap", &App->frcap);
+				ImGui::SliderInt("FPS cap", &App->fps, 1, 120, "%d");
+				ImGui::Separator();
+
+				ImGui::Checkbox("VSync", &App->renderer3D->Vsync);
+
+				MemWindow();
+				ImGui::EndTabItem();
 			}
 
-			if (ImGui::IsItemHovered())
+			if (ImGui::BeginTabItem("OpenGl"))
 			{
-				ImGui::SetTooltip("Change fullscreen window");
-			}
-			ImGui::SameLine();
+				// Depth test
+				if (ImGui::Checkbox("Depth testing", &depthTest))
+				{
+					(depthTest) ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
+				}
+				if (ImGui::IsItemHovered())
+				{
+					ImGui::SetTooltip("If enabled, do depth comparisons and update the depth buffer. ");
+				}
+				ImGui::SameLine();
 
-			if (ImGui::Checkbox("Resizable", &App->window->resizable))
-			{
-				SDL_SetWindowResizable(App->window->window, (SDL_bool)App->window->resizable);
-			}
+				// Cull Face
+				if (ImGui::Checkbox("Cull face", &cullFace))
+				{
+					(cullFace) ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE);
+				}
+				if (ImGui::IsItemHovered())
+				{
+					ImGui::SetTooltip("If enabled, cull polygons based on their winding in window coordinates.");
+				}
+				ImGui::SameLine();
 
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetTooltip("Change resizable window");
-			}
+				// Lightning
+				if (ImGui::Checkbox("Lightning", &lightning))
+				{
+					(lightning) ? glEnable(GL_LIGHTING) : glDisable(GL_LIGHTING);
+				}
+				if (ImGui::IsItemHovered())
+				{
+					ImGui::SetTooltip("If enabled and no vertex shader is active, use the current lighting parameters to compute the vertex\n color or index. Otherwise, simply associate the current color or index with each vertex.");
+				}
+				ImGui::SameLine();
 
-			if (ImGui::Checkbox("Borderless", &App->window->borderless))
-			{
-				SDL_SetWindowBordered(App->window->window, (SDL_bool)!App->window->borderless);
-			}
+				// Color material
+				if (ImGui::Checkbox("Color material", &colorMaterial))
+				{
+					(colorMaterial) ? glEnable(GL_COLOR_MATERIAL) : glDisable(GL_COLOR_MATERIAL);
+				}
+				if (ImGui::IsItemHovered())
+				{
+					ImGui::SetTooltip("If enabled, have one or more material parameters track the current color.");
+				}
 
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetTooltip("Change borderless window");
-			}
-			ImGui::SameLine();
+				//
 
-			if (ImGui::Checkbox("Full desktop", &App->window->fullScreenDesktop))
-			{
-				(!App->window->fullScreenDesktop) ? App->window->flags = SDL_WINDOW_SHOWN : App->window->flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
+				// Texture 2D
+				if (ImGui::Checkbox("Texture 2D", &texture2D))
+				{
+					(texture2D) ? glEnable(GL_TEXTURE_2D) : glDisable(GL_TEXTURE_2D);
+				}
+				if (ImGui::IsItemHovered())
+				{
+					ImGui::SetTooltip("If enabled and no fragment shader is active, two-dimensional texturing is performed.");
+				}
+				ImGui::SameLine();
 
-				SDL_SetWindowFullscreen(App->window->window, App->window->flags);
-			}
+				// Blend
+				if (ImGui::Checkbox("Blend", &blend))
+				{
+					(blend) ? glEnable(GL_BLEND) : glDisable(GL_BLEND);
+				}
+				if (ImGui::IsItemHovered())
+				{
+					ImGui::SetTooltip("If enabled, blend the computed fragment color values with the values in the color buffers.");
+				}
+				ImGui::SameLine();
 
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetTooltip("Change fullscreen desktop window");
-			}
-			ImGui::Text("Window size: %d x %d", SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
+				// Line Smooth
+				if (ImGui::Checkbox("Line Smooth", &lineSmooth))
+				{
+					(lineSmooth) ? glEnable(GL_LINE_SMOOTH) : glDisable(GL_LINE_SMOOTH);
+				}
+				if (ImGui::IsItemHovered())
+				{
+					ImGui::SetTooltip("If enabled, draw lines with correct filtering. Otherwise, draw aliased lines.");
+				}
+				ImGui::SameLine();
 
-			ImGui::Text("Brightness: %.2f", SDL_GetWindowBrightness(App->window->window));
-
-			ImGui::Text("Mouse position: %d x, %d y", App->input->GetMouseX(), App->input->GetMouseY());
-
-			if (ImGui::SliderFloat("Brightness", &App->window->brightness, 0.2350f, 1.0f, "%.2f"))
-			{
-				SDL_SetWindowBrightness(App->window->window, App->window->brightness);//TODO: falla a vegades
-			}
-
-			if (ImGui::SliderInt("Width", &App->window->width, 0, 1920, "%d"))
-			{
-				SDL_SetWindowSize(App->window->window,App->window->width, App->window->height);
-			}
-
-			if (ImGui::SliderInt("Height", &App->window->height, 0, 1920, "%d"))
-			{
-				SDL_SetWindowSize(App->window->window, App->window->width, App->window->height);
-			}
-
-			FpsWindow(io);
-
-			ImGui::Checkbox("FPS Cap", &App->frcap);
-
-			ImGui::SliderInt("FPS cap", &App->fps, 1, 120, "%d");
-
-			ImGui::Checkbox("VSync", &App->renderer3D->Vsync);
-
-			MemWindow();
-		}
-
-		if (ImGui::CollapsingHeader("OpenGl"))
-		{
-			// Depth test
-			if (ImGui::Checkbox("Depth testing", &depthTest))
-			{
-				(depthTest) ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
-			}
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetTooltip("If enabled, do depth comparisons and update the depth buffer. ");
-			}
-			ImGui::SameLine();
-
-			// Cull Face
-			if (ImGui::Checkbox("Cull face", &cullFace))
-			{
-				(cullFace) ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE);
-			}
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetTooltip("If enabled, cull polygons based on their winding in window coordinates.");
-			}
-			ImGui::SameLine();
-
-			// Lightning
-			if (ImGui::Checkbox("Lightning", &lightning))
-			{
-				(lightning) ? glEnable(GL_LIGHTING) : glDisable(GL_LIGHTING);
-			}
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetTooltip("If enabled and no vertex shader is active, use the current lighting parameters to compute the vertex\n color or index. Otherwise, simply associate the current color or index with each vertex.");
-			}
-			ImGui::SameLine();
-
-			// Color material
-			if (ImGui::Checkbox("Color material", &colorMaterial))
-			{
-				(colorMaterial) ? glEnable(GL_COLOR_MATERIAL) : glDisable(GL_COLOR_MATERIAL);
-			}
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetTooltip("If enabled, have one or more material parameters track the current color.");
+				// Line Smooth
+				if (ImGui::Checkbox("Normalize", &normalize))
+				{
+					(normalize) ? glEnable(GL_NORMALIZE) : glDisable(GL_NORMALIZE);
+				}
+				if (ImGui::IsItemHovered())
+				{
+					ImGui::SetTooltip("If enabled and no vertex shader is active, normal vectors are normalized \nto unit length after transformation and before lighting.");
+				}
+				ImGui::EndTabItem();
 			}
 
-			//
+			if(ImGui::BeginTabItem("Style Editor"))
+			{
+				ImGui::ShowStyleEditor();
+				ImGui::EndTabItem();
+			}
 
-			// Texture 2D
-			if (ImGui::Checkbox("Texture 2D", &texture2D))
-			{
-				(texture2D) ? glEnable(GL_TEXTURE_2D) : glDisable(GL_TEXTURE_2D);
-			}
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetTooltip("If enabled and no fragment shader is active, two-dimensional texturing is performed.");
-			}
-			ImGui::SameLine();
-
-			// Blend
-			if (ImGui::Checkbox("Blend", &blend))
-			{
-				(blend) ? glEnable(GL_BLEND) : glDisable(GL_BLEND);
-			}
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetTooltip("If enabled, blend the computed fragment color values with the values in the color buffers.");
-			}
-			ImGui::SameLine();
-
-			// Line Smooth
-			if (ImGui::Checkbox("Line Smooth", &lineSmooth))
-			{
-				(lineSmooth) ? glEnable(GL_LINE_SMOOTH) : glDisable(GL_LINE_SMOOTH);
-			}
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetTooltip("If enabled, draw lines with correct filtering. Otherwise, draw aliased lines.");
-			}
-			ImGui::SameLine();
-
-			// Line Smooth
-			if (ImGui::Checkbox("Normalize", &normalize))
-			{
-				(normalize) ? glEnable(GL_NORMALIZE) : glDisable(GL_NORMALIZE);
-			}
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetTooltip("If enabled and no vertex shader is active, normal vectors are normalized \nto unit length after transformation and before lighting.");
-			}
-			ImGui::SameLine();
+			ImGui::EndTabBar();
 		}
 		ImGui::End();
 	}

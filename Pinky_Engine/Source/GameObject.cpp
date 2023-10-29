@@ -101,6 +101,16 @@ update_status GameObject::Update(float dt)
 					if (!vMaterials.empty() && vMaterials[i]->active)
 					{
 						vMeshes[i]->Draw(vMaterials[i]->checkered, vMaterials[i]->color);
+
+						if (vMeshes[i]->showVertexNormals)
+						{
+							vMeshes[i]->DrawVertexNormals();
+						}
+						
+						if (vMeshes[i]->showFacesNormals)
+						{
+							vMeshes[i]->DrawFaceNormals();
+						}
 					}
 					else
 					{

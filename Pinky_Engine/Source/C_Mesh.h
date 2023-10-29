@@ -18,8 +18,11 @@ public:
 	void Draw(bool checkered = false, Color color = { 255, 255, 255, 255});
 	void DrawVertexNormals();
 	void DrawFaceNormals();
+
 public:
 	ai::mesh* mesh = nullptr;
+	bool showVertexNormals;
+	bool showFacesNormals;
 
 	//GLuint texture_checker;
 };
