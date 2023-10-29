@@ -18,6 +18,7 @@ enum class C_TYPE
 	TRANSFORM,
 	MESH,
 	MATERIAL,
+	CAM,
 	NONE
 };
 

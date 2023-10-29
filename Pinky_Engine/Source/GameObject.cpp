@@ -5,6 +5,7 @@
 #include "C_Transform.h"
 #include "C_Mesh.h"
 #include "C_Material.h"
+#include "C_Camera.h"
 
 
 GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)

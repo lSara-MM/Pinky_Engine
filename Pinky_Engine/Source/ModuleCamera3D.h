@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "../MathGeoLib/include/Math/float3.h"
 #include "../MathGeoLib/include/Math/float4x4.h"
+#include "C_Camera.h"
 
 //todo: REMOVE this before 1st delivery!!
 #include "glmath.h"
@@ -21,8 +22,13 @@ public:
 	void LookAt(const float3&Spot);
 	void Move(const float3&Movement);
 	void Zoom(math::float3 nPos, float s);
-	void Focus();
 	float* GetViewMatrix();
+
+	//frustrum camera functions
+	void CameraMovement();
+	void Orbit();
+	void FPScamera();
+	void Focus();
 
 private:
 
@@ -32,6 +38,10 @@ public:
 	
 	//You won't need this after using Frustum
 	float3 X, Y, Z, Position, Reference;
+
+	C_Camera* MainCamera = nullptr;
+	int mouseX, mouseY;
+	float speed;
 
 private:
 

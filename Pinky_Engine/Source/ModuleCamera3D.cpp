@@ -2,6 +2,10 @@
 #include "Application.h"
 #include "ModuleCamera3D.h"
 #include "../MathGeoLib/include/Math/Quat.h"
+#include "../MathGeoLib/include/Math/float3.h"
+#include "../MathGeoLib/include/Math/float4x4.h"
+#include "C_Camera.h"
+
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -14,16 +18,27 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 	ViewMatrix = IdentityMatrix;
 
 	LookAt(Reference);
+
+	MainCamera = new C_Camera();
+	MainCamera->frustum.pos = float3(0.0f, 10.0f, 5.0f);
+	MainCamera->LookAt(float3(0.0f, 0.0f, 0.0f));
+
 	CalculateViewMatrix();
 }
 
 ModuleCamera3D::~ModuleCamera3D()
-{}
+{
+	RELEASE(MainCamera);
+}
 
 // -----------------------------------------------------------------
 bool ModuleCamera3D::Start()
 {
 	LOG("Setting up the camera");
+	mouseX = 0;
+	mouseY = 0;
+	speed = 0;
+
 	bool ret = true;
 
 	return ret;
@@ -43,18 +58,18 @@ update_status ModuleCamera3D::Update(float dt)
 	// Implement a debug camera with keys and mouse
 	// Now we can make this movememnt frame rate independant!
 
-	float3 newPos(0,0,0);
+	float3 newPos(0, 0, 0);
 	float speed = 10.0f * dt;
 
-	if(App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
-		if(App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 			speed = 20.0f * dt;
 
-		if(App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
-		if(App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
-		if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
-		if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
+		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
 
 		Position += newPos;
 		Reference += newPos;
@@ -101,7 +116,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 		Look(Position, Reference, false);
 	}
-	else if(App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
+	else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
 	{
 		Position = float3(0.0f, 10.0f, 5.0f);
 		Reference = float3(0.0f, 0.0f, 0.0f);
@@ -141,29 +156,41 @@ update_status ModuleCamera3D::Update(float dt)
 				Y = Z.Cross(X);
 			}
 		}
-
 		math::float3 tempPosition = Reference;
 
 		Position = tempPosition + Z * Position.Length();
 
 		LookAt(Reference);
 	}
-	
+
 	else if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT)
 	{
 		Focus();
 	}
-	else 
+	else
 	{
-			Zoom(newPos, speed);
-			Position += newPos;
-			Reference += newPos;
+		Zoom(newPos, speed);
+		Position += newPos;
+		Reference += newPos;
 	}
-
-
 	// Recalculate matrix -------------
 	CalculateViewMatrix();
 
+	//cam WIP
+	//speed = 10.0f * dt;
+	/*mouseX = App->input->GetMouseX();
+	mouseY = App->input->GetMouseY();
+
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT == KEY_REPEAT))
+	{
+		Orbit();
+	}
+
+	else if (App->input->GetMouseButton(SDL_BUTTON_RIGHT)==KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
+	{
+		FPScamera();
+		CameraMovement();
+	}*/
 	return UPDATE_CONTINUE;
 }
 
@@ -234,6 +261,63 @@ void ModuleCamera3D::Focus()
 float* ModuleCamera3D::GetViewMatrix()
 {
 	return ViewMatrix.M;
+}
+
+void ModuleCamera3D::CameraMovement()
+{
+	float3 move(float3::zero);
+	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_REPEAT) move -= float3::unitY;
+	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT) move += float3::unitY;
+
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) move -= MainCamera->frustum.front;
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) move += MainCamera->frustum.front;
+
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) move -= MainCamera->frustum.WorldRight();
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) move += MainCamera->frustum.WorldRight();
+
+	if (!move.Equals(float3::zero))
+	{
+		MainCamera->frustum.Translate(move * speed);
+		Reference += move * speed;
+	}
+}
+
+void ModuleCamera3D::Orbit()
+{
+	float3 dir = MainCamera->frustum.pos - Reference;
+	Quat quaternionY(MainCamera->frustum.up, mouseX);
+	Quat quaternionX(MainCamera->frustum.WorldRight(), mouseY);
+
+	dir = quaternionX.Transform(dir);
+	dir = quaternionY.Transform(dir);
+
+	MainCamera->frustum.pos = dir + Reference;
+	MainCamera->LookAt(Reference);
+}
+
+void ModuleCamera3D::FPScamera()
+{
+	if (mouseX != 0)
+	{
+		Quat rotY = Quat::RotateY(mouseX);
+		MainCamera->frustum.front = rotY.Mul(MainCamera->frustum.front).Normalized();
+		MainCamera->frustum.up = rotY.Mul(MainCamera->frustum.up).Normalized();
+	}
+
+	if (mouseY != 0)
+	{
+		Quat rotX = Quat::RotateAxisAngle(MainCamera->frustum.WorldRight(),mouseY);
+		float3 newPosition = rotX.Mul(MainCamera->frustum.up).Normalized();
+
+		if (newPosition.y > 0)
+		{
+			MainCamera->frustum.up = newPosition;
+			MainCamera->frustum.front = rotX.Mul(MainCamera->frustum.front).Normalized();
+		}
+
+		float3 dist = Reference - MainCamera->frustum.pos;
+		Reference = MainCamera->frustum.pos + MainCamera->frustum.front * dist.Length();
+	}
 }
 
 // -----------------------------------------------------------------
