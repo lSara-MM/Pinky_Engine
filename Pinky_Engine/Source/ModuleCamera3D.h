@@ -21,6 +21,7 @@ public:
 	void LookAt(const float3&Spot);
 	void Move(const float3&Movement);
 	void Zoom(math::float3 nPos, float s);
+	void Focus();
 	float* GetViewMatrix();
 
 private:

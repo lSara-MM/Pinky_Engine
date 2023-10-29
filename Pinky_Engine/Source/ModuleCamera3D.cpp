@@ -13,6 +13,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 	Reference = float3(0.0f, 0.0f, 0.0f);
 	ViewMatrix = IdentityMatrix;
 
+	LookAt(Reference);
 	CalculateViewMatrix();
 }
 
@@ -97,53 +98,60 @@ update_status ModuleCamera3D::Update(float dt)
 		math::float3 tempPosition = Reference;
 
 		Position = tempPosition + Z * Position.Length();
-		
+
+		Look(Position, Reference, false);
 	}
+	else if(App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
+	{
+		Position = float3(0.0f, 10.0f, 5.0f);
+		Reference = float3(0.0f, 0.0f, 0.0f);
 
-	//else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
-	//{
-	//	// Mouse motion ----------------
-	//	int dx = -App->input->GetMouseXMotion();
-	//	int dy = -App->input->GetMouseYMotion();
+		//motion mouse
+		int dx = -App->input->GetMouseXMotion();
+		int dy = -App->input->GetMouseYMotion();
 
-	//	float Sensitivity = 0.35f * dt;
+		float Sensitivity = 0.35f * dt;
 
-	//	Position -= Reference;
+		Position -= Reference;
 
-	//	if(dx != 0)
-	//	{
-	//		float DeltaX = (float)dx * Sensitivity;
+		if (dx != 0)
+		{
+			float DeltaX = (float)dx * Sensitivity;
 
-	//		float3 rotationAxis(0.0f, 1.0f, 0.0f);
-	//		Quat rotationQuat = Quat::RotateAxisAngle(rotationAxis, DeltaX);
+			float3 rotationAxis(0.0f, 1.0f, 0.0f);
+			Quat rotationQuat = Quat::RotateAxisAngle(rotationAxis, DeltaX);
 
-	//		X = rotationQuat * X;
-	//		Y = rotationQuat * Y;
-	//		Z = rotationQuat * Z;
-	//	}
+			X = rotationQuat * X;
+			Y = rotationQuat * Y;
+			Z = rotationQuat * Z;
+		}
 
-	//	if(dy != 0)
-	//	{
-	//		float DeltaY = (float)dy * Sensitivity;
+		if (dy != 0)
+		{
+			float DeltaY = (float)dy * Sensitivity;
 
-	//		Quat rotationQuat = Quat::RotateAxisAngle(X, DeltaY);
+			Quat rotationQuat = Quat::RotateAxisAngle(X, DeltaY);
 
-	//		Y = rotationQuat * Y;
-	//		Z = rotationQuat * Z;
+			Y = rotationQuat * Y;
+			Z = rotationQuat * Z;
 
-	//		if(Y.y < 0.0f)
-	//		{
-	//			Z = float3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-	//			Y = Z.Cross(X);
-	//		}
-	//	}
+			if (Y.y < 0.0f)
+			{
+				Z = float3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
+				Y = Z.Cross(X);
+			}
+		}
 
-	//	Position = Reference + Z * Position.Length();
-	//}
+		math::float3 tempPosition = Reference;
+
+		Position = tempPosition + Z * Position.Length();
+
+		LookAt(Reference);
+	}
 	
 	else if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT)
 	{
-		LookAt(math::float3(0, 0, 0));
+		Focus();
 	}
 	else 
 	{
@@ -152,7 +160,6 @@ update_status ModuleCamera3D::Update(float dt)
 			Reference += newPos;
 	}
 
-	LookAt(Reference);
 
 	// Recalculate matrix -------------
 	CalculateViewMatrix();
@@ -173,7 +180,7 @@ void ModuleCamera3D::Look(const float3&Position, const float3&Reference, bool Ro
 	if(!RotateAroundReference)
 	{
 		this->Reference = this->Position;
-		this->Position += Z * 0.05f;
+		this->Position += Z * 0.005f;
 	}
 
 	CalculateViewMatrix();
@@ -214,6 +221,13 @@ void ModuleCamera3D::Zoom(math::float3 newPosition, float vel)
 
 	Position += newPosition;
 	Reference += newPosition;
+}
+
+void ModuleCamera3D::Focus()
+{
+	Position = float3(0.0f, 10.0f, 5.0f);
+	Reference = float3(0.0f, 0.0f, 0.0f);
+	LookAt(Reference);
 }
 
 // -----------------------------------------------------------------
