@@ -13,6 +13,8 @@
 #include "../ImGui/imgui.h"
 #include "../ImGui/backends/imgui_impl_sdl2.h"
 #include "../ImGui/backends/imgui_impl_opengl3.h"
+//
+#include "../ImGui/imgui_custom.h"
 
 #ifdef _DEBUG
 #pragma comment (lib, "MathGeoLib/libx86/libDebug/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
@@ -49,7 +51,8 @@ bool ModuleEditor::Init()
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
 
 	// Setup Dear ImGui style
-	ImGui::StyleColorsDark(); // dark mode default :D
+	//ImGui::StyleColorsDark(); // dark mode default :D
+	ImGuiCustom::Theme_Cinder();
 
 	// Setup Platform/Renderer backends
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
@@ -611,10 +614,11 @@ void ModuleEditor::AboutWindow()
 
 	// Always center this window when appearing
 	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.4f, 0.3f));
+	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+	ImGui::SetNextWindowSize(ImVec2(500, 300), ImGuiCond_Appearing);
 	if (ImGui::BeginPopupModal("About", &aboutWin))
 	{
-		ImGui::BeginChild("left pane", ImVec2(150, 100), true);
+		ImGui::BeginChild("left pane", ImVec2(150, 300), true);
 		ImGui::TextWrapped("MIT LicenseCopyright\n(c) 2023\n");
 		ImGui::TextWrapped("Permission is hereby granted, free of charge, to any person obtaining a copyof this software and associated documentation files (the 'Software'), to dealin the Software without restriction, including without limitation the rightsto use, copy, modify, merge, publish, distribute, sublicense, and/or sellcopies of the Software, and to permit persons to whom the Software isfurnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in allcopies or substantial portions of the Software.THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS ORIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THEAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHERLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THESOFTWARE.");
 		ImGui::EndChild();
@@ -622,16 +626,46 @@ void ModuleEditor::AboutWindow()
 		ImGui::SameLine();
 
 		ImGui::BeginGroup();
-		ImGui::BeginChild("right pane", ImVec2(200, -ImGui::GetFrameHeightWithSpacing())); // Leave room for 1 line below us
+		ImGui::BeginChild("right pane", ImVec2(500-150, -ImGui::GetFrameHeightWithSpacing())); // Leave room for 1 line below us
 
-		ImGui::Text("Pinky Engine");
-		ImGui::Separator();
-		ImGui::TextColored(aboutColor, "lSara-MM & AndyCubico");
-		ImGui::ColorEdit3("", (float*)&aboutColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+		if (ImGui::BeginTabBar("Pinky Engine"), ImGuiTabBarFlags_Reorderable | ImGuiTabBarFlags_TabListPopupButton)
+		{
+			if (ImGui::BeginTabItem("Pinky Engine"))
+			{
+				ImGui::TextColored(aboutColor, "lSara-MM & AndyCubico");
+				ImGui::ColorEdit3("", (float*)&aboutColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+				ImGui::EndTabItem();
+			}
+			
+			if (ImGui::BeginTabItem("Libraries"))
+			{
+				//---ImGui---
+				if (ImGui::Button("ImGui")) { OsOpenInShell(""); } ImGui::SameLine();
+				ImGui::Text("Omar Cornut Copyright (c) 2014-2023"); 
+
+				//---OpenGL---
+				if (ImGui::Button("OpenGL")) { OsOpenInShell(""); } ImGui::SameLine();
+				ImGui::Text("Omar Cornut Copyright (c) 2014-2023"); 
+				ImGui::EndTabItem();
+			}
+			
+			if (ImGui::BeginTabItem("External Sources"))
+			{
+				ImGui::TextColored(aboutColor, "lSara-MM & AndyCubico");
+				ImGui::ColorEdit3("", (float*)&aboutColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+				ImGui::EndTabItem();
+			}
+			//ImGui::Text("Pinky Engine");
+			//ImGui::Separator();
+			
+			ImGui::EndTabBar();
+		}
 		ImGui::EndChild();
 
-
+		ImGui::PushStyleColor(ImGuiCol_Button, aboutColor);
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
 		if (ImGui::Button("GitHub")) { OsOpenInShell("https://github.com/lSara-MM/Pinky_Engine"); }
+		ImGui::PopStyleColor(2);
 		ImGui::SetItemDefaultFocus();
 		ImGui::SameLine();
 		if (ImGui::Button("Close")) { ImGui::CloseCurrentPopup(); }

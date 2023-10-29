@@ -1206,7 +1206,7 @@ bool ImGui::CheckboxFlags(const char* label, ImU64* flags, ImU64 flags_value)
     return CheckboxFlagsT(label, flags, flags_value);
 }
 
-bool ImGui::ToggleButton(const char* str_id, bool* v, ImVec4 bg_color, bool anim)
+/*bool ImGui::ToggleButton(const char* str_id, bool* v, ImVec4 bg_color, bool anim)
 {
     bool toggle = false;
     ImVec2 p = ImGui::GetCursorScreenPos();
@@ -1264,7 +1264,7 @@ bool ImGui::ToggleButton(const char* str_id, bool* v, ImVec4 bg_color, bool anim
     // ---------------------
     return toggle;
 }
-
+*/
 
 bool ImGui::RadioButton(const char* label, bool active)
 {

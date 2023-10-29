@@ -19,6 +19,9 @@
 #include "../ImGui/backends/imgui_impl_sdl2.h"
 #include "../ImGui/backends/imgui_impl_opengl3.h"
 #include "../ImGui/misc/cpp/imgui_stdlib.h"
+//
+#include "../ImGui/imgui_custom.h"
+
 
 #ifdef _DEBUG
 #pragma comment (lib, "MathGeoLib/libx86/libDebug/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
@@ -178,11 +181,6 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 		{
 			node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 
-			if (current[i]->selected)
-			{
-				node_flags |= ImGuiTreeNodeFlags_Selected;
-			}
-
 			TreeNode(current[i], node_flags);
 			MouseEvents(current[i]);
 		}
@@ -292,7 +290,7 @@ void Inspector::ShowWindow()
 			std::string checkbox = "##Checkbox ";
 			checkbox.append(go->name + std::to_string(go->GetUid()));
 
-			if (ImGui::ToggleButton(checkbox.c_str(), &go->active))
+			if (ImGuiCustom::ToggleButton(checkbox.c_str(), &go->active))
 			{
 				SetActiveState(go, go->active);
 			} 
