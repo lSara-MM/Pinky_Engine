@@ -193,22 +193,29 @@ bool Hierarchy::TreeNode(GameObject* current, ImGuiTreeNodeFlags node_flags)
 {
 	bool ret = false;
 
+	if (current->vChildren.empty())
+	{
+		node_flags = ImGuiTreeNodeFlags_None;
+		node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+	}
+
 	if (current->selected)
 	{
 		node_flags |= ImGuiTreeNodeFlags_Selected;
 	}
+	
 
 	// TODO: en release parpadea nose porque
 	if (!current->active)
 	{
-		//ImGui::PushStyleColor(ImGuiCol_Text, disabledColor);
+		ImGui::PushStyleColor(ImGuiCol_Text, disabledColor);
 	}
 
 	ret = ImGui::TreeNodeEx((void*)(intptr_t)current->GetUid(), node_flags, current->name.c_str());
 
 	if (!current->active)
 	{
-		//ImGui::PopStyleColor(1);
+		ImGui::PopStyleColor(1);
 	}
 
 	return ret;
