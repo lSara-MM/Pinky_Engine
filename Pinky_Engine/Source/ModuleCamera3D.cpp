@@ -72,7 +72,6 @@ update_status ModuleCamera3D::Update(float dt)
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
 
 		Position += newPos;
-		Reference += newPos;
 
 		//motion mouse
 		int dx = -App->input->GetMouseXMotion();
@@ -109,13 +108,8 @@ update_status ModuleCamera3D::Update(float dt)
 				Y = Z.Cross(X);
 			}
 		}
-
-		math::float3 tempPosition = Reference;
-
-		Position = tempPosition + Z * Position.Length();
-
-		Look(Position, Reference, false);
 	}
+
 	else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
 	{
 		Position = float3(0.0f, 10.0f, 5.0f);
