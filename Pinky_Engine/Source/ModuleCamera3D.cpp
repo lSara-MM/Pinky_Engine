@@ -243,7 +243,6 @@ void ModuleCamera3D::Zoom(math::float3 newPosition, float vel)
 	}
 
 	Position += newPosition;
-	Reference += newPosition;
 }
 
 void ModuleCamera3D::Focus()
