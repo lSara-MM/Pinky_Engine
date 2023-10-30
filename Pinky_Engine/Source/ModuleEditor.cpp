@@ -51,8 +51,9 @@ bool ModuleEditor::Init()
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
 
 	// Setup Dear ImGui style
-	//ImGui::StyleColorsDark(); // dark mode default :D
-	ImGuiCustom::Theme_Cinder();
+	ImGui::StyleColorsClassic(); // dark mode default :D
+	//ImGuiCustom::Theme_Cinder();
+	//ImGuiCustom::Theme_EnemyMouse();
 
 	// Setup Platform/Renderer backends
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
