@@ -119,6 +119,12 @@ void ImGuiCustom::Theme_Cinder()
 
 bool ImGuiCustom::ToggleButton(const char* str_id, bool* v, ImVec4 bg_color, bool anim)
 {
+    ImGuiWindow* window = ImGui::GetCurrentWindow();
+    if (window->SkipItems)
+        return false;
+
+    ImGuiContext& g = *GImGui;
+
     bool toggle = false;
     ImVec2 p = ImGui::GetCursorScreenPos();
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
@@ -136,7 +142,6 @@ bool ImGuiCustom::ToggleButton(const char* str_id, bool* v, ImVec4 bg_color, boo
 
     float t = *v ? 1.0f : 0.0f;
 
-    ImGuiContext& g = *GImGui;
     float ANIM_SPEED = 0.08f;
     if (g.LastActiveId == g.CurrentWindow->GetID(str_id))// && g.LastActiveIdTimer < ANIM_SPEED)
     {
@@ -168,8 +173,7 @@ bool ImGuiCustom::ToggleButton(const char* str_id, bool* v, ImVec4 bg_color, boo
     const char* label_end = ImGui::FindRenderedTextEnd(str_id);
     if (str_id != label_end)
     {
-        ImGui::SameLine(width * 1.5f, g.Style.ItemInnerSpacing.x);
-        ImGui::SameLine(width * 1.5f, g.Style.ItemInnerSpacing.x);
+        ImGui::SameLine();
         ImGui::TextEx(str_id, label_end);
     }
     // ---------------------

@@ -326,7 +326,7 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 		{
 			if (ImGui::BeginTabItem("Window"))
 			{
-				if (ImGui::Checkbox("Fullscreen", &App->window->fullScreen))
+				if (ImGuiCustom::ToggleButton("Fullscreen", &App->window->fullScreen))
 				{
 					(!App->window->fullScreen) ? App->window->flags = SDL_WINDOW_SHOWN : App->window->flags = SDL_WINDOW_FULLSCREEN;
 
@@ -337,9 +337,9 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 				{
 					ImGui::SetTooltip("Change fullscreen window");
 				}
-				ImGui::SameLine();
+				ImGui::SameLine(150);
 
-				if (ImGui::Checkbox("Resizable", &App->window->resizable))
+				if (ImGuiCustom::ToggleButton("Resizable", &App->window->resizable))
 				{
 					SDL_SetWindowResizable(App->window->window, (SDL_bool)App->window->resizable);
 				}
@@ -349,7 +349,7 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 					ImGui::SetTooltip("Change resizable window");
 				}
 
-				if (ImGui::Checkbox("Borderless", &App->window->borderless))
+				if (ImGuiCustom::ToggleButton("Borderless", &App->window->borderless))
 				{
 					SDL_SetWindowBordered(App->window->window, (SDL_bool)!App->window->borderless);
 				}
@@ -358,9 +358,9 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 				{
 					ImGui::SetTooltip("Change borderless window");
 				}
-				ImGui::SameLine();
+				ImGui::SameLine(150);
 
-				if (ImGui::Checkbox("Full desktop", &App->window->fullScreenDesktop))
+				if (ImGuiCustom::ToggleButton("Full desktop", &App->window->fullScreenDesktop))
 				{
 					(!App->window->fullScreenDesktop) ? App->window->flags = SDL_WINDOW_SHOWN : App->window->flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
 
