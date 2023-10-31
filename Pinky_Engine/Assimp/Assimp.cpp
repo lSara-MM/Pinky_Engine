@@ -36,7 +36,7 @@ void ai::ImportFile(const char* fileDir)
 {
 	std::string dir = fileDir;
 	std::array<std::string, 3> obj_ext = { ".fbx", ".FBX", ".obj", };
-	std::array<std::string, 4> tex_ext = { ".png", ".PNG", ".jpg", ".JPG" };
+	std::array<std::string, 6> tex_ext = { ".png", ".PNG", ".jpg", ".JPG", ".dds", ".DDS" };
 
 	for (auto i = 0; i < obj_ext.size(); i++)
 	{
