@@ -32,7 +32,7 @@ GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 
 
 // ---Copy Constructor---
-GameObject::GameObject(GameObject* go)
+GameObject::GameObject(GameObject* go, int size)
 {
 	uid = App->randomLCG->Int();
 
@@ -40,10 +40,9 @@ GameObject::GameObject(GameObject* go)
 	name = go->name;
 	active = go->active;
 	
-	const int j = go->vChildren.size();
-	for (auto i = 0; i < j; i++)
+	for (auto i = 0; i < size; i++)
 	{
-		GameObject* g = new GameObject(go->vChildren[i]);
+		GameObject* g = new GameObject(go->vChildren[i], go->vChildren.size());
 		vChildren.push_back(g);
 		g = nullptr;
 	}

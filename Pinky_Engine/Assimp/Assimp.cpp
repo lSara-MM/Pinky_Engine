@@ -61,7 +61,8 @@ void ai::ImportFile(const char* fileDir)
 bool ai::ImportMesh(const char* meshfileDir, GameObject* go, const char* texfileDir)
 {
 	const aiScene* scene = aiImportFile(meshfileDir, aiProcessPreset_TargetRealtime_MaxQuality);
-	
+	bool ret = false;
+
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		if (go != nullptr)
@@ -82,14 +83,17 @@ bool ai::ImportMesh(const char* meshfileDir, GameObject* go, const char* texfile
 			// ---------------------------------------------
 
 			GameObject* obj = new GameObject(name);
-			MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, obj);
+			ret = MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, obj);
 		}
 		else
 		{
-			MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, App->scene->rootNode);
+			ret = MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, App->scene->rootNode);
 		}
 
-		LOG("%d meshes loaded.", scene->mNumMeshes);
+
+		if (ret) { LOG("%d meshes loaded.", scene->mNumMeshes); }
+		else { LOG("[ERROR] Couldn't load mesh.", scene->mNumMeshes); }
+
 		aiReleaseImport(scene);
 	}
 	else
@@ -100,7 +104,7 @@ bool ai::ImportMesh(const char* meshfileDir, GameObject* go, const char* texfile
 	return true;
 }
 
-void ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component)
+bool ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component)
 {
 	GameObject* obj = nullptr;
 
@@ -148,6 +152,8 @@ void ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 					if (m->mFaces[i].mNumIndices != 3)
 					{
 						LOG("[WARNING], geometry face with != 3 indices!");
+						obj->~GameObject();
+						return false;
 					}
 					else
 					{
@@ -217,6 +223,7 @@ void ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 	}
 
 	obj = nullptr;
+	return true;
 }
 
 bool ai::InitMesh(mesh* m)
