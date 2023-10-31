@@ -128,8 +128,7 @@ bool ModuleRenderer3D::Init()
 		}
 		else
 		{
-			LOG("Correct Glew initialization");
-			LOG("->Version: % d. % d. % d", GLEW_VERSION_MAJOR, GLEW_VERSION_MINOR, GLEW_VERSION_MICRO);
+			LOG("Correct Glew initialization, Version: %d.%d.%d", GLEW_VERSION_MAJOR, GLEW_VERSION_MINOR, GLEW_VERSION_MICRO);
 		}
 
 		iluInit();
@@ -142,9 +141,11 @@ bool ModuleRenderer3D::Init()
 		}
 
 		LOG("Correct OpenGL initialization");
-		LOG("->Vendor: %s", glGetString(GL_VENDOR));
-		LOG("->Renderer: %s", glGetString(GL_RENDERER));
-		LOG("->OpenGL version supported %s", glGetString(GL_VERSION));
+		LOG("Vendor: %s", glGetString(GL_VENDOR));
+		LOG("Renderer: %s", glGetString(GL_RENDERER));
+		LOG("OpenGL version supported %s", glGetString(GL_VERSION));
+
+		ai::EnableDebug();
 	}
 
 	// Projection matrix for
@@ -210,19 +211,6 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	(wireframe) ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	/*for each (ai::mesh* i in meshes)
-	{
-		DrawMesh(i);
-		if (VertexNormals)
-		{
-			DrawVertexNormals(i);
-		}
-		if (FaceNormals)
-		{
-			DrawFaceNormals(i);
-		}
-	}*/
-
 	return ret;
 }
 
@@ -231,7 +219,7 @@ bool ModuleRenderer3D::CleanUp()
 {
 	LOG("Destroying 3D Renderer");
 
-	// Cleanup
+	ai::DisableDebug();
 	ClearVecPtr(meshes);
 	
 	SDL_GL_DeleteContext(context);
@@ -259,7 +247,6 @@ void ModuleRenderer3D::HardwareDetection(bool& infoOutputWin)
 	if (infoOutputWin)
 	{
 		ImGui::Begin("Hardware", &infoOutputWin);
-		//Diapo sale cajita con active, no entiendo
 		ImGui::Text("SDL Version: %d.%d.%d", versionSDL.major, versionSDL.minor, versionSDL.patch);
 
 		//CPU info

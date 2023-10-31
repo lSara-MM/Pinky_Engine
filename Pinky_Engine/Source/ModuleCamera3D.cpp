@@ -61,11 +61,11 @@ update_status ModuleCamera3D::Update(float dt)
 	float3 newPos(0, 0, 0);
 	float speed = 10.0f * dt;
 
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+		speed = 20.0f * dt;
+
 	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
-		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
-			speed = 20.0f * dt;
-
 		if (App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT) newPos.y += speed;
 		if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_REPEAT) newPos.y -= speed;
 		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
@@ -235,11 +235,11 @@ void ModuleCamera3D::Zoom(math::float3 newPosition, float vel)
 {
 	if (App->input->GetMouseZ() > 0)
 	{
-		newPosition -= Z * vel;
+		newPosition -= Z * vel * 10;
 	}
 	else if (App->input->GetMouseZ() < 0)
 	{
-		newPosition += Z * vel;
+		newPosition += Z * vel * 10;
 	}
 
 	Position += newPosition;
