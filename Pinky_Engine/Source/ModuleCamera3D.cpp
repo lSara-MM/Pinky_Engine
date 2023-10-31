@@ -114,9 +114,6 @@ update_status ModuleCamera3D::Update(float dt)
 
 	else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
 	{
-		Position = float3(0.0f, 10.0f, 5.0f);
-		Reference = float3(0.0f, 0.0f, 0.0f);
-
 		//motion mouse
 		int dx = -App->input->GetMouseXMotion();
 		int dy = -App->input->GetMouseYMotion();
