@@ -21,7 +21,7 @@ class GameObject
 public:
 	//GameObject();
 	GameObject(std::string n = "EmptyGameObject", GameObject* parent = App->scene->rootNode, bool start_enabled = true);
-	GameObject(GameObject* go, int size);
+	GameObject(GameObject* go, int size, GameObject* parent);
 	~GameObject();
 
 
@@ -50,8 +50,8 @@ public:
 	bool active;
 	C_Transform* transform = nullptr;
 
-	bool selected = false;
-	bool hidden = false;
+	bool selected;
+	bool hidden;
 
 	unsigned int numMeshes;
 	unsigned int numMaterials;

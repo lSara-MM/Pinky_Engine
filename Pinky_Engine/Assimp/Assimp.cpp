@@ -43,6 +43,7 @@ void ai::ImportFile(const char* fileDir)
 		if (dir.find(obj_ext.at(i)) != std::string::npos)
 		{
 			ImportMesh(fileDir);
+			break;
 		}
 	}
 
@@ -84,6 +85,7 @@ bool ai::ImportMesh(const char* meshfileDir, GameObject* go, const char* texfile
 
 			GameObject* obj = new GameObject(name);
 			ret = MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, obj);
+			obj = nullptr;
 		}
 		else
 		{
@@ -153,6 +155,10 @@ bool ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 					{
 						LOG("[WARNING], geometry face with != 3 indices!");
 						obj->~GameObject();
+
+						obj = nullptr;
+						m = nullptr;
+						ourMesh = nullptr;
 						return false;
 					}
 					else

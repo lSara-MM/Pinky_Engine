@@ -39,7 +39,8 @@ namespace ai
 
 		~texture()
 		{
-
+			glDeleteBuffers(1, &tex_id);
+			tex_id = 0;
 		}
 	};
 
@@ -76,7 +77,7 @@ namespace ai
 			RELEASE_ARRAY(normals);
 			RELEASE_ARRAY(tex_uvs);
 
-			//tex_uvs.~texture();
+			tex.~texture();
 		}
 	};
 

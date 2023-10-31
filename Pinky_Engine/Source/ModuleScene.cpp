@@ -53,8 +53,18 @@ bool ModuleScene::Init()
 
 	GameObject* go4 = new GameObject("cube1", rootNode);
 	
-	//GameObject* go8 = new GameObject(go);
+	GameObject* go8 = new GameObject(go, go->vChildren.size(), go->pParent);
 	//GameObject* go11 = new GameObject("cube11", rootNode);
+
+	go = nullptr;
+	go1 = nullptr;
+	go2 = nullptr;
+	go3 = nullptr;
+	go4 = nullptr;
+	go5 = nullptr;
+	go6 = nullptr;
+	go7 = nullptr;
+	go9 = nullptr;
 
 	return ret;
 }

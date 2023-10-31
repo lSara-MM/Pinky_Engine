@@ -220,7 +220,7 @@ bool ModuleRenderer3D::CleanUp()
 	LOG("Destroying 3D Renderer");
 
 	ai::DisableDebug();
-	ClearVecPtr(meshes);
+	ClearVec(meshes);
 	
 	SDL_GL_DeleteContext(context);
 	return true;

@@ -32,8 +32,8 @@ C_Mesh::C_Mesh(GameObject* g, ai::mesh* m, unsigned int i, bool start_enabled) :
 
 C_Mesh::~C_Mesh()
 {
-	//mesh->~mesh();
 	ai::DeleteSelectedMesh(mesh);
+	mesh->~mesh();
 }
 
 void C_Mesh::ShowInInspector()

@@ -32,18 +32,19 @@ GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 
 
 // ---Copy Constructor---
-GameObject::GameObject(GameObject* go, int size)
+GameObject::GameObject(GameObject* go, int size, GameObject* parent)
 {
 	uid = App->randomLCG->Int();
 
-	go->pParent->AddChild(this);
+	parent->AddChild(this);
 	name = go->name;
 	active = go->active;
 	
-	for (auto i = 0; i < size; i++)
+	for (int i = 0; i < size; i++)
 	{
-		GameObject* g = new GameObject(go->vChildren[i], go->vChildren.size());
-		vChildren.push_back(g);
+		GameObject* g = new GameObject(go->vChildren[i], go->vChildren[i]->vChildren.size(), this);
+		// Does't need pushback because it does it above (addchild())
+		//vChildren.push_back(g);
 		g = nullptr;
 	}
 
@@ -68,6 +69,8 @@ GameObject::~GameObject()
 	{
 		ClearVecPtr(vChildren);
 	}
+
+	pParent = nullptr;
 
 	//pParent->vChildren.erase(pParent->vChildren.begin() + FindInVec(pParent->vChildren, this));
 	//TODO: preguntar perque peta si esta aixo pero si es fa des del parent -> delete children si funciona
@@ -219,8 +222,9 @@ void GameObject::AddChild(GameObject* go)
 
 void GameObject::DeleteChild(GameObject* go)
 {
-	go->~GameObject();
 	RemoveChild(go);
+	go->~GameObject();
+	go = nullptr;
 }
 
 void GameObject::RemoveChild(GameObject* go)

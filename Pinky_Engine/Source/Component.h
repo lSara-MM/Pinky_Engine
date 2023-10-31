@@ -29,7 +29,7 @@ class Component
 public:
 	Component(C_TYPE t = C_TYPE::NONE, GameObject* g = nullptr, unsigned int i = 0, bool start_enabled = true, std::string n = "Component")
 		: type(t), gameObject(g), id(i), active(start_enabled), name(n) {};
-	virtual ~Component() {};
+	~Component() { gameObject = nullptr; };
 
 	virtual void ShowInInspector() {};
 	int GetID() { return id; }
