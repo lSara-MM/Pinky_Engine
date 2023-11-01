@@ -166,8 +166,16 @@ bool GameObject::AddComponent(C_TYPE type, ai::mesh* m, ai::POLY_PRIMITIVE_TYPE 
 		// In unity there can be more than one if embeded (?) see snowman for reference 
 		if (numMaterials == 0)	
 		{
-			temp = new C_Material(this, nullptr, numMaterials);
-			vComponents.push_back(temp);
+			if (m != nullptr)
+			{
+				temp = new C_Material(this, &m->tex, numMaterials);
+				vComponents.push_back(temp);
+			}
+			else 
+			{
+				temp = new C_Material(this, nullptr, numMaterials);
+				vComponents.push_back(temp);
+			}
 			numMaterials++;
 		}
 		else { ret = false; }

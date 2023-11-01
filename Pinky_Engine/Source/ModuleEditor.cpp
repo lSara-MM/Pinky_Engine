@@ -317,8 +317,8 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 	{
 		// Always center this window when appearing
 		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.7f));
-		ImGui::SetNextWindowSize(ImVec2(500, 200));
+		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+		ImGui::SetNextWindowSize(ImVec2(500, 500));
 		ImGui::Begin("Configuration", &moduleSettingsWin, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 		
 		static ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_Reorderable | ImGuiTabBarFlags_TabListPopupButton;
@@ -374,14 +374,14 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 				ImGui::Separator();
 
 				ImGui::Text("Window size: %d x %d", SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
-				if (ImGui::SliderInt("Width", &App->window->width, 0, 1920, "%d"))
+				if (ImGui::SliderInt("Width", &SDL_GetWindowSurface(App->window->window)->w, 0, 1920, "%d"))
 				{
-					SDL_SetWindowSize(App->window->window, App->window->width, App->window->height);
+					SDL_SetWindowSize(App->window->window, SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
 				}
 
-				if (ImGui::SliderInt("Height", &App->window->height, 0, 1920, "%d"))
+				if (ImGui::SliderInt("Height", &SDL_GetWindowSurface(App->window->window)->h, 0, 1920, "%d"))
 				{
-					SDL_SetWindowSize(App->window->window, App->window->width, App->window->height);
+					SDL_SetWindowSize(App->window->window, SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
 				}
 				ImGui::Separator();
 				
@@ -401,7 +401,10 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 				ImGui::SliderInt("FPS cap", &App->fps, 1, 120, "%d");
 				ImGui::Separator();
 
-				ImGui::Checkbox("VSync", &App->renderer3D->Vsync);
+				if (ImGui::Checkbox("VSync", &App->renderer3D->Vsync))
+				{
+					App->renderer3D->SetVsync(App->renderer3D->Vsync);
+				};
 
 				MemWindow();
 				ImGui::EndTabItem();

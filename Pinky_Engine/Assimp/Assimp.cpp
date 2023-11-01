@@ -53,7 +53,7 @@ void ai::ImportFile(const char* fileDir)
 		{
 			for each (ai::mesh * i in App->renderer3D->meshes)
 			{
-				i->tex.tex_id = ImportTexture(fileDir);
+				ImportTexture(i,fileDir);
 			}
 		}
 	}
@@ -217,7 +217,7 @@ bool ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 				//---Mesh---
 				obj->AddComponent(C_TYPE::MESH, ourMesh);
 				//---Material---
-				if (!component) { obj->AddComponent(C_TYPE::MATERIAL); }
+				if (!component) { obj->AddComponent(C_TYPE::MATERIAL, ourMesh); }
 
 				//TODO: pushback elsewhere
 				App->renderer3D->meshes.push_back(ourMesh);
@@ -377,7 +377,7 @@ bool ai::BindTexture(mesh* m)
 	return true;
 }
 
-GLuint ai::ImportTexture(const char* texturefileDir)
+void ai::ImportTexture(mesh* m, const char* texturefileDir)
 {
 	ILuint imageID = 0;
 	ILuint textureID;
@@ -408,17 +408,17 @@ GLuint ai::ImportTexture(const char* texturefileDir)
 			LOG("[ERROR] %s", iluErrorString(ilGetError()));
 		}
 
-		int const width = ilGetInteger(IL_IMAGE_WIDTH);
-		int const height = ilGetInteger(IL_IMAGE_HEIGHT);
-		int const type = ilGetInteger(IL_IMAGE_TYPE);
-		int const format = ilGetInteger(IL_IMAGE_FORMAT);
+		m->tex.tex_width = ilGetInteger(IL_IMAGE_WIDTH);
+		m->tex.tex_height = ilGetInteger(IL_IMAGE_HEIGHT);
+		m->tex.tex_type = ilGetInteger(IL_IMAGE_TYPE);
+		m->tex.tex_format = ilGetInteger(IL_IMAGE_FORMAT);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, ilGetData());
+		glTexImage2D(GL_TEXTURE_2D, 0, m->tex.tex_format, m->tex.tex_width, m->tex.tex_height, 0, m->tex.tex_format, GL_UNSIGNED_BYTE, ilGetData());
 	}
 	else
 	{
@@ -428,5 +428,6 @@ GLuint ai::ImportTexture(const char* texturefileDir)
 	//ilBindImage(0);
 	ilDeleteImages(1, &textureID);
 
-	return textureID;
+	m->tex.path = texturefileDir;
+	m->tex.tex_id = textureID;
 }
