@@ -146,7 +146,7 @@ update_status ModuleInput::PreUpdate(float dt)
 			quit = true;
 	}
 
-	if (quit == true || keyboard[SDL_SCANCODE_ESCAPE] == KEY_UP)
+	if (quit == true)
 	{
 		LOG("Quit");
 		return UPDATE_STOP;

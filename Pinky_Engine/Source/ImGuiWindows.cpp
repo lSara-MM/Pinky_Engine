@@ -294,10 +294,11 @@ void Inspector::ShowWindow()
 			name.insert(name.begin(), 2, '#');
 			name.append(std::to_string(go->GetUid()));
 
-			std::string checkbox = "##Checkbox ";
-			checkbox.append(go->name + std::to_string(go->GetUid()));
+			std::string toggle = "##Toggle ";
+			toggle.append(go->name + std::to_string(go->GetUid()));
+			//------
 
-			if (ImGuiCustom::ToggleButton(checkbox.c_str(), &go->active))
+			if (ImGuiCustom::ToggleButton(toggle.c_str(), &go->active))
 			{
 				SetActiveState(go, go->active);
 			} 
@@ -305,7 +306,8 @@ void Inspector::ShowWindow()
 
 			if (!go->active) { ImGui::BeginDisabled(); }
 
-			ImGui::InputText(name.c_str(), &go->name);
+			static std::string temp = go->name;
+			if (ImGui::InputText(name.c_str(), &temp, ImGuiInputTextFlags_EnterReturnsTrue)) { go->name = temp; }
 			ImGui::Dummy(ImVec2(0, 10));
 
 			for (auto i = 0; i < go->vComponents.size(); i++)

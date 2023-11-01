@@ -685,7 +685,7 @@ void ModuleEditor::AboutWindow()
 		ImGui::PopStyleColor(2);
 		ImGui::SetItemDefaultFocus();
 		ImGui::SameLine();
-		if (ImGui::Button("Close")) { ImGui::CloseCurrentPopup(); }
+		if (ImGui::Button("Close")) { aboutWin = false; ImGui::CloseCurrentPopup(); }
 		ImGui::EndGroup();
 		ImGui::EndPopup();
 	}
