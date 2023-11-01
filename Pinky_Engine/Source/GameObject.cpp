@@ -1,6 +1,6 @@
 #include "GameObject.h"
 #include "ModuleScene.h"
-
+#include "Component.h"
 
 #include "C_Transform.h"
 #include "C_Mesh.h"

@@ -557,6 +557,9 @@
     <ClCompile Include="Deviceld\DeviceId.cpp">
       <Filter>Externals\Deviceld</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Component.cpp">
+      <Filter>Sources\GameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">

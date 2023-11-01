@@ -226,6 +226,7 @@
     <ClCompile Include="parson\parson.c" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Color.cpp" />
+    <ClCompile Include="Source\Component.cpp" />
     <ClCompile Include="Source\C_Camera.cpp" />
     <ClCompile Include="Source\C_Material.cpp" />
     <ClCompile Include="Source\C_Mesh.cpp" />
