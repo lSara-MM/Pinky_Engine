@@ -30,6 +30,14 @@ C_Mesh::C_Mesh(GameObject* g, ai::mesh* m, unsigned int i, bool start_enabled) :
 	showFacesNormals = false;
 }
 
+C_Mesh::C_Mesh(GameObject* g, C_Mesh* toCopy, unsigned int i) : Component(C_TYPE::MESH, g, i, toCopy->active, "Mesh")
+{
+	memcpy(&mesh, &toCopy->mesh, sizeof(*mesh));
+	//mesh = toCopy->mesh;
+	showVertexNormals = toCopy->showVertexNormals;
+	showFacesNormals = toCopy->showFacesNormals;
+}
+
 C_Mesh::~C_Mesh()
 {
 	ai::DeleteSelectedMesh(mesh);
@@ -69,7 +77,7 @@ void C_Mesh::ShowInInspector()
 	}
 	ImGui::SameLine();
 
-	if (!exists) { gameObject->RemoveComponet(this); }
+	if (!exists) { gameObject->RemoveComponent(this); }
 }
 
 void C_Mesh::Draw(bool checkered, Color color)

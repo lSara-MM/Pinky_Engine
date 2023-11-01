@@ -18,14 +18,14 @@ C_Transform::C_Transform(GameObject* g, float3 pos, Quat rot, float3 sc, bool st
 	localMatrix = math::float4x4::identity;
 }
 
-C_Transform::C_Transform(GameObject* g) : Component(C_TYPE::TRANSFORM, g, g->GetUid(), true, "Transform")
+C_Transform::C_Transform(GameObject* g, C_Transform* toCopy) : Component(C_TYPE::TRANSFORM, g, g->GetUid(), toCopy->active, "Transform")
 {
-	/*position = pos;
-	rotation = rot;
-	scale = sc;
+	position = toCopy->position;
+	rotation = toCopy->rotation;
+	scale = toCopy->scale;
 
-	globalMatrix = math::float4x4::FromTRS(pos, rot, sc);
-	localMatrix = math::float4x4::identity;*/
+	globalMatrix = math::float4x4::FromTRS(position, rotation, scale);
+	localMatrix = math::float4x4::identity;
 }
 
 C_Transform::~C_Transform()

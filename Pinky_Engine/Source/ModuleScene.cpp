@@ -52,9 +52,10 @@ bool ModuleScene::Init()
 		//GameObject* go10 = new GameObject("cube10", go1);
 
 	GameObject* go4 = new GameObject("cube1", rootNode);
-	
-	GameObject* go8 = new GameObject(go, go->vChildren.size(), go->pParent);
+
+	//GameObject* go8 = new GameObject(go, go->vChildren.size(), go->pParent);
 	//GameObject* go11 = new GameObject("cube11", rootNode);
+
 
 	go = nullptr;
 	go1 = nullptr;
@@ -130,4 +131,8 @@ void ModuleScene::BakerHouse()
 {
 	ai::ImportFile("..\\Game\\Assets\\3dObject\\baker_house\\BakerHouse.fbx");
 	ai::ImportFile("..\\Game\\Assets\\3dObject\\baker_house\\Baker_house.dds");
+
+	// TODO: remove when copy wip done
+	//GameObject* go8 = new GameObject(rootNode->vChildren.back(), rootNode->vChildren.back()->vChildren.size(), rootNode->vChildren.back()->pParent);
+	//go8 = nullptr;
 }

@@ -54,7 +54,12 @@ GameObject::GameObject(GameObject* go, int size, GameObject* parent)
 	selected = false;
 	hidden = false;
 
-	AddComponent(C_TYPE::TRANSFORM);
+	//AddComponent(C_TYPE::TRANSFORM);
+
+	for (int i = 0; i < go->vComponents.size(); i++)
+	{
+		vComponents.push_back(go->vComponents[i]->CopyComponent(this));
+	}
 
 	numMeshes = go->numMeshes;
 	numMaterials = go->numMaterials;
@@ -191,7 +196,7 @@ bool GameObject::AddComponent(C_TYPE type, ai::mesh* m, ai::POLY_PRIMITIVE_TYPE 
 	return ret;
 }
 
-void GameObject::RemoveComponet(Component* component)
+void GameObject::RemoveComponent(Component* component)
 {
 	vComponents.erase(std::find(vComponents.begin(), vComponents.end(), component));
 	component->~Component();

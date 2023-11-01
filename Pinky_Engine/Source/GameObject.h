@@ -31,7 +31,7 @@ public:
 
 	//---Components---
 	bool AddComponent(C_TYPE type, ai::mesh* m = nullptr, ai::POLY_PRIMITIVE_TYPE poly = ai::POLY_PRIMITIVE_TYPE::SPHERE);
-	void RemoveComponet(Component* component);
+	void RemoveComponent(Component* component);
 
 	std::vector<C_Mesh*> GetComponentsMesh();
 	std::vector<C_Material*> GetComponentsMaterial();

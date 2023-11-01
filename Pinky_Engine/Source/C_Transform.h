@@ -16,7 +16,7 @@ class C_Transform : public Component
 {
 public:
 	C_Transform(GameObject* g, float3 pos, Quat rot, float3 sc, bool start_enabled = true);
-	C_Transform(GameObject* g);
+	C_Transform(GameObject* g, C_Transform* toCopy);
 	~C_Transform();
 
 	void ShowInInspector();

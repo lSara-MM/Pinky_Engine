@@ -20,6 +20,14 @@ C_Material::C_Material(GameObject* g, ai::texture* t, bool check, unsigned int i
 	color = { 255, 255, 255, 255 };
 }
 
+C_Material::C_Material(GameObject* g, C_Material* toCopy, unsigned int i) : Component(C_TYPE::MATERIAL, g, i, toCopy->active, "Material")
+{
+	//memcpy(&tex, &toCopy->tex, sizeof(*tex));
+	tex = toCopy->tex;
+	checkered = true;
+	color = { 255, 255, 255, 255 };
+}
+
 C_Material::~C_Material()
 {
 }
@@ -68,5 +76,5 @@ void C_Material::ShowInInspector()
 		if (!active) { ImGui::EndDisabled(); }
 	}
 
-	if (!exists) { gameObject->RemoveComponet(this); }
+	if (!exists) { gameObject->RemoveComponent(this); }
 }
