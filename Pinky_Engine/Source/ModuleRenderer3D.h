@@ -49,7 +49,7 @@ public:
 	void SetVsync(bool enable);
 
 	//vram info
-	sMStats statsVRAM;
+	sMStats memoryStats;
 	Uint64 VRAM_budget = 0;
 	Uint64 VRAM_usage = 0;
 	Uint64 VRAM_available = 0;
