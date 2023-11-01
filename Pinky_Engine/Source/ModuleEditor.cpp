@@ -268,6 +268,19 @@ update_status ModuleEditor::Toolbar()
 				}
 				ImGui::EndMenu();
 			}
+			if (ImGui::BeginMenu("Create Custom Mesh"))
+			{
+				std::array<std::string, 3> components = { "Fox", "Kuro", "King Shark"};
+
+				for (int i = 0; i < components.size(); i++)
+				{
+					if (ImGui::MenuItem(components[i].c_str()))
+					{
+						ai::CreateCustomMehses(ai::CUSTOM_MESH(i));
+					}
+				}
+				ImGui::EndMenu();
+			}
 			ImGui::EndMenu();
 		}
 

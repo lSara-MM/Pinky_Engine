@@ -129,8 +129,5 @@ bool ModuleScene::CleanUp()
 void ModuleScene::BakerHouse()
 {
 	ai::ImportFile("..\\Game\\Assets\\3dObject\\baker_house\\BakerHouse.fbx");
-	for each (ai::mesh * i in App->renderer3D->meshes)
-	{
-		ai::ImportTexture(i,"..\\Game\\Assets\\3dObject\\baker_house\\Baker_house.dds");;
-	}
+	ai::ImportFile("..\\Game\\Assets\\3dObject\\baker_house\\Baker_house.dds");
 }

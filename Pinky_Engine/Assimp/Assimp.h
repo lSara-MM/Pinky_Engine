@@ -29,6 +29,13 @@ namespace ai
 		PLANE
 	};
 
+	enum class CUSTOM_MESH
+	{
+		FOX,
+		KURO,
+		SHARK,
+	};
+
 	struct texture
 	{
 		uint tex_id = 0;
@@ -37,7 +44,7 @@ namespace ai
 		uint tex_type = 0;
 		uint tex_format = 0;
 
-		std::string path;
+		const char* path;
 
 		~texture()
 		{
@@ -93,6 +100,7 @@ namespace ai
 	
 	bool InitMesh(mesh* m);
 	void CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go = nullptr);
+	void CreateCustomMehses(CUSTOM_MESH obj, GameObject* go = nullptr);
 
 	void DeleteLastMesh();	// TODO: remove cuando se pueda seleccionar una mesh
 	void DeleteSelectedMesh(mesh* m);

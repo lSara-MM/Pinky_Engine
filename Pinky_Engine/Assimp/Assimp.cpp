@@ -68,7 +68,7 @@ bool ai::ImportMesh(const char* meshfileDir, GameObject* go, const char* texfile
 	{
 		if (go != nullptr)
 		{
-			MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, go, true);
+			ret = MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, go, true);
 		}
 
 		// If the imported 3D model has many meshes at the same level, create a new GameObject with the
@@ -296,6 +296,27 @@ void ai::CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go)
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::PLANE:
 		ImportMesh("..\\Game\\Assets\\3dObject\\plane.fbx", go);
+		break;
+	default:
+		break;
+	}
+}
+
+void ai::CreateCustomMehses(CUSTOM_MESH obj, GameObject* go)
+{
+	switch (obj)
+	{
+	case ai::CUSTOM_MESH::FOX:
+		ImportMesh("..\\Game\\Assets\\Custom\\fox\\fox.fbx", go);
+		ImportFile("..\\Game\\Assets\\Custom\\fox\\Fox_BaseColor.png");
+		break;
+	case ai::CUSTOM_MESH::KURO:
+		ImportMesh("..\\Game\\Assets\\Custom\\kuro\\kuro.fbx", go);
+		ImportFile("..\\Game\\Assets\\Custom\\kuro\\BODYKURO.png");
+		break;
+	case ai::CUSTOM_MESH::SHARK:
+		ImportMesh("..\\Game\\Assets\\Custom\\king_shark\\kingsharksketch.fbx", go);
+		ImportFile("..\\Game\\Assets\\Custom\\king_shark\\king_shark_tex.png");
 		break;
 	default:
 		break;
