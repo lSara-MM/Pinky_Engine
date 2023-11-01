@@ -57,6 +57,7 @@ void C_Material::ShowInInspector()
 			ImGui::Text("Texture Width: %d", tex->tex_width);
 			ImGui::Text("Texture Height: %d", tex->tex_height);
 			ImGui::TextWrapped("Texture Path: %s", tex->path);
+			ImGui::Image((void*)(intptr_t)tex->tex_id, ImVec2(100, 100));
 		}
 
 		ImGui::ColorEdit3("Color", (float*)&color, ImGuiColorEditFlags_NoInputs);
