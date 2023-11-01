@@ -15,6 +15,7 @@
 #include "../ImGui/backends/imgui_impl_opengl3.h"
 //
 #include "../ImGui/imgui_custom.h"
+#include "../Deviceld/DeviceId.h"
 
 #ifdef _DEBUG
 #pragma comment (lib, "MathGeoLib/libx86/libDebug/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
@@ -121,7 +122,7 @@ update_status ModuleEditor::PostUpdate(float dt)
 
 	//Configwindow, change to fullscreen and such
 	ConfigWindow(io);
-	App->renderer3D->HardwareDetection(infoOutputWin);
+	HardwareDetection(infoOutputWin);
 	
 	// Hierarchy - Inspector
 	for (int i = 0; i < vImGuiWindows.size(); i++)
@@ -592,11 +593,11 @@ void ModuleEditor::FpsWindow(ImGuiIO& io)
 
 void ModuleEditor::MemWindow() 
 {
-	App->renderer3D->statsVRAM = m_getMemoryStatistics();
+	memoryStats = m_getMemoryStatistics();
 	char title[25];
-	AddMem(MemLog, App->renderer3D->statsVRAM.totalReportedMemory);
+	AddMem(MemLog, memoryStats.totalReportedMemory);
 	ImGui::Text("Reported Memory % 0.1f", MemLog[MemLog.size() - 1]);
-	ImGui::PlotHistogram("", &MemLog[0], MemLog.size(), 0, "", 0.0f, App->renderer3D->statsVRAM.peakReportedMemory*2, ImVec2(310, 100.0f));
+	ImGui::PlotHistogram("", &MemLog[0], MemLog.size(), 0, "", 0.0f, memoryStats.peakReportedMemory*2, ImVec2(310, 100.0f));
 }
 
 void ModuleEditor::AddFPS(std::vector<float>& vect, const float aFPS)
@@ -624,6 +625,74 @@ void ModuleEditor::AddMem(std::vector<float>& vect, const float repMem)
 		std::rotate(vect.begin(), vect.begin() + 1, vect.end());
 		vect.pop_back();
 		vect.push_back(repMem);
+	}
+}
+
+void ModuleEditor::HardwareDetection(bool& infoOutputWin)
+{
+	if (infoOutputWin)
+	{
+		ImGui::Begin("Hardware", &infoOutputWin);
+		SDL_GetVersion(&versionSDL);
+		ImGui::Text("SDL Version: %d.%d.%d", versionSDL.major, versionSDL.minor, versionSDL.patch);
+
+		//CPU info
+		ImGui::Separator();
+		ImGui::Text("CPUs: %d (Cache: %d kb) ", SDL_GetCPUCount(), SDL_GetCPUCacheLineSize());
+		ImGui::Text("System RAM: %.2f GB", SDL_GetSystemRAM() * 0.001048576);
+		ImGui::Text("Caps:");
+		ImGui::SameLine();
+		if (SDL_Has3DNow())ImGui::Text("3Dnow");
+		ImGui::SameLine();
+		if (SDL_HasAltiVec)ImGui::Text("AltiVec");
+		ImGui::SameLine();
+		if (SDL_HasAVX())ImGui::Text("AVX");
+		ImGui::SameLine();
+		if (SDL_HasAVX2())ImGui::Text("AVX2");
+		ImGui::SameLine();
+		if (SDL_HasMMX())ImGui::Text("MMX");
+		ImGui::SameLine();
+		if (SDL_HasRDTSC)ImGui::Text("RDTSC");
+		ImGui::SameLine();
+		if (SDL_HasSSE())ImGui::Text("SSE");
+		ImGui::SameLine();
+		if (SDL_HasSSE2())ImGui::Text("SSE2");
+		ImGui::SameLine();
+		if (SDL_HasSSE3())ImGui::Text("SSE3");
+		ImGui::SameLine();
+		if (SDL_HasSSE41())ImGui::Text("SSE41");
+		ImGui::SameLine();
+		if (SDL_HasSSE42())ImGui::Text("SSE42");
+
+		//GPU info
+		ImGui::Separator();
+		ImGui::Text("GPU:");
+		ImGui::SameLine();
+		ImGui::Text((const char*)glGetString(GL_RENDERER));
+		ImGui::Text("Brand:");
+		ImGui::SameLine();
+		ImGui::Text((const char*)glGetString(GL_VENDOR));
+		ImGui::Text("Version:");
+		ImGui::SameLine();
+		ImGui::Text((const char*)glGetString(GL_VERSION));
+
+		getGraphicsDeviceInfo(NULL, NULL, NULL, &VRAM_budget, &VRAM_usage, &VRAM_available, &VRAM_reserved);
+
+		ImGui::Text("VRAM Budget: %.2f Mb", (float)VRAM_budget / (1024 * 1024));
+		ImGui::Text("VRAM Usage: %.2f Mb", (float)VRAM_usage / (1024 * 1024));
+		ImGui::Text("VRAM Available: %.2f Mb", (float)VRAM_available / (1024 * 1024));
+		ImGui::Text("VRAM Reserved: %.2f Mb", (float)VRAM_reserved / (1024 * 1024));
+
+		ImGui::Text("Total Reported Memory: %d", memoryStats.totalReportedMemory);
+		ImGui::Text("Total Actual Memory: %d", memoryStats.totalActualMemory);
+		ImGui::Text("Max Reported Memory: %d", memoryStats.peakReportedMemory);
+		ImGui::Text("Max Actual Mem: %d", memoryStats.peakActualMemory);
+		ImGui::Text("Accumulated Reported Mem: %d", memoryStats.accumulatedReportedMemory);
+		ImGui::Text("Accumulated Actual Mem: %d", memoryStats.accumulatedActualMemory);
+		ImGui::Text("Accumulated Alloc Unit Count: %d", memoryStats.accumulatedAllocUnitCount);
+		ImGui::Text("Total Alloc Unit Count: %d", memoryStats.totalAllocUnitCount);
+		ImGui::Text("Peak Alloc Unit Count: %d", memoryStats.peakAllocUnitCount);
+		ImGui::End();
 	}
 }
 
@@ -656,6 +725,7 @@ void ModuleEditor::AboutWindow()
 			if (ImGui::BeginTabItem("Pinky Engine"))
 			{
 				ImGui::TextColored(aboutColor, "lSara-MM & AndyCubico");
+				ImGui::TextWrapped("3D Game engine done for the Game Engines subject in the CITM bachelor's degree in Video Game Design and Development");
 				ImGui::ColorEdit3("", (float*)&aboutColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
 				ImGui::EndTabItem();
 			}
@@ -692,17 +762,16 @@ void ModuleEditor::AboutWindow()
 
 				//---mmgr---
 				if (ImGui::Button("mmgr")) { OsOpenInShell("https://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml"); }
-				ImGui::EndTabItem();
 
 				//---Deviceld---
-				if (ImGui::Button("Deviceld")) { OsOpenInShell("https://github.com/GameTechDev/gpudetect"); }
+				if (ImGui::Button("Deviceld")) { OsOpenInShell("https://github.com/GameTechDev/gpudetect"); } ImGui::SameLine();
 				ImGui::TextWrapped("Copyright 2017 - 2018 Intel Corporation");
 				ImGui::EndTabItem();
 
 			}
 			if (ImGui::BeginTabItem("External Sources"))
 			{
-				ImGui::TextColored(aboutColor, "lSara-MM & AndyCubico");
+				ImGui::TextColored(aboutColor, "WIP");
 				ImGui::ColorEdit3("", (float*)&aboutColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
 				ImGui::EndTabItem();
 			}

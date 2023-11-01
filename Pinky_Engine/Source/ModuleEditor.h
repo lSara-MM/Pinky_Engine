@@ -31,7 +31,7 @@ public:
 	void LogWindow();
 	void FpsWindow(ImGuiIO& io);
 	void MemWindow();
-
+	void HardwareDetection(bool& infoOutputWin);
 	void AboutWindow();
 
 	void AddFPS(std::vector<float>& vect, const float aFPS);
@@ -74,4 +74,13 @@ private:
 	// About window
 	ImVec4 aboutColor;
 	bool aboutWin;
+
+	//vram info
+	sMStats memoryStats;
+	Uint64 VRAM_budget = 0;
+	Uint64 VRAM_usage = 0;
+	Uint64 VRAM_available = 0;
+	Uint64 VRAM_reserved = 0;
+	//Struct to get sdl version info
+	SDL_version versionSDL;
 };

@@ -40,20 +40,11 @@ public:
 	bool CleanUp();
 
 	void OnResize(int width, int height);
-	void HardwareDetection(bool &infoOutputWin);
-
 	void DrawBox();
 	void DrawMesh(ai::mesh* mesh);
 	void DrawVertexNormals(ai::mesh* mesh);
 	void DrawFaceNormals(ai::mesh* mesh);
 	void SetVsync(bool enable);
-
-	//vram info
-	sMStats memoryStats;
-	Uint64 VRAM_budget = 0;
-	Uint64 VRAM_usage = 0;
-	Uint64 VRAM_available = 0;
-	Uint64 VRAM_reserved = 0;
 
 public:
 
@@ -68,9 +59,6 @@ public:
 	bool VertexNormals;
 	bool FaceNormals;
 	bool Vsync;
-
-	//Struct to get sdl version info
-	SDL_version versionSDL;
 
 	std::vector<ai::mesh*> meshes;
 
