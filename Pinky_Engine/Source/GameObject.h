@@ -29,12 +29,15 @@ public:
 
 	update_status Update(float dt);
 
+	//---Components---
 	bool AddComponent(C_TYPE type, ai::mesh* m = nullptr, ai::POLY_PRIMITIVE_TYPE poly = ai::POLY_PRIMITIVE_TYPE::SPHERE);
-	void ReParent(GameObject* newParent);
+	void RemoveComponet(Component* component);
 
 	std::vector<C_Mesh*> GetComponentsMesh();
 	std::vector<C_Material*> GetComponentsMaterial();
 
+	//---Parent/Child---
+	void ReParent(GameObject* newParent);
 	void AddChild(GameObject* go);
 	void DeleteChild(GameObject* go);
 	void RemoveChild(GameObject* go);

@@ -128,6 +128,7 @@ update_status GameObject::Update(float dt)
 	return UPDATE_CONTINUE;
 }
 
+//---Components---
 bool GameObject::AddComponent(C_TYPE type, ai::mesh* m, ai::POLY_PRIMITIVE_TYPE poly)
 {
 	Component* temp;
@@ -188,14 +189,29 @@ bool GameObject::AddComponent(C_TYPE type, ai::mesh* m, ai::POLY_PRIMITIVE_TYPE 
 	return ret;
 }
 
-void GameObject::ReParent(GameObject* newParent)
+void GameObject::RemoveComponet(Component* component)
 {
-	pParent->RemoveChild(this);
+	vComponents.erase(std::find(vComponents.begin(), vComponents.end(), component));
+	component->~Component();
 
-	pParent = newParent;
-	pParent->vChildren.push_back(this);
+	switch (component->type)
+	{
+	case C_TYPE::MESH:
+		numMeshes--;
+		break;
+	case C_TYPE::MATERIAL:
+		numMaterials--;
+		break;
+	case C_TYPE::CAM:
+		break;
+	case C_TYPE::NONE:
+		break;
+	default:
+		break;
+	}
 }
 
+//---Parent/Child---
 std::vector<C_Mesh*> GameObject::GetComponentsMesh()
 {
 	std::vector<C_Mesh*> vec = {};
@@ -220,6 +236,14 @@ std::vector<C_Material*> GameObject::GetComponentsMaterial()
 		}
 	}
 	return vec;
+}
+
+void GameObject::ReParent(GameObject* newParent)
+{
+	pParent->RemoveChild(this);
+
+	pParent = newParent;
+	pParent->vChildren.push_back(this);
 }
 
 void GameObject::AddChild(GameObject* go)
