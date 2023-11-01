@@ -20,7 +20,7 @@ C_Material::C_Material(GameObject* g, ai::texture* t, bool check, unsigned int i
 	color = { 255, 255, 255, 255 };
 }
 
-C_Material::C_Material(GameObject* g, C_Material* toCopy, unsigned int i) : Component(C_TYPE::MATERIAL, g, i, toCopy->active, "Material")
+C_Material::C_Material(GameObject* g, C_Material* toCopy, bool start_enabled, unsigned int i) : Component(C_TYPE::MATERIAL, g, i, toCopy->active, "Material")
 {
 	//memcpy(&tex, &toCopy->tex, sizeof(*tex));
 	tex = toCopy->tex;
