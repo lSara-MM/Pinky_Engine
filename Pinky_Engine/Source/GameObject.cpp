@@ -28,6 +28,8 @@ GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 
 	numMeshes = 0;
 	numMaterials = 0;
+
+	vChildren = {};
 }
 
 
@@ -157,7 +159,7 @@ bool GameObject::AddComponent(C_TYPE type, ai::mesh* m, ai::POLY_PRIMITIVE_TYPE 
 			}
 			else
 			{
-				ai::CreatePolyPrimitive(poly, this);
+				ai::CreatePolyPrimitive(poly, this, true);
 			}
 		}
 		else { ret = false; }

@@ -24,6 +24,8 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	void PrimitivesMenu(GameObject* go = nullptr, bool component = false);
+
 	update_status Toolbar();
 	void ConfigWindow(ImGuiIO& io);
 	void LogWindow();

@@ -53,13 +53,13 @@ void ai::ImportFile(const char* fileDir)
 		{
 			for each (ai::mesh * i in App->renderer3D->meshes)
 			{
-				ImportTexture(i,fileDir);
+				ImportTexture(i, fileDir);
 			}
 		}
 	}
 }
 
-bool ai::ImportMesh(const char* meshfileDir, GameObject* go, const char* texfileDir)
+bool ai::ImportMesh(const char* meshfileDir, GameObject* go, bool component)
 {
 	const aiScene* scene = aiImportFile(meshfileDir, aiProcessPreset_TargetRealtime_MaxQuality);
 	bool ret = false;
@@ -68,7 +68,7 @@ bool ai::ImportMesh(const char* meshfileDir, GameObject* go, const char* texfile
 	{
 		if (go != nullptr)
 		{
-			ret = MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, go, true);
+			ret = MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, go, component);
 		}
 
 		// If the imported 3D model has many meshes at the same level, create a new GameObject with the
@@ -281,15 +281,15 @@ bool ai::InitMesh(mesh* m)
 	return true;
 }
 
-void ai::CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go)
+void ai::CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go, bool component)
 {
 	switch (obj)
 	{
 	case ai::POLY_PRIMITIVE_TYPE::CUBE:
-		ImportMesh("..\\Game\\Assets\\3dObject\\cube.fbx", go);
+		ImportMesh("..\\Game\\Assets\\3dObject\\cube.fbx", go, component);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::SPHERE:
-		ImportMesh("..\\Game\\Assets\\3dObject\\sphere.fbx", go);
+		ImportMesh("..\\Game\\Assets\\3dObject\\sphere.fbx", go, component);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::CYLINDER:
 		ImportMesh("..\\Game\\Assets\\3dObject\\cylinder.fbx", go);

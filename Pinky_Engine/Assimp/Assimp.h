@@ -44,7 +44,7 @@ namespace ai
 		uint tex_type = 0;
 		uint tex_format = 0;
 
-		const char* path;
+		const char* path = "";
 
 		~texture()
 		{
@@ -95,11 +95,11 @@ namespace ai
 
 	void ImportFile(const char* fileDir);
 
-	bool ImportMesh(const char* meshfileDir, GameObject* go = nullptr, const char* texfileDir = nullptr);
+	bool ImportMesh(const char* meshfileDir, GameObject* go = nullptr, bool component = false);
 	bool MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component = false);
 	
 	bool InitMesh(mesh* m);
-	void CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go = nullptr);
+	void CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go = nullptr, bool component = false);
 	void CreateCustomMehses(CUSTOM_MESH obj, GameObject* go = nullptr);
 
 	void DeleteLastMesh();	// TODO: remove cuando se pueda seleccionar una mesh
