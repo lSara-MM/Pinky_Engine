@@ -20,6 +20,7 @@
 #include "../DevIL/include/ilu.h"
 #include "../DevIL/include/ilut.h"
 #include "../mmgr/mmgr.h"
+#include "../Deviceld/DeviceId.h"
 
 #ifdef _DEBUG
 #pragma comment (lib, "MathGeoLib/libx86/libDebug/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
@@ -43,7 +44,7 @@ bool ModuleRenderer3D::Init()
 	bool ret = true;
 	
 	//Get RAM values
-	statsVRAM = m_getMemoryStatistics();
+	memoryStats = m_getMemoryStatistics();
 
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
@@ -254,33 +255,34 @@ void ModuleRenderer3D::HardwareDetection(bool& infoOutputWin)
 	if (infoOutputWin)
 	{
 		ImGui::Begin("Hardware", &infoOutputWin);
+		SDL_GetVersion(&versionSDL);
 		ImGui::Text("SDL Version: %d.%d.%d", versionSDL.major, versionSDL.minor, versionSDL.patch);
 
 		//CPU info
 		ImGui::Separator();
 		ImGui::Text("CPUs: %d (Cache: %d kb) ", SDL_GetCPUCount(), SDL_GetCPUCacheLineSize());
 		ImGui::Text("System RAM: %.2f GB", SDL_GetSystemRAM()* 0.001048576);
-		ImGui::Text("Caps: ", SDL_GetSystemRAM());
+		ImGui::Text("Caps:");
 		ImGui::SameLine();
-		if (SDL_Has3DNow())ImGui::Text("3Dnow ");
+		if (SDL_Has3DNow())ImGui::Text("3Dnow");
 		ImGui::SameLine();
-		if (SDL_HasAltiVec)ImGui::Text("AltiVec ");
+		if (SDL_HasAltiVec)ImGui::Text("AltiVec");
 		ImGui::SameLine();
-		if (SDL_HasAVX())ImGui::Text("AVX ");
+		if (SDL_HasAVX())ImGui::Text("AVX");
 		ImGui::SameLine();
-		if (SDL_HasAVX2())ImGui::Text("AVX2 ");
+		if (SDL_HasAVX2())ImGui::Text("AVX2");
 		ImGui::SameLine();
-		if (SDL_HasMMX())ImGui::Text("MMX ");
+		if (SDL_HasMMX())ImGui::Text("MMX");
 		ImGui::SameLine();
-		if (SDL_HasRDTSC)ImGui::Text("RDTSC ");
+		if (SDL_HasRDTSC)ImGui::Text("RDTSC");
 		ImGui::SameLine();
-		if (SDL_HasSSE())ImGui::Text("SSE ");
+		if (SDL_HasSSE())ImGui::Text("SSE");
 		ImGui::SameLine();
-		if (SDL_HasSSE2())ImGui::Text("SSE2 ");
+		if (SDL_HasSSE2())ImGui::Text("SSE2");
 		ImGui::SameLine();
-		if (SDL_HasSSE3())ImGui::Text("SSE3 ");
+		if (SDL_HasSSE3())ImGui::Text("SSE3");
 		ImGui::SameLine();
-		if (SDL_HasSSE41())ImGui::Text("SSE41 ");
+		if (SDL_HasSSE41())ImGui::Text("SSE41");
 		ImGui::SameLine();
 		if (SDL_HasSSE42())ImGui::Text("SSE42");
 
@@ -295,15 +297,23 @@ void ModuleRenderer3D::HardwareDetection(bool& infoOutputWin)
 		ImGui::Text("Version: ");
 		ImGui::SameLine();
 		ImGui::Text((const char*)glGetString(GL_VERSION));
-		ImGui::Text("Total Reported Memory: %d", statsVRAM.totalReportedMemory);
-		ImGui::Text("Total Actual Memory: %d", statsVRAM.totalActualMemory);
-		ImGui::Text("Max Reported Memory: %d", statsVRAM.peakReportedMemory);
-		ImGui::Text("Max Actual Mem: %d", statsVRAM.peakActualMemory);
-		ImGui::Text("Accumulated Reported Mem: %d", statsVRAM.accumulatedReportedMemory);
-		ImGui::Text("Accumulated Actual Mem: %d", statsVRAM.accumulatedActualMemory);
-		ImGui::Text("Accumulated Alloc Unit Count: %d", statsVRAM.accumulatedAllocUnitCount);
-		ImGui::Text("Total Alloc Unit Count: %d", statsVRAM.totalAllocUnitCount);
-		ImGui::Text("Peak Alloc Unit Count: %d", statsVRAM.peakAllocUnitCount);
+
+		getGraphicsDeviceInfo(NULL, NULL, NULL, &VRAM_budget, &VRAM_usage, &VRAM_available, &VRAM_reserved);
+
+		ImGui::Text("VRAM Budget: %.2f Mb", (float)VRAM_budget/ (1024 * 1024));
+		ImGui::Text("VRAM Usage: %.2f Mb", (float)VRAM_usage/ (1024 * 1024));
+		ImGui::Text("VRAM Available: %.2f Mb", (float)VRAM_available/ (1024 * 1024));
+		ImGui::Text("VRAM Reserved: %.2f Mb", (float)VRAM_reserved/ (1024* 1024));
+
+		ImGui::Text("Total Reported Memory: %d", memoryStats.totalReportedMemory);
+		ImGui::Text("Total Actual Memory: %d", memoryStats.totalActualMemory);
+		ImGui::Text("Max Reported Memory: %d", memoryStats.peakReportedMemory);
+		ImGui::Text("Max Actual Mem: %d", memoryStats.peakActualMemory);
+		ImGui::Text("Accumulated Reported Mem: %d", memoryStats.accumulatedReportedMemory);
+		ImGui::Text("Accumulated Actual Mem: %d", memoryStats.accumulatedActualMemory);
+		ImGui::Text("Accumulated Alloc Unit Count: %d", memoryStats.accumulatedAllocUnitCount);
+		ImGui::Text("Total Alloc Unit Count: %d", memoryStats.totalAllocUnitCount);
+		ImGui::Text("Peak Alloc Unit Count: %d", memoryStats.peakAllocUnitCount);
 		ImGui::End();
 	}
 }

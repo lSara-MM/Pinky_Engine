@@ -104,7 +104,6 @@ update_status ModuleEditor::PreUpdate(float dt)
 update_status ModuleEditor::PostUpdate(float dt)
 {
 	update_status ret = UPDATE_CONTINUE;
-	App->renderer3D->statsVRAM = m_getMemoryStatistics();
 
 	// Start the Dear ImGui frame
 	ImGui_ImplOpenGL3_NewFrame();
@@ -587,10 +586,11 @@ void ModuleEditor::FpsWindow(ImGuiIO& io)
 
 void ModuleEditor::MemWindow() 
 {
+	App->renderer3D->statsVRAM = m_getMemoryStatistics();
 	char title[25];
-	AddMem(MemLog, App->renderer3D->statsVRAM.peakReportedMemory);
+	AddMem(MemLog, App->renderer3D->statsVRAM.totalReportedMemory);
 	ImGui::Text("Reported Memory % 0.1f", MemLog[MemLog.size() - 1]);
-	ImGui::PlotHistogram("", &MemLog[0], MemLog.size(), 0, "", 0.0f, 40.0f, ImVec2(310, 100.0f));
+	ImGui::PlotHistogram("", &MemLog[0], MemLog.size(), 0, "", 0.0f, App->renderer3D->statsVRAM.peakReportedMemory*2, ImVec2(310, 100.0f));
 }
 
 void ModuleEditor::AddFPS(std::vector<float>& vect, const float aFPS)
@@ -686,6 +686,11 @@ void ModuleEditor::AboutWindow()
 
 				//---mmgr---
 				if (ImGui::Button("mmgr")) { OsOpenInShell("https://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml"); }
+				ImGui::EndTabItem();
+
+				//---Deviceld---
+				if (ImGui::Button("Deviceld")) { OsOpenInShell("https://github.com/GameTechDev/gpudetect"); }
+				ImGui::TextWrapped("Copyright 2017 - 2018 Intel Corporation");
 				ImGui::EndTabItem();
 
 			}

@@ -64,6 +64,9 @@
     <Filter Include="Externals\ImGui\misc">
       <UniqueIdentifier>{e7de0dd9-b7a9-4752-9b57-6fbbec8bfedc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Externals\Deviceld">
+      <UniqueIdentifier>{35ce13ec-e7de-411c-991b-7fab47855320}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MathGeoLib\include\MathBuildConfig.h">
@@ -354,6 +357,9 @@
     <ClInclude Include="Source\C_Camera.h">
       <Filter>Sources\GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="Deviceld\DeviceId.h">
+      <Filter>Externals\Deviceld</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MathGeoLib\include\Geometry\AABB.cpp">
@@ -547,6 +553,9 @@
     </ClCompile>
     <ClCompile Include="Source\C_Camera.cpp">
       <Filter>Sources\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Deviceld\DeviceId.cpp">
+      <Filter>Externals\Deviceld</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

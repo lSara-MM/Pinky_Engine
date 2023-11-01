@@ -47,7 +47,13 @@ public:
 	void DrawVertexNormals(ai::mesh* mesh);
 	void DrawFaceNormals(ai::mesh* mesh);
 	void SetVsync(bool enable);
+
+	//vram info
 	sMStats statsVRAM;
+	Uint64 VRAM_budget = 0;
+	Uint64 VRAM_usage = 0;
+	Uint64 VRAM_available = 0;
+	Uint64 VRAM_reserved = 0;
 
 public:
 
