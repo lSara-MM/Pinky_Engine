@@ -211,7 +211,39 @@ bool Hierarchy::TreeNode(GameObject* current, ImGuiTreeNodeFlags node_flags)
 		ImGui::PushStyleColor(ImGuiCol_Text, disabledColor);
 	}
 
-	ret = ImGui::TreeNodeEx((void*)(intptr_t)current->GetUid(), node_flags, current->name.c_str());
+	ret = ImGui::TreeNodeEx((void*)(intptr_t)current->GetUid(), node_flags, current->name.c_str()); 
+	if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
+	{
+		ImGui::MenuItem(current->name.c_str());
+		ImGui::Separator();
+		if (ImGui::MenuItem("(WIP) Copy", "Ctrl + C"))
+		{
+
+		}
+		if (ImGui::MenuItem("(WIP) Paste", "Ctrl + V"))
+		{
+
+		}
+		if (ImGui::MenuItem("(WIP) Paste as Child", "Ctrl + Shift + V"))
+		{
+
+		}
+		ImGui::Separator();
+		if (ImGui::MenuItem("Create Empty GameObject"))
+		{
+			GameObject* go = new GameObject("Empty GameObject", current);
+			go = nullptr;
+		}
+
+		if (ImGui::BeginMenu("Mesh"))
+		{
+			App->editor->PrimitivesMenu(current);
+			ImGui::EndMenu();
+		}
+
+		SetSelected(current);
+		ImGui::EndPopup();
+	}
 
 	if (!current->active)
 	{
@@ -338,15 +370,7 @@ void Inspector::ShowWindow()
 				{
 					if (ImGui::BeginMenu("Mesh"))
 					{
-						std::array<std::string, 4> components = { "Cube", "Sphere", "Cylinder", "Plane" };
-
-						for (int i = 0; i < components.size(); i++)
-						{
-							if (ImGui::MenuItem(components[i].c_str()))
-							{
-								go->AddComponent(C_TYPE::MESH, nullptr, ai::POLY_PRIMITIVE_TYPE(i));
-							}
-						}
+						App->editor->PrimitivesMenu(go, true);
 						ImGui::EndMenu();
 					}
 				}
