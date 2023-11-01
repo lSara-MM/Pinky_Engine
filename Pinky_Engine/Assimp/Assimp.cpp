@@ -308,15 +308,15 @@ void ai::CreateCustomMehses(CUSTOM_MESH obj, GameObject* go)
 	{
 	case ai::CUSTOM_MESH::FOX:
 		ImportMesh("..\\Game\\Assets\\Custom\\fox\\fox.fbx", go);
-		ImportFile("..\\Game\\Assets\\Custom\\fox\\Fox_BaseColor.png");
+		ImportFile("..\\Game\\Assets\\Custom\\fox\\Fox_BaseColor.dds");
 		break;
 	case ai::CUSTOM_MESH::KURO:
 		ImportMesh("..\\Game\\Assets\\Custom\\kuro\\kuro.fbx", go);
-		ImportFile("..\\Game\\Assets\\Custom\\kuro\\BODYKURO.png");
+		ImportFile("..\\Game\\Assets\\Custom\\kuro\\BODYKURO.dds");
 		break;
 	case ai::CUSTOM_MESH::SHARK:
 		ImportMesh("..\\Game\\Assets\\Custom\\king_shark\\kingsharksketch.fbx", go);
-		ImportFile("..\\Game\\Assets\\Custom\\king_shark\\king_shark_tex.png");
+		ImportFile("..\\Game\\Assets\\Custom\\king_shark\\king_shark_tex.dds");
 		break;
 	default:
 		break;

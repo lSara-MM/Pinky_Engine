@@ -657,15 +657,38 @@ void ModuleEditor::AboutWindow()
 			if (ImGui::BeginTabItem("Libraries"))
 			{
 				//---ImGui---
-				if (ImGui::Button("ImGui")) { OsOpenInShell(""); } ImGui::SameLine();
-				ImGui::Text("Omar Cornut Copyright (c) 2014-2023"); 
+				if (ImGui::Button("ImGui")) { OsOpenInShell("https://github.com/ocornut/imgui"); } ImGui::SameLine();
+				ImGui::TextWrapped("Omar Cornut Copyright (c) 2014-2023"); 
 
 				//---OpenGL---
-				if (ImGui::Button("OpenGL")) { OsOpenInShell(""); } ImGui::SameLine();
-				ImGui::Text("Omar Cornut Copyright (c) 2014-2023"); 
-				ImGui::EndTabItem();
-			}
+				if (ImGui::Button("OpenGL")) { OsOpenInShell("https://glew.sourceforge.net/"); } ImGui::SameLine();
+				if (ImGui::Button("OpenGL License")) { OsOpenInShell("https://github.com/nigels-com/glew#copyright-and-licensing"); } 
 			
+				//---MathGeoLib---
+				if (ImGui::Button("MathGeoLib")) { OsOpenInShell("https://github.com/juj/MathGeoLib"); } ImGui::SameLine();
+				if (ImGui::Button("MathGeoLib License")) { OsOpenInShell("http://www.apache.org/licenses/LICENSE-2.0.html"); } 
+
+				//---Parson---
+				if (ImGui::Button("Parson")) { OsOpenInShell("https://github.com/kgabis/parson"); } ImGui::SameLine();
+				ImGui::TextWrapped("Copyright(c) 2012 - 2022 Krzysztof Gabis");
+
+				//---Assimp---
+				if (ImGui::Button("Assimp")) { OsOpenInShell("https://www.assimp.org/"); } ImGui::SameLine();
+				ImGui::TextWrapped("Copyright (c) 2006-2021, assimp team");
+
+				//---DevIL---
+				if (ImGui::Button("DevIL")) { OsOpenInShell("https://openil.sourceforge.net/"); } ImGui::SameLine();
+				ImGui::TextWrapped("Copyright (C) 1991, 1999 Free Software Foundation");
+
+				//---SDL---
+				if (ImGui::Button("SDL")) { OsOpenInShell("https://www.libsdl.org/index.php"); } ImGui::SameLine();
+				if (ImGui::Button("SDL License")) { OsOpenInShell("https://www.libsdl.org/license.php"); }
+
+				//---mmgr---
+				if (ImGui::Button("mmgr")) { OsOpenInShell("https://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml"); }
+				ImGui::EndTabItem();
+
+			}
 			if (ImGui::BeginTabItem("External Sources"))
 			{
 				ImGui::TextColored(aboutColor, "lSara-MM & AndyCubico");
