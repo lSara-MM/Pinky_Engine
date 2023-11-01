@@ -41,18 +41,17 @@ void C_Mesh::ShowInInspector()
 	// --- Set ImGui ids ---
 	std::string checkbox = name.c_str();
 	std::string header = name.c_str();
+	bool exists = true;
 
 	checkbox.insert(checkbox.begin(), 2, '#');
 	checkbox.append(std::to_string(GetID()));
 
-	header.append("##");
-	header.append(std::to_string(GetID()));
-
+	header.append("##").append(std::to_string(GetID()));
 	// ---------------------------------------------
 
 	ImGui::Checkbox(checkbox.c_str(), &active);		ImGui::SameLine();
 
-	if (ImGui::CollapsingHeader(header.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+	if (ImGui::CollapsingHeader(header.c_str(), &exists, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		if (!active) { ImGui::BeginDisabled(); }
  
@@ -68,6 +67,9 @@ void C_Mesh::ShowInInspector()
 
 		if (!active) { ImGui::EndDisabled(); }
 	}
+	ImGui::SameLine();
+
+	if (!exists) { gameObject->RemoveComponet(this); }
 }
 
 void C_Mesh::Draw(bool checkered, Color color)

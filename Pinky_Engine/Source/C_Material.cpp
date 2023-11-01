@@ -27,6 +27,7 @@ void C_Material::ShowInInspector()
 	std::string checkbox = name.c_str();
 	std::string header = name.c_str();
 	std::string toogle = "Checkered##";
+	bool exists = true;
 
 	checkbox.insert(checkbox.begin(), 2, '#');
 	checkbox.append(std::to_string(GetID()));
@@ -41,7 +42,7 @@ void C_Material::ShowInInspector()
 	ImGui::Checkbox(checkbox.c_str(), &active);
 	ImGui::SameLine();
 
-	if (ImGui::CollapsingHeader(header.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+	if (ImGui::CollapsingHeader(header.c_str(), &exists, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		if (!active) { ImGui::BeginDisabled(); }
 
@@ -62,4 +63,6 @@ void C_Material::ShowInInspector()
 
 		if (!active) { ImGui::EndDisabled(); }
 	}
+
+	if (!exists) { gameObject->RemoveComponet(this); }
 }
