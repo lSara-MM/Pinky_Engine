@@ -13,7 +13,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 	Y = float3(0.0f, 1.0f, 0.0f);
 	Z = float3(0.0f, 0.0f, 1.0f);
 
-	Position = float3(0.0f, 10.0f, 5.0f);
+	Position = float3(5.0f, 5.0f, 5.0f);
 	Reference = float3(0.0f, 0.0f, 0.0f);
 	ViewMatrix = IdentityMatrix;
 
@@ -38,7 +38,7 @@ bool ModuleCamera3D::Start()
 	mouseX = 0;
 	mouseY = 0;
 	speed = 0;
-
+	
 	bool ret = true;
 
 	return ret;
@@ -156,34 +156,21 @@ update_status ModuleCamera3D::Update(float dt)
 		LookAt(Reference);
 	}
 
-	else if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT)
+	else if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN && !ImGui::GetIO().WantTextInput)
 	{
 		Focus();
 	}
-	else
+
+	else if(!ImGui::GetIO().WantCaptureMouse)
 	{
 		Zoom(newPos, speed);
 		Position += newPos;
 		Reference += newPos;
 	}
+
 	// Recalculate matrix -------------
 	CalculateViewMatrix();
 
-	//cam WIP
-	//speed = 10.0f * dt;
-	/*mouseX = App->input->GetMouseX();
-	mouseY = App->input->GetMouseY();
-
-	if (App->input->GetMouseButton(SDL_BUTTON_LEFT == KEY_REPEAT))
-	{
-		Orbit();
-	}
-
-	else if (App->input->GetMouseButton(SDL_BUTTON_RIGHT)==KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
-	{
-		FPScamera();
-		CameraMovement();
-	}*/
 	return UPDATE_CONTINUE;
 }
 
@@ -244,7 +231,7 @@ void ModuleCamera3D::Zoom(math::float3 newPosition, float vel)
 
 void ModuleCamera3D::Focus()
 {
-	Position = float3(0.0f, 10.0f, 5.0f);
+	Position = float3(5.0f, 5.0f, 5.0f);
 	Reference = float3(0.0f, 0.0f, 0.0f);
 	LookAt(Reference);
 }

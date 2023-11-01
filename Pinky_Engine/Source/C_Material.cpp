@@ -51,6 +51,13 @@ void C_Material::ShowInInspector()
 		}
 		ImGui::SetItemTooltip("Use checkered texture");
 
+		if (tex != nullptr)
+		{
+			ImGui::Text("Texture Width: %d", tex->tex_width);
+			ImGui::Text("Texture Height: %d", tex->tex_height);
+			ImGui::TextWrapped("Texture Path: %s", tex->path);
+		}
+
 		ImGui::ColorEdit3("Color", (float*)&color, ImGuiColorEditFlags_NoInputs);
 
 		if (!active) { ImGui::EndDisabled(); }

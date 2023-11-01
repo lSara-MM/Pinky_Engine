@@ -135,9 +135,16 @@ bool ModuleRenderer3D::Init()
 		ilInit();
 		ilutInit();
 
-		if (ilutRenderer(ILUT_OPENGL)) 
+		if (ilutRenderer(ILUT_OPENGL))
 		{
 			LOG("Correct DevIL initialization");
+		}
+
+		if (ilGetInteger(IL_VERSION_NUM) < IL_VERSION ||
+			iluGetInteger(ILU_VERSION_NUM) < ILU_VERSION || 
+			ilutGetInteger(ILUT_VERSION_NUM) < ILUT_VERSION) 
+		{
+			printf("DevIL version is different...exiting!\n");
 		}
 
 		LOG("Correct OpenGL initialization");

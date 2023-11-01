@@ -34,6 +34,8 @@ namespace ai
 		uint tex_id = 0;
 		uint tex_width = 0;
 		uint tex_height = 0;
+		uint tex_type = 0;
+		uint tex_format = 0;
 
 		std::string path;
 
@@ -99,6 +101,6 @@ namespace ai
 	// Textures
 	void LoadCheckers(GLuint& buffer);
 	bool BindTexture(mesh* m);
-	GLuint ImportTexture(const char* texturefileDir);
+	void ImportTexture(mesh* m, const char* texturefileDir);
 }
 #endif //!__MESH_H__
