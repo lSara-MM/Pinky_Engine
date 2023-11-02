@@ -58,6 +58,7 @@
 			* Show reported memory
 		* OpenGl options
 		* Change UI settings
+	* Information output: show Hardware information
 	* About window: License information and three additional windows:
 		* Pinky Engine: team members and s short description, with link to the Github repository
 		* Libraries used, with link to their pages
