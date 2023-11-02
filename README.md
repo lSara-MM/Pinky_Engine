@@ -82,6 +82,6 @@
 # Github links
 
 * [Repository](https://github.com/lSara-MM/Pinky_Engine)
-* [Latest Release](https://github.com/lSara-MM/Pinky_Engine/releases)
+* [Releases](https://github.com/lSara-MM/Pinky_Engine/releases)
 * [Sara Qiao Martínez Mauri](https://github.com/lSara-MM)
 * [Andreu Nosàs Soler](https://github.com/AndyCubico)
