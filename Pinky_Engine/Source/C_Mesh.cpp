@@ -42,6 +42,7 @@ C_Mesh::~C_Mesh()
 {
 	ai::DeleteSelectedMesh(mesh);
 	mesh->~mesh();
+	mesh = nullptr;
 }
 
 void C_Mesh::ShowInInspector()
@@ -111,7 +112,7 @@ void C_Mesh::Draw(bool checkered, Color color)
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 	glActiveTexture(GL_TEXTURE0);
 
-	glBindTexture(GL_TEXTURE_2D, mesh->tex.tex_id);
+	//glBindTexture(GL_TEXTURE_2D, mesh->tex.tex_id);
 	(!checkered) ? glBindTexture(GL_TEXTURE_2D, mesh->tex.tex_id) : glBindTexture(GL_TEXTURE_2D, App->renderer3D->texture_checker);
 
 	// ---------------------------------------------
