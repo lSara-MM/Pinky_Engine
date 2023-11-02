@@ -360,6 +360,7 @@
     <ClInclude Include="Deviceld\DeviceId.h">
       <Filter>Externals\Deviceld</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MathGeoLib\include\Geometry\AABB.cpp">
@@ -580,5 +581,11 @@
     <None Include="MathGeoLib\include\Math\Matrix.inl">
       <Filter>Externals\MathGeoLib\Math</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Pinky_Engine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Game\Assets\Pinky.ico" />
   </ItemGroup>
 </Project>
