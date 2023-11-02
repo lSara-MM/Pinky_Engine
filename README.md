@@ -4,7 +4,7 @@
 
 # Controls
 
-* Right Click + W/A/S/D: Fps camera controls
+* Right Click + W/A/S/D: FPS camera controls
 * Right Click + Q/E: Go down and up
 * Left Alt + Left Click: Orbital camera around (0,0,0)
 * F: Focus on coordinates (0,0,0)
@@ -23,7 +23,7 @@
 		* Material component allows to change the color (with a color picker) and a toggle to show the checkers
 	* User can add mesh (choose a primitive shape) and material components
 	* Toggle to enable and disable Game Object, it will not render and will appear slightly turned off in the hierarchy
-	* Clicking the name allows the user to change it (press enter)
+	* Clicking the name allows the user to change it (press enter to save it)
 * Hierarchy:
 	* User can fold and unfold the children of a parent
 	* Multiple selection of Game Objects
@@ -37,17 +37,17 @@
 	* Button to clear the console.
 ## Menus
 
-* File menu:
+* File:
 	* Options allow the user to change the theme of the UI: classic, light and dark
 	* Exit button to close the application
-* Game Object Menu:
+* Game Object:
 	* Option to create an empty Game Object with onlty a trasnform component
 	* Option to create a primitive shape (cube, sphere, cylinder and plance)
 	* Option to create one of the custom meshes (a fox, King Shark and Kuro)
-* Window menu:
+* Window:
 	* Show and hide the hierarchy window
 	* Show and hide the inspector window
-* Help menu:
+* Help:
 	* Module settings
 		* Configuration window
 			* Change window size
@@ -58,6 +58,7 @@
 			* Show reported memory
 		* OpenGl options
 		* Change UI settings
+	* Information output: show Hardware information
 	* About window: License information and three additional windows:
 		* Pinky Engine: team members and s short description, with link to the Github repository
 		* Libraries used, with link to their pages
