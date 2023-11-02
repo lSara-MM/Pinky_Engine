@@ -17,7 +17,7 @@
 
 * Load and draw FBX files by dragging them to the engine from anywhere in the Hard Drive
 * Load and apply DDS/PNG textures by dragging them to the engine from anywhere in the Hard Drive
-* GameObject structure, one for each loaded mesh. Inspector shows the following:
+* Game Object structure, one for each loaded mesh. Inspector shows the following:
 	* Each GameObject has 3 components: Transform, Mesh and Material
 		* Mesh component allows to show vertex normals and face normals of the geometry
 		* Material component allows to change the color (with a color picker) and a toggle to show the checkers
@@ -29,6 +29,7 @@
 	* Multiple selection of Game Objects
 	* Delete Game objects from the engine deletes them from the hierarchy
 	* Move Game Object to change its parent
+	* Right click Game Object allows to create a child with a primitive shape or empty
 
 * Console Window:
 	* Show the geometry and texture loading process
