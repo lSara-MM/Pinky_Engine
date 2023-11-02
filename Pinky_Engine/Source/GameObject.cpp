@@ -272,18 +272,24 @@ void GameObject::RemoveChild(GameObject* go)
 	vChildren.shrink_to_fit();
 }
 
-GameObject* GameObject::FindChild(u32 idToFind)
+GameObject* GameObject::FindChild(u32 idToFind, GameObject* go)
 {
 	for (auto i = 0; i < vChildren.size(); i++)
 	{
+		if (go != nullptr)
+		{
+			break;
+		}
 		if (!vChildren[i]->vChildren.empty())
 		{
-			vChildren[i]->FindChild(idToFind);
+			go = vChildren[i]->FindChild(idToFind, go);
 		}
 		if (idToFind == vChildren[i]->GetUid())
 		{
-			return vChildren[i];
+			go = vChildren[i];
+			return go;
 		}
 	}
-	return nullptr;
+
+	return go;
 }

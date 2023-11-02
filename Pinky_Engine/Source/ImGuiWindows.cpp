@@ -273,10 +273,12 @@ void Hierarchy::MouseEvents(GameObject* current)
 		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
 		{
 			// If dragged go is parent of target go, don't do anything
-			if (GetDragged()->FindChild(current->GetUid()) == nullptr)
+			GameObject* go = nullptr;
+			if (GetDragged()->FindChild(current->GetUid(), go) == nullptr)
 			{
 				GetDragged()->ReParent(current);
 			}
+			go = nullptr;
 		}
 		ImGui::EndDragDropTarget();
 	}
@@ -338,7 +340,7 @@ void Inspector::ShowWindow()
 
 			if (!go->active) { ImGui::BeginDisabled(); }
 
-			static std::string temp = go->name;
+			std::string temp = go->name;
 			if (ImGui::InputText(name.c_str(), &temp, ImGuiInputTextFlags_EnterReturnsTrue)) { go->name = temp; }
 			ImGui::Dummy(ImVec2(0, 10));
 

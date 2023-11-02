@@ -42,7 +42,7 @@ public:
 	void DeleteChild(GameObject* go);
 	void RemoveChild(GameObject* go);
 	// Return nullptr if gameobject not found
-	GameObject* FindChild(u32 idToFind);
+	GameObject* FindChild(u32 idToFind, GameObject* go);
 
 public:
 	GameObject* pParent = nullptr;

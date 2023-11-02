@@ -222,7 +222,7 @@ bool ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 				//TODO: pushback elsewhere
 				App->renderer3D->meshes.push_back(ourMesh);
 			}
-
+	
 			m = nullptr;
 			ourMesh = nullptr;
 		}
