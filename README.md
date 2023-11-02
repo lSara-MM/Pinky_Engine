@@ -2,13 +2,6 @@
 
 3D Game engine done by Sara Qiao Martínez Mauri and Andreu Nosàs Soler for the Game Engines subject in the CITM bachelor's degree in Video Game Design and Development.
 
-# Github links
-
-* [Repository](https://github.com/lSara-MM/Pinky_Engine)
-* [Latest Release](https://github.com/lSara-MM/Pinky_Engine/releases)
-* [Sara Qiao Martínez Mauri](https://github.com/lSara-MM)
-* [Andreu Nosàs Soler](https://github.com/AndyCubico)
-
 # Controls
 
 * Right Click + W/A/S/D: Fps camera controls
@@ -70,3 +63,22 @@
 		* Libraries used, with link to their pages
 		* External sources: wip, credit creators of ImGUI layouts that we are planning to use 
 * Wireframe toggle to enable and disable showing the wireframe of all meshes
+
+# Libraries Used
+
+* [ImGUI](https://github.com/ocornut/imgui)
+* [OpenGL](https://glew.sourceforge.net/)
+* [MathGeoLib](https://github.com/juj/MathGeoLib)
+* [Parson](https://github.com/kgabis/parson)
+* [Assimp](https://www.assimp.org/)
+* [DevIL](https://openil.sourceforge.net/)
+* [SDL](https://www.libsdl.org/index.php)
+* [mmgr](https://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml)
+* [Deviceld](https://github.com/GameTechDev/gpudetect)
+
+# Github links
+
+* [Repository](https://github.com/lSara-MM/Pinky_Engine)
+* [Latest Release](https://github.com/lSara-MM/Pinky_Engine/releases)
+* [Sara Qiao Martínez Mauri](https://github.com/lSara-MM)
+* [Andreu Nosàs Soler](https://github.com/AndyCubico)
