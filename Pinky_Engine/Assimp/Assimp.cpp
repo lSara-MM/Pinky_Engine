@@ -122,7 +122,6 @@ bool ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 			std::string name = children[i]->mName.C_Str();
 			int pos = name.find_first_of("$");
 
-			// TODO: questionable quick fix 
 			(pos == std::string::npos) ? obj = new GameObject(name, parent) : obj = parent;
 		}
 
@@ -260,7 +259,7 @@ bool ai::InitMesh(mesh* m)
 
 	// EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m->EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * m->num_index, m->index, GL_STATIC_DRAW); //TODO: EN TEORIA FUNCIONA YA?
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * m->num_index, m->index, GL_STATIC_DRAW); 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	// VAO
@@ -320,22 +319,6 @@ void ai::CreateCustomMehses(CUSTOM_MESH obj, GameObject* go)
 		break;
 	default:
 		break;
-	}
-}
-
-void ai::DeleteLastMesh()
-{
-	std::vector<ai::mesh*>* m = &App->renderer3D->meshes;
-
-	if (!m->empty())
-	{
-		LOG("Deleted last mesh created");
-
-		DeleteMeshBuffers(*(m->end() - 1));
-
-		m->back()->~mesh();
-		m->erase(m->end() - 1);
-		m->shrink_to_fit();
 	}
 }
 

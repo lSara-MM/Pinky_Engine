@@ -61,4 +61,4 @@ public:
 
 private:
 	u32 uid;
-} /**rootNode*/;	// TODO: preguntar com es millor, si aixi o un rootnode al scene
+};

@@ -102,7 +102,6 @@ namespace ai
 	void CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go = nullptr, bool component = false);
 	void CreateCustomMehses(CUSTOM_MESH obj, GameObject* go = nullptr);
 
-	void DeleteLastMesh();	// TODO: remove cuando se pueda seleccionar una mesh
 	void DeleteSelectedMesh(mesh* m);
 	void DeleteMeshBuffers(mesh* m);
 
