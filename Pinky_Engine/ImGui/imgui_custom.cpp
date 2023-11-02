@@ -129,7 +129,7 @@ void ImGuiCustom::Theme_PinkCherry()
 
     style.Colors[ImGuiCol_Text] = ImVec4(0.8588235378265381f, 0.929411768913269f, 0.886274516582489f, 1.0f);
     style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.5215686559677124f, 0.5490196347236633f, 0.5333333611488342f, 1.0f);
-    style.Colors[ImGuiCol_WindowBg] = ImVec4(0.1294117718935013f, 0.1372549086809158f, 0.168627455830574f, 1.0f);
+    style.Colors[ImGuiCol_WindowBg] = ImVec4(0.109f, 0.115f, 0.142f, 1.0f);
     style.Colors[ImGuiCol_ChildBg] = ImVec4(0.1490196138620377f, 0.1568627506494522f, 0.1882352977991104f, 1.0f);
     style.Colors[ImGuiCol_PopupBg] = ImVec4(0.2000000029802322f, 0.2196078449487686f, 0.2666666805744171f, 1.0f);
     style.Colors[ImGuiCol_Border] = ImVec4(0.1372549086809158f, 0.1137254908680916f, 0.1333333402872086f, 1.0f);
@@ -138,7 +138,7 @@ void ImGuiCustom::Theme_PinkCherry()
     style.Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.872f, 0.276f, 0.654f, 1.0f);
     style.Colors[ImGuiCol_FrameBgActive] = ImVec4(0.872f, 0.276f, 0.654f, 1.0f);
     style.Colors[ImGuiCol_TitleBg] = ImVec4(0.2313725501298904f, 0.2000000029802322f, 0.2705882489681244f, 1.0f);
-    style.Colors[ImGuiCol_TitleBgActive] = ImVec4(0.641f, 0.134f, 0.338f, 1.0f);
+    style.Colors[ImGuiCol_TitleBgActive] = ImVec4(0.686f, 0.17f, 0.429f, 1.0f);
     style.Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.2000000029802322f, 0.2196078449487686f, 0.2666666805744171f, 1.0f);
     style.Colors[ImGuiCol_MenuBarBg] = ImVec4(0.2000000029802322f, 0.2196078449487686f, 0.2666666805744171f, 1.0f);
     style.Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.239215686917305f, 0.239215686917305f, 0.2196078449487686f, 1.0f);
@@ -153,7 +153,7 @@ void ImGuiCustom::Theme_PinkCherry()
     style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.872f, 0.276f, 0.654f, 1.0f);
     style.Colors[ImGuiCol_Header] = ImVec4(0.872f, 0.276f, 0.654f, 1.0f);
     style.Colors[ImGuiCol_HeaderHovered] = ImVec4(0.756f, 0.134f, 0.529f, 1.0f);
-    style.Colors[ImGuiCol_HeaderActive] = ImVec4(0.641f, 0.134f, 0.338f, 1.0f);
+    style.Colors[ImGuiCol_HeaderActive] = ImVec4(0.686f, 0.17f, 0.429f, 1.0f);
     style.Colors[ImGuiCol_Separator] = ImVec4(0.4274509847164154f, 0.4274509847164154f, 0.4980392158031464f, 1.0f);
     style.Colors[ImGuiCol_SeparatorHovered] = ImVec4(0.09803921729326248f, 0.4000000059604645f, 0.7490196228027344f, 1.0f);
     style.Colors[ImGuiCol_SeparatorActive] = ImVec4(0.09803921729326248f, 0.4000000059604645f, 0.7490196228027344f, 1.0f);

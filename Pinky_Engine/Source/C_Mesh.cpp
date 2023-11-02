@@ -30,7 +30,7 @@ C_Mesh::C_Mesh(GameObject* g, ai::mesh* m, unsigned int i, bool start_enabled) :
 	showFacesNormals = false;
 }
 
-C_Mesh::C_Mesh(GameObject* g, C_Mesh* toCopy, unsigned int i, bool start_enabled) : Component(C_TYPE::MESH, g, i, toCopy->active, "Mesh")
+C_Mesh::C_Mesh(GameObject* g, C_Mesh* toCopy, bool start_enabled, unsigned int i) : Component(C_TYPE::MESH, g, i, toCopy->active, "Mesh")
 {
 	memcpy(&mesh, &toCopy->mesh, sizeof(*mesh));
 	//mesh = toCopy->mesh;

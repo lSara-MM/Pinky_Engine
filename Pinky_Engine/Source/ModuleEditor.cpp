@@ -55,7 +55,7 @@ bool ModuleEditor::Init()
 	ImGui::StyleColorsClassic();
 	//ImGuiCustom::Theme_Cinder();
 	//ImGuiCustom::Theme_EnemyMouse();
-	//ImGuiCustom::Theme_PinkCherry();
+	ImGuiCustom::Theme_PinkCherry();
 
 	io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Calibri.ttf", 15.0f);
 	io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Consola.ttf", 14.0f);
@@ -567,7 +567,7 @@ void ModuleEditor::ConsoleWindow()
 		{
 			vLog.push_back("[WARNING] debug warning message");
 		}
-		ImGui::Dummy(ImVec2(ImGui::GetFontSize() * 20, 0));
+		ImGui::Dummy(ImVec2(225, 0));
 		static ImGuiTextFilter filter;
 		filter.Draw("Search", ImGui::GetFontSize() * 15);
 

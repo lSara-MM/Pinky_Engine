@@ -394,7 +394,7 @@ void Inspector::ShowWindow()
 		}
 
 		
-	}ImGui::End();
+	} ImGui::End();
 }
 
 void Inspector::SetActiveState(GameObject* go, bool active)
