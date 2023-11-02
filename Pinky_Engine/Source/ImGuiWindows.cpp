@@ -124,8 +124,10 @@ void Hierarchy::ShowWindow()
 	std::string title = "Hierarchy";
 	title.append("##");
 	title.append(std::to_string(id));
-
-	ImGui::SetNextWindowSize(ImVec2(200, 500), ImGuiCond_Appearing);
+	
+	ImVec2 pos = ImGui::GetMainViewport()->WorkPos;
+	ImGui::SetNextWindowPos(pos, ImGuiCond_Appearing, ImVec2(-0.05f, -0.05f));
+	ImGui::SetNextWindowSize(ImVec2(200, 490), ImGuiCond_Appearing);
 	if (ImGui::Begin(title.c_str(), &show))
 	{
 		// ---Root node---
@@ -314,8 +316,10 @@ void Inspector::ShowWindow()
 	title.append("##");
 	title.append(std::to_string(id));
 
-	ImGui::SetNextWindowSize(ImVec2(260, 500), ImGuiCond_Appearing);
-	ImGui::SetWindowPos(ImVec2(700, 50), ImGuiCond_Appearing);
+	ImVec2 pos = ImGui::GetMainViewport()->WorkPos;
+	pos.x += ImGui::GetMainViewport()->Size.x;
+	ImGui::SetNextWindowPos(pos, ImGuiCond_Appearing, ImVec2(1.05f, -0.05f));
+	ImGui::SetNextWindowSize(ImVec2(260, 490), ImGuiCond_Appearing);
 	if (ImGui::Begin(title.c_str(), &show))
 	{
 		if (!GetSelectedGOs().empty())

@@ -552,6 +552,9 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 void ModuleEditor::ConsoleWindow()
 {
 	// Console window
+	ImVec2 pos = ImGui::GetMainViewport()->WorkPos;
+	pos.y += ImGui::GetMainViewport()->Size.y;
+	ImGui::SetNextWindowPos(pos, ImGuiCond_Appearing, ImVec2(-0.01f, 1.0f));
 	ImGui::SetNextWindowSize(ImVec2(500, 200), ImGuiCond_FirstUseEver);
 
 	if (ImGui::Begin("Console", /*&consoleWin,*/ NULL, ImGuiWindowFlags_MenuBar))
@@ -648,6 +651,9 @@ void ModuleEditor::HardwareDetection(bool& infoOutputWin)
 {
 	if (infoOutputWin)
 	{
+		// Always center this window when appearing
+		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 		ImGui::Begin("Hardware", &infoOutputWin);
 		SDL_GetVersion(&versionSDL);
 		ImGui::Text("SDL Version: %d.%d.%d", versionSDL.major, versionSDL.minor, versionSDL.patch);
