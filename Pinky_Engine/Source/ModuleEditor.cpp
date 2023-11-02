@@ -55,6 +55,7 @@ bool ModuleEditor::Init()
 	ImGui::StyleColorsClassic();
 	//ImGuiCustom::Theme_Cinder();
 	//ImGuiCustom::Theme_EnemyMouse();
+	//ImGuiCustom::Theme_PinkCherry();
 
 	io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Calibri.ttf", 15.0f);
 	io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Consola.ttf", 14.0f);
@@ -280,7 +281,7 @@ update_status ModuleEditor::Toolbar()
 			
 			if (ImGui::BeginMenu("Create Custom Mesh"))
 			{
-				std::array<std::string, 3> components = { "Fox", "Kuro", "King Shark"};
+				std::array<std::string, 3> components = { "Law Hat", "Kuro", "King Shark"};
 
 				for (int i = 0; i < components.size(); i++)
 				{
@@ -590,8 +591,7 @@ void ModuleEditor::ConsoleWindow()
 		if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY()) { ImGui::SetScrollHereY(1.0f); }
 
 		ImGui::EndChild();
-		ImGui::End();
-	}
+	} ImGui::End();
 }
 
 void ModuleEditor::FpsWindow(ImGuiIO& io)

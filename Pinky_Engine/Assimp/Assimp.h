@@ -31,7 +31,7 @@ namespace ai
 
 	enum class CUSTOM_MESH
 	{
-		FOX,
+		LAW,
 		KURO,
 		SHARK,
 	};

@@ -13,8 +13,11 @@
 
 namespace ImGuiCustom
 {
+    void Theme_SoftCherry();
+    void Theme_PinkCherry();
     void Theme_EnemyMouse();
     void Theme_Cinder();
+    void Theme_RoomLoad();
 
     bool ToggleButton(const char* str_id, bool* v, ImVec4 bg_color = { 255, 0, 255, 255 }, bool anim = true);
 }

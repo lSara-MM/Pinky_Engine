@@ -152,8 +152,7 @@ void Hierarchy::ShowWindow()
 		}
 
 		ImGui::TreePop();
-		ImGui::End();
-	}
+	} ImGui::End();
 }
 
 bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
@@ -394,8 +393,8 @@ void Inspector::ShowWindow()
 			go = nullptr;
 		}
 
-		ImGui::End();
-	}
+		
+	}ImGui::End();
 }
 
 void Inspector::SetActiveState(GameObject* go, bool active)
