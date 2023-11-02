@@ -23,7 +23,7 @@
 		* Material component allows to change the color (with a color picker) and a toggle to show the checkers
 	* User can add mesh (choose a primitive shape) and material components
 	* Toggle to enable and disable Game Object, it will not render and will appear slightly turned off in the hierarchy
-	* Clicking the name allows the user to change it (press enter to save it)
+	* Clicking the name allows the user to change it (press enter to save it and esc to cancel)
 * Hierarchy:
 	* User can fold and unfold the children of a parent
 	* Multiple selection of Game Objects
