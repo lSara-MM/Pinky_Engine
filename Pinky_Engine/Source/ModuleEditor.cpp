@@ -570,7 +570,6 @@ void ModuleEditor::ConsoleWindow()
 		ImGui::Dummy(ImVec2(225, 0));
 		static ImGuiTextFilter filter;
 		filter.Draw("Search", ImGui::GetFontSize() * 15);
-
 		ImGui::EndMenuBar();
 
 		//const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();

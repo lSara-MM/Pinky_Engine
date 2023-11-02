@@ -138,7 +138,7 @@ void ImGuiCustom::Theme_PinkCherry()
     style.Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.872f, 0.276f, 0.654f, 1.0f);
     style.Colors[ImGuiCol_FrameBgActive] = ImVec4(0.872f, 0.276f, 0.654f, 1.0f);
     style.Colors[ImGuiCol_TitleBg] = ImVec4(0.2313725501298904f, 0.2000000029802322f, 0.2705882489681244f, 1.0f);
-    style.Colors[ImGuiCol_TitleBgActive] = ImVec4(0.686f, 0.17f, 0.429f, 1.0f);
+    style.Colors[ImGuiCol_TitleBgActive] = ImVec4(0.756f, 0.134f, 0.529f, 1.0f);
     style.Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.2000000029802322f, 0.2196078449487686f, 0.2666666805744171f, 1.0f);
     style.Colors[ImGuiCol_MenuBarBg] = ImVec4(0.2000000029802322f, 0.2196078449487686f, 0.2666666805744171f, 1.0f);
     style.Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.239215686917305f, 0.239215686917305f, 0.2196078449487686f, 1.0f);
