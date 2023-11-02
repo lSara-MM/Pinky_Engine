@@ -101,8 +101,8 @@ bool ModuleScene::CleanUp()
 
 void ModuleScene::BakerHouse()
 {
-	ai::ImportFile("..\\Game\\Assets\\3dObject\\baker_house\\BakerHouse.fbx");
-	ai::ImportFile("..\\Game\\Assets\\3dObject\\baker_house\\Baker_house.dds");
+	ai::ImportFile("Assets\\3dObject\\baker_house\\BakerHouse.fbx");
+	ai::ImportFile("Assets\\3dObject\\baker_house\\Baker_house.dds");
 
 	// TODO: remove when copy wip done
 	//GameObject* go8 = new GameObject(rootNode->vChildren.back(), rootNode->vChildren.back()->vChildren.size(), rootNode->vChildren.back()->pParent);

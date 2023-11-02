@@ -285,16 +285,16 @@ void ai::CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go, bool compo
 	switch (obj)
 	{
 	case ai::POLY_PRIMITIVE_TYPE::CUBE:
-		ImportMesh("..\\Game\\Assets\\3dObject\\cube.fbx", go, component);
+		ImportMesh("Assets\\3dObject\\cube.fbx", go, component);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::SPHERE:
-		ImportMesh("..\\Game\\Assets\\3dObject\\sphere.fbx", go, component);
+		ImportMesh("Assets\\3dObject\\sphere.fbx", go, component);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::CYLINDER:
-		ImportMesh("..\\Game\\Assets\\3dObject\\cylinder.fbx", go);
+		ImportMesh("Assets\\3dObject\\cylinder.fbx", go);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::PLANE:
-		ImportMesh("..\\Game\\Assets\\3dObject\\plane.fbx", go);
+		ImportMesh("Assets\\3dObject\\plane.fbx", go);
 		break;
 	default:
 		break;
@@ -306,16 +306,16 @@ void ai::CreateCustomMehses(CUSTOM_MESH obj, GameObject* go)
 	switch (obj)
 	{
 	case ai::CUSTOM_MESH::LAW:
-		ImportMesh("..\\Game\\Assets\\Custom\\law_hat\\trafalgar-laws-hat.fbx", go);
-		ImportFile("..\\Game\\Assets\\Custom\\law_hat\\law_hat_mat_BaseColor.dds");
+		ImportMesh("Assets\\Custom\\law_hat\\trafalgar-laws-hat.fbx", go);
+		ImportFile("Assets\\Custom\\law_hat\\law_hat_mat_BaseColor.dds");
 		break;
 	case ai::CUSTOM_MESH::KURO:
-		ImportMesh("..\\Game\\Assets\\Custom\\kuro\\kuro.fbx", go);
-		ImportFile("..\\Game\\Assets\\Custom\\kuro\\BODYKURO.dds");
+		ImportMesh("Assets\\Custom\\kuro\\kuro.fbx", go);
+		ImportFile("Assets\\Custom\\kuro\\BODYKURO.dds");
 		break;
 	case ai::CUSTOM_MESH::SHARK:
-		ImportMesh("..\\Game\\Assets\\Custom\\king_shark\\kingsharksketch.fbx", go);
-		ImportFile("..\\Game\\Assets\\Custom\\king_shark\\king_shark_tex.dds");
+		ImportMesh("Assets\\Custom\\king_shark\\kingsharksketch.fbx", go);
+		ImportFile("Assets\\Custom\\king_shark\\king_shark_tex.dds");
 		break;
 	default:
 		break;
