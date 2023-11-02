@@ -85,7 +85,9 @@ bool ModuleEditor::Init()
 	infoOutputWin = false;
 	//
 	consoleWin = false;
-	//
+
+	//VRAM data (leaks memory in update)
+	getGraphicsDeviceInfo(NULL, NULL, NULL, &VRAM_budget, &VRAM_usage, &VRAM_available, &VRAM_reserved);
 
 	// About
 	aboutColor = ImVec4(0.953f, 0.533f, 0.969f, 1.0f);
@@ -417,7 +419,7 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 				ImGui::Text("Brightness: %.2f", SDL_GetWindowBrightness(App->window->window));
 				if (ImGui::SliderFloat("Brightness", &App->window->brightness, 0.2350f, 1.0f, "%.2f"))
 				{
-					SDL_SetWindowBrightness(App->window->window, App->window->brightness);//TODO: falla a vegades
+					SDL_SetWindowBrightness(App->window->window, App->window->brightness);
 				}
 				ImGui::Separator();
 
@@ -689,8 +691,6 @@ void ModuleEditor::HardwareDetection(bool& infoOutputWin)
 		ImGui::Text("Version:");
 		ImGui::SameLine();
 		ImGui::Text((const char*)glGetString(GL_VERSION));
-
-		getGraphicsDeviceInfo(NULL, NULL, NULL, &VRAM_budget, &VRAM_usage, &VRAM_available, &VRAM_reserved);
 
 		ImGui::Text("VRAM Budget: %.2f Mb", (float)VRAM_budget / (1024 * 1024));
 		ImGui::Text("VRAM Usage: %.2f Mb", (float)VRAM_usage / (1024 * 1024));

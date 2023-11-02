@@ -21,7 +21,7 @@
 
 #include "GameObject.h"
 #include "Component.h"
-#include "ModuleRenderer3D.h"	// TODO: no se donde tendria que estar el gluint del checkers pa que no se repita por cada mesh
+#include "ModuleRenderer3D.h"	
 
 C_Mesh::C_Mesh(GameObject* g, ai::mesh* m, unsigned int i, bool start_enabled) : Component(C_TYPE::MESH, g, i, start_enabled, "Mesh")
 {
@@ -132,7 +132,6 @@ void C_Mesh::Draw(bool checkered, Color color)
 
 void C_Mesh::DrawVertexNormals()
 {
-	//TODO: adjust length value with editor
 	float normal_lenght = 1.0f;
 	glBegin(GL_LINES);
 	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
@@ -152,7 +151,6 @@ void C_Mesh::DrawVertexNormals()
 
 void C_Mesh::DrawFaceNormals()
 {
-	//TODO: adjust length value with editor
 	float normal_lenght = 1.0f;
 	glBegin(GL_LINES);
 	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);

@@ -5,7 +5,7 @@
 #include "../MathGeoLib/include/Math/float4x4.h"
 #include "C_Camera.h"
 
-//todo: REMOVE this before 1st delivery!!
+//todo: REMOVE this before 2nd delivery!!
 #include "glmath.h"
 
 class ModuleCamera3D : public Module

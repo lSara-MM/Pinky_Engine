@@ -1,6 +1,3 @@
-// Importers
-// TODO: cambiar de sitio cuando se cree donde tiene que estar
-// TODO preguntar: porque tiene que estar arriba de todo o sino peta el algorithm 
 #pragma once
 #include "../Assimp/Assimp.h"
 
@@ -21,7 +18,7 @@
 #include "../Glew/include/glew.h"
 
 
-//todo: REMOVE this before 1st delivery!!
+//todo: REMOVE this before 2nd delivery!!
 #include "glmath.h"
 
 #define MAX_LIGHTS 8
@@ -41,9 +38,6 @@ public:
 
 	void OnResize(int width, int height);
 	void DrawBox();
-	void DrawMesh(ai::mesh* mesh);
-	void DrawVertexNormals(ai::mesh* mesh);
-	void DrawFaceNormals(ai::mesh* mesh);
 	void SetVsync(bool enable);
 
 public:

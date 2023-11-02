@@ -238,7 +238,7 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	//todo: USE MATHGEOLIB here BEFORE 1st delivery! (TIP: Use MathGeoLib/Geometry/Frustum.h, view and projection matrices are managed internally.)
+	//todo: USE MATHGEOLIB here BEFORE 2nd delivery! (TIP: Use MathGeoLib/Geometry/Frustum.h, view and projection matrices are managed internally.)
 	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
 	glLoadMatrixf(ProjectionMatrix.M);
 
@@ -287,104 +287,6 @@ void ModuleRenderer3D::DrawBox()
 	glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, 1.0f, 1.0f);// Point 3 (Left)
 	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, -1.0f);// Point 4 (Left)
 	glEnd();// Done Drawing Quads
-}
-
-void ModuleRenderer3D::DrawMesh(ai::mesh* mesh)
-{
-	glEnableClientState(GL_VERTEX_ARRAY);
-	//normals
-	glEnableClientState(GL_NORMAL_ARRAY);
-
-	//texture
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	// Mesh buffers
-	glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glBindVertexArray(0);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->EBO);
-
-    
-	// Normales
-	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_normals);
-	glNormalPointer(GL_FLOAT, 0, NULL);
-
-	// Textures
-	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_tex_uvs);
-	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-	glActiveTexture(GL_TEXTURE0);
-
-	glBindTexture(GL_TEXTURE_2D, mesh->tex.tex_id);
-	//(mesh->hasTex) ? glBindTexture(GL_TEXTURE_2D, mesh->tex.id_tex) : glBindTexture(GL_TEXTURE_2D, texture_checker);
-
-	// Draw mesh
-	glDrawElements(GL_TRIANGLES, mesh->num_index, GL_UNSIGNED_INT, NULL);
-
-	// Clean textures
-	glBindTexture(GL_TEXTURE_2D, 0); // Cleanning bind buffer;
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-}
-
-void ModuleRenderer3D::DrawVertexNormals(ai::mesh* mesh)
-{
-	//TODO: adjust length value with editor
-	float normal_lenght = 1.0f;
-	glBegin(GL_LINES);
-	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
-
-	for (uint i = 0; i < mesh->num_vertex * 3; i += 3)
-	{
-		LineSegment NormalDirection(math::float3(mesh->vertex[i], mesh->vertex[i + 1], mesh->vertex[i + 2]),
-			math::float3(mesh->vertex[i] + mesh->normals[i], mesh->vertex[i + 1] + mesh->normals[i + 1], mesh->vertex[i + 2] + mesh->normals[i + 2]));
-
-		glVertex3f(NormalDirection.a.x * normal_lenght, NormalDirection.a.y * normal_lenght, NormalDirection.a.z * normal_lenght);
-		glVertex3f(NormalDirection.b.x * normal_lenght, NormalDirection.b.y * normal_lenght, NormalDirection.b.z * normal_lenght);
-	}
-
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	glEnd();
-}
-
-void ModuleRenderer3D::DrawFaceNormals(ai::mesh* mesh)
-{
-	//TODO: adjust length value with editor
-	float normal_lenght = 1.0f;
-	glBegin(GL_LINES);
-	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
-
-	for (size_t i = 0; i < mesh->num_index ; i += 3)
-	{
-		uint index1 = mesh->index[i] * 3;
-		uint index2 = mesh->index[i + 1] * 3;
-		uint index3 = mesh->index[i + 2] * 3;
-
-		math::float3 vec1(mesh->vertex[index1], mesh->vertex[index1 + 1], mesh->vertex[index1 + 2]);
-		math::float3 vec2(mesh->vertex[index2], mesh->vertex[index2 + 1], mesh->vertex[index2 + 2]);
-		math::float3 vec3(mesh->vertex[index3], mesh->vertex[index3 + 1], mesh->vertex[index3 + 2]);
-		
-		math::float3 v0 = vec2 - vec1;
-		math::float3 v1 = vec3 - vec1;
-		math::float3 crossV = math::Cross(v0, v1);
-
-		math::float3 crossNorm = crossV.Normalized();
-
-		GLfloat vx = (vec1.x + vec2.x + vec3.x) / 3;
-		GLfloat vy = (vec1.y + vec2.y + vec3.y) / 3;
-		GLfloat vz = (vec1.z + vec2.z + vec3.z) / 3;
-
-		GLfloat vx_norm = crossNorm.x;
-		GLfloat vy_norm = crossNorm.y;
-		GLfloat vz_norm = crossNorm.z;
-
-		glVertex3f(vx, vy, vz);
-		glVertex3f(vx + (vx_norm * normal_lenght), vy + (vy_norm * normal_lenght), vz + (vz_norm * normal_lenght));
-	}
-
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	glEnd();
 }
 
 void ModuleRenderer3D::SetVsync(bool enable)

@@ -39,34 +39,6 @@ bool ModuleScene::Init()
 
 	rootNode = new GameObject("Root node", nullptr);
 
-	// TODO: borrar cuando ya no se use
-	GameObject* go = new GameObject("cube", rootNode);
-		GameObject* go2 = new GameObject("cube2", go);
-			GameObject* go7 = new GameObject("cube7", go2);
-			GameObject* go9 = new GameObject("cube9", go2);
-		GameObject* go3 = new GameObject("cube3", go);
-			GameObject* go5 = new GameObject("cube5", go3);
-			GameObject* go6 = new GameObject("cube6", go3);
-
-	GameObject* go1 = new GameObject("cube1", rootNode);
-		//GameObject* go10 = new GameObject("cube10", go1);
-
-	GameObject* go4 = new GameObject("cube1", rootNode);
-
-	//GameObject* go8 = new GameObject(go, go->vChildren.size(), go->pParent);
-	//GameObject* go11 = new GameObject("cube11", rootNode);
-
-
-	go = nullptr;
-	go1 = nullptr;
-	go2 = nullptr;
-	go3 = nullptr;
-	go4 = nullptr;
-	go5 = nullptr;
-	go6 = nullptr;
-	go7 = nullptr;
-	go9 = nullptr;
-
 	return ret;
 }
 

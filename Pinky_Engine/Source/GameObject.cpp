@@ -78,9 +78,6 @@ GameObject::~GameObject()
 	}
 
 	pParent = nullptr;
-
-	//pParent->vChildren.erase(pParent->vChildren.begin() + FindInVec(pParent->vChildren, this));
-	//TODO: preguntar perque peta si esta aixo pero si es fa des del parent -> delete children si funciona
 }
 
 u32 GameObject::GetUid()
