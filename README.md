@@ -44,7 +44,7 @@
 	* Button to clear the console.
 ## Menus
 
-*File menu:
+* File menu:
 	* Options allow the user to change the theme of the UI: classic, light and dark
 	* Exit button to close the application
 * Game Object Menu:
