@@ -1,4 +1,4 @@
-# Motors
+# Pinky Engine
 
 3D Game engine done by Sara Qiao Martínez Mauri and Andreu Nosàs Soler for the Game Engines subject in the CITM bachelor's degree in Video Game Design and Development.
 
