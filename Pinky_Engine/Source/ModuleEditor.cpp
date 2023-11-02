@@ -52,9 +52,14 @@ bool ModuleEditor::Init()
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
 
 	// Setup Dear ImGui style
-	ImGui::StyleColorsClassic(); // dark mode default :D
+	ImGui::StyleColorsClassic();
 	//ImGuiCustom::Theme_Cinder();
 	//ImGuiCustom::Theme_EnemyMouse();
+
+	io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Calibri.ttf", 15.0f);
+	io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Consola.ttf", 14.0f);
+	io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Comic.ttf", 18.0f);
+	io.Fonts->AddFontDefault();
 
 	// Setup Platform/Renderer backends
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
@@ -62,6 +67,7 @@ bool ModuleEditor::Init()
 
 	// Module Settings
 	moduleSettingsWin = false;
+	styleEditor = false;
 	frcap = true;
 
 	//// OpenGL configuration
@@ -76,6 +82,9 @@ bool ModuleEditor::Init()
 
 	//
 	infoOutputWin = false;
+	//
+	consoleWin = false;
+	//
 
 	// About
 	aboutColor = ImVec4(0.953f, 0.533f, 0.969f, 1.0f);
@@ -120,7 +129,7 @@ update_status ModuleEditor::PostUpdate(float dt)
 	ret = Toolbar();
 	
 	//LOG window
-	LogWindow();
+	ConsoleWindow();
 
 	//Configwindow, change to fullscreen and such
 	ConfigWindow(io);
@@ -211,20 +220,6 @@ update_status ModuleEditor::Toolbar()
 			ImGui::Separator();
 			if (ImGui::BeginMenu("Options"))
 			{
-				static bool enabled = true;
-				ImGui::MenuItem("Enabled", "", &enabled);
-				
-				ImGui::BeginChild("child", ImVec2(0, 60), true);
-				for (int i = 0; i < 10; i++)
-					ImGui::Text("Scrolling Text %d", i);
-				ImGui::EndChild();
-				
-				static float f = 0.5f;
-				static int n = 0;
-				ImGui::SliderFloat("Value", &f, 0.0f, 1.0f);
-				ImGui::InputFloat("Input", &f, 0.1f);
-				ImGui::Combo("Combo", &n, "Yes\0No\0Maybe\0\0");
-
 				if (ImGui::BeginMenu("Theme"))
 				{
 					if (ImGui::MenuItem("Classic"))
@@ -238,6 +233,13 @@ update_status ModuleEditor::Toolbar()
 					if (ImGui::MenuItem("Dark"))
 					{
 						ImGui::StyleColorsDark();
+					}
+					ImGui::Separator();
+
+					if (ImGui::MenuItem("Advanced"))
+					{
+						moduleSettingsWin = true;
+						styleEditor = true;
 					}
 					ImGui::EndMenu();
 				}
@@ -310,6 +312,11 @@ update_status ModuleEditor::Toolbar()
 				}
 				//vImGuiWindows.push_back(new Inspector(vImGuiWindows.size()));
 			}
+
+			/*if (ImGui::MenuItem("Console##1"))
+			{
+				consoleWin != consoleWin;
+			}*/
 			ImGui::EndMenu();
 		}
 
@@ -523,61 +530,68 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 				ImGui::EndTabItem();
 			}
 
-			if(ImGui::BeginTabItem("Style Editor"))
+			ImGuiTabItemFlags flags = ImGuiTabItemFlags_None;
+			if (styleEditor) flags = ImGuiTabItemFlags_SetSelected;
+			if (ImGui::BeginTabItem("Style Editor", NULL, flags))
 			{
 				ImGui::ShowStyleEditor();
 				ImGui::EndTabItem();
 			}
+			else { styleEditor = false; }
 
 			ImGui::EndTabBar();
 		}
+		
 		ImGui::End();
 	}
 }
 
-void ModuleEditor::LogWindow()
+void ModuleEditor::ConsoleWindow()
 {
-	//Log window
+	// Console window
 	ImGui::SetNextWindowSize(ImVec2(500, 200), ImGuiCond_FirstUseEver);
-	ImGui::Begin("Console", NULL, ImGuiWindowFlags_MenuBar);
-	ImGui::BeginMenuBar();
-	if (ImGui::Button("Clear"))
-	{
-		ClearVec(vLog);
-	}
-	if (ImGui::Button("Add Error message"))
-	{
-		vLog.push_back("[ERROR] debug error message");
-	}
-	if (ImGui::Button("Add Warning message"))
-	{
-		vLog.push_back("[WARNING] debug warning message");
-	}
-	ImGui::Dummy(ImVec2(ImGui::GetFontSize() * 20, 0));
-	static ImGuiTextFilter filter;
-	filter.Draw("Search", ImGui::GetFontSize() * 15);
 
-	ImGui::EndMenuBar();
-
-	//const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
-	ImGui::BeginChild("##output", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
-	
-	for (int n = 0; n < vLog.size(); n++)
+	if (ImGui::Begin("Console", /*&consoleWin,*/ NULL, ImGuiWindowFlags_MenuBar))
 	{
-		if (filter.PassFilter(vLog[n].c_str()))
+		ImGui::BeginMenuBar();
+		if (ImGui::Button("Clear"))
 		{
-			if (strstr(vLog[n].c_str(), "[ERROR")) { ImGui::TextColored(ImVec4(0.9f, 0.0f, 0.0f, 1.0f), vLog[n].c_str()); }
-			else if (strstr(vLog[n].c_str(), "[WARNING")) { ImGui::TextColored(ImVec4(1.0f, 0.7f, 0.0f, 1.0f), vLog[n].c_str()); }
-			else { ImGui::Text(vLog[n].c_str(), n); }
+			ClearVec(vLog);
 		}
+		if (ImGui::Button("Add Error message"))
+		{
+			vLog.push_back("[ERROR] debug error message");
+		}
+		if (ImGui::Button("Add Warning message"))
+		{
+			vLog.push_back("[WARNING] debug warning message");
+		}
+		ImGui::Dummy(ImVec2(ImGui::GetFontSize() * 20, 0));
+		static ImGuiTextFilter filter;
+		filter.Draw("Search", ImGui::GetFontSize() * 15);
+
+		ImGui::EndMenuBar();
+
+		//const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
+		ImGui::BeginChild("##output", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
+
+		for (int n = 0; n < vLog.size(); n++)
+		{
+			if (filter.PassFilter(vLog[n].c_str()))
+			{
+				if (strstr(vLog[n].c_str(), "[ERROR")) { ImGui::TextColored(ImVec4(0.9f, 0.0f, 0.0f, 1.0f), vLog[n].c_str()); }
+				else if (strstr(vLog[n].c_str(), "[WARNING")) { ImGui::TextColored(ImVec4(1.0f, 0.7f, 0.0f, 1.0f), vLog[n].c_str()); }
+				else { ImGui::Text(vLog[n].c_str(), n); }
+			}
+		}
+
+		// Keep up at the bottom of the scroll region if we were already at the bottom at the beginning of the frame.
+		// Using a scrollbar or mouse-wheel will take away from the bottom edge.
+		if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY()) { ImGui::SetScrollHereY(1.0f); }
+
+		ImGui::EndChild();
+		ImGui::End();
 	}
-
-	// Keep up at the bottom of the scroll region if we were already at the bottom at the beginning of the frame.
-	// Using a scrollbar or mouse-wheel will take away from the bottom edge.
-	if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY()) { ImGui::SetScrollHereY(1.0f); }
-
-	ImGui::EndChild();
-	ImGui::End();
 }
 
 void ModuleEditor::FpsWindow(ImGuiIO& io)

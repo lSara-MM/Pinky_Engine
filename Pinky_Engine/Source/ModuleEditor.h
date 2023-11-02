@@ -28,7 +28,7 @@ public:
 
 	update_status Toolbar();
 	void ConfigWindow(ImGuiIO& io);
-	void LogWindow();
+	void ConsoleWindow();
 	void FpsWindow(ImGuiIO& io);
 	void MemWindow();
 	void HardwareDetection(bool& infoOutputWin);
@@ -59,7 +59,9 @@ private:
 	std::vector<ImGuiWindows*> vImGuiWindows;
 
 	bool moduleSettingsWin;
+	bool styleEditor;
 	bool infoOutputWin;
+	bool consoleWin;
 
 	// Configuration OpenGL Options
 	bool depthTest;
