@@ -11,17 +11,18 @@
 * Mouse Wheel: Zoom In/Out
 * Left shift: Multiply movement and zoom speed
 * Left control + Left click : Select multiple Game Objects in the Hierarchy
-* Del/backspace key: delete selected Game Object
+* Del/backspace key: delete selected Game Objects
 
 # Features
 
 * Load and draw FBX files by dragging them to the engine from anywhere in the Hard Drive
 * Load and apply DDS/PNG textures by dragging them to the engine from anywhere in the Hard Drive
 * Game Object structure, one for each loaded mesh. Inspector shows the following:
-	* Each GameObject has 3 components: Transform, Mesh and Material
+	* Each GameObject can have 3 components: Transform, Mesh and Material
 		* Mesh component allows to show vertex normals and face normals of the geometry
 		* Material component allows to change the color (with a color picker) and a toggle to show the checkers
-	* User can add mesh (choose a primitive shape) and material components
+	* User can add mesh (choose a primitive shape) and material components (can't add more than one of each, like in Unity Engine)
+	* Mesh and material component can be deleted pressing the cross icon
 	* Toggle to enable and disable Game Object, it will not render and will appear slightly turned off in the hierarchy
 	* Clicking the name allows the user to change it (press enter to save it and esc to cancel)
 * Hierarchy:
