@@ -732,7 +732,7 @@ void ModuleEditor::AboutWindow()
 		ImGui::SameLine();
 
 		ImGui::BeginGroup();
-		ImGui::BeginChild("right pane", ImVec2(500-150, -ImGui::GetFrameHeightWithSpacing())); // Leave room for 1 line below us
+		ImGui::BeginChild("right pane", ImVec2(500-200, -ImGui::GetFrameHeightWithSpacing())); // Leave room for 1 line below us
 
 		if (ImGui::BeginTabBar("Pinky Engine"), ImGuiTabBarFlags_Reorderable | ImGuiTabBarFlags_TabListPopupButton)
 		{

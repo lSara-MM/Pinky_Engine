@@ -165,7 +165,7 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 		if (!current[i]->vChildren.empty())
 		{
 			node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
-				| ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
+				| ImGuiTreeNodeFlags_SpanAvailWidth;
 	
 			bool open = TreeNode(current[i], node_flags);
 			MouseEvents(current[i]);
