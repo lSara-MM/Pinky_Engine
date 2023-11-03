@@ -619,9 +619,10 @@ void ModuleEditor::ConsoleWindow()
 {
 	// Console window
 	ImVec2 pos = ImGui::GetMainViewport()->WorkPos;
-	pos.y += ImGui::GetMainViewport()->Size.y;
+	ImVec2 size = ImGui::GetMainViewport()->Size;
+	pos.y += size.y;
 	ImGui::SetNextWindowPos(pos, ImGuiCond_Appearing, ImVec2(-0.01f, 1.0f));
-	ImGui::SetNextWindowSize(ImVec2(500, 200), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(size.x - 15, 200), ImGuiCond_Appearing);
 
 	if (ImGui::Begin("Console", /*&consoleWin,*/ NULL, ImGuiWindowFlags_MenuBar))
 	{
