@@ -26,6 +26,7 @@ public:
 
 	void PrimitivesMenu(GameObject* go = nullptr, bool component = false);
 
+	void UseDockSpace(ImGuiIO& io);
 	update_status Toolbar();
 	void ConfigWindow(ImGuiIO& io);
 	void ConsoleWindow();
@@ -57,6 +58,8 @@ public:
 private:
 
 	std::vector<ImGuiWindows*> vImGuiWindows;
+
+	bool docking;
 
 	bool moduleSettingsWin;
 	bool styleEditor;
