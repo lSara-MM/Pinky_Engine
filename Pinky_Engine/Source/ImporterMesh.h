@@ -1,5 +1,5 @@
-#ifndef __MESH_IMPORTER_H__
-#define __MESH_IMPORTER_H__
+#ifndef __IMPORTER_MESH_H__
+#define __IMPORTER_MESH_H__
 
 #pragma once
 #include "../Assimp/Assimp.h"
@@ -15,4 +15,4 @@ namespace ImpMesh
 	uint64 Save(const ai::mesh* ourMesh, char** fileBuffer);
 	void Load(const char* fileBuffer, ai::mesh* ourMesh);
 }
-#endif //!__MESH_IMPORTER_H__
+#endif //!__IMPORTER_MESH_H__

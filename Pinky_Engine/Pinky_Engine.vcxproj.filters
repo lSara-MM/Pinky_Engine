@@ -361,7 +361,10 @@
       <Filter>Externals\Deviceld</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Source\MeshImporter.h">
+    <ClInclude Include="Source\ImporterMesh.h">
+      <Filter>Sources\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ImporterTexture.h">
       <Filter>Sources\Importers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -564,7 +567,10 @@
     <ClCompile Include="Source\Component.cpp">
       <Filter>Sources\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="Source\MeshImporter.cpp">
+    <ClCompile Include="Source\ImporterMesh.cpp">
+      <Filter>Sources\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ImporterTexture.cpp">
       <Filter>Sources\Importers</Filter>
     </ClCompile>
   </ItemGroup>
