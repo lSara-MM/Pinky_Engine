@@ -11,7 +11,6 @@
 #include "../MathGeoLib/include/Math/Quat.h"
 
 #include "../Assimp/Assimp.h"
-#include <vector>
 
 enum class C_TYPE
 {

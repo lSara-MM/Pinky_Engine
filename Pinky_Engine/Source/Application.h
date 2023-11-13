@@ -12,8 +12,6 @@
 
 #include "../MathGeoLib/include/Algorithm/Random/LCG.h"
 
-#include <vector>
-
 class Application
 {
 public:

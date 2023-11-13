@@ -11,7 +11,6 @@
 #include "../MathGeoLib/include/Math/float4x4.h"
 
 #include "ImGuiWindows.h"
-#include <vector>
 
 class ModuleEditor : public Module
 {

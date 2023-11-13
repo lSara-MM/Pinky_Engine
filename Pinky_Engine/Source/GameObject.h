@@ -9,7 +9,6 @@
 #include "../ImGui/backends/imgui_impl_sdl2.h"
 #include "../ImGui/backends/imgui_impl_opengl3.h"
 
-#include <vector>
 #include "Component.h"
 #include "C_Transform.h"
 #include "C_Mesh.h"

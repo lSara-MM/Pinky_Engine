@@ -7,8 +7,6 @@
 #include "../ImGui/backends/imgui_impl_sdl2.h"
 #include "../ImGui/backends/imgui_impl_opengl3.h"
 
-#include <vector>
-
 #include "ImGuiWindows.h"
 
 class GameObject;

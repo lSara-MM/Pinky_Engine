@@ -6,8 +6,6 @@
 #include "../MathGeoLib/include/Math/float4x4.h"
 #include "../MathGeoLib/include/Math/Quat.h"
 
-#include <vector>
-
 #include "Component.h"
 
 class GameObject;

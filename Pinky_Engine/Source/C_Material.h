@@ -3,7 +3,6 @@
 #include "Light.h"
 
 #include "../Assimp/Assimp.h"
-#include <vector>
 
 #include "Component.h"
 #include "Color.h"
