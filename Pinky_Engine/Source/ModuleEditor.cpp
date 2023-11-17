@@ -79,7 +79,7 @@ bool ModuleEditor::Init()
 	lightning = true;
 	colorMaterial = true;
 	texture2D = true;
-	blend = true;
+	blend = false;
 	lineSmooth = true;
 	normalize = true;
 
