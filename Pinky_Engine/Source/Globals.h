@@ -40,6 +40,11 @@ enum update_status
 #define VSYNC true
 #define TITLE "Pinky Engine"
 
+// Folders dirs
+#define LIBRARY_PATH "Library/"
+#define MESHES_PATH LIBRARY_PATH "Meshes/"
+#define TEXTURES_PATH LIBRARY_PATH "Textures/"
+
 
 // Deletes a buffer
 #define RELEASE( x )\

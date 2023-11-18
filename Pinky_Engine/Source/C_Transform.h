@@ -2,9 +2,9 @@
 #include "Globals.h"
 #include "Light.h"
 
-#include "../MathGeoLib/include/Math/float3x3.h"
-#include "../MathGeoLib/include/Math/float4x4.h"
-#include "../MathGeoLib/include/Math/Quat.h"
+#include "External Libraries/MathGeoLib/include/Math/float3x3.h"
+#include "External Libraries/MathGeoLib/include/Math/float4x4.h"
+#include "External Libraries/MathGeoLib/include/Math/Quat.h"
 
 #include "Component.h"
 

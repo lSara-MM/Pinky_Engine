@@ -1,9 +1,9 @@
-#include "../Assimp/Assimp.h"
+#include "External Libraries/Assimp/Assimp.h"
 
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleInput.h"
-#include "../ImGui/backends/imgui_impl_sdl2.h"
+#include "External Libraries/ImGui/backends/imgui_impl_sdl2.h"
 
 #define MAX_KEYS 300
 

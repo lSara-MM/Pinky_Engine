@@ -3,9 +3,9 @@
 
 #include "GameObject.h"
 #include "Component.h"
-#include "../ImGui/misc/cpp/imgui_stdlib.h"
+#include "External Libraries/ImGui/misc/cpp/imgui_stdlib.h"
 //
-#include "../ImGui/imgui_custom.h"
+#include "External Libraries/ImGui/imgui_custom.h"
 
 C_Camera::C_Camera(GameObject* g, unsigned int i, bool start_enabled) : Component(C_TYPE::CAM, g, i, start_enabled, "Cam")
 {

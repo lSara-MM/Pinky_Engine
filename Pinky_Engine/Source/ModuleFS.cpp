@@ -2,14 +2,14 @@
 #include "Application.h"
 #include "ModuleFS.h"
 
-#include "../SDL\include\SDL_opengl.h"
+#include "External Libraries\SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
-#include "../PhysFS/include/physfs.h"
-#include <fstream>
+#include "External Libraries/PhysFS/include/physfs.h"
+//#include <fstream>
 #include <filesystem>
-#pragma comment( lib, "PhysFS/libx86/physfs.lib" )
+#pragma comment( lib, "Source/External Libraries/PhysFS/libx86/physfs.lib" )
 
 ModuleFS::ModuleFS(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -18,14 +18,14 @@ ModuleFS::ModuleFS(Application* app, bool start_enabled) : Module(app, start_ena
 	PHYSFS_init(nullptr);
 	SDL_free(base_path);
 
-	//Setting the working directory as the writing directory
+	// Setting the working directory as the writing directory
 	if (PHYSFS_setWriteDir(".") == 0)
 		LOG("File System error while creating write dir: %s\n", PHYSFS_getLastError());
 
-	AddPath("."); //Adding ProjectFolder (working directory)
+	AddPath("."); // Adding ProjectFolder (working directory)
 	AddPath("Assets");
 
-
+	CreateLibraryDirs();
 }
 
 // Destructor
@@ -74,18 +74,11 @@ bool ModuleFS::CleanUp()
 
 
 // Create
-void ModuleFS::CreateLibDirs()
+void ModuleFS::CreateLibraryDirs()
 {
-	/*CreateDir(LIBRARY_PATH);
-	CreateDir(FOLDERS_PATH);
+	CreateDir(LIBRARY_PATH);
 	CreateDir(MESHES_PATH);
 	CreateDir(TEXTURES_PATH);
-	CreateDir(MATERIALS_PATH);
-	CreateDir(MODELS_PATH);
-	CreateDir(ANIMATIONS_PATH);
-	CreateDir(PARTICLES_PATH);
-	CreateDir(SHADERS_PATH);
-	CreateDir(MAPS_PATH);*/
 }
 
 bool ModuleFS::AddPath(std::string path)
@@ -453,7 +446,7 @@ bool ModuleFS::DuplicateFile(const char* file, const char* dstFolder, std::strin
 bool ModuleFS::DuplicateFile(const char* srcFile, const char* dstFile)
 {
 	//TODO: Compare performance to calling Load(srcFile) and then Save(dstFile)
-	std::ifstream src;
+	/*std::ifstream src;
 	src.open(srcFile, std::ios::binary);
 	bool srcOpen = src.is_open();
 	std::ofstream  dst(dstFile, std::ios::binary);
@@ -473,7 +466,8 @@ bool ModuleFS::DuplicateFile(const char* srcFile, const char* dstFile)
 	{
 		LOG("[ERROR] File System: Could not be duplicated");
 		return false;
-	}
+	}*/
+	return false;
 }
 
 int close_sdl_rwops(SDL_RWops* rw)

@@ -1,21 +1,21 @@
 #pragma once
-#include "../Assimp/Assimp.h"
+#include "External Libraries/Assimp/Assimp.h"
 
 #include "Module.h"
 #include "Globals.h"
 #include "Light.h"
 
-#include "../ImGui/imgui.h"
-#include "../ImGui/backends/imgui_impl_sdl2.h"
-#include "../ImGui/backends/imgui_impl_opengl3.h"
+#include "External Libraries/ImGui/imgui.h"
+#include "External Libraries/ImGui/backends/imgui_impl_sdl2.h"
+#include "External Libraries/ImGui/backends/imgui_impl_opengl3.h"
 
-#include "../MathGeoLib/include/Math/float3x3.h"
-#include "../MathGeoLib/include/Math/float4x4.h"
+#include "External Libraries/MathGeoLib/include/Math/float3x3.h"
+#include "External Libraries/MathGeoLib/include/Math/float4x4.h"
 #include "Primitive.h"
 
-#include "../mmgr/mmgr.h"
+#include "External Libraries/mmgr/mmgr.h"
 
-#include "../Glew/include/glew.h"
+#include "External Libraries/Glew/include/glew.h"
 
 
 //todo: REMOVE this before 2nd delivery!!

@@ -5,9 +5,9 @@
 #include "Application.h"
 #include "ModuleScene.h"
 
-#include "../ImGui/imgui.h"
-#include "../ImGui/backends/imgui_impl_sdl2.h"
-#include "../ImGui/backends/imgui_impl_opengl3.h"
+#include "External Libraries/ImGui/imgui.h"
+#include "External Libraries/ImGui/backends/imgui_impl_sdl2.h"
+#include "External Libraries/ImGui/backends/imgui_impl_opengl3.h"
 
 #include "Component.h"
 #include "C_Transform.h"

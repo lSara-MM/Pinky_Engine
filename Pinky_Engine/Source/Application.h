@@ -10,7 +10,9 @@
 #include "ModuleEditor.h"
 #include "ModuleScene.h"
 
-#include "../MathGeoLib/include/Algorithm/Random/LCG.h"
+#include "ModuleFS.h"
+
+#include "External Libraries/MathGeoLib/include/Algorithm/Random/LCG.h"
 
 class Application
 {

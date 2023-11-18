@@ -9,6 +9,8 @@ Application::Application()
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 
+	ModuleFS* fs = new ModuleFS(this);
+
 	editor = new ModuleEditor(this);
 	scene = new ModuleScene(this);
 

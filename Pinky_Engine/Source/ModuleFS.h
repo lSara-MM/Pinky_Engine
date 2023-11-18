@@ -48,7 +48,7 @@ public:
 	bool CleanUp();
 
 	// Create
-	void CreateLibDirs();
+	void CreateLibraryDirs();
 	bool AddPath(std::string path);
 	bool CreateDir(const char* dir);
 

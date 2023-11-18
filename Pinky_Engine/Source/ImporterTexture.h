@@ -2,7 +2,7 @@
 #define __IMPORTER_TEXTURE_H__
 
 #pragma once
-#include "../Assimp/Assimp.h"
+#include "External Libraries/Assimp/Assimp.h"
 
 #include "Globals.h"
 #include <array>

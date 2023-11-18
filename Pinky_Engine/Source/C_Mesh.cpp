@@ -1,22 +1,22 @@
 #pragma once
 #include "C_Mesh.h"
 
-#include "../SDL\include\SDL_opengl.h"
+#include "External Libraries\SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
-#include "../MathGeoLib/include/MathGeoLib.h"
+#include "External Libraries/MathGeoLib/include/MathGeoLib.h"
 
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "glu32.lib") /* link Microsoft OpenGL lib   */
-#pragma comment (lib, "Glew/libx86/glew32.lib")
+#pragma comment (lib, "Source/External Libraries/Glew/libx86/glew32.lib")
 
-#include "../ImGui/imgui.h"
-#include "../ImGui/backends/imgui_impl_sdl2.h"
-#include "../ImGui/backends/imgui_impl_opengl3.h"
-#include "../DevIL/include/il.h"
-#include "../DevIL/include/ilu.h"
-#include "../DevIL/include/ilut.h"
-#include "../mmgr/mmgr.h"
+#include "External Libraries/ImGui/imgui.h"
+#include "External Libraries/ImGui/backends/imgui_impl_sdl2.h"
+#include "External Libraries/ImGui/backends/imgui_impl_opengl3.h"
+#include "External Libraries/DevIL/include/il.h"
+#include "External Libraries/DevIL/include/ilu.h"
+#include "External Libraries/DevIL/include/ilut.h"
+#include "External Libraries/mmgr/mmgr.h"
 
 
 #include "GameObject.h"

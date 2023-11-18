@@ -6,9 +6,9 @@
 
 #include "GameObject.h"
 #include "Component.h"
-#include "../ImGui/misc/cpp/imgui_stdlib.h"
+#include "External Libraries/ImGui/misc/cpp/imgui_stdlib.h"
 //
-#include "../ImGui/imgui_custom.h"
+#include "External Libraries/ImGui/imgui_custom.h"
 
 C_Material::C_Material(GameObject* g, ai::texture* t, unsigned int i, bool start_enabled) : Component(C_TYPE::MATERIAL, g, i, start_enabled, "Material")
 {

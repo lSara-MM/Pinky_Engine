@@ -1,8 +1,8 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
-#include "../MathGeoLib/include/Math/float3.h"
-#include "../MathGeoLib/include/Math/float4x4.h"
+#include "External Libraries/MathGeoLib/include/Math/float3.h"
+#include "External Libraries/MathGeoLib/include/Math/float4x4.h"
 #include "C_Camera.h"
 
 //todo: REMOVE this before 2nd delivery!!
