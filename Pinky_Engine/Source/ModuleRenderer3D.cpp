@@ -20,6 +20,7 @@
 #include "External Libraries/DevIL/include/ilu.h"
 #include "External Libraries/DevIL/include/ilut.h"
 #include "External Libraries/mmgr/mmgr.h"
+#include "C_Camera.h"
 
 #ifdef _DEBUG
 #pragma comment (lib, "Source/External Libraries/MathGeoLib/libx86/libDebug/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
@@ -173,10 +174,10 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->GetViewMatrix());
+	glLoadMatrixf(activeCam->GetViewMatrix());
 
 	// light 0 on cam pos
-	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
+	lights[0].SetPos(activeCam->frustum.pos.x, activeCam->frustum.pos.y, activeCam->frustum.pos.z);
 
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
@@ -313,4 +314,9 @@ void ModuleRenderer3D::SetVsync(bool enable)
 			LOG("VSYNC disabled");
 		}
 	}
+}
+
+void ModuleRenderer3D::SetCamActive(C_Camera* cam)
+{
+	activeCam = cam;
 }

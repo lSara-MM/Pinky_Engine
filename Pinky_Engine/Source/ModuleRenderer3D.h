@@ -16,6 +16,7 @@
 #include "External Libraries/mmgr/mmgr.h"
 
 #include "External Libraries/Glew/include/glew.h"
+#include "C_Camera.h"
 
 
 //todo: REMOVE this before 2nd delivery!!
@@ -39,8 +40,11 @@ public:
 	void OnResize(int width, int height);
 	void DrawBox();
 	void SetVsync(bool enable);
+	void SetCamActive(C_Camera* cam);
 
 public:
+
+	C_Camera* activeCam = nullptr;
 
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;

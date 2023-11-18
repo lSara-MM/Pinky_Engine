@@ -18,33 +18,16 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
-	void Look(const float3 &Position, const float3&Reference, bool RotateAroundReference = false);
-	void LookAt(const float3&Spot);
-	void Move(const float3&Movement);
-	void Zoom(math::float3 nPos, float s);
-	float* GetViewMatrix();
-
 	//frustrum camera functions
 	void CameraMovement();
 	void Orbit();
 	void FPScamera();
 	void Focus();
+	void Zoom(float zoom, float scrollSpeed);
 
 private:
-
-	void CalculateViewMatrix();
-
-public:
-	
-	//You won't need this after using Frustum
-	float3 X, Y, Z, Position, Reference;
-
 	C_Camera* MainCamera = nullptr;
 	int mouseX, mouseY;
-	float speed;
-
-private:
-
-	mat4x4 ViewMatrix;
-	//Frustum mMainCamera; Some help here :)
+	float speed, zoomPos;
+	float3 Reference = { 0, 0, 0 };//change to focused object
 };
