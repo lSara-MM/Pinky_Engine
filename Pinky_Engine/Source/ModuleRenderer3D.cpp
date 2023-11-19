@@ -234,7 +234,7 @@ bool ModuleRenderer3D::CleanUp()
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {
-	activeCam->SetAspectRatio((float)width / (float)height);
+	activeCam->SetAspectRatio(width, height);
 	glViewport(0, 0, width, height);
 
 	glMatrixMode(GL_PROJECTION);

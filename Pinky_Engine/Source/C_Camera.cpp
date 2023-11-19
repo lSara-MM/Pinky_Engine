@@ -9,23 +9,20 @@
 
 C_Camera::C_Camera(GameObject* g, unsigned int i, bool start_enabled) : Component(C_TYPE::CAM, g, i, start_enabled, "Cam")
 {
-	//aspect ratio 16:9 by now
+	//aspect ratio 16:9 
 	width = 16;
 	height = 9;
 	aspect_ratio = width / height; 
-
-	near_plane = 0.2;
-	far_plane = 1000;
-	vertical_fov = 60; 
+	fov = 60; 
 
 	//frustum settings
 	frustum.type = PerspectiveFrustum;
 	frustum.pos.Set(0, 0, 0);
-	frustum.front.Set(0, 0, 1);
-	frustum.up.Set(0, 1, 0);
-	frustum.nearPlaneDistance = near_plane;
-	frustum.farPlaneDistance = far_plane;
-	frustum.verticalFov = vertical_fov * DEGTORAD;
+	frustum.front= float3::unitZ;
+	frustum.up = float3::unitY;
+	frustum.nearPlaneDistance = 0.1f;
+	frustum.farPlaneDistance = 1000.0f;
+	frustum.verticalFov = fov * DEGTORAD;
 	frustum.horizontalFov = Atan(aspect_ratio * Tan(frustum.verticalFov / 2)) * 2;
 }
 
@@ -35,7 +32,41 @@ C_Camera::~C_Camera()
 
 void C_Camera::ShowInInspector()
 {
+	// --- Set ImGui ids ---
+	std::string checkbox = name.c_str();
+	std::string header = name.c_str();
+	bool exists = true;
 
+	checkbox.insert(checkbox.begin(), 2, '#');
+	checkbox.append(std::to_string(GetID()));
+
+	header.append("##");
+	header.append(std::to_string(GetID()));
+
+	// ---------------------------------------------
+
+	ImGui::Checkbox(checkbox.c_str(), &active);
+	ImGui::SameLine();
+
+	if (ImGui::CollapsingHeader(header.c_str(), &exists, ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		if (!active) { ImGui::BeginDisabled(); }
+
+		// Edit frustum values ------------------
+		ImGui::PushItemWidth(80);
+		if (ImGui::DragFloat("Near Plane", &frustum.nearPlaneDistance, 0.5f, 0.01f, frustum.nearPlaneDistance));
+		
+		if (ImGui::DragFloat("Far Plane", &frustum.farPlaneDistance, 0.5f, frustum.nearPlaneDistance, 1000.0f));//TODO: see if max value makes sense
+
+		if (ImGui::SliderFloat("FOV", &fov, 55.0f, 110.0f))//usually ranges from 55º to 110º
+		{
+			SetFOV(fov);
+		}
+
+		ImGui::ColorEdit3("Color", (float*)&color, ImGuiColorEditFlags_NoInputs);
+
+		if (!active) { ImGui::EndDisabled(); }
+	}
 }
 
 void C_Camera::LookAt(const float3& position)
@@ -128,8 +159,15 @@ FrustumCulling C_Camera::ContainsAABox(const AABB& refBox) const
 	return FrustumCulling::CULLING_INTERSECT;
 }
 
-void C_Camera::SetAspectRatio(float ratio)
+void C_Camera::SetAspectRatio(int width, int height)
 {
-	aspect_ratio = ratio;
+	aspect_ratio = float(width)/float(height);
 	frustum.horizontalFov = 2 * Atan(Tan(frustum.verticalFov / 2) * aspect_ratio);
 }
+
+void C_Camera::SetFOV(float horizontalFOV)
+{
+	frustum.horizontalFov = horizontalFOV * DEGTORAD;
+	frustum.verticalFov = 2 * (Atan(Tan(frustum.horizontalFov / 2) * (1 / aspect_ratio)));
+}
+

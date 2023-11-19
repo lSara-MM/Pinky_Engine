@@ -21,11 +21,16 @@ public:
 
 	void ShowInInspector();
 	void LookAt(const float3& position);
-	float* GetViewMatrix() const;
-	float* GetProjectionMatrix() const;
+	float* GetViewMatrix() const;//recalculate view matrix every frame 
+	float* GetProjectionMatrix() const;//recalculate projection matrix only when frustum is changed
 	void DrawDebug();
 	FrustumCulling ContainsAABox(const AABB& refBox) const;
-	void SetAspectRatio(float ratio);
+	void SetAspectRatio(int width, int height);//resize window
+
+	//user settings
+	void SetFOV(float horizontalFOV);
+	void SetFarPlane(float far_P);
+	void SetNearPlane(float near_P);
 
 public:
 	ai::texture* tex;
@@ -42,7 +47,5 @@ private:
 	float width = 0.0f;
 	float height = 0.0f;
 	float aspect_ratio = 0.0f;
-	float near_plane = 0.0f;
-	float far_plane = 0.0f;
-	float vertical_fov = 0.0f;
+	float fov = 0.0f;
 };
