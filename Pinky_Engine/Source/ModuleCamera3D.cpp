@@ -13,6 +13,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 	MainCamera->frustum.pos = float3(5.0f, 5.0f, 5.0f);
 	MainCamera->LookAt(float3(0.0f, 0.0f, 0.0f));
 	Reference = float3(0.0f, 0.0f, 0.0f);//change to selected game object
+	centerReference = float3(0.0f, 0.0f, 0.0f);//TODO: delete when selected game object
 	App->renderer3D->SetCamActive(MainCamera);
 }
 
@@ -25,8 +26,8 @@ ModuleCamera3D::~ModuleCamera3D()
 bool ModuleCamera3D::Start()
 {
 	LOG("Setting up the camera");
-	mouseX = 0;
-	mouseY = 0;
+	mouseX = 0.0f;
+	mouseY = 0.0f;
 	speed = 0;
 
 	bool ret = true;
@@ -106,13 +107,16 @@ void ModuleCamera3D::CameraMovement()
 
 void ModuleCamera3D::Orbit()
 {
+	//Todo delete center Reference
+	Reference = centerReference;
+
 	float3 dir = MainCamera->frustum.pos - Reference;
 	Quat quaternionY(MainCamera->frustum.up, mouseX);
 	Quat quaternionX(MainCamera->frustum.WorldRight(), mouseY);
 
 	dir = quaternionX.Transform(dir);
 	dir = quaternionY.Transform(dir);
-
+	
 	MainCamera->frustum.pos = dir + Reference;
 	MainCamera->LookAt(Reference);
 }

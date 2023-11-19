@@ -25,7 +25,7 @@ public:
 
 private:
 	C_Camera* MainCamera = nullptr;
-	int mouseX, mouseY;
-	float speed, zoomPos;
+	float mouseX, mouseY, speed, zoomPos;
 	float3 Reference = { 0, 0, 0 };//change to focused object
+	float3 centerReference = { 0, 0, 0 };
 };
