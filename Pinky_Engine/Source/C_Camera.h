@@ -26,6 +26,7 @@ public:
 	void DrawDebug();
 	FrustumCulling ContainsAABox(const AABB& refBox) const;
 	void SetAspectRatio(int width, int height);//resize window
+	void UpdateCameraFrustum();
 
 	//user settings
 	void SetFOV(float horizontalFOV);

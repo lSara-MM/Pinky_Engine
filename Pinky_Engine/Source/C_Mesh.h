@@ -18,11 +18,18 @@ public:
 	void Draw(bool checkered = false, Color color = { 255, 255, 255, 255});
 	void DrawVertexNormals();
 	void DrawFaceNormals();
+	void DrawAABB();
+	void DrawOBB();
 
 public:
 	ai::mesh* mesh = nullptr;
 	bool showVertexNormals;
 	bool showFacesNormals;
+	bool showAABB;
+	bool showOBB;
+
+	AABB global_aabb;//global OB
+	OBB obb;//global AABB
 
 	//GLuint texture_checker;
 };

@@ -61,8 +61,6 @@ void C_Camera::ShowInInspector()
 			SetFOV(fov);
 		}
 
-		ImGui::ColorEdit3("Color", (float*)&color, ImGuiColorEditFlags_NoInputs);
-
 		if (!active) { ImGui::EndDisabled(); }
 	}
 }
@@ -100,7 +98,7 @@ void C_Camera::DrawDebug()
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glBegin(GL_LINES);
 	glLineWidth(3.0f);
-	glColor4f(0.25f, 1.0f, 0.0f, 1.0f);
+	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
 
 	for (uint i = 0; i < 12; i++)
 	{
@@ -112,7 +110,7 @@ void C_Camera::DrawDebug()
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
-FrustumCulling C_Camera::ContainsAABox(const AABB& refBox) const
+FrustumCulling C_Camera::ContainsAABox(const AABB& refBox) const//TODO: donde llamo esto
 {
 	float3 vCorner[8];
 	int iTotalIn = 0;
@@ -161,6 +159,17 @@ void C_Camera::SetAspectRatio(int width, int height)
 {
 	aspect_ratio = float(width)/float(height);
 	frustum.horizontalFov = 2 * Atan(Tan(frustum.verticalFov / 2) * aspect_ratio);
+}
+
+void C_Camera::UpdateCameraFrustum()
+{
+	const C_Transform* transformComponent = this->gameObject->pParent->transform;//TODO: not good
+
+	float4x4 transform = transformComponent->GetGlobalTransform();
+
+	frustum.pos = transform.TranslatePart();
+	frustum.front = transform.WorldZ().Normalized();
+	frustum.up = frustum.front.Cross(-frustum.WorldRight()).Normalized();
 }
 
 void C_Camera::SetFOV(float horizontalFOV)

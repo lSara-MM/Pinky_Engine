@@ -22,6 +22,8 @@ public:
 	void SetTransform(float vec[3]);
 	void SetRotation(float vec[]);
 	void SetScale(float vec[3]);
+	float4x4 GetGlobalTransform() const;
+	float4x4 GetLocalTransform() const;
 
 public:
 	float3 position;

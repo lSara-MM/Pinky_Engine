@@ -214,7 +214,11 @@ bool ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 				//TODO: pushback elsewhere
 				App->renderer3D->meshes.push_back(ourMesh);
 			}
-	
+
+			//TODO: does it go here?
+			ourMesh->local_aabb.SetNegativeInfinity();
+			ourMesh->local_aabb.Enclose((float3*)ourMesh->vertex, ourMesh->num_vertex);
+
 			m = nullptr;
 			ourMesh = nullptr;
 		}

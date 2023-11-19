@@ -28,6 +28,14 @@ C_Mesh::C_Mesh(GameObject* g, ai::mesh* m, unsigned int i, bool start_enabled) :
 	mesh = m; 
 	showVertexNormals = false;
 	showFacesNormals = false;
+	showAABB = false;
+	showOBB = false;
+
+	//TODO: does it go here?
+	obb = mesh->local_aabb;
+	obb.Transform(this->gameObject->pParent->transform->GetGlobalTransform());
+	global_aabb.SetNegativeInfinity();
+	global_aabb.Enclose(obb);
 }
 
 C_Mesh::C_Mesh(GameObject* g, C_Mesh* toCopy, bool start_enabled, unsigned int i) : Component(C_TYPE::MESH, g, i, toCopy->active, "Mesh")
@@ -71,6 +79,8 @@ void C_Mesh::ShowInInspector()
 
 		ImGui::Checkbox("Vertex Normals", &showVertexNormals);
 		ImGui::Checkbox("Faces Normals", &showFacesNormals);
+		ImGui::Checkbox("Show AABB", &showAABB);
+		ImGui::Checkbox("Show OBB", &showOBB);
 			
 		ImGui::SameLine();
 
@@ -185,4 +195,36 @@ void C_Mesh::DrawFaceNormals()
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glEnd();
+}
+
+void C_Mesh::DrawAABB()
+{
+	glBegin(GL_LINES);
+	glLineWidth(3.0f);
+	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
+
+	for (uint i = 0; i < 12; i++)
+	{
+		glVertex3f(global_aabb.Edge(i).a.x, global_aabb.Edge(i).a.y, global_aabb.Edge(i).a.z);
+		glVertex3f(global_aabb.Edge(i).b.x, global_aabb.Edge(i).b.y, global_aabb.Edge(i).b.z);
+	}
+
+	glEnd();
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+}
+
+void C_Mesh::DrawOBB()
+{
+	glBegin(GL_LINES);
+	glLineWidth(3.0f);
+	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
+
+	for (uint i = 0; i < 12; i++)
+	{
+		glVertex3f(obb.Edge(i).a.x, obb.Edge(i).a.y, obb.Edge(i).a.z);
+		glVertex3f(obb.Edge(i).b.x, obb.Edge(i).b.y, obb.Edge(i).b.z);
+	}
+
+	glEnd();
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 }

@@ -108,6 +108,7 @@ update_status GameObject::Update(float dt)
 				if (vCams[i]->active)
 				{
 					vCams[i]->DrawDebug();
+					//vCams[i]->UpdateCameraFrustum();
 				}
 			}
 
@@ -127,6 +128,16 @@ update_status GameObject::Update(float dt)
 						if (vMeshes[i]->showFacesNormals)
 						{
 							vMeshes[i]->DrawFaceNormals();
+						}
+
+						if (vMeshes[i]->showAABB)
+						{
+							vMeshes[i]->DrawAABB();
+						}
+
+						if (vMeshes[i]->showOBB)
+						{
+							vMeshes[i]->DrawOBB();
 						}
 					}
 					else

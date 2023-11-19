@@ -86,6 +86,9 @@ namespace ai
 		GLuint EBO; // element buffer object
 		GLuint VAO; // attribute buffer object
 
+		//Frustum culling
+		AABB local_aabb;//local AABB
+
 		~mesh()
 		{
 			RELEASE_ARRAY(index);

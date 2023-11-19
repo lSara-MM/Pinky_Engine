@@ -70,3 +70,13 @@ void C_Transform::SetScale(float vec[3])
 {
 	scale = float3(vec);
 }
+
+float4x4 C_Transform::GetGlobalTransform() const
+{
+	return globalMatrix;
+}
+
+float4x4 C_Transform::GetLocalTransform() const
+{
+	return localMatrix;
+}
