@@ -5,8 +5,6 @@
 #include "External Libraries/MathGeoLib/include/Math/float4x4.h"
 #include "C_Camera.h"
 
-//todo: REMOVE this before 2nd delivery!!
-#include "glmath.h"
 
 class ModuleCamera3D : public Module
 {
@@ -18,7 +16,7 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
-	//frustrum camera functions
+	//frustum camera functions
 	void CameraMovement();
 	void Orbit();
 	void FPScamera();

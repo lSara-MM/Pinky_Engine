@@ -13,6 +13,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 	MainCamera->frustum.pos = float3(5.0f, 5.0f, 5.0f);
 	MainCamera->LookAt(float3(0.0f, 0.0f, 0.0f));
 	Reference = float3(0.0f, 0.0f, 0.0f);//change to selected game object
+	App->renderer3D->SetCamActive(MainCamera);
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -28,8 +29,6 @@ bool ModuleCamera3D::Start()
 	mouseY = 0;
 	speed = 0;
 
-	App->renderer3D->SetCamActive(MainCamera);
-	
 	bool ret = true;
 
 	return ret;

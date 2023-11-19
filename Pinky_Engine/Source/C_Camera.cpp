@@ -127,3 +127,9 @@ FrustumCulling C_Camera::ContainsAABox(const AABB& refBox) const
 	// we must be partly in then otherwise
 	return FrustumCulling::CULLING_INTERSECT;
 }
+
+void C_Camera::SetAspectRatio(float ratio)
+{
+	aspect_ratio = ratio;
+	frustum.horizontalFov = 2 * Atan(Tan(frustum.verticalFov / 2) * aspect_ratio);
+}

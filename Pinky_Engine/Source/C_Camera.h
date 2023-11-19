@@ -25,6 +25,7 @@ public:
 	float* GetProjectionMatrix() const;
 	void DrawDebug();
 	FrustumCulling ContainsAABox(const AABB& refBox) const;
+	void SetAspectRatio(float ratio);
 
 public:
 	ai::texture* tex;

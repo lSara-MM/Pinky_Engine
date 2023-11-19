@@ -18,10 +18,6 @@
 #include "External Libraries/Glew/include/glew.h"
 #include "C_Camera.h"
 
-
-//todo: REMOVE this before 2nd delivery!!
-#include "glmath.h"
-
 #define MAX_LIGHTS 8
 #define CHECKERS_HEIGHT 256
 #define CHECKERS_WIDTH 256
@@ -49,9 +45,6 @@ public:
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
 	CPlane Grid;
-	
-	//You won't need this after using Frustum
-	mat4x4 ProjectionMatrix;
 
 	bool wireframe;
 	bool VertexNormals;
