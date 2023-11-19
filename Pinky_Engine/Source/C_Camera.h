@@ -29,8 +29,6 @@ public:
 
 	//user settings
 	void SetFOV(float horizontalFOV);
-	void SetFarPlane(float far_P);
-	void SetNearPlane(float near_P);
 
 public:
 	ai::texture* tex;

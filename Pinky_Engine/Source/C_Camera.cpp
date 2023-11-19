@@ -35,7 +35,6 @@ void C_Camera::ShowInInspector()
 	// --- Set ImGui ids ---
 	std::string checkbox = name.c_str();
 	std::string header = name.c_str();
-	bool exists = true;
 
 	checkbox.insert(checkbox.begin(), 2, '#');
 	checkbox.append(std::to_string(GetID()));
@@ -48,17 +47,16 @@ void C_Camera::ShowInInspector()
 	ImGui::Checkbox(checkbox.c_str(), &active);
 	ImGui::SameLine();
 
-	if (ImGui::CollapsingHeader(header.c_str(), &exists, ImGuiTreeNodeFlags_DefaultOpen))
+	if (ImGui::CollapsingHeader(header.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		if (!active) { ImGui::BeginDisabled(); }
 
 		// Edit frustum values ------------------
-		ImGui::PushItemWidth(80);
-		if (ImGui::DragFloat("Near Plane", &frustum.nearPlaneDistance, 0.5f, 0.01f, frustum.nearPlaneDistance));
+		if (ImGui::DragFloat("Near Plane", &frustum.nearPlaneDistance, 0.5f, 0.01f, frustum.farPlaneDistance));
 		
 		if (ImGui::DragFloat("Far Plane", &frustum.farPlaneDistance, 0.5f, frustum.nearPlaneDistance, 1000.0f));//TODO: see if max value makes sense
 
-		if (ImGui::SliderFloat("FOV", &fov, 55.0f, 110.0f))//usually ranges from 55º to 110º
+		if (ImGui::DragFloat("FOV", &fov, 0.5f, 1.0f, 179.0f))
 		{
 			SetFOV(fov);
 		}

@@ -39,6 +39,10 @@ bool ModuleScene::Init()
 
 	rootNode = new GameObject("Root node", nullptr);
 
+	//test camera component, 
+	testCamera = new GameObject("Test Camera");
+	testCamera->AddComponent(C_TYPE::CAM);
+
 	return ret;
 }
 
@@ -94,7 +98,7 @@ update_status ModuleScene::PostUpdate(float dt)
 bool ModuleScene::CleanUp()
 {
 	LOG("Destroying 3D Renderer");
-	
+	RELEASE(testCamera);
 	RELEASE(rootNode);
 	return true;
 }

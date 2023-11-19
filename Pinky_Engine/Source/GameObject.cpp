@@ -101,6 +101,16 @@ update_status GameObject::Update(float dt)
 		{
 			std::vector<C_Mesh*> vMeshes = GetComponentsMesh();
 			std::vector<C_Material*> vMaterials = GetComponentsMaterial();
+			std::vector<C_Camera*> vCams = GetCompoonentsCamera();
+
+			for (auto i = 0; i < vCams.size(); i++)
+			{
+				if (vCams[i]->active)
+				{
+					vCams[i]->DrawDebug();
+				}
+			}
+
 			for (auto i = 0; i < vMeshes.size(); i++)
 			{
 				if (vMeshes[i]->active)
@@ -185,6 +195,10 @@ bool GameObject::AddComponent(C_TYPE type, ai::mesh* m, ai::POLY_PRIMITIVE_TYPE 
 		}
 		else { ret = false; }
 		break;
+	case C_TYPE::CAM:
+		temp = new C_Camera();
+		vComponents.push_back(temp);
+		break;
 	default:
 		break;
 	}
@@ -237,6 +251,19 @@ std::vector<C_Material*> GameObject::GetComponentsMaterial()
 		if (vComponents[i]->type == C_TYPE::MATERIAL)
 		{
 			vec.push_back((C_Material*)vComponents[i]);
+		}
+	}
+	return vec;
+}
+
+std::vector<C_Camera*> GameObject::GetCompoonentsCamera()
+{
+	std::vector<C_Camera*> vec = {};
+	for (auto i = 0; i < vComponents.size(); i++)
+	{
+		if (vComponents[i]->type == C_TYPE::CAM)
+		{
+			vec.push_back((C_Camera*)vComponents[i]);
 		}
 	}
 	return vec;

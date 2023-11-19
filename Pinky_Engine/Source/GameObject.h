@@ -34,6 +34,8 @@ public:
 
 	std::vector<C_Mesh*> GetComponentsMesh();
 	std::vector<C_Material*> GetComponentsMaterial();
+	std::vector<C_Camera*> GetCompoonentsCamera();//TODO: this bad me thinks
+
 
 	//---Parent/Child---
 	void ReParent(GameObject* newParent);
