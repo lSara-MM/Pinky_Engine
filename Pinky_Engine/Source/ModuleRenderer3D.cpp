@@ -154,7 +154,7 @@ bool ModuleRenderer3D::Init()
 	}
 
 	// Projection matrix for
-	OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
+	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	Grid.axis = true;
 	wireframe = false;
