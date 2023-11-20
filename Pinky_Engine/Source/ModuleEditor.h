@@ -85,6 +85,7 @@ private:
 	Uint64 VRAM_usage;
 	Uint64 VRAM_available;
 	Uint64 VRAM_reserved;
+
 	//Struct to get sdl version info
 	SDL_version versionSDL;
 };
