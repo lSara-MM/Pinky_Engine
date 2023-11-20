@@ -12,7 +12,7 @@ class GameObject;
 namespace I_Mesh
 {
 	bool Import(const aiMesh* mesh, ai::mesh* ourMesh);
-	uint64 Save(const ai::mesh* ourMesh, char** fileBuffer);
-	void Load(const char* fileBuffer, ai::mesh* ourMesh);
+	uint64 Save(const ai::mesh* ourMesh, char** fileBufferCursor);
+	void Load(ai::mesh* ourMesh);
 }
 #endif //!__IMPORTER_MESH_H__

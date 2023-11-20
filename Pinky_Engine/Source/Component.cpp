@@ -34,3 +34,8 @@ Component* Component::CopyComponent(GameObject* go)
 
 	return temp;
 }
+
+int Component::GetID()
+{
+	return id;
+}

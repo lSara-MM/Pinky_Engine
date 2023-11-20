@@ -362,7 +362,7 @@ void Inspector::ShowWindow()
 			{
 				ImGui::OpenPopup("AddComponents");
 				ImGui::SameLine();
-				ImGui::TextUnformatted(selected_fish == -1 ? "<None>" : components[selected_fish].c_str());
+				//ImGui::TextUnformatted(selected_fish == -1 ? "<None>" : components[selected_fish].c_str());
 			}
 
 			if (ImGui::BeginPopup("AddComponents"))

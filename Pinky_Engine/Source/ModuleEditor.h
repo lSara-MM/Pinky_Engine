@@ -81,10 +81,10 @@ private:
 
 	//vram info
 	sMStats memoryStats;
-	Uint64 VRAM_budget = 0;
-	Uint64 VRAM_usage = 0;
-	Uint64 VRAM_available = 0;
-	Uint64 VRAM_reserved = 0;
+	Uint64 VRAM_budget;
+	Uint64 VRAM_usage;
+	Uint64 VRAM_available;
+	Uint64 VRAM_reserved;
 	//Struct to get sdl version info
 	SDL_version versionSDL;
 };

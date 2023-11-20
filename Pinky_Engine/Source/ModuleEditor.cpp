@@ -29,6 +29,10 @@
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	VRAM_budget = 0;
+	VRAM_usage = 0;
+	VRAM_available = 0;
+	VRAM_reserved = 0;
 }
 
 // Destructor

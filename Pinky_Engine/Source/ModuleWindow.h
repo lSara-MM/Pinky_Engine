@@ -26,7 +26,7 @@ public:
 
 	//The surface contained by the window
 	SDL_Surface* screen_surface;
-	Uint32 flags = SDL_WINDOW_SHOWN;
+	Uint32 flags;
 
 	//Screen options
 	bool fullScreen;

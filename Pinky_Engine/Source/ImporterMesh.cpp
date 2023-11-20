@@ -56,15 +56,15 @@ bool I_Mesh::Import(const aiMesh* mesh, ai::mesh* ourMesh)
 	return true;
 }
 
-uint64 I_Mesh::Save(const ai::mesh* ourMesh, char** fileBuffer)
+uint64 I_Mesh::Save(const ai::mesh* ourMesh, char** fileBufferCursor)
 {
 	// amount of indices / vertices / colors / normals / texture_coords / AABB
 	uint ranges[4] = { ourMesh->num_index, ourMesh->num_vertex, ourMesh->num_normals, ourMesh->num_tex_uvs };
-	uint size = sizeof(ranges) + sizeof(uint) * ourMesh->num_index + sizeof(float) * ourMesh->num_vertex * 3 + 
-		sizeof(float) * ourMesh->num_vertex* ourMesh->num_normals * 3 + sizeof(math::float2*) * ourMesh->num_tex_uvs * 2;
-	
+	uint size = sizeof(ranges) + sizeof(uint) * ourMesh->num_index + (sizeof(float) * 3) * (ourMesh->num_vertex + ourMesh->num_normals)
+		+ sizeof(math::float2*) * ourMesh->num_tex_uvs;
+
 	char* fileBuffer = new char[size]; // Allocate
-	char** cursor = fileBuffer;
+	char** cursor = fileBufferCursor;
 	
 	// First store ranges
 	uint bytes = sizeof(ranges); 
@@ -76,9 +76,62 @@ uint64 I_Mesh::Save(const ai::mesh* ourMesh, char** fileBuffer)
 	memcpy(cursor, ourMesh->index, bytes);
 	cursor += bytes;
 
+	// Store vertex
+	bytes = sizeof(float) * ourMesh->num_vertex;
+	memcpy(cursor, ourMesh->vertex, bytes);
+	cursor += bytes;
+
+	// Store normals
+	bytes = sizeof(float) * ourMesh->num_normals;
+	memcpy(cursor, ourMesh->normals, bytes);
+	cursor += bytes;
+
+	// Store texture UVs
+	bytes = sizeof(math::float2) * ourMesh->num_tex_uvs;
+	memcpy(cursor, ourMesh->tex_uvs, bytes);
+	cursor += bytes;
+
 	return size;
 }
 
-void I_Mesh::Load(const char* fileBuffer, ai::mesh* ourMesh)
+void I_Mesh::Load(ai::mesh* ourMesh)
 {
+	char* cursor = nullptr;
+	// amount of indices / vertices / colors / normals / texture_coords
+	uint ranges[5];
+	uint bytes = sizeof(ranges);
+	memcpy(ranges, cursor, bytes);
+	cursor += bytes;
+
+	ourMesh->num_index = ranges[0];
+	ourMesh->num_vertex = ranges[1];
+	ourMesh->num_normals = ranges[2];
+	ourMesh->num_tex_uvs = ranges[3];
+
+	// Load indices
+	bytes = sizeof(uint) * ourMesh->num_index;
+	ourMesh->index = new uint[ourMesh->num_index];
+	memcpy(ourMesh->index, cursor, bytes);
+	cursor += bytes;
+
+	// Load vertex
+	bytes = sizeof(float) * ourMesh->num_vertex * 3;
+	ourMesh->vertex = new float[ourMesh->num_vertex * 3];
+	memcpy(ourMesh->vertex, cursor, bytes);
+	cursor += bytes;
+
+	// Load normals
+	bytes = sizeof(uint) * ourMesh->num_normals * 3;
+	ourMesh->normals = new float[ourMesh->num_normals * 3];
+	memcpy(ourMesh->normals, cursor, bytes);
+	cursor += bytes;
+
+	// Load textures UVs
+	bytes = sizeof(math::float2) * ourMesh->num_tex_uvs;
+	ourMesh->tex_uvs = new math::float2[ourMesh->num_tex_uvs];
+	memcpy(ourMesh->tex_uvs, cursor, bytes);
+	cursor += bytes;
+
+	LOG("Mesh %s Loaded");
+	RELEASE_ARRAY(cursor);
 }
