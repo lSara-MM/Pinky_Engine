@@ -9,7 +9,7 @@
 
 class GameObject;
 
-namespace ImpTexture
+namespace I_Texture
 {
 	void Import(const aiTexture* mesh, ai::texture* ourMesh);
 	uint64 Save(const ai::texture* ourMesh, char** fileBuffer);

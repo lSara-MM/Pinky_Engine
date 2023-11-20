@@ -9,9 +9,9 @@
 
 class GameObject;
 
-namespace ImpMesh
+namespace I_Mesh
 {
-	void Import(const aiMesh* mesh, ai::mesh* ourMesh);
+	bool Import(const aiMesh* mesh, ai::mesh* ourMesh);
 	uint64 Save(const ai::mesh* ourMesh, char** fileBuffer);
 	void Load(const char* fileBuffer, ai::mesh* ourMesh);
 }

@@ -9,6 +9,8 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
+#include "../ImporterMesh.h"
+
 void ai::EnableDebug()
 {
 	// Stream log messages to Debug window
@@ -128,55 +130,11 @@ bool ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 			const aiMesh* m = s->mMeshes[children[i]->mMeshes[0]];
 			mesh* ourMesh = new mesh;
 
-			// copy vertices
-			ourMesh->num_vertex = m->mNumVertices;
-			ourMesh->vertex = new float[ourMesh->num_vertex * 3];
-			memcpy(ourMesh->vertex, m->mVertices, sizeof(float) * ourMesh->num_vertex * 3);
-
-			LOG("New mesh %s with %d vertices", m->mName.C_Str(), m->mNumVertices);
-
-			// copy faces
-			if (m->HasFaces())
+			if (!I_Mesh::Import(m, ourMesh))
 			{
-				ourMesh->num_index = m->mNumFaces * 3;
-				ourMesh->index = new uint[ourMesh->num_index]; // assume each face is a triangle
-
-				for (uint i = 0; i < m->mNumFaces; ++i)
-				{
-					if (m->mFaces[i].mNumIndices != 3)
-					{
-						LOG("[WARNING], geometry face with != 3 indices!");
-						obj->~GameObject();
-
-						obj = nullptr;
-						m = nullptr;
-						ourMesh = nullptr;
-						return false;
-					}
-					else
-					{
-						memcpy(&ourMesh->index[i * 3], m->mFaces[i].mIndices, 3 * sizeof(uint));
-					}
-				}
-			}
-
-			//copy normals
-			ourMesh->num_normals = m->mNumVertices;
-			ourMesh->normals = new float[ourMesh->num_normals * 3];
-			memcpy(ourMesh->normals, m->mNormals, sizeof(float) * ourMesh->num_normals * 3);
-
-			////copy texture coordinates
-			uint uv_index = 0;
-
-			if (m->HasTextureCoords(uv_index))
-			{
-				ourMesh->num_tex_uvs = m->mNumVertices;
-				ourMesh->tex_uvs = new math::float2[ourMesh->num_tex_uvs * 3];
-				for (uint i = 0; i < ourMesh->num_tex_uvs; i++)
-				{
-					ourMesh->tex_uvs[i].x = m->mTextureCoords[uv_index][i].x;
-					ourMesh->tex_uvs[i].y = m->mTextureCoords[uv_index][i].y;
-				}
+				obj->~GameObject();
+				obj = nullptr;
+				return false;
 			}
 
 			if (InitMesh(ourMesh))

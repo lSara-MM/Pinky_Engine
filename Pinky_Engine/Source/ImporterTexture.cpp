@@ -2,11 +2,11 @@
 
 #pragma once
 
-void ImpTexture::Import(const aiTexture* Texture, ai::texture* ourTexture)
+void I_Texture::Import(const aiTexture* Texture, ai::texture* ourTexture)
 {
 }
 
-uint64 ImpTexture::Save(const ai::texture* ourTexture, char** fileBuffer)
+uint64 I_Texture::Save(const ai::texture* ourTexture, char** fileBuffer)
 {
 	ILuint size;
 	ILubyte* data;
@@ -15,8 +15,10 @@ uint64 ImpTexture::Save(const ai::texture* ourTexture, char** fileBuffer)
 	if (size > 0) {
 		data = new ILubyte[size]; // allocate data buffer
 		if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function
+		{
 			*fileBuffer = (char*)data;
 			RELEASE_ARRAY(data);
+		}
 	}
 	else
 	{
@@ -26,9 +28,10 @@ uint64 ImpTexture::Save(const ai::texture* ourTexture, char** fileBuffer)
 			LOG("[ERROR] when saving %s - %d: %s", ourTexture->path, error, iluErrorString(error));
 		}
 	}
-	return uint64();
+
+	return size;
 }
 
-void ImpTexture::Load(const char* fileBuffer, ai::texture* ourTexture)
+void I_Texture::Load(const char* fileBuffer, ai::texture* ourTexture)
 {
 }
