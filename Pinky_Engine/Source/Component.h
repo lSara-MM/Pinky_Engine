@@ -26,11 +26,10 @@ class GameObject;
 class Component
 {
 public:
-	Component(C_TYPE t = C_TYPE::NONE, GameObject* g = nullptr, unsigned int i = 0, bool start_enabled = true, std::string n = "Component")
-		: type(t), gameObject(g), id(i), active(start_enabled), name(n) {};
-	
-	Component(GameObject* g, bool start_enabled = true, std::string n = "Component") : gameObject(g), active(start_enabled), name(n) {};
-	virtual ~Component() { gameObject = nullptr; };
+	Component(C_TYPE t = C_TYPE::NONE, GameObject* g = nullptr, unsigned int i = 0, bool start_enabled = true, std::string n = "Component");
+	Component(GameObject* g, bool start_enabled = true, std::string n = "Component");
+
+	virtual ~Component();
 
 	virtual void ShowInInspector() {};
 	Component* CopyComponent(GameObject* go);

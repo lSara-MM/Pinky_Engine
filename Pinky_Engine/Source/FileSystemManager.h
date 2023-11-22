@@ -35,11 +35,11 @@ struct NodePath
 	}
 };
 
-class ModuleFS : public Module
+class FileSystemManager : public Module
 {
 public:
-	ModuleFS(Application* app, bool start_enabled = true);
-	~ModuleFS();
+	FileSystemManager(Application* app, bool start_enabled = true);
+	~FileSystemManager();
 
 	bool Init();
 	update_status PreUpdate(float dt);

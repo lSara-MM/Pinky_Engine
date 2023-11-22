@@ -26,10 +26,10 @@ class GameObject;
 class Resource
 {
 public:
-	Resource() {};
-	virtual ~Resource() { };
+	Resource();
+	virtual ~Resource();
 
-	int GetID() { return uid; }
+	int GetID();
 
 public:
 	std::string name;

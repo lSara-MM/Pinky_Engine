@@ -148,7 +148,7 @@
     <ClInclude Include="Source\ImporterTexture.h">
       <Filter>Sources\Importers</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ModuleFS.h">
+    <ClInclude Include="Source\FileSystemManager.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
     <ClInclude Include="Source\External Libraries\Deviceld\DeviceId.h">
@@ -480,7 +480,7 @@
     <ClCompile Include="Source\ImporterTexture.cpp">
       <Filter>Sources\Importers</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ModuleFS.cpp">
+    <ClCompile Include="Source\FileSystemManager.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="Source\External Libraries\Deviceld\DeviceId.cpp">

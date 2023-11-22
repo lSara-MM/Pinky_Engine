@@ -1,6 +1,6 @@
 #include "Globals.h"
 #include "Application.h"
-#include "ModuleFS.h"
+#include "FileSystemManager.h"
 
 #include "External Libraries\SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
@@ -11,7 +11,7 @@
 #include <filesystem>
 #pragma comment( lib, "Source/External Libraries/PhysFS/libx86/physfs.lib" )
 
-ModuleFS::ModuleFS(Application* app, bool start_enabled) : Module(app, start_enabled)
+FileSystemManager::FileSystemManager(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	// needs to be created before Init so other modules can use it
 	char* base_path = SDL_GetBasePath();
@@ -29,11 +29,11 @@ ModuleFS::ModuleFS(Application* app, bool start_enabled) : Module(app, start_ena
 }
 
 // Destructor
-ModuleFS::~ModuleFS()
+FileSystemManager::~FileSystemManager()
 {}
 
 // Called before render is available
-bool ModuleFS::Init()
+bool FileSystemManager::Init()
 {
 	LOG("Creating File System");
 	bool ret = true;
@@ -42,13 +42,13 @@ bool ModuleFS::Init()
 }
 
 // PreUpdate: clear buffer
-update_status ModuleFS::PreUpdate(float dt)
+update_status FileSystemManager::PreUpdate(float dt)
 {
 
 	return UPDATE_CONTINUE;
 }
 
-update_status ModuleFS::Update(float dt)
+update_status FileSystemManager::Update(float dt)
 {
 
 
@@ -56,7 +56,7 @@ update_status ModuleFS::Update(float dt)
 }
 
 // PostUpdate present buffer to screen
-update_status ModuleFS::PostUpdate(float dt)
+update_status FileSystemManager::PostUpdate(float dt)
 {
 	update_status ret = UPDATE_CONTINUE;
 
@@ -65,7 +65,7 @@ update_status ModuleFS::PostUpdate(float dt)
 }
 
 // Called before quitting
-bool ModuleFS::CleanUp()
+bool FileSystemManager::CleanUp()
 {
 	LOG("Destroying File System");
 
@@ -74,14 +74,14 @@ bool ModuleFS::CleanUp()
 
 
 // Create
-void ModuleFS::CreateLibraryDirs()
+void FileSystemManager::CreateLibraryDirs()
 {
 	CreateDir(LIBRARY_PATH);
 	CreateDir(MESHES_PATH);
 	CreateDir(TEXTURES_PATH);
 }
 
-bool ModuleFS::AddPath(std::string path)
+bool FileSystemManager::AddPath(std::string path)
 {
 	bool ret = false;
 
@@ -97,7 +97,7 @@ bool ModuleFS::AddPath(std::string path)
 	return ret;
 }
 
-bool ModuleFS::CreateDir(const char* dir)
+bool FileSystemManager::CreateDir(const char* dir)
 {
 	if (IsDirectory(dir) == false)
 	{
@@ -111,26 +111,26 @@ bool ModuleFS::CreateDir(const char* dir)
 
 // Checks
 //// Check if a file exists
-bool ModuleFS::Exists(const char* file) const
+bool FileSystemManager::Exists(const char* file) const
 {
 	return PHYSFS_exists(file) != 0;
 }
 
 //// Check if a file is a directory
-bool ModuleFS::IsDirectory(const char* file) const
+bool FileSystemManager::IsDirectory(const char* file) const
 {
 	return PHYSFS_isDirectory(file) != 0;
 }
 
 
 // Getters
-const char* ModuleFS::GetWriteDir() const
+const char* FileSystemManager::GetWriteDir() const
 {
 	//TODO: erase first annoying dot (".")
 	return PHYSFS_getWriteDir();
 }
 
-void ModuleFS::DiscoverFiles(const char* directory, std::vector<std::string>& vFiles, std::vector<std::string>& vDirs) const
+void FileSystemManager::DiscoverFiles(const char* directory, std::vector<std::string>& vFiles, std::vector<std::string>& vDirs) const
 {
 	char** rc = PHYSFS_enumerateFiles(directory);
 
@@ -144,7 +144,7 @@ void ModuleFS::DiscoverFiles(const char* directory, std::vector<std::string>& vF
 	PHYSFS_freeList(rc);
 }
 
-std::vector<std::string>& ModuleFS::GetAllFilesWithExtension(const char* directory, const char* extension, std::vector<std::string>& vFiles) const
+std::vector<std::string>& FileSystemManager::GetAllFilesWithExtension(const char* directory, const char* extension, std::vector<std::string>& vFiles) const
 {
 	std::vector<std::string> files, dirs;
 
@@ -164,7 +164,7 @@ std::vector<std::string>& ModuleFS::GetAllFilesWithExtension(const char* directo
 	return vFiles;
 }
 
-NodePath ModuleFS::GetAllFiles(const char* directory, std::vector<std::string>* filter_ext, std::vector<std::string>* ignore_ext) const
+NodePath FileSystemManager::GetAllFiles(const char* directory, std::vector<std::string>* filter_ext, std::vector<std::string>* ignore_ext) const
 {
 	NodePath root;
 
@@ -215,7 +215,7 @@ NodePath ModuleFS::GetAllFiles(const char* directory, std::vector<std::string>* 
 	return root;
 }
 
-std::string ModuleFS::GetRealDir(const char* path) const
+std::string FileSystemManager::GetRealDir(const char* path) const
 {
 	std::string dir;
 	dir = PHYSFS_getBaseDir();
@@ -230,18 +230,18 @@ std::string ModuleFS::GetRealDir(const char* path) const
 	return dir;
 }
 
-std::string ModuleFS::GetPathRelativeToAssets(const char* originalPath) const
+std::string FileSystemManager::GetPathRelativeToAssets(const char* originalPath) const
 {
 	return GetRealDir(originalPath);
 }
 
 
-uint64 ModuleFS::GetLastModTime(const char* fileName)
+uint64 FileSystemManager::GetLastModTime(const char* fileName)
 {
 	return PHYSFS_getLastModTime(fileName);
 }
 
-std::string ModuleFS::GetUniqueName(const char* path, const char* name) const
+std::string FileSystemManager::GetUniqueName(const char* path, const char* name) const
 {
 	//TODO: modify to distinguix files and dirs?
 	std::vector<std::string> vFiles, vDirectories;
@@ -282,14 +282,14 @@ std::string ModuleFS::GetUniqueName(const char* path, const char* name) const
 
 
 // Check extension
-bool ModuleFS::HasExtension(const char* path) const
+bool FileSystemManager::HasExtension(const char* path) const
 {
 	std::string ext = "";
 	SplitFilePath(path, nullptr, nullptr, &ext);
 	return ext != "";
 }
 
-bool ModuleFS::HasExtension(const char* path, std::string extension) const
+bool FileSystemManager::HasExtension(const char* path, std::string extension) const
 {
 	std::string ext = "";
 	SplitFilePath(path, nullptr, nullptr, &ext);
@@ -297,7 +297,7 @@ bool ModuleFS::HasExtension(const char* path, std::string extension) const
 	return ext == extension;
 }
 
-bool ModuleFS::HasExtension(const char* path, std::vector<std::string> extensions) const
+bool FileSystemManager::HasExtension(const char* path, std::vector<std::string> extensions) const
 {
 	std::string ext = "";
 	SplitFilePath(path, nullptr, nullptr, &ext);
@@ -319,7 +319,7 @@ bool ModuleFS::HasExtension(const char* path, std::vector<std::string> extension
 
 
 //
-std::string ModuleFS::NormalizePath(const char* full_path) const
+std::string FileSystemManager::NormalizePath(const char* full_path) const
 {
 	std::string newPath(full_path);
 
@@ -334,7 +334,7 @@ std::string ModuleFS::NormalizePath(const char* full_path) const
 	return newPath;
 }
 
-void ModuleFS::SplitFilePath(const char* full_path, std::string* path, std::string* file, std::string* extension) const
+void FileSystemManager::SplitFilePath(const char* full_path, std::string* path, std::string* file, std::string* extension) const
 {
 	if (full_path != nullptr)
 	{
@@ -382,7 +382,7 @@ void ModuleFS::SplitFilePath(const char* full_path, std::string* path, std::stri
 
 
 // Loads
-unsigned int ModuleFS::Load(const char* path, const char* file, char** buffer) const
+unsigned int FileSystemManager::Load(const char* path, const char* file, char** buffer) const
 {
 	std::string full_path(path);
 	full_path += file;
@@ -391,7 +391,7 @@ unsigned int ModuleFS::Load(const char* path, const char* file, char** buffer) c
 }
 
 // Read a file and put it in a new buffer
-uint ModuleFS::Load(const char* file, char** buffer) const
+uint FileSystemManager::Load(const char* file, char** buffer) const
 {
 	uint ret = 0;
 	PHYSFS_file* fs_file = PHYSFS_openRead(file);
@@ -431,7 +431,7 @@ uint ModuleFS::Load(const char* file, char** buffer) const
 
 
 // Duplicate
-bool ModuleFS::DuplicateFile(const char* file, const char* dstFolder, std::string& relativePath)
+bool FileSystemManager::DuplicateFile(const char* file, const char* dstFolder, std::string& relativePath)
 {
 	std::string fileStr, extensionStr;
 	SplitFilePath(file, nullptr, &fileStr, &extensionStr);
@@ -443,7 +443,7 @@ bool ModuleFS::DuplicateFile(const char* file, const char* dstFolder, std::strin
 
 }
 
-bool ModuleFS::DuplicateFile(const char* srcFile, const char* dstFile)
+bool FileSystemManager::DuplicateFile(const char* srcFile, const char* dstFile)
 {
 	//TODO: Compare performance to calling Load(srcFile) and then Save(dstFile)
 	/*std::ifstream src;
@@ -479,7 +479,7 @@ int close_sdl_rwops(SDL_RWops* rw)
 
 // Others
 //// Save a buffer to disk
-uint ModuleFS::Save(const char* file, const void* buffer, unsigned int size, bool append) const
+uint FileSystemManager::Save(const char* file, const void* buffer, unsigned int size, bool append) const
 {
 	unsigned int ret = 0;
 
@@ -525,7 +525,7 @@ uint ModuleFS::Save(const char* file, const void* buffer, unsigned int size, boo
 	return ret;
 }
 
-bool ModuleFS::Remove(const char* file)
+bool FileSystemManager::Remove(const char* file)
 {
 	bool ret = false;
 
