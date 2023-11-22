@@ -27,6 +27,7 @@ public:
 
 
 	LCG* randomLCG;
+	FileSystemManager* fs;
 
 private:
 

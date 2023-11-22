@@ -148,9 +148,6 @@
     <ClInclude Include="Source\ImporterTexture.h">
       <Filter>Sources\Importers</Filter>
     </ClInclude>
-    <ClInclude Include="Source\FileSystemManager.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="Source\External Libraries\Deviceld\DeviceId.h">
       <Filter>External Libraries\Deviceld</Filter>
     </ClInclude>
@@ -409,6 +406,9 @@
     <ClInclude Include="Source\R_Mesh.h">
       <Filter>Sources\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="Source\FileSystemManager.h">
+      <Filter>Sources\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ModuleCamera3D.cpp">
@@ -479,9 +479,6 @@
     </ClCompile>
     <ClCompile Include="Source\ImporterTexture.cpp">
       <Filter>Sources\Importers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\FileSystemManager.cpp">
-      <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="Source\External Libraries\Deviceld\DeviceId.cpp">
       <Filter>External Libraries\Deviceld</Filter>
@@ -622,6 +619,9 @@
       <Filter>Sources\Resources</Filter>
     </ClCompile>
     <ClCompile Include="Source\R_Mesh.cpp">
+      <Filter>Sources\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FileSystemManager.cpp">
       <Filter>Sources\Resources</Filter>
     </ClCompile>
   </ItemGroup>

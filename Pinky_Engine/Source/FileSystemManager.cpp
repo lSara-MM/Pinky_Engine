@@ -32,46 +32,6 @@ FileSystemManager::FileSystemManager(Application* app, bool start_enabled) : Mod
 FileSystemManager::~FileSystemManager()
 {}
 
-// Called before render is available
-bool FileSystemManager::Init()
-{
-	LOG("Creating File System");
-	bool ret = true;
-
-	return ret;
-}
-
-// PreUpdate: clear buffer
-update_status FileSystemManager::PreUpdate(float dt)
-{
-
-	return UPDATE_CONTINUE;
-}
-
-update_status FileSystemManager::Update(float dt)
-{
-
-
-	return UPDATE_CONTINUE;
-}
-
-// PostUpdate present buffer to screen
-update_status FileSystemManager::PostUpdate(float dt)
-{
-	update_status ret = UPDATE_CONTINUE;
-
-
-	return ret;
-}
-
-// Called before quitting
-bool FileSystemManager::CleanUp()
-{
-	LOG("Destroying File System");
-
-	return true;
-}
-
 
 // Create
 void FileSystemManager::CreateLibraryDirs()
@@ -144,7 +104,7 @@ void FileSystemManager::DiscoverFiles(const char* directory, std::vector<std::st
 	PHYSFS_freeList(rc);
 }
 
-std::vector<std::string>& FileSystemManager::GetAllFilesWithExtension(const char* directory, const char* extension, std::vector<std::string>& vFiles) const
+std::vector<std::string>& FileSystemManager::GetByExt(const char* directory, const char* extension, std::vector<std::string>& vFiles) const
 {
 	std::vector<std::string> files, dirs;
 

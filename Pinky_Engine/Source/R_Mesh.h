@@ -29,7 +29,10 @@ class R_Mesh : public Resource
 {
 public:
 	R_Mesh();
-	virtual ~R_Mesh();
+	~R_Mesh();
+
+	bool InitBuffers(R_Mesh* m);
+	void DeleteBuffers(R_Mesh* m);
 
 public:
 

@@ -41,12 +41,6 @@ public:
 	FileSystemManager(Application* app, bool start_enabled = true);
 	~FileSystemManager();
 
-	bool Init();
-	update_status PreUpdate(float dt);
-	update_status Update(float dt);
-	update_status PostUpdate(float dt);
-	bool CleanUp();
-
 	// Create
 	void CreateLibraryDirs();
 	bool AddPath(std::string path);
@@ -59,7 +53,7 @@ public:
 	// Getters
 	const char* GetWriteDir() const;
 	void DiscoverFiles(const char* directory, std::vector<std::string>& vFiles, std::vector<std::string>& vDirs) const;
-	std::vector<std::string>& GetAllFilesWithExtension(const char* directory, const char* extension, std::vector<std::string>& vFiles) const;
+	std::vector<std::string>& GetByExt(const char* directory, const char* extension, std::vector<std::string>& vFiles) const;
 	NodePath GetAllFiles(const char* directory, std::vector<std::string>* filter_ext = nullptr, std::vector<std::string>* ignore_ext = nullptr) const;
 	std::string GetRealDir(const char* path) const;
 	std::string GetPathRelativeToAssets(const char* originalPath) const;
