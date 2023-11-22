@@ -28,28 +28,28 @@ enum class CUSTOM_MESH
 class R_Mesh : public Resource
 {
 public:
-	R_Mesh() {};
-	virtual ~R_Mesh() { };
+	R_Mesh();
+	virtual ~R_Mesh();
 
 public:
 
 	//indices
-	uint num_index = 0;
-	uint* index = nullptr;
+	uint num_index;
+	uint* index;
 
 	//vertices
-	uint num_vertex = 0;
-	float* vertex = nullptr;
+	uint num_vertex;
+	float* vertex;
 
 	//normals
-	GLuint id_normals = 0;
-	uint num_normals = 0;
-	float* normals = nullptr;
+	GLuint id_normals;
+	uint num_normals;
+	float* normals;
 
 	//texture UVs
-	GLuint id_tex_uvs = 0;
-	uint num_tex_uvs = 0;
-	math::float2* tex_uvs = nullptr;
+	GLuint id_tex_uvs;
+	uint num_tex_uvs;
+	math::float2* tex_uvs;
 
 	//texture tex;
 
