@@ -7,7 +7,7 @@
 //
 #include "External Libraries/ImGui/imgui_custom.h"
 
-C_Camera::C_Camera(GameObject* g, unsigned int i, bool start_enabled) : Component(C_TYPE::CAM, g, i, start_enabled, "Cam")
+C_Camera::C_Camera(GameObject* g, uint i, bool start_enabled) : Component(C_TYPE::CAM, g, i, start_enabled, "Cam")
 {
 	//aspect ratio 16:9 
 	width = 16;
@@ -37,10 +37,10 @@ void C_Camera::ShowInInspector()
 	std::string header = name.c_str();
 
 	checkbox.insert(checkbox.begin(), 2, '#');
-	checkbox.append(std::to_string(GetID()));
+	checkbox.append(std::to_string(GetUID()));
 
 	header.append("##");
-	header.append(std::to_string(GetID()));
+	header.append(std::to_string(GetUID()));
 
 	// ---------------------------------------------
 

@@ -23,7 +23,7 @@
 #include "Component.h"
 #include "ModuleRenderer3D.h"	
 
-C_Mesh::C_Mesh(GameObject* g, ai::mesh* m, unsigned int i, bool start_enabled) : Component(C_TYPE::MESH, g, i, start_enabled, "Mesh")
+C_Mesh::C_Mesh(GameObject* g, ai::mesh* m, uint i, bool start_enabled) : Component(C_TYPE::MESH, g, i, start_enabled, "Mesh")
 {
 	mesh = m; 
 	showVertexNormals = false;
@@ -38,7 +38,7 @@ C_Mesh::C_Mesh(GameObject* g, ai::mesh* m, unsigned int i, bool start_enabled) :
 	global_aabb.Enclose(obb);
 }
 
-C_Mesh::C_Mesh(GameObject* g, C_Mesh* toCopy, bool start_enabled, unsigned int i) : Component(C_TYPE::MESH, g, i, toCopy->active, "Mesh")
+C_Mesh::C_Mesh(GameObject* g, C_Mesh* toCopy, bool start_enabled, uint i) : Component(C_TYPE::MESH, g, i, toCopy->active, "Mesh")
 {
 	memcpy(&mesh, &toCopy->mesh, sizeof(*mesh));
 	//mesh = toCopy->mesh;
@@ -61,9 +61,9 @@ void C_Mesh::ShowInInspector()
 	bool exists = true;
 
 	checkbox.insert(checkbox.begin(), 2, '#');
-	checkbox.append(std::to_string(GetID()));
+	checkbox.append(std::to_string(GetUID()));
 
-	header.append("##").append(std::to_string(GetID()));
+	header.append("##").append(std::to_string(GetUID()));
 	// ---------------------------------------------
 
 	ImGui::Checkbox(checkbox.c_str(), &active);		ImGui::SameLine();

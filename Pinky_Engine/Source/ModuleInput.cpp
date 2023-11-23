@@ -5,6 +5,8 @@
 #include "ModuleInput.h"
 #include "External Libraries/ImGui/backends/imgui_impl_sdl2.h"
 
+#include "ModuleResource.h"
+
 #define MAX_KEYS 300
 
 ModuleInput::ModuleInput(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -122,13 +124,11 @@ update_status ModuleInput::PreUpdate(float dt)
 			}
 
 			case (SDL_DROPFILE): 
-			{      // In case if dropped file
+			{
 				dropped_filedir = e.drop.file;
-				// Shows directory of dropped file
-				/*SDL_ShowSimpleMessageBox(
-					SDL_MESSAGEBOX_INFORMATION,
-					"File dropped on window", dropped_filedir, App->window->window);*/
-
+				
+				//App->resource->ImportFile(dropped_filedir);
+				
 				LOG("File dropped from: %s", dropped_filedir);
 
 				ai::ImportFile(dropped_filedir);

@@ -129,8 +129,9 @@ bool ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 		{
 			const aiMesh* m = s->mMeshes[children[i]->mMeshes[0]];
 			mesh* ourMesh = new mesh;
+			R_Mesh* ourMesh2;
 
-			if (!I_Mesh::Import(m, ourMesh))
+			if (!I_Mesh::Import(m, ourMesh2))
 			{
 				obj->~GameObject();
 				obj = nullptr;

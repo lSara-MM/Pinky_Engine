@@ -2,7 +2,7 @@
 
 #pragma once
 
-bool I_Mesh::Import(const aiMesh* mesh, ai::mesh* ourMesh)
+bool I_Mesh::Import(const aiMesh* mesh, R_Mesh* ourMesh)
 {
 	// copy vertices
 	ourMesh->num_vertex = mesh->mNumVertices;
@@ -56,7 +56,7 @@ bool I_Mesh::Import(const aiMesh* mesh, ai::mesh* ourMesh)
 	return true;
 }
 
-uint64 I_Mesh::Save(const ai::mesh* ourMesh, char** fileBufferCursor)
+uint64 I_Mesh::Save(const R_Mesh* ourMesh, char** fileBufferCursor)
 {
 	// amount of indices / vertices / colors / normals / texture_coords / AABB
 	uint ranges[4] = { ourMesh->num_index, ourMesh->num_vertex, ourMesh->num_normals, ourMesh->num_tex_uvs };
@@ -94,7 +94,7 @@ uint64 I_Mesh::Save(const ai::mesh* ourMesh, char** fileBufferCursor)
 	return size;
 }
 
-void I_Mesh::Load(ai::mesh* ourMesh)
+void I_Mesh::Load(R_Mesh* ourMesh)
 {
 	char* cursor = nullptr;
 	// amount of indices / vertices / colors / normals / texture_coords

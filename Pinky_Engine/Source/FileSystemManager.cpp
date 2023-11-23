@@ -7,20 +7,53 @@
 #include <gl/GLU.h>
 
 #include "External Libraries/PhysFS/include/physfs.h"
-//#include <fstream>
+#include <fstream>
 #include <filesystem>
 #pragma comment( lib, "Source/External Libraries/PhysFS/libx86/physfs.lib" )
 
+// Node Path
+NodePath::NodePath() : path("")
+{
+	isLeaf = true;
+	isFile = true;
+}
+
+bool NodePath::IsLastFolder() const
+{
+	for (uint i = 0; i < vChildren.size(); i++)
+	{
+		if (!vChildren[i].isFile)
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool NodePath::operator == (const NodePath node) const
+{
+	return path == node.path;
+}
+
+//
 FileSystemManager::FileSystemManager(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	// needs to be created before Init so other modules can use it
 	char* base_path = SDL_GetBasePath();
-	PHYSFS_init(nullptr);
+
+	if (PHYSFS_init(nullptr) == 0)
+	{
+		LOG("[ERROR] File System: Could not initiallize PhysFS");
+	}
+
 	SDL_free(base_path);
 
 	// Setting the working directory as the writing directory
 	if (PHYSFS_setWriteDir(".") == 0)
-		LOG("File System error while creating write dir: %s\n", PHYSFS_getLastError());
+	{
+		LOG("[ERROR] File System: Could not create write dir: %s\n", PHYSFS_getLastError());
+	}
 
 	AddPath("."); // Adding ProjectFolder (working directory)
 	AddPath("Assets");
@@ -47,7 +80,7 @@ bool FileSystemManager::AddPath(std::string path)
 
 	if (PHYSFS_mount(path.c_str(), nullptr, 1) == 0)
 	{
-		LOG("[ERROR] Could not add a path: %s\n", PHYSFS_getLastError());
+		LOG("[ERROR] File System: Could not add a path: %s\n", PHYSFS_getLastError());
 	}
 	else
 	{
@@ -186,7 +219,7 @@ std::string FileSystemManager::GetRealDir(const char* path) const
 
 	dir.append(*PHYSFS_getSearchPath()).append("/");
 	dir.append(PHYSFS_getRealDir(path)).append("/").append(path);
-	
+
 	return dir;
 }
 
@@ -342,7 +375,7 @@ void FileSystemManager::SplitFilePath(const char* full_path, std::string* path, 
 
 
 // Loads
-unsigned int FileSystemManager::Load(const char* path, const char* file, char** buffer) const
+uint FileSystemManager::Load(const char* path, const char* file, char** buffer) const
 {
 	std::string full_path(path);
 	full_path += file;
@@ -379,7 +412,9 @@ uint FileSystemManager::Load(const char* file, char** buffer) const
 		}
 
 		if (PHYSFS_close(fs_file) == 0)
+		{
 			LOG("[ERROR] File System: Could not close file %s: %s\n", file, PHYSFS_getLastError());
+		}
 	}
 	else
 	{
@@ -400,13 +435,11 @@ bool FileSystemManager::DuplicateFile(const char* file, const char* dstFolder, s
 	std::string finalPath = std::string(*PHYSFS_getSearchPath()).append("/") + relativePath;
 
 	return DuplicateFile(file, finalPath.c_str());
-
 }
 
 bool FileSystemManager::DuplicateFile(const char* srcFile, const char* dstFile)
 {
-	//TODO: Compare performance to calling Load(srcFile) and then Save(dstFile)
-	/*std::ifstream src;
+	std::ifstream src;
 	src.open(srcFile, std::ios::binary);
 	bool srcOpen = src.is_open();
 	std::ofstream  dst(dstFile, std::ios::binary);
@@ -419,17 +452,18 @@ bool FileSystemManager::DuplicateFile(const char* srcFile, const char* dstFile)
 
 	if (srcOpen && dstOpen)
 	{
-		LOG("File System: File %s Duplicated Correctly", srcFile);
+		LOG("[success] File Duplicated Correctly");
 		return true;
 	}
 	else
 	{
-		LOG("[ERROR] File System: Could not be duplicated");
+		LOG("[error] File could not be duplicated");
 		return false;
-	}*/
-	return false;
+	}
 }
 
+
+//
 int close_sdl_rwops(SDL_RWops* rw)
 {
 	RELEASE_ARRAY(rw->hidden.mem.base);
@@ -439,9 +473,9 @@ int close_sdl_rwops(SDL_RWops* rw)
 
 // Others
 //// Save a buffer to disk
-uint FileSystemManager::Save(const char* file, const void* buffer, unsigned int size, bool append) const
+uint FileSystemManager::Save(const char* file, const void* buffer, uint size, bool append) const
 {
-	unsigned int ret = 0;
+	uint ret = 0;
 
 	bool overwrite = PHYSFS_exists(file) != 0;
 	PHYSFS_file* fs_file = (append) ? PHYSFS_openAppend(file) : PHYSFS_openWrite(file);
