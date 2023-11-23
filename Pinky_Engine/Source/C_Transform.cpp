@@ -12,20 +12,24 @@ C_Transform::C_Transform(GameObject* g, float3 pos, Quat rot, float3 sc, bool st
 {
 	position = pos;
 	rotation = rot;
+	eulerRot = rotation.ToEulerXYZ();
 	scale = sc;
 
 	globalMatrix = math::float4x4::FromTRS(pos, rot, sc);
 	localMatrix = math::float4x4::identity;
+	updateMatrix = false;
 }
 
 C_Transform::C_Transform(GameObject* g, C_Transform* toCopy) : Component(C_TYPE::TRANSFORM, g, g->GetUid(), toCopy->active, "Transform")
 {
 	position = toCopy->position;
 	rotation = toCopy->rotation;
+	eulerRot = rotation.ToEulerXYZ();
 	scale = toCopy->scale;
 
 	globalMatrix = math::float4x4::FromTRS(position, rotation, scale);
-	localMatrix = math::float4x4::identity;
+	localMatrix = math::float4x4::FromTRS(position, rotation, scale);
+	updateMatrix = false;
 }
 
 C_Transform::~C_Transform()
@@ -42,33 +46,39 @@ void C_Transform::ShowInInspector()
 		ImGui::Text("Y");				ImGui::SameLine(350);
 		ImGui::Text("Z");*/
 
-		float vec[3] = { position.x, position.y, position .z};
-		ImGui::DragFloat3("Position", vec, 0.1f);
-		SetTransform(vec);
+		if (ImGui::DragFloat3("Position", &position[0], 0.1f))
+		{
+			SetTransform(position);
+		}
 
-		float vec1[3] = { rotation.x, rotation.y, rotation.z};
-		ImGui::DragFloat3("Rotation", vec1, 0.1f);
-		SetRotation(vec1);
+		if (ImGui::DragFloat3("Rotation", &eulerRot[0], 0.1f))
+		{
+			SetRotation(eulerRot);
+		}
 
-		float vec2[3] = { scale.x, scale.y, scale.z};
-		ImGui::DragFloat3("Scale", vec2, 0.1f);
-		SetScale(vec2);
+		if (ImGui::DragFloat3("Scale", &scale[0], 0.1f))
+		{
+			SetScale(scale);
+		}
 	}
 }
 
-void C_Transform::SetTransform(float vec[3])
+void C_Transform::SetTransform(float3 vec)
 {
 	position = float3(vec);
+	updateMatrix = true;
 }
 
-void C_Transform::SetRotation(float vec[])
+void C_Transform::SetRotation(float3 vec)
 {
-	rotation = Quat(vec);
+	rotation = Quat::FromEulerXYZ(vec[0] * DEGTORAD, vec[1] * DEGTORAD, vec[2] * DEGTORAD);
+	updateMatrix = true;
 }
 
-void C_Transform::SetScale(float vec[3])
+void C_Transform::SetScale(float3 vec)
 {
 	scale = float3(vec);
+	updateMatrix = true;
 }
 
 float4x4 C_Transform::GetGlobalTransform() const
@@ -79,4 +89,32 @@ float4x4 C_Transform::GetGlobalTransform() const
 float4x4 C_Transform::GetLocalTransform() const
 {
 	return localMatrix;
+}
+
+GLfloat* C_Transform::GetGLTransform() const
+{
+	return globalMatrix.Transposed().ptr();
+}
+
+void C_Transform::UpdateTransformsChilds()
+{
+	if (!gameObject->vChildren.empty())
+	{
+		for (auto i = 0; i < gameObject->vChildren.size(); i++)
+		{
+			this->gameObject->vChildren[i]->transform->UpdateGlobalMatrix();
+		}
+	}
+	updateMatrix = false;
+}
+
+void C_Transform::UpdateGlobalMatrix()
+{
+	localMatrix = float4x4::FromTRS(position, rotation, scale);
+
+	if (this->gameObject->pParent != nullptr)
+	{
+		float4x4 Global_parent = this->gameObject->pParent->transform->GetGlobalTransform();
+		globalMatrix = Global_parent * localMatrix;//Your global matrix = your parent’s global matrix * your local Matrix
+	}
 }

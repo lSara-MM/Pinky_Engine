@@ -97,6 +97,12 @@ update_status GameObject::Update(float dt)
 			}
 		}
 
+		if (this->transform->updateMatrix)
+		{
+			this->transform->UpdateGlobalMatrix();
+			this->transform->UpdateTransformsChilds();
+		}
+
 		if (vComponents.size() > 1)
 		{
 			std::vector<C_Mesh*> vMeshes = GetComponentsMesh();

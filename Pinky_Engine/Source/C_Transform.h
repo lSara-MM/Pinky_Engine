@@ -19,17 +19,27 @@ public:
 
 	void ShowInInspector();
 
-	void SetTransform(float vec[3]);
-	void SetRotation(float vec[]);
-	void SetScale(float vec[3]);
+	void SetTransform(float3 vec);
+	void SetRotation(float3 vec);
+	void SetScale(float3 vec);
 	float4x4 GetGlobalTransform() const;
 	float4x4 GetLocalTransform() const;
+	GLfloat* GetGLTransform() const;
+	void UpdateTransformsChilds();
+	void UpdateGlobalMatrix();
+
 
 public:
+	//local
 	float3 position;
 	Quat rotation;
+	float3 eulerRot;
 	float3 scale;
-
-	float4x4 globalMatrix;
 	float4x4 localMatrix;
+
+	//global
+	float4x4 globalMatrix;
+
+	bool updateMatrix;
+
 };

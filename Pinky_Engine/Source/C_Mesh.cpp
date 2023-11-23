@@ -33,7 +33,7 @@ C_Mesh::C_Mesh(GameObject* g, ai::mesh* m, unsigned int i, bool start_enabled) :
 
 	//TODO: does it go here?
 	obb = mesh->local_aabb;
-	obb.Transform(this->gameObject->pParent->transform->GetGlobalTransform());
+	obb.Transform(this->gameObject->transform->GetGlobalTransform());
 	global_aabb.SetNegativeInfinity();
 	global_aabb.Enclose(obb);
 }
@@ -93,6 +93,9 @@ void C_Mesh::ShowInInspector()
 
 void C_Mesh::Draw(bool checkered, Color color)
 {
+	glPushMatrix();
+	glMultMatrixf(gameObject->transform->GetGLTransform());
+
 	glEnableClientState(GL_VERTEX_ARRAY);
 	//normals
 	glEnableClientState(GL_NORMAL_ARRAY);
@@ -136,8 +139,8 @@ void C_Mesh::Draw(bool checkered, Color color)
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glPopMatrix();
 }
 
 void C_Mesh::DrawVertexNormals()

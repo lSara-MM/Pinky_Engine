@@ -163,7 +163,7 @@ void C_Camera::SetAspectRatio(int width, int height)
 
 void C_Camera::UpdateCameraFrustum()
 {
-	const C_Transform* transformComponent = this->gameObject->pParent->transform;//TODO: not good
+	C_Transform* transformComponent = this->gameObject->transform;//TODO: not good
 
 	float4x4 transform = transformComponent->GetGlobalTransform();
 

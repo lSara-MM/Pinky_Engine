@@ -149,15 +149,15 @@ bool ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 				children[i]->mTransformation.Decompose(scale, rot, pos);
 		
 
-				float temp[3] = { pos.x , pos.y, pos.z };
+				float3 temp = { pos.x , pos.y, pos.z };
 				obj->transform->SetTransform(temp);
 
 				float temp1[4] = { rot.x , rot.y, rot.z, rot.w };
 				float3 euler = Quat(temp1).ToEulerXYZ();
-				float eulerF[3] = { euler.x * RADTODEG, euler.y * RADTODEG, euler.z * RADTODEG };
+				float3 eulerF = { euler.x * RADTODEG, euler.y * RADTODEG, euler.z * RADTODEG };
 				obj->transform->SetRotation(eulerF);
 				
-				float temp2[3] = { scale.x, scale.y, scale.z };
+				float3 temp2 = { scale.x, scale.y, scale.z };
 				obj->transform->SetScale(temp2);
 
 				obj->transform->globalMatrix = math::float4x4::FromTRS(obj->transform->position, 
