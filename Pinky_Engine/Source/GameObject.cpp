@@ -99,7 +99,6 @@ update_status GameObject::Update(float dt)
 
 		if (this->transform->updateMatrix)
 		{
-			this->transform->UpdateGlobalMatrix();
 			this->transform->UpdateTransformsChilds();
 		}
 
@@ -292,6 +291,7 @@ void GameObject::ReParent(GameObject* newParent)
 
 	pParent = newParent;
 	pParent->vChildren.push_back(this);
+	this->transform->updateMatrix = true;//recalculate matrix when reparenting
 }
 
 void GameObject::AddChild(GameObject* go)

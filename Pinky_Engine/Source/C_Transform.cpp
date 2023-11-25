@@ -98,18 +98,24 @@ GLfloat* C_Transform::GetGLTransform() const
 
 void C_Transform::UpdateTransformsChilds()
 {
+	this->gameObject->transform->UpdateGlobalMatrix();
+
 	if (!gameObject->vChildren.empty())
 	{
 		for (auto i = 0; i < gameObject->vChildren.size(); i++)
 		{
-			this->gameObject->vChildren[i]->transform->UpdateGlobalMatrix();
+			this->gameObject->vChildren[i]->transform->UpdateTransformsChilds();
 		}
 	}
+
 	updateMatrix = false;
 }
 
 void C_Transform::UpdateGlobalMatrix()
 {
+	rotation = Quat::FromEulerXYZ(eulerRot.x * DEGTORAD, eulerRot.y * DEGTORAD, eulerRot.z * DEGTORAD);
+	rotation.Normalize();
+
 	localMatrix = float4x4::FromTRS(position, rotation, scale);
 
 	if (this->gameObject->pParent != nullptr)
