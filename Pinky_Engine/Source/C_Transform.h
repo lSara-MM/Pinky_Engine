@@ -27,7 +27,8 @@ public:
 	GLfloat* GetGLTransform() const;
 	void UpdateTransformsChilds();
 	void UpdateGlobalMatrix();
-
+	//update global AABB and OBB when updating transform
+	void UpdateBoundingBoxes();
 
 public:
 	//local

@@ -111,7 +111,7 @@ void C_Transform::UpdateTransformsChilds()
 	updateMatrix = false;
 }
 
-void C_Transform::UpdateGlobalMatrix()
+void C_Transform::UpdateGlobalMatrix()//TODO: error calculo, al hacer reparent no actualiza correctamente
 {
 	rotation = Quat::FromEulerXYZ(eulerRot.x * DEGTORAD, eulerRot.y * DEGTORAD, eulerRot.z * DEGTORAD);
 	rotation.Normalize();
@@ -122,5 +122,19 @@ void C_Transform::UpdateGlobalMatrix()
 	{
 		float4x4 Global_parent = this->gameObject->pParent->transform->GetGlobalTransform();
 		globalMatrix = Global_parent * localMatrix;//Your global matrix = your parent’s global matrix * your local Matrix
+		UpdateBoundingBoxes();
+	}
+}
+
+void C_Transform::UpdateBoundingBoxes()
+{
+	std::vector<C_Mesh*> vMeshes = this->gameObject->GetComponentsMesh();
+
+	for (auto i = 0; i < vMeshes.size(); i++)
+	{
+		vMeshes[i]->obb = vMeshes[i]->mesh->local_aabb;
+		vMeshes[i]->obb.Transform(this->gameObject->transform->GetGlobalTransform());
+		vMeshes[i]->global_aabb.SetNegativeInfinity();
+		vMeshes[i]->global_aabb.Enclose(vMeshes[i]->obb);
 	}
 }

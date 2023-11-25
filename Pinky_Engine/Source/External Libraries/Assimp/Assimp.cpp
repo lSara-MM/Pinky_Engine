@@ -163,6 +163,10 @@ bool ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 				obj->transform->globalMatrix = math::float4x4::FromTRS(obj->transform->position, 
 					obj->transform->rotation, obj->transform->scale);
 				//------
+				
+				//TODO: does it go here?
+				ourMesh->local_aabb.SetNegativeInfinity();
+				ourMesh->local_aabb.Enclose((float3*)ourMesh->vertex, ourMesh->num_vertex);
 
 				//---Mesh---
 				obj->AddComponent(C_TYPE::MESH, ourMesh);
@@ -172,10 +176,6 @@ bool ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 				//TODO: pushback elsewhere
 				App->renderer3D->meshes.push_back(ourMesh);
 			}
-
-			//TODO: does it go here?
-			ourMesh->local_aabb.SetNegativeInfinity();
-			ourMesh->local_aabb.Enclose((float3*)ourMesh->vertex, ourMesh->num_vertex);
 
 			m = nullptr;
 			ourMesh = nullptr;
