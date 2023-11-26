@@ -151,6 +151,13 @@ void ModuleCamera3D::Zoom(float zoom, float scrollSpeed)
 	MainCamera->frustum.pos += MainCamera->frustum.front * zoom * scrollSpeed;
 }
 
+void ModuleCamera3D::MousePick(float xNorm, float yNorm, float w, float h)
+{
+	pickingRay = MainCamera->frustum.UnProjectLineSegment(xNorm, yNorm);
+
+
+}
+
 void ModuleCamera3D::Focus()
 {
 	MainCamera->frustum.pos = float3(5.0f, 5.0f, 5.0f);

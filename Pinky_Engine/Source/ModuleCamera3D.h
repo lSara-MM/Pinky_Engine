@@ -28,4 +28,5 @@ private:
 	float mouseX, mouseY, speed, zoomPos;
 	float3 Reference = { 0, 0, 0 };//change to focused object
 	float3 centerReference = { 0, 0, 0 };
+	LineSegment pickingRay;
 };
