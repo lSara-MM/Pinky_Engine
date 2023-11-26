@@ -96,6 +96,20 @@ GLfloat* C_Transform::GetGLTransform() const
 	return globalMatrix.Transposed().ptr();
 }
 
+float3 C_Transform::GetGlobalPosition() const
+{
+	float3 position, scale;
+	Quat rotation;
+	globalMatrix.Decompose(position, rotation, scale);
+
+	return position;
+}
+
+Quat C_Transform::GetLocalRotation() const
+{
+	return rotation;
+}
+
 void C_Transform::UpdateTransformsChilds()
 {
 	this->gameObject->transform->UpdateGlobalMatrix();

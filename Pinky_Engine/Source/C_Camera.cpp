@@ -165,14 +165,12 @@ void C_Camera::UpdateCameraFrustum()
 {
 	C_Transform* transformComponent = this->gameObject->transform;
 
-	float4x4 transform = transformComponent->GetGlobalTransform();
-
-	frustum.pos = transform.TranslatePart();
-	frustum.front = transform.WorldZ().Normalized();
-	frustum.up = frustum.front.Cross(-frustum.WorldRight()).Normalized();
+	frustum.pos = transformComponent->GetGlobalPosition();
+	frustum.front = transformComponent->GetLocalRotation().WorldZ();
+	frustum.up = transformComponent->GetLocalRotation().WorldY();
 }
 
-void C_Camera::FrustumCulling()
+void C_Camera::FrustumCulling()//TODO: add toggle to enable/disable
 {
 	std::vector<GameObject*> objectsToCull;
 	GetObjectsToCull(App->scene->rootNode, objectsToCull);
@@ -193,12 +191,12 @@ void C_Camera::FrustumCulling()
 			}
 		}
 	}
-
 }
 
 void C_Camera::GetObjectsToCull(GameObject* go, std::vector<GameObject*>& vgo)
 {
 	vgo.push_back(go);
+
 	if (go->active)//TODO: needed?
 	{
 		if (!go->vChildren.empty())

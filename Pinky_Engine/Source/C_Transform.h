@@ -25,6 +25,8 @@ public:
 	float4x4 GetGlobalTransform() const;
 	float4x4 GetLocalTransform() const;
 	GLfloat* GetGLTransform() const;
+	float3 GetGlobalPosition() const;
+	Quat GetLocalRotation() const;
 	void UpdateTransformsChilds();
 	void UpdateGlobalMatrix();
 	//update global AABB and OBB when updating transform

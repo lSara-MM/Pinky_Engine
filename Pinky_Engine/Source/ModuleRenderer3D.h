@@ -37,6 +37,9 @@ public:
 	void DrawBox();
 	void SetVsync(bool enable);
 	void SetCamActive(C_Camera* cam);
+	//wip, dunno how it works
+	void CreateFrameBuffer(int width, int height);
+
 
 public:
 
