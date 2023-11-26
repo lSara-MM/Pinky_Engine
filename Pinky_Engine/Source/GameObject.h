@@ -56,6 +56,7 @@ public:
 
 	bool selected;
 	bool hidden;
+	bool isCulled;
 
 	unsigned int numMeshes;
 	unsigned int numMaterials;

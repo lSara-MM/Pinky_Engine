@@ -110,7 +110,7 @@ void C_Camera::DrawDebug()
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
-FrustumCulling C_Camera::ContainsAABox(const AABB& refBox) const//TODO: donde llamo esto
+FrustumCulling C_Camera::ContainsAABox(const AABB& refBox) const
 {
 	float3 vCorner[8];
 	int iTotalIn = 0;
@@ -163,13 +163,53 @@ void C_Camera::SetAspectRatio(int width, int height)
 
 void C_Camera::UpdateCameraFrustum()
 {
-	C_Transform* transformComponent = this->gameObject->transform;//TODO: not good
+	C_Transform* transformComponent = this->gameObject->transform;
 
 	float4x4 transform = transformComponent->GetGlobalTransform();
 
 	frustum.pos = transform.TranslatePart();
 	frustum.front = transform.WorldZ().Normalized();
 	frustum.up = frustum.front.Cross(-frustum.WorldRight()).Normalized();
+}
+
+void C_Camera::FrustumCulling()
+{
+	std::vector<GameObject*> objectsToCull;
+	GetObjectsToCull(App->scene->rootNode, objectsToCull);
+	
+	for (auto i = 0; i < objectsToCull.size(); i++)
+	{
+		std::vector<C_Mesh*> vMeshes = objectsToCull[i]->GetComponentsMesh();
+
+		for (auto i = 0; i < vMeshes.size(); i++)
+		{
+			if (ContainsAABox(vMeshes[i]->global_aabb) == FrustumCulling::CULLING_OUT)
+			{
+				vMeshes[i]->gameObject->isCulled = true;
+			}
+			else
+			{
+				vMeshes[i]->gameObject->isCulled = false;
+			}
+		}
+	}
+
+}
+
+void C_Camera::GetObjectsToCull(GameObject* go, std::vector<GameObject*>& vgo)
+{
+	vgo.push_back(go);
+	if (go->active)//TODO: needed?
+	{
+		if (!go->vChildren.empty())
+		{
+			for (auto i = 0; i < go->vChildren.size(); i++)
+			{
+				GameObject* parentgo = go->vChildren[i];
+				GetObjectsToCull(parentgo, vgo);
+			}
+		}
+	}
 }
 
 void C_Camera::SetFOV(float horizontalFOV)

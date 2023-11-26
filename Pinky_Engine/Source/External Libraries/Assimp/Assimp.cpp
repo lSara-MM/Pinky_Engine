@@ -164,7 +164,7 @@ bool ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 					obj->transform->rotation, obj->transform->scale);
 				//------
 				
-				//TODO: does it go here?
+				//local aabb
 				ourMesh->local_aabb.SetNegativeInfinity();
 				ourMesh->local_aabb.Enclose((float3*)ourMesh->vertex, ourMesh->num_vertex);
 

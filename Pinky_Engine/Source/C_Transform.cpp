@@ -17,7 +17,7 @@ C_Transform::C_Transform(GameObject* g, float3 pos, Quat rot, float3 sc, bool st
 
 	globalMatrix = math::float4x4::FromTRS(pos, rot, sc);
 	localMatrix = math::float4x4::identity;
-	updateMatrix = false;
+	updateMatrix = true;
 }
 
 C_Transform::C_Transform(GameObject* g, C_Transform* toCopy) : Component(C_TYPE::TRANSFORM, g, g->GetUid(), toCopy->active, "Transform")

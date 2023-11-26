@@ -23,6 +23,7 @@ GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 	// ---
 	selected = false;
 	hidden = false;
+	isCulled = false;
 
 	AddComponent(C_TYPE::TRANSFORM);
 
@@ -113,13 +114,14 @@ update_status GameObject::Update(float dt)
 				if (vCams[i]->active)
 				{
 					vCams[i]->DrawDebug();
-					//vCams[i]->UpdateCameraFrustum();
+					vCams[i]->UpdateCameraFrustum();//TODO: no rota en eje z
+					vCams[i]->FrustumCulling();
 				}
 			}
 
 			for (auto i = 0; i < vMeshes.size(); i++)
 			{
-				if (vMeshes[i]->active)
+				if (vMeshes[i]->active && !this->isCulled)
 				{
 					if (!vMaterials.empty() && vMaterials[i]->active)
 					{
@@ -212,7 +214,7 @@ bool GameObject::AddComponent(C_TYPE type, ai::mesh* m, ai::POLY_PRIMITIVE_TYPE 
 		else { ret = false; }
 		break;
 	case C_TYPE::CAM:
-		temp = new C_Camera();
+		temp = new C_Camera(this);
 		vComponents.push_back(temp);
 		break;
 	default:
