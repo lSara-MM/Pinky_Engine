@@ -22,6 +22,7 @@ public:
 	void FPScamera();
 	void Focus();
 	void Zoom(float zoom, float scrollSpeed);
+	void MousePick(float xNorm, float yNorm, float w, float h);
 
 private:
 	C_Camera* MainCamera = nullptr;
