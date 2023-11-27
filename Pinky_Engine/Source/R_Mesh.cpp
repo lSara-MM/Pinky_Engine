@@ -19,7 +19,6 @@ R_Mesh::R_Mesh()
 	id_tex_uvs = 0;
 	num_tex_uvs = 0;
 	tex_uvs = nullptr;
-
 }
 
 R_Mesh::~R_Mesh()
