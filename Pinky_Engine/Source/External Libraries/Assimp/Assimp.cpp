@@ -88,8 +88,7 @@ bool ai::ImportMesh(const char* meshfileDir, GameObject* go, bool component)
 		}
 		else
 		{
-			(MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, App->scene->rootNode) != nullptr) ?
-				ret = go : ret = nullptr;
+			ret = MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, App->scene->rootNode);
 		}
 
 		if (ret != nullptr) 

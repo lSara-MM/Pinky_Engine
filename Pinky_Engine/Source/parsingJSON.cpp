@@ -18,8 +18,11 @@ void ParsingJSON::CreateGOMetaFile(GameObject* go)
     root_object = json_value_get_object(root_value);
     char* serialized_string = NULL;
 
-    json_object_dotset_string(root_object, "GameObject.Info", "1");
-    GameObjectJSON(go);
+    std::string node_name = "GameObject.Info";
+    std_json_object_dotset_number(root_object, node_name + ".Children number", go->vChildren.size());
+    std_json_object_dotset_string(root_object, node_name + ".Local Directory", file_name);
+    
+    GameObjectJSON(go, "GameObject.Parent");
    
     serialized_string = json_serialize_to_string_pretty(root_value);
     puts(serialized_string);
@@ -29,22 +32,30 @@ void ParsingJSON::CreateGOMetaFile(GameObject* go)
     json_value_free(root_value);
 }
 
-void ParsingJSON::GameObjectJSON(GameObject* go)
+int ParsingJSON::GameObjectJSON(GameObject* go, std::string name, int offset)
 {
-    json_object_set_string(root_object, "Name", go->name.c_str());
-    json_object_set_number(root_object, "UID", go->GetUid());
-    json_object_set_number(root_object, "Parent UID", go->pParent->GetUid());
-    json_object_set_number(root_object, "Components num", go->vComponents.size());   
+    offset++;
+    std_json_object_dotset_string(root_object, name + ".Name", go->name.c_str());
+    std_json_object_dotset_number(root_object, name + ".UID", go->GetUid());
+    std_json_object_dotset_number(root_object, name + ".Parent UID", go->pParent->GetUid());
+    std_json_object_dotset_number(root_object, name + ".Components num", go->vComponents.size());
 
-    for (int i = 0; i < go->vComponents.size(); i++)
+    /*for (int i = 0; i < go->vComponents.size(); i++)
     {
-        ComponentsJSON(go->vComponents[i]);
+        ComponentsJSON(go->vComponents[i], name);
+    }*/
+
+    for (int i = 0; i < go->vChildren.size(); i++)
+    {
+        GameObjectJSON(go->vChildren[i], "GameObject.Child " + std::to_string(go->GetUid()), offset);
     }
+
+    return offset;
 }
 
-void ParsingJSON::ComponentsJSON(Component* comp)
+void ParsingJSON::ComponentsJSON(Component* comp, std::string name)
 {
-    std::string comp_name = "Components." + comp->name;
+    std::string comp_name = name + ".Components." + comp->name;
     std_json_object_dotset_number(root_object, comp_name + ".Type", (double)comp->type);
     std_json_object_dotset_number(root_object, comp_name + ".UUID", comp->GetUID());
 
@@ -70,6 +81,13 @@ void ParsingJSON::ComponentsJSON(Component* comp)
     default:
         break;
     }
+}
+
+// Private
+// The same as the json but accepts string as name instead of const char*
+void ParsingJSON::std_json_object_dotset_string(JSON_Object* root_object, std::string s, std::string string)
+{
+    json_object_dotset_string(root_object, s.c_str(), string.c_str());
 }
 
 void ParsingJSON::std_json_object_dotset_number(JSON_Object* root_object, std::string s, double number)
