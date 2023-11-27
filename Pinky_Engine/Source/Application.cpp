@@ -9,6 +9,8 @@ Application::Application()
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 
+	resource = new ModuleResource(this);
+
 	editor = new ModuleEditor(this);
 	scene = new ModuleScene(this);
 
@@ -18,6 +20,9 @@ Application::Application()
 
 	// Main Modules
 	AddModule(window);
+
+	AddModule(resource);
+
 	AddModule(camera);
 	AddModule(input);
 

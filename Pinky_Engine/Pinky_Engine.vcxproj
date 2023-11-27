@@ -187,6 +187,7 @@
     <ClInclude Include="Source\FileSystemManager.h" />
     <ClInclude Include="Source\ModuleInput.h" />
     <ClInclude Include="Source\ModuleRenderer3D.h" />
+    <ClInclude Include="Source\ModuleResource.h" />
     <ClInclude Include="Source\ModuleScene.h" />
     <ClInclude Include="Source\ModuleWindow.h" />
     <ClInclude Include="Source\parsingJSON.h" />
@@ -262,6 +263,7 @@
     <ClCompile Include="Source\FileSystemManager.cpp" />
     <ClCompile Include="Source\ModuleInput.cpp" />
     <ClCompile Include="Source\ModuleRenderer3D.cpp" />
+    <ClCompile Include="Source\ModuleResource.cpp" />
     <ClCompile Include="Source\ModuleScene.cpp" />
     <ClCompile Include="Source\ModuleWindow.cpp" />
     <ClCompile Include="Source\parsingJSON.cpp" />
