@@ -342,7 +342,7 @@ void FileSystemManager::SplitFilePath(const char* full_path, std::string* path, 
 
 
 // Loads
-unsigned int FileSystemManager::Load(const char* path, const char* file, char** buffer) const
+uint FileSystemManager::Load(const char* path, const char* file, char** buffer) const
 {
 	std::string full_path(path);
 	full_path += file;
@@ -439,9 +439,9 @@ int close_sdl_rwops(SDL_RWops* rw)
 
 // Others
 //// Save a buffer to disk
-uint FileSystemManager::Save(const char* file, const void* buffer, unsigned int size, bool append) const
+uint FileSystemManager::Save(const char* file, const void* buffer, uint size, bool append) const
 {
-	unsigned int ret = 0;
+	uint ret = 0;
 
 	bool overwrite = PHYSFS_exists(file) != 0;
 	PHYSFS_file* fs_file = (append) ? PHYSFS_openAppend(file) : PHYSFS_openWrite(file);

@@ -36,7 +36,7 @@ public:
 	std::string assetsFile;
 	std::string libraryFile;
 
-	unsigned int count;
+	uint count;
 
 private:
 	u32 uid;
