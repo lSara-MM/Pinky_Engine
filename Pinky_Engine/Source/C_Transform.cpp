@@ -81,6 +81,18 @@ void C_Transform::SetScale(float3 vec)
 	updateMatrix = true;
 }
 
+void C_Transform::SetLocalValues(float4x4 matrix)
+{
+	float3 pos, sc;
+	Quat rot;
+	matrix.Decompose(pos, rot, sc);
+	position = pos;
+	rotation = rot;
+	rotation.Normalize();
+	eulerRot = rotation.ToEulerXYZ();
+	scale = sc;
+}
+
 float4x4 C_Transform::GetGlobalTransform() const
 {
 	return globalMatrix;
@@ -125,7 +137,7 @@ void C_Transform::UpdateTransformsChilds()
 	updateMatrix = false;
 }
 
-void C_Transform::UpdateGlobalMatrix()//TODO: error calculo, al hacer reparent no actualiza correctamente
+void C_Transform::UpdateGlobalMatrix()
 {
 	rotation = Quat::FromEulerXYZ(eulerRot.x * DEGTORAD, eulerRot.y * DEGTORAD, eulerRot.z * DEGTORAD);
 	rotation.Normalize();

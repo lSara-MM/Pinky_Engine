@@ -114,7 +114,7 @@ update_status GameObject::Update(float dt)
 				if (vCams[i]->active)
 				{
 					vCams[i]->DrawDebug();
-					vCams[i]->UpdateCameraFrustum();//TODO: no rota en eje z
+					vCams[i]->UpdateCameraFrustum();
 					vCams[i]->FrustumCulling();
 				}
 			}
@@ -293,7 +293,12 @@ void GameObject::ReParent(GameObject* newParent)
 
 	pParent = newParent;
 	pParent->vChildren.push_back(this);
-	this->transform->updateMatrix = true;//recalculate matrix when reparenting
+
+	//recalculate local values and global matrix when reparenting
+	//this->transform->localMatrix = pParent->transform->globalMatrix.Transposed() * this->transform->globalMatrix;
+
+	this->transform->SetLocalValues(pParent->transform->globalMatrix.Transposed() * this->transform->globalMatrix);
+	this->transform->updateMatrix = true;
 }
 
 void GameObject::AddChild(GameObject* go)
