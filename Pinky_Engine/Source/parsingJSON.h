@@ -1,9 +1,10 @@
 #pragma once
 #include "Globals.h"
 
-#include "GameObject.h"
-
 #include "External libraries/parson/parson.h"
+
+class GameObject;
+class Component;
 
 class ParsingJSON
 {

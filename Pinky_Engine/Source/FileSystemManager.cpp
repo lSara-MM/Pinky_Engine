@@ -38,7 +38,7 @@ bool NodePath::operator == (const NodePath node) const
 }
 
 //
-FileSystemManager::FileSystemManager(Application* app, bool start_enabled) : Module(app, start_enabled)
+FileSystemManager::FileSystemManager()
 {
 	// needs to be created before Init so other modules can use it
 	char* base_path = SDL_GetBasePath();

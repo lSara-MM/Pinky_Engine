@@ -12,6 +12,7 @@
 
 #include "ModuleResource.h"
 #include "FileSystemManager.h"
+#include "parsingJSON.h"
 
 #include "External Libraries/MathGeoLib/include/Algorithm/Random/LCG.h"
 
@@ -30,6 +31,7 @@ public:
 
 	LCG* randomLCG;
 	FileSystemManager* fs;
+	ParsingJSON* parson;
 
 private:
 

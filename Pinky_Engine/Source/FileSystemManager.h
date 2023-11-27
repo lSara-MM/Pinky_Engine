@@ -1,5 +1,4 @@
 #pragma once
-#include "Module.h"
 #include "Globals.h"
 #include "Light.h"
 
@@ -24,10 +23,10 @@ public:
 	bool isFile;
 };
 
-class FileSystemManager : public Module
+class FileSystemManager
 {
 public:
-	FileSystemManager(Application* app, bool start_enabled = true);
+	FileSystemManager();
 	~FileSystemManager();
 
 	// Create

@@ -13,15 +13,18 @@ ParsingJSON::~ParsingJSON()
 
 void ParsingJSON::CreateGOMetaFile(GameObject* go)
 {
+    std::string file_name = "Assets\\" + go->name + ".json";
     JSON_Value* root_value = json_value_init_object();
     JSON_Object* root_object = json_value_get_object(root_value);
     char* serialized_string = NULL;
 
     json_object_dotset_string(root_object, "GameObject.Info", "1");
-
+    GameObjectJSON(go, root_object);
    
     serialized_string = json_serialize_to_string_pretty(root_value);
     puts(serialized_string);
+
+    json_serialize_to_file(root_value, file_name.c_str());
     json_free_serialized_string(serialized_string);
     json_value_free(root_value);
 }
@@ -41,26 +44,32 @@ void ParsingJSON::GameObjectJSON(GameObject* go, JSON_Object* root_object)
 
 void ParsingJSON::ComponentsJSON(Component* comp, JSON_Object* root_object)
 {
-    json_object_set_string(root_object, "Components:.Name", comp->name.c_str());
-    json_object_set_number(root_object, "Components:.Type", (double)comp->type);
-    json_object_set_number(root_object, "Components:.UID", comp->GetUID());
+    json_object_dotset_string(root_object, "Components.Name", comp->name.c_str());
+    json_object_dotset_number(root_object, "Components.Type", (double)comp->type);
+    json_object_set_number(root_object, "Components.UID", comp->GetUID());
 
     switch (comp->type)
     {
     case C_TYPE::TRANSFORM:
-        json_object_set_number(root_object, "Components:.Position.X:", static_cast<C_Transform*> (comp)->position.x);
-        json_object_set_number(root_object, "Components:.Position.Y:", static_cast<C_Transform*> (comp)->position.y);
-        json_object_set_number(root_object, "Components:.Position.Z:", static_cast<C_Transform*> (comp)->position.z);
+        for (int i = 0; i < 3; i++)
+        {
+            json_object_dotset_number(root_object, "Components.Position:", static_cast<C_Transform*> (comp)->position[i]);
+            LOG("%d", static_cast<C_Transform*>(comp)->position[i]);
+        }
+
+        /*json_object_set_number(root_object, "Components.Position.X:", static_cast<C_Transform*> (comp)->position.x);
+        json_object_set_number(root_object, "Components.Position.Y:", static_cast<C_Transform*> (comp)->position.y);
+        json_object_set_number(root_object, "Components.Position.Z:", static_cast<C_Transform*> (comp)->position.z);*/
 
 
-        json_object_set_number(root_object, "Components:.Rotation.", static_cast<C_Transform*> (comp)->rotation.x);
-        json_object_set_number(root_object, "Components:.Rotation.", static_cast<C_Transform*> (comp)->rotation.y);
-        json_object_set_number(root_object, "Components:.Rotation.", static_cast<C_Transform*> (comp)->rotation.z);
-        json_object_set_number(root_object, "Components:.Rotation.", static_cast<C_Transform*> (comp)->rotation.w);
+        json_object_set_number(root_object, "Components.Rotation.", static_cast<C_Transform*> (comp)->rotation.x);
+        json_object_set_number(root_object, "Components.Rotation.", static_cast<C_Transform*> (comp)->rotation.y);
+        json_object_set_number(root_object, "Components.Rotation.", static_cast<C_Transform*> (comp)->rotation.z);
+        json_object_set_number(root_object, "Components.Rotation.", static_cast<C_Transform*> (comp)->rotation.w);
 
-        json_object_set_number(root_object, "Components:.Scale.X:", static_cast<C_Transform*> (comp)->scale.x);
-        json_object_set_number(root_object, "Components:.Scale.Y:", static_cast<C_Transform*> (comp)->scale.y);
-        json_object_set_number(root_object, "Components:.Scale.Z:", static_cast<C_Transform*> (comp)->scale.z);
+        json_object_set_number(root_object, "Components.Scale.X:", static_cast<C_Transform*> (comp)->scale.x);
+        json_object_set_number(root_object, "Components.Scale.Y:", static_cast<C_Transform*> (comp)->scale.y);
+        json_object_set_number(root_object, "Components.Scale.Z:", static_cast<C_Transform*> (comp)->scale.z);
         break;
     case C_TYPE::MESH:
         break;

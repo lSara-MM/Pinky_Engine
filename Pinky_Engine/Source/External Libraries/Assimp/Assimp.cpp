@@ -1,6 +1,7 @@
 #pragma once
 #include "Assimp.h"
 #include "../../Application.h"
+#include "../../parsingJSON.h"
 #include "../../GameObject.h"
 #include "../../ModuleScene.h"
 
@@ -10,6 +11,7 @@
 #include <gl/GLU.h>
 
 #include "../ImporterMesh.h"
+
 
 void ai::EnableDebug()
 {
@@ -139,6 +141,7 @@ bool ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 
 			if (InitMesh(ourMesh))
 			{
+				App->parson->CreateGOMetaFile(obj);
 				//BindTexture(ourMesh);
 
 				//(texfileDir != nullptr) ? ourMesh->hasTex = true : ourMesh->hasTex = false;

@@ -32,8 +32,9 @@ Application::Application()
 	AddModule(editor);
 
 	//------
-	fs = new FileSystemManager(this);
 	randomLCG = new LCG();
+	fs = new FileSystemManager();
+	parson = new ParsingJSON();
 }
 
 Application::~Application()
@@ -126,8 +127,9 @@ bool Application::CleanUp()
 		ret = (*it)->CleanUp();
 	}
 
-	RELEASE(fs);
 	RELEASE(randomLCG);
+	RELEASE(fs);
+	RELEASE(parson);
 	return ret;
 }
 
