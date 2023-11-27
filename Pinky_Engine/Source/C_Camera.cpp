@@ -21,7 +21,7 @@ C_Camera::C_Camera(GameObject* g, unsigned int i, bool start_enabled) : Componen
 	frustum.front= float3::unitZ;
 	frustum.up = float3::unitY;
 	frustum.nearPlaneDistance = 0.1f;
-	frustum.farPlaneDistance = 1000.0f;
+	frustum.farPlaneDistance = 10.0f;
 	frustum.verticalFov = fov * DEGTORAD;
 	frustum.horizontalFov = Atan(aspect_ratio * Tan(frustum.verticalFov / 2)) * 2;
 }
