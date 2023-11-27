@@ -98,7 +98,6 @@ update_status ModuleScene::PostUpdate(float dt)
 bool ModuleScene::CleanUp()
 {
 	LOG("Destroying 3D Renderer");
-	RELEASE(testCamera);
 	RELEASE(rootNode);
 	return true;
 }

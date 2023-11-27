@@ -41,12 +41,12 @@ void C_Material::ShowInInspector()
 	bool exists = true;
 
 	checkbox.insert(checkbox.begin(), 2, '#');
-	checkbox.append(std::to_string(GetID()));
+	checkbox.append(std::to_string(GetUID()));
 	
 	header.append("##");
-	header.append(std::to_string(GetID()));
+	header.append(std::to_string(GetUID()));
 
-	toogle.append(std::to_string(GetID()));
+	toogle.append(std::to_string(GetUID()));
 
 	// ---------------------------------------------
 

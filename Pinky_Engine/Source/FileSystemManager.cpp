@@ -11,6 +11,33 @@
 #include <filesystem>
 #pragma comment( lib, "Source/External Libraries/PhysFS/libx86/physfs.lib" )
 
+
+// Node Path
+NodePath::NodePath() : path("")
+{
+	isLeaf = true;
+	isFile = true;
+}
+
+bool NodePath::IsLastFolder() const
+{
+	for (uint i = 0; i < vChildren.size(); i++)
+	{
+		if (!vChildren[i].isFile)
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool NodePath::operator == (const NodePath node) const
+{
+	return path == node.path;
+}
+
+//
 FileSystemManager::FileSystemManager(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	// needs to be created before Init so other modules can use it

@@ -3,36 +3,25 @@
 #include "Globals.h"
 #include "Light.h"
 
-struct NodePath
+class NodePath
 {
-	NodePath() : path("") {};
-	//Path in reference to the first PathNode
+public:
+	NodePath();
+
+	bool IsLastFolder() const;
+	bool operator == (const NodePath node) const;
+
+public:
+	// Path in reference to the first NodePath
 	std::string path;
-	//Folder / file itself
+
+	// Folder / file itself
 	std::string localPath;
 
 	std::vector<NodePath> vChildren;
 
-	bool isLeaf = true;
-	bool isFile = true;
-
-	bool IsLastFolder() const
-	{
-		for (uint i = 0; i < vChildren.size(); i++)
-		{
-			if (!vChildren[i].isFile)
-			{
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	bool operator == (const NodePath node) const
-	{
-		return path == node.path;
-	}
+	bool isLeaf;
+	bool isFile;
 };
 
 class FileSystemManager : public Module

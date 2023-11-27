@@ -37,10 +37,10 @@ void C_Camera::ShowInInspector()
 	std::string header = name.c_str();
 
 	checkbox.insert(checkbox.begin(), 2, '#');
-	checkbox.append(std::to_string(GetID()));
+	checkbox.append(std::to_string(GetUID()));
 
 	header.append("##");
-	header.append(std::to_string(GetID()));
+	header.append(std::to_string(GetUID()));
 
 	// ---------------------------------------------
 
@@ -52,9 +52,9 @@ void C_Camera::ShowInInspector()
 		if (!active) { ImGui::BeginDisabled(); }
 
 		// Edit frustum values ------------------
-		if (ImGui::DragFloat("Near Plane", &frustum.nearPlaneDistance, 0.5f, 0.01f, frustum.farPlaneDistance));
+		ImGui::DragFloat("Near Plane", &frustum.nearPlaneDistance, 0.5f, 0.01f, frustum.farPlaneDistance);
 		
-		if (ImGui::DragFloat("Far Plane", &frustum.farPlaneDistance, 0.5f, frustum.nearPlaneDistance, 1000.0f));//TODO: see if max value makes sense
+		ImGui::DragFloat("Far Plane", &frustum.farPlaneDistance, 0.5f, frustum.nearPlaneDistance, 1000.0f);//TODO: see if max value makes sense
 
 		if (ImGui::DragFloat("FOV", &fov, 0.5f, 1.0f, 179.0f))
 		{

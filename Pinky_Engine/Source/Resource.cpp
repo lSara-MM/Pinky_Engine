@@ -8,4 +8,4 @@ Resource::~Resource()
 {
 }
 
-int Resource::GetID() { return uid; }
+int Resource::GetUID() { return uid; }

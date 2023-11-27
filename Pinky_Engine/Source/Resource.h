@@ -29,7 +29,7 @@ public:
 	Resource();
 	virtual ~Resource();
 
-	int GetID();
+	int GetUID();
 
 public:
 	std::string name;

@@ -61,9 +61,9 @@ void C_Mesh::ShowInInspector()
 	bool exists = true;
 
 	checkbox.insert(checkbox.begin(), 2, '#');
-	checkbox.append(std::to_string(GetID()));
+	checkbox.append(std::to_string(GetUID()));
 
-	header.append("##").append(std::to_string(GetID()));
+	header.append("##").append(std::to_string(GetUID()));
 	// ---------------------------------------------
 
 	ImGui::Checkbox(checkbox.c_str(), &active);		ImGui::SameLine();

@@ -34,7 +34,7 @@ public:
 	virtual void ShowInInspector() {};
 	Component* CopyComponent(GameObject* go);
 
-	int GetID();
+	int GetUID();
 
 public:
 	bool active;
@@ -43,5 +43,5 @@ public:
 	GameObject* gameObject;
 
 private:
-	uint id;
+	uint uid;
 };
