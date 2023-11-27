@@ -10,7 +10,6 @@
 #include "ModuleEditor.h"
 #include "ModuleScene.h"
 
-#include "ModuleResource.h"
 #include "FileSystemManager.h"
 
 #include "External Libraries/MathGeoLib/include/Algorithm/Random/LCG.h"
@@ -22,8 +21,6 @@ public:
 	ModuleInput* input;
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
-
-	ModuleResource* resource;
 
 	ModuleEditor* editor;
 	ModuleScene* scene;

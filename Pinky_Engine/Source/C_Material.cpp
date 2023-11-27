@@ -10,7 +10,7 @@
 //
 #include "External Libraries/ImGui/imgui_custom.h"
 
-C_Material::C_Material(GameObject* g, ai::texture* t, uint i, bool start_enabled) : Component(C_TYPE::MATERIAL, g, i, start_enabled, "Material")
+C_Material::C_Material(GameObject* g, ai::texture* t, unsigned int i, bool start_enabled) : Component(C_TYPE::MATERIAL, g, i, start_enabled, "Material")
 {
 	tex = t;
 	//(t->path != "") ? tex = t : tex = nullptr;
@@ -20,7 +20,7 @@ C_Material::C_Material(GameObject* g, ai::texture* t, uint i, bool start_enabled
 	color = { 255, 255, 255, 255 };
 }
 
-C_Material::C_Material(GameObject* g, C_Material* toCopy, bool start_enabled, uint i) : Component(C_TYPE::MATERIAL, g, i, toCopy->active, "Material")
+C_Material::C_Material(GameObject* g, C_Material* toCopy, bool start_enabled, unsigned int i) : Component(C_TYPE::MATERIAL, g, i, toCopy->active, "Material")
 {
 	//memcpy(&tex, &toCopy->tex, sizeof(*tex));
 	tex = toCopy->tex;
@@ -41,12 +41,12 @@ void C_Material::ShowInInspector()
 	bool exists = true;
 
 	checkbox.insert(checkbox.begin(), 2, '#');
-	checkbox.append(std::to_string(GetUID()));
+	checkbox.append(std::to_string(GetID()));
 	
 	header.append("##");
-	header.append(std::to_string(GetUID()));
+	header.append(std::to_string(GetID()));
 
-	toogle.append(std::to_string(GetUID()));
+	toogle.append(std::to_string(GetID()));
 
 	// ---------------------------------------------
 

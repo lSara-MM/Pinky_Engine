@@ -5,15 +5,14 @@
 #include "External Libraries/Assimp/Assimp.h"
 
 #include "Globals.h"
-
-#include "R_Mesh.h"
-
 #include <array>
+
+class GameObject;
 
 namespace I_Mesh
 {
-	bool Import(const aiMesh* mesh, R_Mesh* ourMesh);
-	uint64 Save(const R_Mesh* ourMesh, char** fileBufferCursor);
-	void Load(R_Mesh* ourMesh);
+	bool Import(const aiMesh* mesh, ai::mesh* ourMesh);
+	uint64 Save(const ai::mesh* ourMesh, char** fileBufferCursor);
+	void Load(ai::mesh* ourMesh);
 }
 #endif //!__IMPORTER_MESH_H__

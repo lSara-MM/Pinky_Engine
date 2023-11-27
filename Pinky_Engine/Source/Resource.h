@@ -29,14 +29,14 @@ public:
 	Resource();
 	virtual ~Resource();
 
-	int GetUID();
+	int GetID();
 
 public:
 	std::string name;
 	std::string assetsFile;
 	std::string libraryFile;
 
-	uint count;
+	unsigned int count;
 
 private:
 	u32 uid;

@@ -3,25 +3,36 @@
 #include "Globals.h"
 #include "Light.h"
 
-class NodePath
+struct NodePath
 {
-public:
-	NodePath();
-
-	bool IsLastFolder() const;
-	bool operator == (const NodePath node) const;
-
-public:
-	// Path in reference to the first NodePath
+	NodePath() : path("") {};
+	//Path in reference to the first PathNode
 	std::string path;
-
-	// Folder / file itself
+	//Folder / file itself
 	std::string localPath;
 
 	std::vector<NodePath> vChildren;
 
-	bool isLeaf;
-	bool isFile;
+	bool isLeaf = true;
+	bool isFile = true;
+
+	bool IsLastFolder() const
+	{
+		for (uint i = 0; i < vChildren.size(); i++)
+		{
+			if (!vChildren[i].isFile)
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	bool operator == (const NodePath node) const
+	{
+		return path == node.path;
+	}
 };
 
 class FileSystemManager : public Module
@@ -58,15 +69,15 @@ public:
 
 	// Loads
 	//// Open for Read/Write
-	uint Load(const char* path, const char* file, char** buffer) const;
-	uint Load(const char* file, char** buffer) const;
+	unsigned int Load(const char* path, const char* file, char** buffer) const;
+	unsigned int Load(const char* file, char** buffer) const;
 
 	// Duplicate
 	bool DuplicateFile(const char* file, const char* dstFolder, std::string& relativePath);
 	bool DuplicateFile(const char* srcFile, const char* dstFile);
 
 	// Others
-	uint Save(const char* file, const void* buffer, uint size, bool append = false) const;
+	unsigned int Save(const char* file, const void* buffer, unsigned int size, bool append = false) const;
 	bool Remove(const char* file);
 
 	uint64 GetLastModTime(const char* fileName);

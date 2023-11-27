@@ -406,17 +406,8 @@
     <ClInclude Include="Source\R_Mesh.h">
       <Filter>Sources\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="Source\R_Texture.h">
-      <Filter>Sources\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModuleResource.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="Source\FileSystemManager.h">
       <Filter>Sources\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\parsingJSON.h">
-      <Filter>Sources\Importers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -630,17 +621,8 @@
     <ClCompile Include="Source\R_Mesh.cpp">
       <Filter>Sources\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="Source\R_Texture.cpp">
-      <Filter>Sources\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ModuleResource.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="Source\FileSystemManager.cpp">
       <Filter>Sources\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\parsingJSON.cpp">
-      <Filter>Sources\Importers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

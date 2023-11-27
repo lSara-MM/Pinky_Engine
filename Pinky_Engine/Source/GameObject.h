@@ -57,8 +57,8 @@ public:
 	bool selected;
 	bool hidden;
 
-	uint numMeshes;
-	uint numMaterials;
+	unsigned int numMeshes;
+	unsigned int numMaterials;
 
 private:
 	u32 uid;
