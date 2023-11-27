@@ -106,7 +106,7 @@ namespace ai
 	void ImportFile(const char* fileDir);
 
 	bool ImportMesh(const char* meshfileDir, GameObject* go = nullptr, bool component = false);
-	bool MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component = false);
+	GameObject* MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component = false);
 	
 	bool InitMesh(mesh* m);
 	void CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go = nullptr, bool component = false);

@@ -59,13 +59,14 @@ void ai::ImportFile(const char* fileDir)
 bool ai::ImportMesh(const char* meshfileDir, GameObject* go, bool component)
 {
 	const aiScene* scene = aiImportFile(meshfileDir, aiProcessPreset_TargetRealtime_MaxQuality);
-	bool ret = false;
+	GameObject* ret = nullptr;
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		if (go != nullptr)
 		{
-			ret = MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, go, component);
+			(MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, go, component) != nullptr) ?
+				ret = go : ret = nullptr;
 		}
 
 		// If the imported 3D model has many meshes at the same level, create a new GameObject with the
@@ -81,16 +82,21 @@ bool ai::ImportMesh(const char* meshfileDir, GameObject* go, bool component)
 			// ---------------------------------------------
 
 			GameObject* obj = new GameObject(name);
-			ret = MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, obj);
+			MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, obj);
+			ret = obj;
 			obj = nullptr;
 		}
 		else
 		{
-			ret = MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, App->scene->rootNode);
+			(MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, App->scene->rootNode) != nullptr) ?
+				ret = go : ret = nullptr;
 		}
 
-
-		if (ret) { LOG("%d meshes loaded.", scene->mNumMeshes); }
+		if (ret != nullptr) 
+		{
+			LOG("%d meshes loaded.", scene->mNumMeshes);
+			App->parson->CreateGOMetaFile(ret);
+		}
 		else { LOG("[ERROR] Couldn't load mesh.", scene->mNumMeshes); }
 
 		aiReleaseImport(scene);
@@ -100,10 +106,12 @@ bool ai::ImportMesh(const char* meshfileDir, GameObject* go, bool component)
 		LOG("[ERROR] loading scene % s", meshfileDir);
 		return false;
 	}
+
+	ret = nullptr;
 	return true;
 }
 
-bool ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component)
+GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component)
 {
 	GameObject* obj = nullptr;
 
@@ -134,14 +142,13 @@ bool ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 
 			if (!I_Mesh::Import(m, ourMesh))
 			{
-				obj->~GameObject();
+				//obj->~GameObject();
 				obj = nullptr;
-				return false;
+				return nullptr;
 			}
 
 			if (InitMesh(ourMesh))
 			{
-				App->parson->CreateGOMetaFile(obj);
 				//BindTexture(ourMesh);
 
 				//(texfileDir != nullptr) ? ourMesh->hasTex = true : ourMesh->hasTex = false;
@@ -152,7 +159,7 @@ bool ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 				children[i]->mTransformation.Decompose(scale, rot, pos);
 		
 
-				float3 temp = { pos.x , pos.y, pos.z };
+				float3 temp = { pos.x, pos.y, pos.z };
 				obj->transform->SetTransform(temp);
 
 				float temp1[4] = { rot.x , rot.y, rot.z, rot.w };
@@ -185,8 +192,7 @@ bool ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject*
 		}
 	}
 
-	obj = nullptr;
-	return true;
+	return obj;
 }
 
 bool ai::InitMesh(mesh* m)
