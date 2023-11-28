@@ -14,5 +14,3 @@ R_Texture::R_Texture()
 R_Texture::~R_Texture()
 {
 }
-
-

@@ -5,12 +5,15 @@
 #include "../../GameObject.h"
 #include "../../ModuleScene.h"
 
+#include "../Resource.h"
+#include "../R_Mesh.h"
+
 #pragma comment (lib, "Source/External Libraries/Assimp/libx86/assimp.lib")
 
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
-#include "../ImporterMesh.h"
+#include "../I_Mesh.h"
 
 
 void ai::EnableDebug()

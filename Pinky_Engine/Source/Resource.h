@@ -30,6 +30,7 @@ public:
 	virtual ~Resource();
 
 	int GetUID();
+	R_TYPE GetType();
 
 public:
 	std::string name;
