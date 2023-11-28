@@ -33,6 +33,7 @@ void ParsingJSON::CreateGOMetaFile(GameObject* go)
     serialized_string = json_serialize_to_string_pretty(root_value);
     puts(serialized_string);
 
+    // TODO: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAaa
     json_serialize_to_file(root_value, file_name.c_str());
     json_free_serialized_string(serialized_string);
     json_value_free(root_value);

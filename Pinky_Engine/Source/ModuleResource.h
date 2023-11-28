@@ -15,7 +15,7 @@ public:
 	bool CleanUp();
 
 
-	bool ImportFile(const char* path);
+	void ImportFile(const char* path);
 	bool SaveToLibrary(Resource* r);
 
 private:

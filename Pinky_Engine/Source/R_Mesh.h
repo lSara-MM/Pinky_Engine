@@ -3,6 +3,8 @@
 #include "Light.h"
 
 #include "Resource.h"
+#include "GameObject.h"
+
 
 #include "External Libraries/MathGeoLib/include/Math/float3x3.h"
 #include "External Libraries/MathGeoLib/include/Math/float4x4.h"

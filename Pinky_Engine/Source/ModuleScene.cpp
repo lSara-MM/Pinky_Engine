@@ -3,6 +3,9 @@
 #include "ModuleScene.h"
 #include "ModuleWindow.h"
 #include "ImGuiWindows.h"
+
+#include "ModuleResource.h"
+
 #include "External Libraries\SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -104,8 +107,8 @@ bool ModuleScene::CleanUp()
 
 void ModuleScene::BakerHouse()
 {
-	ai::ImportFile("Assets\\3dObject\\baker_house\\BakerHouse.fbx");
-	ai::ImportFile("Assets\\3dObject\\baker_house\\Baker_house.dds");
+	App->resource->ImportFile("Assets\\3dObject\\baker_house\\BakerHouse.fbx");
+	App->resource->ImportFile("Assets\\3dObject\\baker_house\\Baker_house.dds");
 
 	// TODO: remove when copy wip done
 	//GameObject* go8 = new GameObject(rootNode->vChildren.back(), rootNode->vChildren.back()->vChildren.size(), rootNode->vChildren.back()->pParent);

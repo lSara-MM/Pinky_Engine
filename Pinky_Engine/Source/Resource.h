@@ -26,7 +26,7 @@ class GameObject;
 class Resource
 {
 public:
-	Resource();
+	Resource(R_TYPE t);
 	virtual ~Resource();
 
 	int GetUID();
@@ -38,8 +38,8 @@ public:
 	std::string libraryFile;
 
 	uint count;
-
-private:
-	u32 uid;
 	R_TYPE type;
+
+protected:
+	u32 uid;
 };

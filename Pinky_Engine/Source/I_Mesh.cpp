@@ -113,13 +113,12 @@ bool I_Mesh::Import(const aiMesh* mesh, ai::mesh* ourMesh)
 
 uint64 I_Mesh::Save(const R_Mesh* ourMesh, char** fileBufferCursor)
 {
-	// amount of indices / vertices / colors / normals / texture_coords / AABB
+	// amount of indices / vertices / colors / normals / texture_coords
 	uint ranges[4] = { ourMesh->num_index, ourMesh->num_vertex, ourMesh->num_normals, ourMesh->num_tex_uvs };
 	uint64 size = sizeof(ranges) + sizeof(uint) * ourMesh->num_index + (sizeof(float) * 3) * (ourMesh->num_vertex + ourMesh->num_normals)
 		+ sizeof(math::float2*) * ourMesh->num_tex_uvs;
 
-	char* fileBuffer = new char[size]; // Allocate
-	char** cursor = fileBufferCursor;
+	char* cursor = new char[size]; // Allocate
 	
 	// First store ranges
 	uint bytes = sizeof(ranges); 
@@ -146,6 +145,8 @@ uint64 I_Mesh::Save(const R_Mesh* ourMesh, char** fileBufferCursor)
 	memcpy(cursor, ourMesh->tex_uvs, bytes);
 	cursor += bytes;
 
+	*fileBufferCursor = cursor;
+	cursor = nullptr;
 	return size;
 }
 

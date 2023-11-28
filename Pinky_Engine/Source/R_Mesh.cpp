@@ -1,6 +1,7 @@
 #include "R_Mesh.h"
+#include "GameObject.h"
 
-R_Mesh::R_Mesh()
+R_Mesh::R_Mesh() : Resource(R_TYPE::MESH)
 {
 	//indices
 	num_index = 0;

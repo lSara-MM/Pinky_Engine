@@ -1,7 +1,7 @@
 #include "Resource.h"
 #include "Application.h"
 
-Resource::Resource()
+Resource::Resource(R_TYPE t) : type (t)
 {
 	uid = App->randomLCG->Int();
 }

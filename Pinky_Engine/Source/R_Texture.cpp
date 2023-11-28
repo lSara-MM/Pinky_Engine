@@ -1,6 +1,6 @@
 #include "R_Texture.h"
 
-R_Texture::R_Texture()
+R_Texture::R_Texture() : Resource(R_TYPE::TEXTURE)
 {
 	tex_id = 0;
 	tex_width = 0;

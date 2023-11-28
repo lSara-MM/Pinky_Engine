@@ -103,8 +103,6 @@ namespace ai
 	void EnableDebug();
 	void DisableDebug();
 
-	void ImportFile(const char* fileDir);
-
 	bool ImportMesh(const char* meshfileDir, GameObject* go = nullptr, bool component = false);
 	GameObject* MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component = false);
 	

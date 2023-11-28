@@ -47,7 +47,9 @@ FileSystemManager::FileSystemManager()
 
 	// Setting the working directory as the writing directory
 	if (PHYSFS_setWriteDir(".") == 0)
-		LOG("File System error while creating write dir: %s\n", PHYSFS_getLastError());
+	{
+		LOG("[ERROR] File System: Could not write dir: %s\n", PHYSFS_getLastError());
+	}
 
 	AddPath("."); // Adding ProjectFolder (working directory)
 	AddPath("Assets");
@@ -74,7 +76,7 @@ bool FileSystemManager::AddPath(std::string path)
 
 	if (PHYSFS_mount(path.c_str(), nullptr, 1) == 0)
 	{
-		LOG("[ERROR] Could not add a path: %s\n", PHYSFS_getLastError());
+		LOG("[ERROR] File System: Could not add a path: %s\n", PHYSFS_getLastError());
 	}
 	else
 	{
@@ -470,7 +472,10 @@ uint FileSystemManager::Save(const char* file, const void* buffer, uint size, bo
 {
 	uint ret = 0;
 
-	bool overwrite = PHYSFS_exists(file) != 0;
+	bool overwrite;
+
+	(PHYSFS_exists(file) == 0) ? overwrite = true : overwrite = false;
+
 	PHYSFS_file* fs_file = (append) ? PHYSFS_openAppend(file) : PHYSFS_openWrite(file);
 
 	if (fs_file != nullptr)

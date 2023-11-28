@@ -5,8 +5,9 @@
 #include "../../GameObject.h"
 #include "../../ModuleScene.h"
 
-#include "../Resource.h"
+#include "../ModuleResource.h"
 #include "../R_Mesh.h"
+#include "../Resource.h"
 
 #pragma comment (lib, "Source/External Libraries/Assimp/libx86/assimp.lib")
 
@@ -30,33 +31,6 @@ void ai::DisableDebug()
 	// Detach log stream
 	aiDetachAllLogStreams();
 	LOG("Disable debug mode");
-}
-
-void ai::ImportFile(const char* fileDir)
-{
-	std::string dir = fileDir;
-	std::array<std::string, 3> obj_ext = { ".fbx", ".FBX", ".obj", };
-	std::array<std::string, 6> tex_ext = { ".png", ".PNG", ".jpg", ".JPG", ".dds", ".DDS" };
-
-	for (auto i = 0; i < obj_ext.size(); i++)
-	{
-		if (dir.find(obj_ext.at(i)) != std::string::npos)
-		{
-			ImportMesh(fileDir);
-			break;
-		}
-	}
-
-	for (auto i = 0; i < tex_ext.size(); i++)
-	{
-		if (dir.find(tex_ext.at(i)) != std::string::npos)
-		{
-			for each (ai::mesh * i in App->renderer3D->meshes)
-			{
-				ImportTexture(i, fileDir);
-			}
-		}
-	}
 }
 
 bool ai::ImportMesh(const char* meshfileDir, GameObject* go, bool component)
@@ -141,15 +115,17 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 		{
 			const aiMesh* m = s->mMeshes[children[i]->mMeshes[0]];
 			mesh* ourMesh = new mesh;
+			R_Mesh* mesh = new R_Mesh();
 
-			if (!I_Mesh::Import(m, ourMesh))
+			if (!I_Mesh::Import(m, mesh))
 			{
 				//obj->~GameObject();
 				obj = nullptr;
 				return nullptr;
 			}
 
-			if (InitMesh(ourMesh))
+			
+			if (mesh->InitBuffers(mesh) /*InitMesh(ourMesh)*/)
 			{
 				//BindTexture(ourMesh);
 
@@ -178,6 +154,9 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 
 				//---Mesh---
 				obj->AddComponent(C_TYPE::MESH, ourMesh);
+
+				App->resource->SaveToLibrary(mesh);
+
 				//---Material---
 				if (!component) { obj->AddComponent(C_TYPE::MATERIAL, ourMesh); }
 
@@ -273,15 +252,15 @@ void ai::CreateCustomMehses(CUSTOM_MESH obj, GameObject* go)
 	{
 	case ai::CUSTOM_MESH::LAW:
 		ImportMesh("Assets\\Custom\\law_hat\\trafalgar-laws-hat.fbx", go);
-		ImportFile("Assets\\Custom\\law_hat\\law_hat_mat_BaseColor.dds");
+		App->resource->ImportFile("Assets\\Custom\\law_hat\\law_hat_mat_BaseColor.dds");
 		break;
 	case ai::CUSTOM_MESH::KURO:
 		ImportMesh("Assets\\Custom\\kuro\\kuro.fbx", go);
-		ImportFile("Assets\\Custom\\kuro\\BODYKURO.dds");
+		App->resource->ImportFile("Assets\\Custom\\kuro\\BODYKURO.dds");
 		break;
 	case ai::CUSTOM_MESH::SHARK:
 		ImportMesh("Assets\\Custom\\king_shark\\kingsharksketch.fbx", go);
-		ImportFile("Assets\\Custom\\king_shark\\king_shark_tex.dds");
+		App->resource->ImportFile("Assets\\Custom\\king_shark\\king_shark_tex.dds");
 		break;
 	default:
 		break;

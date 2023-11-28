@@ -1,9 +1,9 @@
-#include "External Libraries/Assimp/Assimp.h"
-
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleInput.h"
 #include "External Libraries/ImGui/backends/imgui_impl_sdl2.h"
+
+#include "ModuleResource.h"
 
 #define MAX_KEYS 300
 
@@ -131,7 +131,7 @@ update_status ModuleInput::PreUpdate(float dt)
 
 				LOG("File dropped from: %s", dropped_filedir);
 
-				ai::ImportFile(dropped_filedir);
+				App->resource->ImportFile(dropped_filedir);
 
 				SDL_free(dropped_filedir);    // Free dropped_filedir memory
 				break;
