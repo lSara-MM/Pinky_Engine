@@ -117,7 +117,7 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 			mesh* ourMesh = new mesh;
 			R_Mesh* mesh = new R_Mesh();
 
-			if (!I_Mesh::Import(m, mesh))
+			if (!I_Mesh::Import(m, ourMesh))
 			{
 				//obj->~GameObject();
 				obj = nullptr;
@@ -125,7 +125,7 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 			}
 
 			
-			if (mesh->InitBuffers(mesh) /*InitMesh(ourMesh)*/)
+			if (/*mesh->InitBuffers(mesh)*/ InitMesh(ourMesh))
 			{
 				//BindTexture(ourMesh);
 
@@ -155,7 +155,7 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 				//---Mesh---
 				obj->AddComponent(C_TYPE::MESH, ourMesh);
 
-				App->resource->SaveToLibrary(mesh);
+				//App->resource->SaveToLibrary(mesh);
 
 				//---Material---
 				if (!component) { obj->AddComponent(C_TYPE::MATERIAL, ourMesh); }
