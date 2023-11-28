@@ -293,11 +293,11 @@ void GameObject::ReParent(GameObject* newParent)
 
 	pParent = newParent;
 	pParent->vChildren.push_back(this);
-
+	
 	//recalculate local values and global matrix when reparenting
-	//this->transform->localMatrix = pParent->transform->globalMatrix.Transposed() * this->transform->globalMatrix;
+	this->transform->localMatrix = pParent->transform->globalMatrix.Inverted() * this->transform->globalMatrix;
+	this->transform->SetLocalValues(this->transform->localMatrix);
 
-	this->transform->SetLocalValues(pParent->transform->globalMatrix.Transposed() * this->transform->globalMatrix);
 	this->transform->updateMatrix = true;
 }
 

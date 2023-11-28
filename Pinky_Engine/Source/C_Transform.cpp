@@ -87,8 +87,7 @@ void C_Transform::SetLocalValues(float4x4 matrix)
 	Quat rot;
 	matrix.Decompose(pos, rot, sc);
 	position = pos;
-	rotation = rot;
-	rotation.Normalize();
+	rotation = rot.Normalized();
 	eulerRot = rotation.ToEulerXYZ();
 	scale = sc;
 }
