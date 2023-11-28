@@ -27,6 +27,8 @@ public:
 	FrustumCulling ContainsAABox(const AABB& refBox) const;
 	void SetAspectRatio(int width, int height);//resize window
 	void UpdateCameraFrustum();
+	void FrustumCulling();
+	void GetObjectsToCull(GameObject* go, std::vector<GameObject*>& list_go);
 
 	//user settings
 	void SetFOV(float horizontalFOV);

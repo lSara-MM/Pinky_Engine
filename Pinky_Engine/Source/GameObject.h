@@ -53,6 +53,8 @@ public:
 
 	bool selected;
 	bool hidden;
+	//Discard mesh if the global AABB is outside frustum
+	bool isCulled;
 
 	uint numMeshes;
 	uint numMaterials;

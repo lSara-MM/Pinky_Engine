@@ -17,7 +17,7 @@ C_Transform::C_Transform(GameObject* g, float3 pos, Quat rot, float3 sc, bool st
 
 	globalMatrix = math::float4x4::FromTRS(pos, rot, sc);
 	localMatrix = math::float4x4::identity;
-	updateMatrix = false;
+	updateMatrix = true;
 }
 
 C_Transform::C_Transform(GameObject* g, C_Transform* toCopy) : Component(C_TYPE::TRANSFORM, g, g->GetUid(), toCopy->isActive, "Transform")
@@ -81,6 +81,17 @@ void C_Transform::SetScale(float3 vec)
 	updateMatrix = true;
 }
 
+void C_Transform::SetLocalValues(float4x4 matrix)
+{
+	float3 pos, sc;
+	Quat rot;
+	matrix.Decompose(pos, rot, sc);
+	position = pos;
+	rotation = rot.Normalized();
+	eulerRot = rotation.ToEulerXYZ();
+	scale = sc;
+}
+
 float4x4 C_Transform::GetGlobalTransform() const
 {
 	return globalMatrix;
@@ -96,13 +107,29 @@ GLfloat* C_Transform::GetGLTransform() const
 	return globalMatrix.Transposed().ptr();
 }
 
+float3 C_Transform::GetGlobalPosition() const
+{
+	float3 pos, sc;
+	Quat rot;
+	globalMatrix.Decompose(pos, rot, sc);
+
+	return pos;
+}
+
+Quat C_Transform::GetLocalRotation() const
+{
+	return rotation;
+}
+
 void C_Transform::UpdateTransformsChilds()
 {
+	gameObject->transform->UpdateGlobalMatrix();
+
 	if (!gameObject->vChildren.empty())
 	{
 		for (auto i = 0; i < gameObject->vChildren.size(); i++)
 		{
-			this->gameObject->vChildren[i]->transform->UpdateGlobalMatrix();
+			gameObject->vChildren[i]->transform->UpdateTransformsChilds();
 		}
 	}
 	updateMatrix = false;
@@ -110,11 +137,28 @@ void C_Transform::UpdateTransformsChilds()
 
 void C_Transform::UpdateGlobalMatrix()
 {
+	rotation = Quat::FromEulerXYZ(eulerRot.x * DEGTORAD, eulerRot.y * DEGTORAD, eulerRot.z * DEGTORAD);
+	rotation.Normalize();
+
 	localMatrix = float4x4::FromTRS(position, rotation, scale);
 
-	if (this->gameObject->pParent != nullptr)
+	if (gameObject->pParent != nullptr)
 	{
-		float4x4 Global_parent = this->gameObject->pParent->transform->GetGlobalTransform();
+		float4x4 Global_parent = gameObject->pParent->transform->GetGlobalTransform();
 		globalMatrix = Global_parent * localMatrix;//Your global matrix = your parent’s global matrix * your local Matrix
+		UpdateBoundingBoxes();
+	}
+}
+
+void C_Transform::UpdateBoundingBoxes()
+{
+	std::vector<C_Mesh*> vMeshes = this->gameObject->GetComponentsMesh();
+
+	for (auto i = 0; i < vMeshes.size(); i++)
+	{
+		vMeshes[i]->obb = vMeshes[i]->mesh->local_aabb;
+		vMeshes[i]->obb.Transform(this->gameObject->transform->GetGlobalTransform());
+		vMeshes[i]->global_aabb.SetNegativeInfinity();
+		vMeshes[i]->global_aabb.Enclose(vMeshes[i]->obb);
 	}
 }

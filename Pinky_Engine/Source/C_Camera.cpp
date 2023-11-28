@@ -21,7 +21,7 @@ C_Camera::C_Camera(GameObject* g, uint i, bool start_enabled) : Component(C_TYPE
 	frustum.front= float3::unitZ;
 	frustum.up = float3::unitY;
 	frustum.nearPlaneDistance = 0.1f;
-	frustum.farPlaneDistance = 1000.0f;
+	frustum.farPlaneDistance = 10.0f;
 	frustum.verticalFov = fov * DEGTORAD;
 	frustum.horizontalFov = Atan(aspect_ratio * Tan(frustum.verticalFov / 2)) * 2;
 }
@@ -167,9 +167,49 @@ void C_Camera::UpdateCameraFrustum()
 
 	float4x4 transform = transformComponent->GetGlobalTransform();
 
-	frustum.pos = transform.TranslatePart();
-	frustum.front = transform.WorldZ().Normalized();
-	frustum.up = frustum.front.Cross(-frustum.WorldRight()).Normalized();
+	frustum.pos = transformComponent->GetGlobalPosition();
+	frustum.front = transformComponent->GetLocalRotation().WorldZ();
+	frustum.up = transformComponent->GetLocalRotation().WorldY();
+}
+
+void C_Camera::FrustumCulling()//TODO: add toggle to enable/disable
+{
+	std::vector<GameObject*> objectsToCull;
+	GetObjectsToCull(App->scene->rootNode, objectsToCull);
+
+	for (auto i = 0; i < objectsToCull.size(); i++)
+	{
+		std::vector<C_Mesh*> vMeshes = objectsToCull[i]->GetComponentsMesh();
+
+		for (auto i = 0; i < vMeshes.size(); i++)
+		{
+			if (ContainsAABox(vMeshes[i]->global_aabb) == FrustumCulling::CULLING_OUT)
+			{
+				vMeshes[i]->gameObject->isCulled = true;
+			}
+			else
+			{
+				vMeshes[i]->gameObject->isCulled = false;
+			}
+		}
+	}
+}
+
+void C_Camera::GetObjectsToCull(GameObject* go, std::vector<GameObject*>& vgo)
+{
+	vgo.push_back(go);
+
+	if (go->isActive)//TODO: needed?
+	{
+		if (!go->vChildren.empty())
+		{
+			for (auto i = 0; i < go->vChildren.size(); i++)
+			{
+				GameObject* parentgo = go->vChildren[i];
+				GetObjectsToCull(parentgo, vgo);
+			}
+		}
+	}
 }
 
 void C_Camera::SetFOV(float horizontalFOV)

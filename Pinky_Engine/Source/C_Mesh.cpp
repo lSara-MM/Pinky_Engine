@@ -204,7 +204,7 @@ void C_Mesh::DrawAABB()
 {
 	glBegin(GL_LINES);
 	glLineWidth(3.0f);
-	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
+	glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
 
 	for (uint i = 0; i < 12; i++)
 	{
@@ -220,7 +220,7 @@ void C_Mesh::DrawOBB()
 {
 	glBegin(GL_LINES);
 	glLineWidth(3.0f);
-	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
+	glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
 
 	for (uint i = 0; i < 12; i++)
 	{

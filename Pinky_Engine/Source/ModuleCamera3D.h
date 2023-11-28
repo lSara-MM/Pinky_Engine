@@ -22,10 +22,12 @@ public:
 	void FPScamera();
 	void Focus();
 	void Zoom(float zoom, float scrollSpeed);
+	void MousePick(float xNorm, float yNorm, float w, float h);
 
 private:
 	C_Camera* MainCamera = nullptr;
 	float mouseX, mouseY, speed, zoomPos;
 	float3 Reference = { 0, 0, 0 };//change to focused object
 	float3 centerReference = { 0, 0, 0 };
+	LineSegment pickingRay;
 };

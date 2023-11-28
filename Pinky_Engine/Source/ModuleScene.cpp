@@ -43,7 +43,7 @@ bool ModuleScene::Init()
 	rootNode = new GameObject("Root node", nullptr);
 
 	//test camera component, 
-	testCamera = new GameObject("Test Camera");
+	testCamera = new GameObject("Test Camera", rootNode);
 	testCamera->AddComponent(C_TYPE::CAM);
 
 	return ret;

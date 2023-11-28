@@ -22,11 +22,16 @@ public:
 	void SetTransform(float3 vec);
 	void SetRotation(float3 vec);
 	void SetScale(float3 vec);
+	void SetLocalValues(float4x4 matrix);
 	float4x4 GetGlobalTransform() const;
 	float4x4 GetLocalTransform() const;
 	GLfloat* GetGLTransform() const;
+	float3 GetGlobalPosition() const;
+	Quat GetLocalRotation() const;
 	void UpdateTransformsChilds();
 	void UpdateGlobalMatrix();
+	//update global AABB and OBB when updating transform
+	void UpdateBoundingBoxes();
 
 
 public:

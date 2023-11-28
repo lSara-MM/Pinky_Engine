@@ -150,7 +150,10 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 
 				obj->transform->globalMatrix = math::float4x4::FromTRS(obj->transform->position, 
 					obj->transform->rotation, obj->transform->scale);
-				//------
+
+				//TODO: Local AABB
+				ourMesh->local_aabb.SetNegativeInfinity();
+				ourMesh->local_aabb.Enclose((float3*)ourMesh->vertex, ourMesh->num_vertex);
 
 				//---Mesh---
 				obj->AddComponent(C_TYPE::MESH, ourMesh);

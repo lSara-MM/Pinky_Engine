@@ -12,6 +12,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 	MainCamera = new C_Camera();
 	MainCamera->frustum.pos = float3(5.0f, 5.0f, 5.0f);
 	MainCamera->LookAt(float3(0.0f, 0.0f, 0.0f));
+	MainCamera->frustum.farPlaneDistance = 1000.0f;
 	Reference = float3(0.0f, 0.0f, 0.0f);//change to selected game object
 	centerReference = float3(0.0f, 0.0f, 0.0f);//TODO: delete when selected game object
 	App->renderer3D->SetCamActive(MainCamera);
@@ -149,6 +150,11 @@ void ModuleCamera3D::FPScamera()
 void ModuleCamera3D::Zoom(float zoom, float scrollSpeed)
 {
 	MainCamera->frustum.pos += MainCamera->frustum.front * zoom * scrollSpeed;
+}
+
+void ModuleCamera3D::MousePick(float xNorm, float yNorm, float w, float h)
+{
+	pickingRay = MainCamera->frustum.UnProjectLineSegment(xNorm, yNorm);
 }
 
 void ModuleCamera3D::Focus()

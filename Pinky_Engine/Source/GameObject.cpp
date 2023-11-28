@@ -23,6 +23,7 @@ GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 	name = n;
 	isActive = start_enabled;
 	isStatic = false;
+	isCulled = false;
 
 	// ---
 	selected = false;
@@ -103,8 +104,7 @@ update_status GameObject::Update(float dt)
 
 		if (this->transform->updateMatrix)
 		{
-			this->transform->UpdateGlobalMatrix();
-			this->transform->UpdateTransformsChilds();
+			transform->UpdateTransformsChilds();
 		}
 
 		if (vComponents.size() > 1)
@@ -118,13 +118,14 @@ update_status GameObject::Update(float dt)
 				if (vCams[i]->isActive)
 				{
 					vCams[i]->DrawDebug();
-					//vCams[i]->UpdateCameraFrustum();
+					vCams[i]->UpdateCameraFrustum();
+					vCams[i]->FrustumCulling();
 				}
 			}
 
 			for (auto i = 0; i < vMeshes.size(); i++)
 			{
-				if (vMeshes[i]->isActive)
+				if (vMeshes[i]->isActive && !isCulled)
 				{
 					if (!vMaterials.empty() && vMaterials[i]->isActive)
 					{
@@ -217,7 +218,7 @@ bool GameObject::AddComponent(C_TYPE type, ai::mesh* m, ai::POLY_PRIMITIVE_TYPE 
 		else { ret = false; }
 		break;
 	case C_TYPE::CAM:
-		temp = new C_Camera();
+		temp = new C_Camera(this);
 		vComponents.push_back(temp);
 		break;
 	default:
@@ -296,6 +297,13 @@ void GameObject::ReParent(GameObject* newParent)
 
 	pParent = newParent;
 	pParent->vChildren.push_back(this);
+
+	//recalculate local values and global matrix when reparenting
+	//this->transform->localMatrix = pParent->transform->globalMatrix.Transposed() * this->transform->globalMatrix;
+	this->transform->localMatrix = pParent->transform->globalMatrix.Inverted() * this->transform->globalMatrix;
+	this->transform->SetLocalValues(this->transform->localMatrix);
+
+	this->transform->updateMatrix = true;
 }
 
 void GameObject::AddChild(GameObject* go)

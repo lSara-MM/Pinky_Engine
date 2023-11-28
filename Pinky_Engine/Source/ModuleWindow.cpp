@@ -35,7 +35,7 @@ bool ModuleWindow::Init()
 		//Init screenoptions
 		fullScreen = false;
 		borderless = false;
-		resizable = false;
+		resizable = true;//TODO: doble click == big
 		fullScreenDesktop = false;
 		brightness = 1.0f;
 
