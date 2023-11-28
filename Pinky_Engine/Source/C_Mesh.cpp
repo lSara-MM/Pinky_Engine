@@ -38,7 +38,7 @@ C_Mesh::C_Mesh(GameObject* g, ai::mesh* m, uint i, bool start_enabled) : Compone
 	global_aabb.Enclose(obb);
 }
 
-C_Mesh::C_Mesh(GameObject* g, C_Mesh* toCopy, bool start_enabled, uint i) : Component(C_TYPE::MESH, g, i, toCopy->active, "Mesh")
+C_Mesh::C_Mesh(GameObject* g, C_Mesh* toCopy, bool start_enabled, uint i) : Component(C_TYPE::MESH, g, i, toCopy->isActive, "Mesh")
 {
 	memcpy(&mesh, &toCopy->mesh, sizeof(*mesh));
 	//mesh = toCopy->mesh;
@@ -66,11 +66,11 @@ void C_Mesh::ShowInInspector()
 	header.append("##").append(std::to_string(GetUID()));
 	// ---------------------------------------------
 
-	ImGui::Checkbox(checkbox.c_str(), &active);		ImGui::SameLine();
+	ImGui::Checkbox(checkbox.c_str(), &isActive);		ImGui::SameLine();
 
 	if (ImGui::CollapsingHeader(header.c_str(), &exists, ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		if (!active) { ImGui::BeginDisabled(); }
+		if (!isActive) { ImGui::BeginDisabled(); }
  
 		if (mesh != nullptr)
 		{
@@ -84,7 +84,7 @@ void C_Mesh::ShowInInspector()
 			
 		ImGui::SameLine();
 
-		if (!active) { ImGui::EndDisabled(); }
+		if (!isActive) { ImGui::EndDisabled(); }
 	}
 	ImGui::SameLine();
 

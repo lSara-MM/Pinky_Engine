@@ -44,12 +44,12 @@ void C_Camera::ShowInInspector()
 
 	// ---------------------------------------------
 
-	ImGui::Checkbox(checkbox.c_str(), &active);
+	ImGui::Checkbox(checkbox.c_str(), &isActive);
 	ImGui::SameLine();
 
 	if (ImGui::CollapsingHeader(header.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		if (!active) { ImGui::BeginDisabled(); }
+		if (!isActive) { ImGui::BeginDisabled(); }
 
 		// Edit frustum values ------------------
 		ImGui::DragFloat("Near Plane", &frustum.nearPlaneDistance, 0.5f, 0.01f, frustum.farPlaneDistance);
@@ -61,7 +61,7 @@ void C_Camera::ShowInInspector()
 			SetFOV(fov);
 		}
 
-		if (!active) { ImGui::EndDisabled(); }
+		if (!isActive) { ImGui::EndDisabled(); }
 	}
 }
 

@@ -7,18 +7,22 @@
 #include "C_Material.h"
 #include "C_Camera.h"
 
-
+// If parent == nullptr --> its the root node
 GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 {
-	uid = App->randomLCG->Int();
-
 	if (parent != nullptr)
 	{
 		parent->AddChild(this);
+		uid = App->randomLCG->Int();
+	}
+	else
+	{
+		uid = -1;
 	}
 
 	name = n;
-	active = start_enabled;
+	isActive = start_enabled;
+	isStatic = false;
 
 	// ---
 	selected = false;
@@ -40,7 +44,7 @@ GameObject::GameObject(GameObject* go, int size, GameObject* parent)
 
 	parent->AddChild(this);
 	name = go->name;
-	active = go->active;
+	isActive = go->isActive;
 	
 	for (int i = 0; i < size; i++)
 	{
@@ -87,7 +91,7 @@ u32 GameObject::GetUid()
 
 update_status GameObject::Update(float dt)
 {
-	if (active)
+	if (isActive)
 	{
 		if (!vChildren.empty())
 		{
@@ -111,7 +115,7 @@ update_status GameObject::Update(float dt)
 
 			for (auto i = 0; i < vCams.size(); i++)
 			{
-				if (vCams[i]->active)
+				if (vCams[i]->isActive)
 				{
 					vCams[i]->DrawDebug();
 					//vCams[i]->UpdateCameraFrustum();
@@ -120,9 +124,9 @@ update_status GameObject::Update(float dt)
 
 			for (auto i = 0; i < vMeshes.size(); i++)
 			{
-				if (vMeshes[i]->active)
+				if (vMeshes[i]->isActive)
 				{
-					if (!vMaterials.empty() && vMaterials[i]->active)
+					if (!vMaterials.empty() && vMaterials[i]->isActive)
 					{
 						vMeshes[i]->Draw(vMaterials[i]->checkered, vMaterials[i]->color);
 

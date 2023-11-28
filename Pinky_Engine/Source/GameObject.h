@@ -48,7 +48,7 @@ public:
 	std::vector<Component*> vComponents;
 
 	std::string name;
-	bool active;
+	bool isActive, isStatic;
 	C_Transform* transform = nullptr;
 
 	bool selected;

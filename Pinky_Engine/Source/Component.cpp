@@ -6,9 +6,9 @@
 #include "C_Material.h"
 #include "C_Camera.h"
 
-Component::Component(C_TYPE t, GameObject* g, uint i, bool start_enabled, std::string n) : type(t), gameObject(g), uid(i), active(start_enabled), name(n) {}
+Component::Component(C_TYPE t, GameObject* g, uint i, bool start_enabled, std::string n) : type(t), gameObject(g), uid(i), isActive(start_enabled), name(n) {}
 
-Component::Component(GameObject* g, bool start_enabled, std::string n) : gameObject(g), active(start_enabled), name(n) {}
+Component::Component(GameObject* g, bool start_enabled, std::string n) : gameObject(g), isActive(start_enabled), name(n) {}
 
 Component::~Component()
 {

@@ -207,7 +207,7 @@ bool Hierarchy::TreeNode(GameObject* current, ImGuiTreeNodeFlags node_flags)
 	
 
 	// TODO: en release parpadea nose porque
-	if (!current->active)
+	if (!current->isActive)
 	{
 		ImGui::PushStyleColor(ImGuiCol_Text, disabledColor);
 	}
@@ -246,7 +246,7 @@ bool Hierarchy::TreeNode(GameObject* current, ImGuiTreeNodeFlags node_flags)
 		ImGui::EndPopup();
 	}
 
-	if (!current->active)
+	if (!current->isActive)
 	{
 		ImGui::PopStyleColor(1);
 	}
@@ -335,13 +335,13 @@ void Inspector::ShowWindow()
 			toggle.append(go->name + std::to_string(go->GetUid()));
 			//------
 
-			if (ImGuiCustom::ToggleButton(toggle.c_str(), &go->active))
+			if (ImGuiCustom::ToggleButton(toggle.c_str(), &go->isActive))
 			{
-				SetActiveState(go, go->active);
+				SetActiveState(go, go->isActive);
 			} 
 			ImGui::SameLine();
 
-			if (!go->active) { ImGui::BeginDisabled(); }
+			if (!go->isActive) { ImGui::BeginDisabled(); }
 
 			std::string temp = go->name;
 			if (ImGui::InputText(name.c_str(), &temp, ImGuiInputTextFlags_EnterReturnsTrue)) { go->name = temp; }
@@ -391,7 +391,7 @@ void Inspector::ShowWindow()
 				ImGui::EndPopup();
 			}
 
-			if (!go->active) { ImGui::EndDisabled(); }
+			if (!go->isActive) { ImGui::EndDisabled(); }
 
 
 			go = nullptr;
@@ -401,16 +401,16 @@ void Inspector::ShowWindow()
 	} ImGui::End();
 }
 
-void Inspector::SetActiveState(GameObject* go, bool active)
+void Inspector::SetActiveState(GameObject* go, bool isActive)
 {
 	for (auto i = 0; i < go->vChildren.size(); i++)
 	{
 		if (!go->vChildren.empty())
 		{
-			SetActiveState(go->vChildren[i], active);
+			SetActiveState(go->vChildren[i], isActive);
 		}
 
-		go->vChildren[i]->active = active;
+		go->vChildren[i]->isActive = isActive;
 	}
 }
 //------

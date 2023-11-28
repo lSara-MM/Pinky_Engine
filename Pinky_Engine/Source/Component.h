@@ -37,7 +37,7 @@ public:
 	int GetUID();
 
 public:
-	bool active;
+	bool isActive;
 	std::string name;
 	C_TYPE type;
 	GameObject* gameObject;

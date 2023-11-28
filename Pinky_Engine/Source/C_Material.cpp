@@ -20,7 +20,7 @@ C_Material::C_Material(GameObject* g, ai::texture* t, uint i, bool start_enabled
 	color = { 255, 255, 255, 255 };
 }
 
-C_Material::C_Material(GameObject* g, C_Material* toCopy, bool start_enabled, uint i) : Component(C_TYPE::MATERIAL, g, i, toCopy->active, "Material")
+C_Material::C_Material(GameObject* g, C_Material* toCopy, bool start_enabled, uint i) : Component(C_TYPE::MATERIAL, g, i, toCopy->isActive, "Material")
 {
 	//memcpy(&tex, &toCopy->tex, sizeof(*tex));
 	tex = toCopy->tex;
@@ -50,12 +50,12 @@ void C_Material::ShowInInspector()
 
 	// ---------------------------------------------
 
-	ImGui::Checkbox(checkbox.c_str(), &active);
+	ImGui::Checkbox(checkbox.c_str(), &isActive);
 	ImGui::SameLine();
 
 	if (ImGui::CollapsingHeader(header.c_str(), &exists, ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		if (!active) { ImGui::BeginDisabled(); }
+		if (!isActive) { ImGui::BeginDisabled(); }
 
 		if (ImGuiCustom::ToggleButton(toogle.c_str(), &checkered))
 		{
@@ -73,7 +73,7 @@ void C_Material::ShowInInspector()
 
 		ImGui::ColorEdit3("Color", (float*)&color, ImGuiColorEditFlags_NoInputs);
 
-		if (!active) { ImGui::EndDisabled(); }
+		if (!isActive) { ImGui::EndDisabled(); }
 	}
 
 	if (!exists) { gameObject->RemoveComponent(this); }

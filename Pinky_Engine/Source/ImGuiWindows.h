@@ -61,7 +61,7 @@ public:
 	~Inspector();
 
 	void ShowWindow();
-	void SetActiveState(GameObject* go, bool active);
+	void SetActiveState(GameObject* go, bool isActive);
 
 public:
 	int selected_fish = -1;
