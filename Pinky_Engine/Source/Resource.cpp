@@ -4,6 +4,7 @@
 Resource::Resource(R_TYPE t) : type (t)
 {
 	uid = App->randomLCG->Int();
+	count = 0;
 }
 
 Resource::~Resource()

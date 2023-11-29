@@ -474,7 +474,7 @@ uint FileSystemManager::Save(const char* file, const void* buffer, uint size, bo
 
 	bool overwrite;
 
-	(PHYSFS_exists(file) == 0) ? overwrite = true : overwrite = false;
+	(PHYSFS_exists(file) == 0) ? overwrite = false : overwrite = true;
 
 	PHYSFS_file* fs_file = (append) ? PHYSFS_openAppend(file) : PHYSFS_openWrite(file);
 

@@ -117,7 +117,7 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 			mesh* ourMesh = new mesh;
 			R_Mesh* mesh = new R_Mesh();
 
-			if (!I_Mesh::Import(m, ourMesh))
+			if (!I_Mesh::Import(m, mesh))
 			{
 				//obj->~GameObject();
 				obj = nullptr;
@@ -125,7 +125,7 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 			}
 
 			
-			if (/*mesh->InitBuffers(mesh)*/ InitMesh(ourMesh))
+			if (mesh->InitBuffers()/*InitMesh(ourMesh)*/)
 			{
 				//BindTexture(ourMesh);
 
@@ -151,20 +151,20 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 				obj->transform->globalMatrix = math::float4x4::FromTRS(obj->transform->position, 
 					obj->transform->rotation, obj->transform->scale);
 
-				//TODO: Local AABB
+				//---Local AABB---
 				ourMesh->local_aabb.SetNegativeInfinity();
 				ourMesh->local_aabb.Enclose((float3*)ourMesh->vertex, ourMesh->num_vertex);
 
 				//---Mesh---
-				obj->AddComponent(C_TYPE::MESH, ourMesh);
-
-				//App->resource->SaveToLibrary(mesh);
+				obj->AddComponent(C_TYPE::MESH, ourMesh);				
 
 				//---Material---
 				if (!component) { obj->AddComponent(C_TYPE::MATERIAL, ourMesh); }
 
 				//TODO: pushback elsewhere
 				App->renderer3D->meshes.push_back(ourMesh);
+
+				App->resource->SaveToLibrary(mesh);
 			}
 
 			//TODO: does it go here?

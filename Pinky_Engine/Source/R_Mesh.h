@@ -33,8 +33,8 @@ public:
 	R_Mesh();
 	~R_Mesh();
 
-	bool InitBuffers(R_Mesh* m);
-	void DeleteBuffers(R_Mesh* m);
+	bool InitBuffers();
+	void DeleteBuffers();
 
 public:
 
