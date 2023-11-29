@@ -171,11 +171,8 @@ bool ModuleRenderer3D::Init()
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity();
 
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(activeCam->GetViewMatrix());
+	activeCam->draw();
 
 	// light 0 on cam pos
 	lights[0].SetPos(activeCam->frustum.pos.x, activeCam->frustum.pos.y, activeCam->frustum.pos.z);
@@ -246,6 +243,10 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	{
 		glLoadMatrixf(activeCam->GetProjectionMatrix());
 	}
+
+	//TODO: DONDE VA
+	//activeCam->createFrameBuffer();
+	//activeCam->bindFrameBuffer();
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
