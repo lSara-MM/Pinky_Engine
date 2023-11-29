@@ -26,6 +26,7 @@
 
 #include "ModuleScene.h"
 #include "GameObject.h"
+#include "ImGuiPorjectFiles.h"
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -72,7 +73,7 @@ bool ModuleEditor::Init()
 
 	// Module Settings
 	docking = true;
-	docking = false;	// TODO: by default false because the scene not in a window yet
+	//docking = false;	// TODO: by default false because the scene not in a window yet
 	moduleSettingsWin = false;
 	styleEditor = false;
 	frcap = true;
@@ -103,10 +104,16 @@ bool ModuleEditor::Init()
 	App->scene->h = h;
 	vImGuiWindows.push_back(h);
 	h = nullptr;
+
 	Inspector* i = new Inspector(vImGuiWindows.size());
 	App->scene->i = i;
 	vImGuiWindows.push_back(i);
 	i = nullptr;
+
+	ProjectFiles* p = new ProjectFiles(vImGuiWindows.size());
+	vImGuiWindows.push_back(p);
+	p = nullptr;
+
 
 	// Load Baker House at the start by default
 	App->scene->BakerHouse();
@@ -258,7 +265,7 @@ void ModuleEditor::UseDockSpace(ImGuiIO& io)
 		// Submit the DockSpace
 		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 		{
-			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+			ImGuiID dockspace_id = ImGui::GetID("DockSpace");
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 		}
 		ImGui::End();

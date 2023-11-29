@@ -29,10 +29,9 @@
 #pragma comment (lib, "Source/External Libraries/MathGeoLib/libx86/libRelease/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
 #endif // _DEBUG
 
-ImGuiWindows::ImGuiWindows(int i)
+ImGuiWindows::ImGuiWindows(int i) : id (i)
 {
 	selectedGOs = {};
-	id = i;
 }
 
 ImGuiWindows::~ImGuiWindows()

@@ -177,6 +177,7 @@
     <ClInclude Include="Source\GameObject.h" />
     <ClInclude Include="Source\glmath.h" />
     <ClInclude Include="Source\Globals.h" />
+    <ClInclude Include="Source\ImGuiPorjectFiles.h" />
     <ClInclude Include="Source\ImGuiWindows.h" />
     <ClInclude Include="Source\I_Texture.h" />
     <ClInclude Include="Source\Light.h" />
@@ -252,6 +253,7 @@
     <ClCompile Include="Source\External Libraries\parson\parson.c" />
     <ClCompile Include="Source\GameObject.cpp" />
     <ClCompile Include="Source\glmath.cpp" />
+    <ClCompile Include="Source\ImGuiPorjectFiles.cpp" />
     <ClCompile Include="Source\ImGuiWindows.cpp" />
     <ClCompile Include="Source\I_Texture.cpp" />
     <ClCompile Include="Source\Light.cpp" />

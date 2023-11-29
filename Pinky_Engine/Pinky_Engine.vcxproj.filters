@@ -418,6 +418,9 @@
     <ClInclude Include="Source\ModuleResource.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ImGuiPorjectFiles.h">
+      <Filter>Sources\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ModuleCamera3D.cpp">
@@ -641,6 +644,9 @@
     </ClCompile>
     <ClCompile Include="Source\ModuleResource.cpp">
       <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ImGuiPorjectFiles.cpp">
+      <Filter>Sources\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
