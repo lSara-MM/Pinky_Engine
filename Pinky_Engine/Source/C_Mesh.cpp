@@ -145,6 +145,8 @@ void C_Mesh::Draw(bool checkered, Color color)
 
 void C_Mesh::DrawVertexNormals()
 {
+	glPushMatrix();
+	glMultMatrixf(gameObject->transform->globalMatrix.Transposed().ptr());
 	float normal_lenght = 1.0f;
 	glBegin(GL_LINES);
 	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
@@ -160,10 +162,14 @@ void C_Mesh::DrawVertexNormals()
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glEnd();
+	glPopMatrix();
 }
 
 void C_Mesh::DrawFaceNormals()
 {
+	glPushMatrix();
+	glMultMatrixf(gameObject->transform->globalMatrix.Transposed().ptr());
+
 	float normal_lenght = 1.0f;
 	glBegin(GL_LINES);
 	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
@@ -198,6 +204,7 @@ void C_Mesh::DrawFaceNormals()
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glEnd();
+	glPopMatrix();
 }
 
 void C_Mesh::DrawAABB()
