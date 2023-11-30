@@ -215,7 +215,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	(wireframe) ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	activeCam->unbindFrameBuffer();
 
 	return ret;
 }
@@ -245,10 +245,6 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	{
 		glLoadMatrixf(activeCam->GetProjectionMatrix());
 	}
-
-	//TODO: DONDE VA
-	//activeCam->createFrameBuffer();
-	//activeCam->bindFrameBuffer();
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -326,34 +322,4 @@ void ModuleRenderer3D::SetVsync(bool enable)
 void ModuleRenderer3D::SetCamActive(C_Camera* cam)
 {
 	activeCam = cam;
-}
-
-void ModuleRenderer3D::CreateFrameBuffer(int width, int height)//TODO: no entiendo nada
-{
-	GLuint color, depth, fbo;
-
-	glGenTextures(1, &color);
-	glBindTexture(GL_TEXTURE_2D, color);
-	glTexStorage2D(GL_TEXTURE_2D, 1, GL_SRGB8_ALPHA8, width, height);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	glGenTextures(1, &depth);
-	glBindTexture(GL_TEXTURE_2D, depth);
-	glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH_COMPONENT32F, width, height);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	glGenFramebuffers(1, &fbo);
-	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth, 0);
-	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-	if (status != GL_FRAMEBUFFER_COMPLETE) {
-		fprintf(stderr, "glCheckFramebufferStatus: %x\n", status);
-	}
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-	glDepthRange(1, 0);
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

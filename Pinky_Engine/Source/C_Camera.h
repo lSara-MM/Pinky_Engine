@@ -39,7 +39,6 @@ public:
 	void createCamBuffers(int width, int height);
 	void bindFrameBuffer();
 	void unbindFrameBuffer();
-	void rescaleFrameBuffer(float width, float height);
 	void deleteBuffers();
 
 public:

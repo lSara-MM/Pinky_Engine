@@ -237,7 +237,7 @@ void C_Camera::draw()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(GetViewMatrix());
 
-	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+	bindFrameBuffer();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
@@ -270,6 +270,18 @@ void C_Camera::createCamBuffers(int width, int height)
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+}
+
+void C_Camera::bindFrameBuffer()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+	//glViewport(0, 0, App->editor->m_ViewportSize.x, App->editor->m_ViewportSize.y);
+}
+
+void C_Camera::unbindFrameBuffer()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 }
 
 void C_Camera::deleteBuffers()

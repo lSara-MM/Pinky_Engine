@@ -151,12 +151,12 @@ void ModuleCamera3D::CameraInput()
 		Orbit();
 	}
 
-	else if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN && !ImGui::GetIO().WantTextInput)
+	else if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN /*&& !ImGui::GetIO().WantTextInput*/)
 	{
 		Focus();
 	}
 
-	else if (!ImGui::GetIO().WantCaptureMouse && App->input->GetMouseZ() != 0)
+	else if (/*!ImGui::GetIO().WantCaptureMouse && */App->input->GetMouseZ() != 0)
 	{
 		zoomPos = App->input->GetMouseZ();
 		Zoom(zoomPos, speed);

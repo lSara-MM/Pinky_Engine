@@ -55,6 +55,10 @@ public:
 
 	//Log vector
 	std::vector<std::string> vLog;
+
+	//Viewport scene size
+	ImVec2 m_ViewportSize;
+
 private:
 
 	std::vector<ImGuiWindows*> vImGuiWindows;

@@ -166,7 +166,7 @@ update_status ModuleEditor::PostUpdate(float dt)
 
 	// Rendering
 	ImGui::Render();
-	glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+	//glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 	//glClearColor(1.0, 1.0, 1.0, 0.0);
 	//glClear(GL_COLOR_BUFFER_BIT);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -902,18 +902,24 @@ void ModuleEditor::AboutWindow()
 
 void ModuleEditor::EditorWindow()
 {
-	if (ImGui::Begin("Scene", NULL))
-	{
-		if (ImGui::IsWindowHovered())
-		{
-			App->camera->CameraInput();
-		}
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 
-		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-		App->renderer3D->activeCam->SetAspectRatio(viewportSize.x, viewportSize.y);
-		ImGui::Image((ImTextureID)App->renderer3D->activeCam->textureColourBuffer, viewportSize, ImVec2(0, 1), ImVec2(1, 0));
+	ImGui::Begin("Scene", NULL);
+	
+	if (ImGui::IsWindowHovered())
+	{
+		App->camera->CameraInput();
 	}
+
+	ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+	m_ViewportSize = { viewportSize.x,viewportSize.y };
+
+	App->renderer3D->activeCam->SetAspectRatio(m_ViewportSize.x, m_ViewportSize.y);
+	ImGui::Image((ImTextureID)App->renderer3D->activeCam->textureColourBuffer, m_ViewportSize, ImVec2(0, 1), ImVec2(1, 0));
+	
 	ImGui::End();
+
+	ImGui::PopStyleVar();
 }
 
 void ModuleEditor::OsOpenInShell(const char* path)
