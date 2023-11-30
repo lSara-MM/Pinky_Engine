@@ -102,7 +102,7 @@ update_status GameObject::Update(float dt)
 			}
 		}
 
-		if (this->transform->updateMatrix)
+		if (transform->dirty_)
 		{
 			transform->UpdateTransformsChilds();
 		}
@@ -111,7 +111,7 @@ update_status GameObject::Update(float dt)
 		{
 			std::vector<C_Mesh*> vMeshes = GetComponentsMesh();
 			std::vector<C_Material*> vMaterials = GetComponentsMaterial();
-			std::vector<C_Camera*> vCams = GetCompoonentsCamera();
+			std::vector<C_Camera*> vCams = GetComponentsCamera();
 
 			for (auto i = 0; i < vCams.size(); i++)
 			{
@@ -278,7 +278,7 @@ std::vector<C_Material*> GameObject::GetComponentsMaterial()
 	return vec;
 }
 
-std::vector<C_Camera*> GameObject::GetCompoonentsCamera()
+std::vector<C_Camera*> GameObject::GetComponentsCamera()
 {
 	std::vector<C_Camera*> vec = {};
 	for (auto i = 0; i < vComponents.size(); i++)
@@ -303,7 +303,7 @@ void GameObject::ReParent(GameObject* newParent)
 	this->transform->localMatrix = pParent->transform->globalMatrix.Inverted() * this->transform->globalMatrix;
 	this->transform->SetLocalValues(this->transform->localMatrix);
 
-	this->transform->updateMatrix = true;
+	this->transform->dirty_ = true;
 }
 
 void GameObject::AddChild(GameObject* go)

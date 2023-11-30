@@ -29,11 +29,16 @@ C_Camera::C_Camera(GameObject* g, uint i, bool start_enabled) : Component(C_TYPE
 	FBO = 0;
 	RBO = 0;
 	textureColourBuffer = 0;
+	isMainCam = false;
 }
 
 C_Camera::~C_Camera()
 {
 	deleteBuffers();
+	if (isMainCam)
+	{
+		App->renderer3D->SetGameCamera(nullptr);
+	}
 }
 
 void C_Camera::ShowInInspector()
@@ -72,6 +77,11 @@ void C_Camera::ShowInInspector()
 		if (ImGui::DragFloat("FOV", &fov, 0.5f, 1.0f, 179.0f))
 		{
 			SetFOV(fov);
+		}
+
+		if (ImGui::Checkbox("Main Camera", &isMainCam))
+		{	
+			SetAsMain(isMainCam);
 		}
 
 		if (!isActive) { ImGui::EndDisabled(); }
@@ -174,6 +184,28 @@ void C_Camera::SetAspectRatio(int width, int height)
 	frustum.horizontalFov = 2 * Atan(Tan(frustum.verticalFov / 2) * aspect_ratio);
 }
 
+void C_Camera::SetAsMain(bool mainCam)
+{
+	if (mainCam)
+	{
+		if (App->renderer3D->gameCam == nullptr)
+		{
+			App->renderer3D->SetGameCamera(this);
+			mainCam = true;
+		}
+		else
+		{
+			mainCam = false;
+		}
+	}
+	else
+	{
+		App->renderer3D->SetGameCamera(nullptr);
+		mainCam = false;
+	}
+
+}
+
 void C_Camera::OnResize(int width, int height)
 {
 	glViewport(0, 0, width, height);
@@ -182,7 +214,7 @@ void C_Camera::OnResize(int width, int height)
 
 void C_Camera::UpdateCameraFrustum()
 {
-	C_Transform* transformComponent = this->gameObject->transform;//TODO: not good
+	C_Transform* transformComponent = gameObject->transform;//TODO: not good
 
 	float4x4 transform = transformComponent->GetGlobalTransform();
 

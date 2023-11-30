@@ -27,6 +27,7 @@ public:
 	FrustumCulling ContainsAABox(const AABB& refBox) const;
 	//resize window
 	void SetAspectRatio(int width, int height);
+	void SetAsMain(bool mainCam);
 	void OnResize(int width, int height);
 	void UpdateCameraFrustum();
 	void FrustumCulling();
@@ -36,7 +37,7 @@ public:
 	void SetFOV(float horizontalFOV);
 
 
-	//TODO: VIEWPORT
+	//Buffer functions
 	void draw();
 	void createCamBuffers(int width, int height);
 	void bindFrameBuffer();
@@ -55,12 +56,14 @@ public:
 	GLuint RBO; //rendering buffer object
 	GLuint textureColourBuffer; //texture id 
 
-	const GLuint WIDTH = 800;
-	const GLint HEIGHT = 600;
+	bool isMainCam = false;
+
 private:
 
 	//Editor settings
 	bool isCullEnabled = false;
+
+
 	//bool is_main = false;
 	float width = 0.0f;
 	float height = 0.0f;

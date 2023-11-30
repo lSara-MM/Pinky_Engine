@@ -15,7 +15,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 	MainCamera->frustum.farPlaneDistance = 1000.0f;
 	Reference = float3(0.0f, 0.0f, 0.0f);//change to selected game object
 	centerReference = float3(0.0f, 0.0f, 0.0f);//TODO: delete when selected game object
-	App->renderer3D->SetCamActive(MainCamera);
+	App->renderer3D->editorCam = MainCamera;
 }
 
 ModuleCamera3D::~ModuleCamera3D()

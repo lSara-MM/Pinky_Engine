@@ -42,9 +42,12 @@ bool ModuleScene::Init()
 
 	rootNode = new GameObject("Root node", nullptr);
 
-	//test camera component, 
+	//Main Camera  
 	mainCamera = new GameObject("Main Camera", rootNode);
 	mainCamera->AddComponent(C_TYPE::CAM);
+	std::vector<C_Camera*> vCams = mainCamera->GetComponentsCamera();
+	vCams[0]->isMainCam = true;
+	vCams[0]->SetAsMain(vCams[0]->isMainCam);
 
 	return ret;
 }

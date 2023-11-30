@@ -17,7 +17,7 @@ C_Transform::C_Transform(GameObject* g, float3 pos, Quat rot, float3 sc, bool st
 
 	globalMatrix = math::float4x4::FromTRS(pos, rot, sc);
 	localMatrix = math::float4x4::identity;
-	updateMatrix = true;
+	dirty_ = true;
 }
 
 C_Transform::C_Transform(GameObject* g, C_Transform* toCopy) : Component(C_TYPE::TRANSFORM, g, g->GetUid(), toCopy->isActive, "Transform")
@@ -29,7 +29,7 @@ C_Transform::C_Transform(GameObject* g, C_Transform* toCopy) : Component(C_TYPE:
 
 	globalMatrix = math::float4x4::FromTRS(position, rotation, scale);
 	localMatrix = math::float4x4::FromTRS(position, rotation, scale);
-	updateMatrix = false;
+	dirty_ = false;
 }
 
 C_Transform::~C_Transform()
@@ -66,19 +66,19 @@ void C_Transform::ShowInInspector()
 void C_Transform::SetTransform(float3 vec)
 {
 	position = float3(vec);
-	updateMatrix = true;
+	dirty_ = true;
 }
 
 void C_Transform::SetRotation(float3 vec)
 {
 	rotation = Quat::FromEulerXYZ(vec[0] * DEGTORAD, vec[1] * DEGTORAD, vec[2] * DEGTORAD);
-	updateMatrix = true;
+	dirty_ = true;
 }
 
 void C_Transform::SetScale(float3 vec)
 {
 	scale = float3(vec);
-	updateMatrix = true;
+	dirty_ = true;
 }
 
 void C_Transform::SetLocalValues(float4x4 matrix)
@@ -132,7 +132,7 @@ void C_Transform::UpdateTransformsChilds()
 			gameObject->vChildren[i]->transform->UpdateTransformsChilds();
 		}
 	}
-	updateMatrix = false;
+	dirty_ = false;
 }
 
 void C_Transform::UpdateGlobalMatrix()
@@ -152,12 +152,12 @@ void C_Transform::UpdateGlobalMatrix()
 
 void C_Transform::UpdateBoundingBoxes()
 {
-	std::vector<C_Mesh*> vMeshes = this->gameObject->GetComponentsMesh();
+	std::vector<C_Mesh*> vMeshes = gameObject->GetComponentsMesh();
 
 	for (auto i = 0; i < vMeshes.size(); i++)
 	{
 		vMeshes[i]->obb = vMeshes[i]->mesh->local_aabb;
-		vMeshes[i]->obb.Transform(this->gameObject->transform->GetGlobalTransform());
+		vMeshes[i]->obb.Transform(gameObject->transform->GetGlobalTransform());
 		vMeshes[i]->global_aabb.SetNegativeInfinity();
 		vMeshes[i]->global_aabb.Enclose(vMeshes[i]->obb);
 	}

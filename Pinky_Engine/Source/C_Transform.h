@@ -45,6 +45,7 @@ public:
 	//global
 	float4x4 globalMatrix;
 
-	bool updateMatrix;
+	//Flag to update game object transform
+	bool dirty_;
 
 };

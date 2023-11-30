@@ -34,6 +34,7 @@ public:
 	void HardwareDetection(bool& infoOutputWin);
 	void AboutWindow();
 	void EditorWindow();
+	void GameWindow();
 
 	void AddFPS(std::vector<float>& vect, const float aFPS);
 	void AddMem(std::vector<float>& vect, const float repMem);
@@ -58,6 +59,8 @@ public:
 
 	//Viewport scene size
 	ImVec2 m_ViewportSize;
+	//Game scene size
+	ImVec2 m_GameViewSize;
 
 private:
 

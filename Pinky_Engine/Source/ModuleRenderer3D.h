@@ -35,7 +35,7 @@ public:
 
 	void DrawBox();
 	void SetVsync(bool enable);
-	void SetCamActive(C_Camera* cam);
+	void SetGameCamera(C_Camera* cam);
 
 public:
 
@@ -43,7 +43,7 @@ public:
 	C_Camera* editorCam;//TODO: eliminat = nullptr
 
 	//Game viewer camera
-	C_Camera* gameCam;
+	C_Camera* gameCam = nullptr;
 
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;

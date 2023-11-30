@@ -148,6 +148,9 @@ update_status ModuleEditor::PostUpdate(float dt)
 	//Scene window
 	EditorWindow();
 
+	//Game window
+	//GameWindow();
+
 	//LOG window
 	ConsoleWindow();
 
@@ -443,6 +446,10 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 
 					SDL_SetWindowFullscreen(App->window->window, App->window->flags);
 					App->renderer3D->editorCam->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
+					if (App->renderer3D->gameCam!=nullptr)
+					{
+						App->renderer3D->gameCam->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
+					}
 				}
 
 				if (ImGui::IsItemHovered())
@@ -465,6 +472,10 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 				{
 					SDL_SetWindowBordered(App->window->window, (SDL_bool)!App->window->borderless);
 					App->renderer3D->editorCam->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
+					if (App->renderer3D->gameCam != nullptr)
+					{
+						App->renderer3D->gameCam->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
+					}
 				}
 
 				if (ImGui::IsItemHovered())
@@ -479,6 +490,10 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 
 					SDL_SetWindowFullscreen(App->window->window, App->window->flags);
 					App->renderer3D->editorCam->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
+					if (App->renderer3D->gameCam != nullptr)
+					{
+						App->renderer3D->gameCam->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
+					}
 				}
 
 				if (ImGui::IsItemHovered())
@@ -492,12 +507,20 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 				{
 					SDL_SetWindowSize(App->window->window, SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
 					App->renderer3D->editorCam->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
+					if (App->renderer3D->gameCam != nullptr)
+					{
+						App->renderer3D->gameCam->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
+					}
 				}
 
 				if (ImGui::SliderInt("Height", &SDL_GetWindowSurface(App->window->window)->h, 0, 1920, "%d"))
 				{
 					SDL_SetWindowSize(App->window->window, SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
 					App->renderer3D->editorCam->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
+					if (App->renderer3D->gameCam != nullptr)
+					{
+						App->renderer3D->gameCam->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
+					}
 				}
 				ImGui::Separator();
 				
@@ -917,6 +940,26 @@ void ModuleEditor::EditorWindow()
 	App->renderer3D->editorCam->SetAspectRatio(m_ViewportSize.x, m_ViewportSize.y);
 	ImGui::Image((ImTextureID)App->renderer3D->editorCam->textureColourBuffer, m_ViewportSize, ImVec2(0, 1), ImVec2(1, 0));
 	
+	ImGui::End();
+
+	ImGui::PopStyleVar();
+}
+
+void ModuleEditor::GameWindow()
+{
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
+
+	ImGui::Begin("Game", NULL);
+
+	ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+	m_GameViewSize = { viewportSize.x,viewportSize.y };
+
+	if (App->renderer3D->gameCam!=nullptr)
+	{
+		App->renderer3D->gameCam->SetAspectRatio(m_GameViewSize.x, m_GameViewSize.y);
+		ImGui::Image((ImTextureID)App->renderer3D->gameCam->textureColourBuffer, m_GameViewSize, ImVec2(0, 1), ImVec2(1, 0));
+	}
+
 	ImGui::End();
 
 	ImGui::PopStyleVar();
