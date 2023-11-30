@@ -442,7 +442,7 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 					(!App->window->fullScreen) ? App->window->flags = SDL_WINDOW_SHOWN : App->window->flags = SDL_WINDOW_FULLSCREEN;
 
 					SDL_SetWindowFullscreen(App->window->window, App->window->flags);
-					App->renderer3D->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
+					App->renderer3D->editorCam->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
 				}
 
 				if (ImGui::IsItemHovered())
@@ -464,7 +464,7 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 				if (ImGuiCustom::ToggleButton("Borderless", &App->window->borderless))
 				{
 					SDL_SetWindowBordered(App->window->window, (SDL_bool)!App->window->borderless);
-					App->renderer3D->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
+					App->renderer3D->editorCam->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
 				}
 
 				if (ImGui::IsItemHovered())
@@ -478,7 +478,7 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 					(!App->window->fullScreenDesktop) ? App->window->flags = SDL_WINDOW_SHOWN : App->window->flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
 
 					SDL_SetWindowFullscreen(App->window->window, App->window->flags);
-					App->renderer3D->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
+					App->renderer3D->editorCam->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
 				}
 
 				if (ImGui::IsItemHovered())
@@ -491,13 +491,13 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 				if (ImGui::SliderInt("Width", &SDL_GetWindowSurface(App->window->window)->w, 0, 1920, "%d"))
 				{
 					SDL_SetWindowSize(App->window->window, SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
-					App->renderer3D->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
+					App->renderer3D->editorCam->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
 				}
 
 				if (ImGui::SliderInt("Height", &SDL_GetWindowSurface(App->window->window)->h, 0, 1920, "%d"))
 				{
 					SDL_SetWindowSize(App->window->window, SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
-					App->renderer3D->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
+					App->renderer3D->editorCam->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
 				}
 				ImGui::Separator();
 				
@@ -914,8 +914,8 @@ void ModuleEditor::EditorWindow()
 	ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 	m_ViewportSize = { viewportSize.x,viewportSize.y };
 
-	App->renderer3D->activeCam->SetAspectRatio(m_ViewportSize.x, m_ViewportSize.y);
-	ImGui::Image((ImTextureID)App->renderer3D->activeCam->textureColourBuffer, m_ViewportSize, ImVec2(0, 1), ImVec2(1, 0));
+	App->renderer3D->editorCam->SetAspectRatio(m_ViewportSize.x, m_ViewportSize.y);
+	ImGui::Image((ImTextureID)App->renderer3D->editorCam->textureColourBuffer, m_ViewportSize, ImVec2(0, 1), ImVec2(1, 0));
 	
 	ImGui::End();
 

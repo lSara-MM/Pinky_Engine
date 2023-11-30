@@ -33,14 +33,17 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
-	void OnResize(int width, int height);
 	void DrawBox();
 	void SetVsync(bool enable);
 	void SetCamActive(C_Camera* cam);
 
 public:
 
-	C_Camera* activeCam = nullptr;
+	//Scene viewer camera
+	C_Camera* editorCam;//TODO: eliminat = nullptr
+
+	//Game viewer camera
+	C_Camera* gameCam;
 
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;

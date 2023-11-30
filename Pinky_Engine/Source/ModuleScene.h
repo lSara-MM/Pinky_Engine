@@ -33,5 +33,5 @@ public:
 	Inspector* i;
 
 private:
-	GameObject* testCamera;
+	GameObject* mainCamera;
 };

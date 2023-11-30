@@ -155,7 +155,7 @@ bool ModuleRenderer3D::Init()
 	}
 
 	// Projection matrix for
-	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	editorCam->OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	Grid.axis = true;
 	wireframe = false;
@@ -172,10 +172,10 @@ bool ModuleRenderer3D::Init()
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
 
-	activeCam->draw();
+	editorCam->draw();
 
 	// light 0 on cam pos
-	lights[0].SetPos(activeCam->frustum.pos.x, activeCam->frustum.pos.y, activeCam->frustum.pos.z);
+	lights[0].SetPos(editorCam->frustum.pos.x, editorCam->frustum.pos.y, editorCam->frustum.pos.z);
 
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
@@ -215,7 +215,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	(wireframe) ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 
-	activeCam->unbindFrameBuffer();
+	editorCam->unbindFrameBuffer();
 
 	return ret;
 }
@@ -231,15 +231,6 @@ bool ModuleRenderer3D::CleanUp()
 	SDL_GL_DeleteContext(context);
 	return true;
 }
-
-
-void ModuleRenderer3D::OnResize(int width, int height)
-{
-	glViewport(0, 0, width, height);
-	activeCam->createCamBuffers(width,height);
-
-}
-
 
 void ModuleRenderer3D::DrawBox()
 {
@@ -311,5 +302,5 @@ void ModuleRenderer3D::SetVsync(bool enable)
 
 void ModuleRenderer3D::SetCamActive(C_Camera* cam)
 {
-	activeCam = cam;
+	editorCam = cam;
 }

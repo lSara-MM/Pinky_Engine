@@ -25,7 +25,9 @@ public:
 	float* GetProjectionMatrix() const;//recalculate projection matrix only when frustum is changed
 	void DrawDebug();
 	FrustumCulling ContainsAABox(const AABB& refBox) const;
-	void SetAspectRatio(int width, int height);//resize window
+	//resize window
+	void SetAspectRatio(int width, int height);
+	void OnResize(int width, int height);
 	void UpdateCameraFrustum();
 	void FrustumCulling();
 	void GetObjectsToCull(GameObject* go, std::vector<GameObject*>& list_go);

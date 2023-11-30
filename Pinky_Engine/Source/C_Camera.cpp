@@ -174,6 +174,12 @@ void C_Camera::SetAspectRatio(int width, int height)
 	frustum.horizontalFov = 2 * Atan(Tan(frustum.verticalFov / 2) * aspect_ratio);
 }
 
+void C_Camera::OnResize(int width, int height)
+{
+	glViewport(0, 0, width, height);
+	createCamBuffers(width, height);
+}
+
 void C_Camera::UpdateCameraFrustum()
 {
 	C_Transform* transformComponent = this->gameObject->transform;//TODO: not good
