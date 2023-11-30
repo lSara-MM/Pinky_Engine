@@ -234,6 +234,9 @@ void C_Camera::SetFOV(float horizontalFOV)
 void C_Camera::draw()
 {
 	glLoadIdentity();
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf(GetProjectionMatrix());
+
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(GetViewMatrix());
 

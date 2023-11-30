@@ -238,16 +238,6 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glViewport(0, 0, width, height);
 	activeCam->createCamBuffers(width,height);
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-	if (activeCam != nullptr)
-	{
-		glLoadMatrixf(activeCam->GetProjectionMatrix());
-	}
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
 }
 
 
