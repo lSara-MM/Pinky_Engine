@@ -214,6 +214,9 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	(wireframe) ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 	return ret;
 }
 

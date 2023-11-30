@@ -233,16 +233,13 @@ void C_Camera::SetFOV(float horizontalFOV)
 
 void C_Camera::draw()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
-
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(GetViewMatrix());
 
-	//TODO: DONDE VA
-	//createFrameBuffer();
-	//bindFrameBuffer();
+	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void C_Camera::createCamBuffers(int width, int height)

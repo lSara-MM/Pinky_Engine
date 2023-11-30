@@ -912,7 +912,6 @@ void ModuleEditor::EditorWindow()
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 		App->renderer3D->activeCam->SetAspectRatio(viewportSize.x, viewportSize.y);
 		ImGui::Image((ImTextureID)App->renderer3D->activeCam->textureColourBuffer, viewportSize, ImVec2(0, 1), ImVec2(1, 0));
-
 	}
 	ImGui::End();
 }
