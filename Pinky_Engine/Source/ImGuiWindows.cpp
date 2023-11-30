@@ -29,7 +29,7 @@
 #pragma comment (lib, "Source/External Libraries/MathGeoLib/libx86/libRelease/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
 #endif // _DEBUG
 
-ImGuiWindows::ImGuiWindows(int i) : id (i)
+ImGuiWindows::ImGuiWindows(int i) : id(i)
 {
 	selectedGOs = {};
 }
@@ -66,7 +66,7 @@ void ImGuiWindows::SetSelected(GameObject* go)
 
 		// On click select or deselect item
 		go->selected = !go->selected;
-		
+
 		// If the item was selected, add it to the vec, otherwise remove it
 		if (go->selected)
 		{
@@ -102,9 +102,9 @@ void ImGuiWindows::SetSelectedState(GameObject* go, bool selected)
 }
 //------
 
-Hierarchy::Hierarchy(int i) : ImGuiWindows(i) 
+Hierarchy::Hierarchy(int i) : ImGuiWindows(i)
 {
-	draggedGO = nullptr; 
+	draggedGO = nullptr;
 	disabledColor = ImVec4(0.675f, 0.675f, 0.675f, 1.0f);
 }
 
@@ -123,7 +123,7 @@ void Hierarchy::ShowWindow()
 	std::string title = "Hierarchy";
 	title.append("##");
 	title.append(std::to_string(id));
-	
+
 	ImVec2 pos = ImGui::GetMainViewport()->WorkPos;
 	ImGui::SetNextWindowPos(pos, ImGuiCond_Appearing, ImVec2(-0.05f, -0.05f));
 	ImGui::SetNextWindowSize(ImVec2(200, 490), ImGuiCond_Appearing);
@@ -159,15 +159,12 @@ void Hierarchy::ShowWindow()
 bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 {
 	bool ret = true;
-	ImGuiTreeNodeFlags node_flags;
+	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_None;
 
 	for (int i = 0; i < num; i++)
 	{
 		if (!current[i]->vChildren.empty())
 		{
-			node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
-				| ImGuiTreeNodeFlags_SpanAvailWidth;
-	
 			bool open = TreeNode(current[i], node_flags);
 			MouseEvents(current[i]);
 
@@ -179,8 +176,6 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 		}
 		else
 		{
-			node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-
 			TreeNode(current[i], node_flags);
 			MouseEvents(current[i]);
 		}
@@ -193,7 +188,12 @@ bool Hierarchy::TreeNode(GameObject* current, ImGuiTreeNodeFlags node_flags)
 {
 	bool ret = false;
 
-	if (current->vChildren.empty())
+	if (!current->vChildren.empty())
+	{
+		node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
+			| ImGuiTreeNodeFlags_SpanAvailWidth;
+	}
+	else
 	{
 		node_flags = ImGuiTreeNodeFlags_None;
 		node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
@@ -203,7 +203,7 @@ bool Hierarchy::TreeNode(GameObject* current, ImGuiTreeNodeFlags node_flags)
 	{
 		node_flags |= ImGuiTreeNodeFlags_Selected;
 	}
-	
+
 
 	// TODO: en release parpadea nose porque
 	if (!current->isActive)
@@ -211,7 +211,7 @@ bool Hierarchy::TreeNode(GameObject* current, ImGuiTreeNodeFlags node_flags)
 		ImGui::PushStyleColor(ImGuiCol_Text, disabledColor);
 	}
 
-	ret = ImGui::TreeNodeEx((void*)(intptr_t)current->GetUid(), node_flags, current->name.c_str()); 
+	ret = ImGui::TreeNodeEx((void*)(intptr_t)current->GetUid(), node_flags, current->name.c_str());
 	if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
 	{
 		ImGui::MenuItem(current->name.c_str());
@@ -337,7 +337,7 @@ void Inspector::ShowWindow()
 			if (ImGuiCustom::ToggleButton(toggle.c_str(), &go->isActive))
 			{
 				SetActiveState(go, go->isActive);
-			} 
+			}
 			ImGui::SameLine();
 
 			if (!go->isActive) { ImGui::BeginDisabled(); }
@@ -396,7 +396,7 @@ void Inspector::ShowWindow()
 			go = nullptr;
 		}
 
-		
+
 	} ImGui::End();
 }
 

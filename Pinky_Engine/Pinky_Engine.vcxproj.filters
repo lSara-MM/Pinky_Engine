@@ -418,7 +418,7 @@
     <ClInclude Include="Source\ModuleResource.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ImGuiPorjectFiles.h">
+    <ClInclude Include="Source\ImGuiProjectFiles.h">
       <Filter>Sources\Scene</Filter>
     </ClInclude>
   </ItemGroup>
@@ -645,7 +645,7 @@
     <ClCompile Include="Source\ModuleResource.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ImGuiPorjectFiles.cpp">
+    <ClCompile Include="Source\ImGuiProjectFiles.cpp">
       <Filter>Sources\Scene</Filter>
     </ClCompile>
   </ItemGroup>

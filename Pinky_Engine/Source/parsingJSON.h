@@ -22,10 +22,7 @@ public:
 	void ComponentsJSON(Component* comp, std::string name);
 
 private:
-	void std_json_object_dotset_string(JSON_Object* root_object, std::string s, std::string string);
-	void std_json_object_dotset_number(JSON_Object* root_object, std::string s, double number);
-	void std_json_object_dotset_boolean(JSON_Object* root_object, std::string s, bool boolean);
-
+	
 	void json_object_dotset_array(float* num, int size, string name);
 
 private:

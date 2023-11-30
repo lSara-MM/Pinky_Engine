@@ -16,4 +16,11 @@ public:
 
 	void ShowWindow();
 	void ShowDirectories(std::string directory);
+
+	bool TreeNode(std::string currentDir, ImGuiTreeNodeFlags node_flags, bool finalDir);
+	void MouseEvents(std::string current, std::vector<std::string> files);
+
+public:
+	std::string selectedDir;
+	std::vector<std::string> vSelectedDirFiles;
 };

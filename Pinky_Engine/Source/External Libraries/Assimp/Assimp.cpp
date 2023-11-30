@@ -87,7 +87,7 @@ bool ai::ImportMesh(const char* meshfileDir, GameObject* go, bool component)
 	return true;
 }
 
-GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component)
+GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component, bool foundParent)
 {
 	GameObject* obj = nullptr;
 
@@ -104,11 +104,23 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 			int pos = name.find_first_of("$");
 
 			(pos == std::string::npos) ? obj = new GameObject(name, parent) : obj = parent;
+
+			if (!foundParent && pos == std::string::npos)
+			{
+				foundParent = true;
+			}
 		}
 
 		if (children[i]->mChildren != NULL)
 		{
-			MeshHierarchy(s, children[i]->mChildren, children[i]->mNumChildren, obj);
+			if (!foundParent)
+			{
+				obj = MeshHierarchy(s, children[i]->mChildren, children[i]->mNumChildren, obj, foundParent);
+			}
+			else
+			{
+				MeshHierarchy(s, children[i]->mChildren, children[i]->mNumChildren, obj, foundParent);
+			}			
 		}
 
 		if (children[i]->mNumMeshes > 0)

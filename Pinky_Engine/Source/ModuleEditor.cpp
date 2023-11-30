@@ -26,7 +26,7 @@
 
 #include "ModuleScene.h"
 #include "GameObject.h"
-#include "ImGuiPorjectFiles.h"
+#include "ImGuiProjectFiles.h"
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -45,7 +45,7 @@ bool ModuleEditor::Init()
 {
 	LOG("Creating 3D Renderer context");
 	bool ret = true;
-	
+
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -53,7 +53,7 @@ bool ModuleEditor::Init()
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
-	
+
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
 
 	// Setup Dear ImGui style
@@ -139,8 +139,8 @@ update_status ModuleEditor::PostUpdate(float dt)
 	ImGui::NewFrame();
 
 
-	ImGuiIO& io = ImGui::GetIO(); 
-	
+	ImGuiIO& io = ImGui::GetIO();
+
 	UseDockSpace(io);
 
 	ret = Toolbar();
@@ -157,7 +157,7 @@ update_status ModuleEditor::PostUpdate(float dt)
 	//Configwindow, change to fullscreen and such
 	ConfigWindow(io);
 	HardwareDetection(infoOutputWin);
-	
+
 	// Hierarchy - Inspector
 	for (int i = 0; i < vImGuiWindows.size(); i++)
 	{
@@ -244,29 +244,23 @@ void ModuleEditor::UseDockSpace(ImGuiIO& io)
 			window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove
 				| ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 		}
-		else
-		{
-			dockspace_flags &= ~ImGuiDockNodeFlags_PassthruCentralNode;
-		}
+		else { dockspace_flags &= ~ImGuiDockNodeFlags_PassthruCentralNode; }
 
 		//// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background
 		//// and handle the pass-thru hole, so we ask Begin() to not render a background.
-		if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-			window_flags |= ImGuiWindowFlags_NoBackground;
+		if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) { window_flags |= ImGuiWindowFlags_NoBackground; }
 
 		// Important: note that we proceed even if Begin() returns false (aka window is collapsed).
 		// This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
 		// all active windows docked into it will lose their parent and become undocked.
 		// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
 		// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
-		if (!opt_padding)
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+		if (!opt_padding) { ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f)); }
 		ImGui::Begin("DockSpace", NULL, window_flags);
-		if (!opt_padding)
-			ImGui::PopStyleVar();
 
-		if (opt_fullscreen)
-			ImGui::PopStyleVar(2);
+		if (!opt_padding) { ImGui::PopStyleVar(); }
+
+		if (opt_fullscreen) { ImGui::PopStyleVar(2); }
 
 		// Submit the DockSpace
 		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
@@ -350,16 +344,16 @@ update_status ModuleEditor::Toolbar()
 		if (ImGui::BeginMenu("Game Object"))
 		{
 			if (ImGui::MenuItem("Create Empty")) { new GameObject("Empty"); }
-			
+
 			if (ImGui::BeginMenu("Create Primitive"))
 			{
 				PrimitivesMenu();
 				ImGui::EndMenu();
 			}
-			
+
 			if (ImGui::BeginMenu("Create Custom Mesh"))
 			{
-				std::array<std::string, 3> components = { "Law Hat", "Kuro", "King Shark"};
+				std::array<std::string, 3> components = { "Law Hat", "Kuro", "King Shark" };
 
 				for (int i = 0; i < components.size(); i++)
 				{
@@ -380,7 +374,7 @@ update_status ModuleEditor::Toolbar()
 				if (App->scene->h != nullptr)
 				{
 					App->scene->h->show = !App->scene->h->show;
-				}				
+				}
 				//vImGuiWindows.push_back(new Hierarchy(vImGuiWindows.size()));
 			}
 			if (ImGui::MenuItem("Inspector"))
@@ -427,7 +421,7 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 		ImGui::SetNextWindowSize(ImVec2(500, 500));
 		ImGui::Begin("Configuration", &moduleSettingsWin, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
-		
+
 		static ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_Reorderable | ImGuiTabBarFlags_TabListPopupButton;
 		if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
 		{
@@ -446,7 +440,7 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 
 					SDL_SetWindowFullscreen(App->window->window, App->window->flags);
 					App->renderer3D->editorCam->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
-					if (App->renderer3D->gameCam!=nullptr)
+					if (App->renderer3D->gameCam != nullptr)
 					{
 						App->renderer3D->gameCam->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
 					}
@@ -523,7 +517,7 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 					}
 				}
 				ImGui::Separator();
-				
+
 				ImGui::Text("Brightness: %.2f", SDL_GetWindowBrightness(App->window->window));
 				if (ImGui::SliderFloat("Brightness", &App->window->brightness, 0.2350f, 1.0f, "%.2f"))
 				{
@@ -652,7 +646,7 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 
 			ImGui::EndTabBar();
 		}
-		
+
 		ImGui::End();
 	}
 }
@@ -720,12 +714,12 @@ void ModuleEditor::FpsWindow(ImGuiIO& io)
 	ImGui::PlotHistogram("##milliseconds ", &mSLog[0], mSLog.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100.0f));
 }
 
-void ModuleEditor::MemWindow() 
+void ModuleEditor::MemWindow()
 {
 	char title[25];
 	AddMem(MemLog, memoryStats.totalReportedMemory);
 	ImGui::Text("Reported Memory % 0.1f", MemLog[MemLog.size() - 1]);
-	ImGui::PlotHistogram("", &MemLog[0], MemLog.size(), 0, "", 0.0f, memoryStats.peakReportedMemory*2, ImVec2(310, 100.0f));
+	ImGui::PlotHistogram("", &MemLog[0], MemLog.size(), 0, "", 0.0f, memoryStats.peakReportedMemory * 2, ImVec2(310, 100.0f));
 }
 
 void ModuleEditor::AddFPS(std::vector<float>& vect, const float aFPS)
@@ -847,7 +841,7 @@ void ModuleEditor::AboutWindow()
 		ImGui::SameLine();
 
 		ImGui::BeginGroup();
-		ImGui::BeginChild("right pane", ImVec2(500-200, -ImGui::GetFrameHeightWithSpacing())); // Leave room for 1 line below us
+		ImGui::BeginChild("right pane", ImVec2(500 - 200, -ImGui::GetFrameHeightWithSpacing())); // Leave room for 1 line below us
 
 		if (ImGui::BeginTabBar("Pinky Engine"), ImGuiTabBarFlags_Reorderable | ImGuiTabBarFlags_TabListPopupButton)
 		{
@@ -858,20 +852,20 @@ void ModuleEditor::AboutWindow()
 				ImGui::ColorEdit3("", (float*)&aboutColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
 				ImGui::EndTabItem();
 			}
-			
+
 			if (ImGui::BeginTabItem("Libraries"))
 			{
 				//---ImGui---
 				if (ImGui::Button("ImGui")) { OsOpenInShell("https://github.com/ocornut/imgui"); } ImGui::SameLine();
-				ImGui::TextWrapped("Omar Cornut Copyright (c) 2014-2023"); 
+				ImGui::TextWrapped("Omar Cornut Copyright (c) 2014-2023");
 
 				//---OpenGL---
 				if (ImGui::Button("OpenGL")) { OsOpenInShell("https://glew.sourceforge.net/"); } ImGui::SameLine();
-				if (ImGui::Button("OpenGL License")) { OsOpenInShell("https://github.com/nigels-com/glew#copyright-and-licensing"); } 
-			
+				if (ImGui::Button("OpenGL License")) { OsOpenInShell("https://github.com/nigels-com/glew#copyright-and-licensing"); }
+
 				//---MathGeoLib---
 				if (ImGui::Button("MathGeoLib")) { OsOpenInShell("https://github.com/juj/MathGeoLib"); } ImGui::SameLine();
-				if (ImGui::Button("MathGeoLib License")) { OsOpenInShell("http://www.apache.org/licenses/LICENSE-2.0.html"); } 
+				if (ImGui::Button("MathGeoLib License")) { OsOpenInShell("http://www.apache.org/licenses/LICENSE-2.0.html"); }
 
 				//---Parson---
 				if (ImGui::Button("Parson")) { OsOpenInShell("https://github.com/kgabis/parson"); } ImGui::SameLine();
@@ -906,7 +900,7 @@ void ModuleEditor::AboutWindow()
 			}
 			//ImGui::Text("Pinky Engine");
 			//ImGui::Separator();
-			
+
 			ImGui::EndTabBar();
 		}
 		ImGui::EndChild();
@@ -928,7 +922,7 @@ void ModuleEditor::EditorWindow()
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 
 	ImGui::Begin("Scene", NULL);
-	
+
 	if (ImGui::IsWindowHovered())
 	{
 		App->camera->CameraInput();
@@ -939,7 +933,7 @@ void ModuleEditor::EditorWindow()
 
 	App->renderer3D->editorCam->SetAspectRatio(m_ViewportSize.x, m_ViewportSize.y);
 	ImGui::Image((ImTextureID)App->renderer3D->editorCam->textureColourBuffer, m_ViewportSize, ImVec2(0, 1), ImVec2(1, 0));
-	
+
 	ImGui::End();
 
 	ImGui::PopStyleVar();
@@ -954,7 +948,7 @@ void ModuleEditor::GameWindow()
 	ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 	m_GameViewSize = { viewportSize.x,viewportSize.y };
 
-	if (App->renderer3D->gameCam!=nullptr)
+	if (App->renderer3D->gameCam != nullptr)
 	{
 		App->renderer3D->gameCam->SetAspectRatio(m_GameViewSize.x, m_GameViewSize.y);
 		ImGui::Image((ImTextureID)App->renderer3D->gameCam->textureColourBuffer, m_GameViewSize, ImVec2(0, 1), ImVec2(1, 0));
