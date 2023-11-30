@@ -33,6 +33,7 @@ public:
 	void MemWindow();
 	void HardwareDetection(bool& infoOutputWin);
 	void AboutWindow();
+	void EditorWindow();
 
 	void AddFPS(std::vector<float>& vect, const float aFPS);
 	void AddMem(std::vector<float>& vect, const float repMem);

@@ -145,6 +145,9 @@ update_status ModuleEditor::PostUpdate(float dt)
 
 	ret = Toolbar();
 
+	//Scene window
+	EditorWindow();
+
 	//LOG window
 	ConsoleWindow();
 
@@ -439,6 +442,7 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 					(!App->window->fullScreen) ? App->window->flags = SDL_WINDOW_SHOWN : App->window->flags = SDL_WINDOW_FULLSCREEN;
 
 					SDL_SetWindowFullscreen(App->window->window, App->window->flags);
+					App->renderer3D->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
 				}
 
 				if (ImGui::IsItemHovered())
@@ -460,6 +464,7 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 				if (ImGuiCustom::ToggleButton("Borderless", &App->window->borderless))
 				{
 					SDL_SetWindowBordered(App->window->window, (SDL_bool)!App->window->borderless);
+					App->renderer3D->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
 				}
 
 				if (ImGui::IsItemHovered())
@@ -468,11 +473,12 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 				}
 				ImGui::SameLine(150);
 
-				if (ImGuiCustom::ToggleButton("Full desktop", &App->window->fullScreenDesktop))
+				if (ImGuiCustom::ToggleButton("Fullscreen desktop", &App->window->fullScreenDesktop))
 				{
 					(!App->window->fullScreenDesktop) ? App->window->flags = SDL_WINDOW_SHOWN : App->window->flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
 
 					SDL_SetWindowFullscreen(App->window->window, App->window->flags);
+					App->renderer3D->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
 				}
 
 				if (ImGui::IsItemHovered())
@@ -892,6 +898,23 @@ void ModuleEditor::AboutWindow()
 		ImGui::EndGroup();
 		ImGui::EndPopup();
 	}
+}
+
+void ModuleEditor::EditorWindow()
+{
+	if (ImGui::Begin("Scene", NULL))
+	{
+		if (ImGui::IsWindowHovered())
+		{
+			App->camera->CameraInput();
+		}
+
+		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+		App->renderer3D->activeCam->SetAspectRatio(viewportSize.x, viewportSize.y);
+		ImGui::Image((ImTextureID)App->renderer3D->activeCam->textureColourBuffer, viewportSize, ImVec2(0, 1), ImVec2(1, 0));
+
+	}
+	ImGui::End();
 }
 
 void ModuleEditor::OsOpenInShell(const char* path)

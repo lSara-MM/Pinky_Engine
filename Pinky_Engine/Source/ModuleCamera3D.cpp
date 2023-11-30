@@ -60,27 +60,8 @@ update_status ModuleCamera3D::Update(float dt)
 		speed = 40.0f * dt;
 	}
 
-	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
-	{
-		CameraMovement();
-		FPScamera();
-	}
-
-	else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
-	{
-		Orbit();
-	}
-
-	else if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN && !ImGui::GetIO().WantTextInput)
-	{
-		Focus();
-	}
-
-	else if(!ImGui::GetIO().WantCaptureMouse && App->input->GetMouseZ() != 0)
-	{
-		zoomPos = App->input->GetMouseZ();
-		Zoom(zoomPos, speed);
-	}
+	//TODO: treure, es fa en window scene editor
+	//CameraInput();
 
 	return UPDATE_CONTINUE;
 }
@@ -155,6 +136,31 @@ void ModuleCamera3D::Zoom(float zoom, float scrollSpeed)
 void ModuleCamera3D::MousePick(float xNorm, float yNorm, float w, float h)
 {
 	pickingRay = MainCamera->frustum.UnProjectLineSegment(xNorm, yNorm);
+}
+
+void ModuleCamera3D::CameraInput()
+{
+	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+	{
+		CameraMovement();
+		FPScamera();
+	}
+
+	else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
+	{
+		Orbit();
+	}
+
+	else if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN && !ImGui::GetIO().WantTextInput)
+	{
+		Focus();
+	}
+
+	else if (!ImGui::GetIO().WantCaptureMouse && App->input->GetMouseZ() != 0)
+	{
+		zoomPos = App->input->GetMouseZ();
+		Zoom(zoomPos, speed);
+	}
 }
 
 void ModuleCamera3D::Focus()

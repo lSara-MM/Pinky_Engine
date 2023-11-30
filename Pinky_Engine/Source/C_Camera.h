@@ -36,14 +36,11 @@ public:
 
 	//TODO: VIEWPORT
 	void draw();
-	void endDraw();
-
-	void createFrameBuffer();
+	void createCamBuffers(int width, int height);
 	void bindFrameBuffer();
 	void unbindFrameBuffer();
 	void rescaleFrameBuffer(float width, float height);
-
-
+	void deleteBuffers();
 
 public:
 	ai::texture* tex;
@@ -52,13 +49,11 @@ public:
 
 	Color color{};
 
+	//Camera buffers
+	GLuint FBO; //frame buffer object
+	GLuint RBO; //rendering buffer object
+	GLuint textureColourBuffer; //texture id 
 
-
-
-	//TODO: igual poner en render3d
-	GLuint FBO; // frame buffer object
-	GLuint RBO; // rendering buffer object
-	GLuint texture_colour_buffer; // the texture id we'll need later to create a texture 
 	const GLuint WIDTH = 800;
 	const GLint HEIGHT = 600;
 private:

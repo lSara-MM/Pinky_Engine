@@ -24,10 +24,16 @@ C_Camera::C_Camera(GameObject* g, uint i, bool start_enabled) : Component(C_TYPE
 	frustum.farPlaneDistance = 10.0f;
 	frustum.verticalFov = fov * DEGTORAD;
 	frustum.horizontalFov = Atan(aspect_ratio * Tan(frustum.verticalFov / 2)) * 2;
+
+	//buffers //TODO: fer constructor bonic
+	FBO = 0;
+	RBO = 0;
+	textureColourBuffer = 0;
 }
 
 C_Camera::~C_Camera()
 {
+	deleteBuffers();
 }
 
 void C_Camera::ShowInInspector()
@@ -50,6 +56,13 @@ void C_Camera::ShowInInspector()
 	if (ImGui::CollapsingHeader(header.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		if (!isActive) { ImGui::BeginDisabled(); }
+
+		//Buffers info
+		ImGui::Text("Camera buffers:");
+		ImGui::Text("FBO: %d", FBO);
+		ImGui::Text("RBO: %d", RBO);
+		ImGui::Text("Texture ID: %d", textureColourBuffer);
+		ImGui::Separator();
 
 		// Edit frustum values ------------------
 		ImGui::DragFloat("Near Plane", &frustum.nearPlaneDistance, 0.5f, 0.01f, frustum.farPlaneDistance);
@@ -232,50 +245,50 @@ void C_Camera::draw()
 
 }
 
-void C_Camera::createFrameBuffer()
+void C_Camera::createCamBuffers(int width, int height)
 {
+	SetAspectRatio(width, height);
+	deleteBuffers();
+
 	glGenFramebuffers(1, &FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
-	glGenTextures(1, &texture_colour_buffer);
-	glBindTexture(GL_TEXTURE_2D, texture_colour_buffer);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, WIDTH, HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glGenTextures(1, &textureColourBuffer);
+	glBindTexture(GL_TEXTURE_2D, textureColourBuffer);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_colour_buffer, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColourBuffer, 0);
 
 	glGenRenderbuffers(1, &RBO);
 	glBindRenderbuffer(GL_RENDERBUFFER, RBO);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, WIDTH, HEIGHT);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
 
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!\n";
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) 
+	{
+		LOG("[ERROR] Framebuffer is not complete!");
+	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
 
-void C_Camera::bindFrameBuffer()
+void C_Camera::deleteBuffers()
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-}
+	if (FBO!=0)
+	{
+		glDeleteFramebuffers(1, &FBO);
+	}
 
-void C_Camera::unbindFrameBuffer()
-{
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
+	if (textureColourBuffer != 0)
+	{
+		glDeleteTextures(1, &textureColourBuffer);
+	}
 
-void C_Camera::rescaleFrameBuffer(float width, float height)
-{
-	glBindTexture(GL_TEXTURE_2D, texture_colour_buffer);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_colour_buffer, 0);
-
-	glBindRenderbuffer(GL_RENDERBUFFER, RBO);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
+	if (RBO != 0)
+	{
+		glDeleteRenderbuffers(1, &RBO);
+	}
 }

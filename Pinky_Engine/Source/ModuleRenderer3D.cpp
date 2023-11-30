@@ -232,13 +232,12 @@ bool ModuleRenderer3D::CleanUp()
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {
-	//CreateFrameBuffer(width, height);
-
-	activeCam->SetAspectRatio(width, height);
 	glViewport(0, 0, width, height);
+	activeCam->createCamBuffers(width,height);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
+
 	if (activeCam != nullptr)
 	{
 		glLoadMatrixf(activeCam->GetProjectionMatrix());
