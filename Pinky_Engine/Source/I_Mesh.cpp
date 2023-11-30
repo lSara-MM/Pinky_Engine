@@ -115,8 +115,8 @@ uint64 I_Mesh::Save(const R_Mesh* ourMesh, char** fileBufferCursor)
 {
 	// amount of indices / vertices / colors / normals / texture_coords
 	uint ranges[4] = { ourMesh->num_index, ourMesh->num_vertex, ourMesh->num_normals, ourMesh->num_tex_uvs };
-	uint64 size = sizeof(ranges) + sizeof(uint) * ourMesh->num_index + (sizeof(float) * 3) * (ourMesh->num_vertex + ourMesh->num_normals)
-		+ sizeof(math::float2*) * ourMesh->num_tex_uvs;
+	uint64 size = sizeof(ranges) + sizeof(uint) * ourMesh->num_index + (sizeof(uint) * 3) * (ourMesh->num_vertex + ourMesh->num_normals)
+		+ sizeof(uint) * ourMesh->num_tex_uvs * 2;
 
 	char* cursor = new char[size]; // Allocate
 	
@@ -131,17 +131,17 @@ uint64 I_Mesh::Save(const R_Mesh* ourMesh, char** fileBufferCursor)
 	cursor += bytes;
 
 	// Store vertex
-	bytes = sizeof(float) * ourMesh->num_vertex * 3;
+	bytes = sizeof(uint) * ourMesh->num_vertex * 3;
 	memcpy(cursor, ourMesh->vertex, bytes);
 	cursor += bytes;
 
 	// Store normals
-	bytes = sizeof(float) * ourMesh->num_normals * 3;
+	bytes = sizeof(uint) * ourMesh->num_normals * 3;
 	memcpy(cursor, ourMesh->normals, bytes);
 	cursor += bytes;
 
 	// Store texture UVs
-	bytes = sizeof(math::float2) * ourMesh->num_tex_uvs;
+	bytes = sizeof(uint) * ourMesh->num_tex_uvs * 2;
 	memcpy(cursor, ourMesh->tex_uvs, bytes);
 	cursor += bytes;
 

@@ -80,6 +80,8 @@ bool R_Mesh::InitBuffers()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_tex_uvs);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * num_tex_uvs * 2, tex_uvs, GL_STATIC_DRAW);
 
+	// TODO: preguntar a andreu si aqui deberia haber un glBindBuffer(0)
+
 	return true;
 }
 
