@@ -94,7 +94,7 @@ void ProjectFiles::ShowDirectories(std::string directory)
 
 	for (int i = 0; i < vDirs.size(); i++)
 	{
-		App->fs->DiscoverFiles(vDirs[i].c_str(), vChildrenFiles, vChildrenDirs);
+		App->fs->DiscoverFiles((directory + "/" + vDirs[i]).c_str(), vChildrenFiles, vChildrenDirs);
 
 		if (!vChildrenDirs.empty())
 		{
@@ -118,6 +118,9 @@ void ProjectFiles::ShowDirectories(std::string directory)
 
 			MouseEvents(vDirs[i], vChildrenFiles);
 		}
+
+		vChildrenFiles.clear();
+		vChildrenDirs.clear();
 	}
 }
 
