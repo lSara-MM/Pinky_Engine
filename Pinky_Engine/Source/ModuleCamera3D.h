@@ -22,7 +22,12 @@ public:
 	void FPScamera();
 	void Focus();
 	void Zoom(float zoom, float scrollSpeed);
+	//mouse picking
 	void MousePick(LineSegment ray);
+	void CheckIntersection(GameObject* go);
+	void CheckGameObjectsIntersection(GameObject* go);
+	void CheckTriangleIntersection();
+
 	//Handle all camera input, used in editor (isHovered)
 	void CameraInput();
 
@@ -31,4 +36,10 @@ private:
 	float mouseX, mouseY, speed, zoomPos;
 	float3 Reference = { 0, 0, 0 };//TODO: change to focused object
 	float3 centerReference = { 0, 0, 0 };
+
+	//Mouse Picking
+	float entryDist;
+	float exitDist;
+	LineSegment rayCam;
+	std::map<float, GameObject*> intersects;
 };
