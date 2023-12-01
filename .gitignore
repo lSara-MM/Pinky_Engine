@@ -347,4 +347,6 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-Pinky_Engine/.vs/Pinky_Engine/v16/.suo
+
+
+*.pnk
