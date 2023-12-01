@@ -290,6 +290,17 @@ std::vector<C_Camera*> GameObject::GetComponentsCamera()
 	return vec;
 }
 
+Component* GameObject::GetComponentByType(C_TYPE type)
+{
+	for (int i = 0; i < vComponents.size(); i++)
+	{
+		if (vComponents[i]->type == type)
+		{
+			return vComponents[i];
+		}
+	}
+}
+
 void GameObject::ReParent(GameObject* newParent)
 {
 	pParent->RemoveChild(this);

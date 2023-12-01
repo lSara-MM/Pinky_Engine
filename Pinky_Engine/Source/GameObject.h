@@ -35,6 +35,8 @@ public:
 	std::vector<C_Material*> GetComponentsMaterial();
 	std::vector<C_Camera*> GetComponentsCamera();
 
+	Component* GetComponentByType(C_TYPE type);
+
 
 	//---Parent/Child---
 	void ReParent(GameObject* newParent);
