@@ -15,8 +15,8 @@ public:
 	bool InitBuffers();
 	void DeleteBuffers();
 
-	bool BindTexture(R_Mesh* m);
 	void ImportTexture(R_Mesh* m, const char* texturefileDir);
+	void ImportTexture(const char* texturefileDir);
 
 public:
 

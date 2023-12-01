@@ -136,15 +136,13 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 			}
 
 			std::string path = App->resource->SaveToLibrary(mesh);
-			int id = mesh->GetUID();
 			RELEASE(mesh);
-			mesh = static_cast<R_Mesh*>(App->resource->LoadFromLibrary(path, std::to_string(id) + ".pnk", R_TYPE::MESH));
+			mesh = static_cast<R_Mesh*>(App->resource->LoadFromLibrary(path, R_TYPE::MESH));
 
 			//---Transform---
 			aiVector3D pos, scale;
 			aiQuaternion rot;
 			children[i]->mTransformation.Decompose(scale, rot, pos);
-
 
 			float3 temp = { pos.x, pos.y, pos.z };
 			obj->transform->SetTransform(temp);

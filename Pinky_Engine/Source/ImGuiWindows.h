@@ -7,6 +7,14 @@
 
 class GameObject;
 
+enum class W_TYPE
+{
+	HIERARCHY,
+	INSPECTOR,
+	CONSOLE,
+	PROJECT
+};
+
 class ImGuiWindows
 {
 public:
@@ -24,6 +32,7 @@ public:
 public:
 	bool show;
 	int id;
+	W_TYPE type;
 
 private:
 	std::vector<GameObject*> selectedGOs;

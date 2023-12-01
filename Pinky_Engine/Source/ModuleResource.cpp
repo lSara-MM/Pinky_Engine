@@ -60,8 +60,15 @@ void ModuleResource::ImportFile(const char* fileDir)
 		{
 			for each (R_Mesh* i in App->renderer3D->meshes)
 			{
-				i->tex.ImportTexture(i, fileDir);
-				//ai::ImportTexture(i, fileDir);
+				R_Texture* tex = new R_Texture();
+				tex->ImportTexture(fileDir);
+
+				std::string path = App->resource->SaveToLibrary(tex);
+				//RELEASE(tex);
+
+				//tex = static_cast<R_Texture*>(App->resource->LoadFromLibrary(path, R_TYPE::TEXTURE));
+
+				i->BindTexture(tex);
 			}
 		}
 	}
@@ -102,7 +109,7 @@ std::string ModuleResource::SaveToLibrary(Resource* r)
 	return path;
 }
 
-Resource* ModuleResource::LoadFromLibrary(std::string path, std::string file, R_TYPE type)
+Resource* ModuleResource::LoadFromLibrary(std::string path, R_TYPE type)
 {
 	char* buffer = nullptr;
 
@@ -116,8 +123,8 @@ Resource* ModuleResource::LoadFromLibrary(std::string path, std::string file, R_
 		I_Mesh::Load(static_cast<R_Mesh*>(r), buffer);
 		break;
 	case R_TYPE::TEXTURE:
-		path = TEXTURES_PATH;
-		//size = I_Texture::Load(static_cast<R_Texture*>(r), &buffer);
+		r = new R_Texture();
+		I_Texture::Load(static_cast<R_Texture*>(r), buffer);
 		break;
 	case R_TYPE::SCENE:
 		break;
@@ -130,67 +137,4 @@ Resource* ModuleResource::LoadFromLibrary(std::string path, std::string file, R_
 	//RELEASE_ARRAY(buffer);
 	buffer = nullptr;
 	return r;
-}
-
-bool ModuleResource::BindTexture(R_Mesh* m)
-{
-	//texture coordinates
-	glBindBuffer(GL_ARRAY_BUFFER, m->id_tex_uvs);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->num_tex_uvs * 2, m->tex_uvs, GL_STATIC_DRAW);
-	return true;
-}
-
-void ModuleResource::ImportTexture(R_Mesh* m, const char* texturefileDir)
-{
-	ILuint imageID = 0;
-	ILuint textureID;
-	ilGenImages(1, &imageID);
-	ilBindImage(imageID);
-	ILubyte* data = ilGetData();
-
-	glGenTextures(1, &textureID);
-	glBindTexture(GL_TEXTURE_2D, textureID);
-
-	ILboolean success;
-	success = ilLoadImage(texturefileDir);
-
-	if (ilLoadImage(texturefileDir))
-	{
-		ILinfo ImageInfo;
-		iluGetImageInfo(&ImageInfo);
-
-		//Flip the image into the right way
-		if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT)
-		{
-			iluFlipImage();
-		}
-
-		// Convert the image into a suitable format to work with
-		if (!ilConvertImage(ilGetInteger(IL_IMAGE_FORMAT), IL_UNSIGNED_BYTE))
-		{
-			LOG("[ERROR] %s", iluErrorString(ilGetError()));
-		}
-
-		m->tex.tex_width = ilGetInteger(IL_IMAGE_WIDTH);
-		m->tex.tex_height = ilGetInteger(IL_IMAGE_HEIGHT);
-		m->tex.tex_type = ilGetInteger(IL_IMAGE_TYPE);
-		m->tex.tex_format = ilGetInteger(IL_IMAGE_FORMAT);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-		glTexImage2D(GL_TEXTURE_2D, 0, m->tex.tex_format, m->tex.tex_width, m->tex.tex_height, 0, m->tex.tex_format, GL_UNSIGNED_BYTE, ilGetData());
-	}
-	else
-	{
-		LOG("[ERROR] %s", iluErrorString(ilGetError()));
-	}
-
-	//ilBindImage(0);
-	ilDeleteImages(1, &textureID);
-
-	m->tex.path = texturefileDir;
-	m->tex.tex_id = textureID;
 }

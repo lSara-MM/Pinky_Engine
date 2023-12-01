@@ -28,7 +28,6 @@ public:
 public:
 	GameObject* rootNode;
 
-
 	Hierarchy* h;
 	Inspector* i;
 

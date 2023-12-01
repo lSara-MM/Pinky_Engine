@@ -122,10 +122,11 @@ update_status GameObject::Update(float dt)
 
 			if (mesh != nullptr)
 			{
-				if (mesh->isActive && !isCulled)
+				if (mesh->isActive /*&& !isCulled*/)
 				{
 					if (!vMaterials.empty() && vMaterials[0]->isActive)//TODO: mirar materials bé
 					{
+						vMaterials[0]->tex = mesh->mesh->tex; //TODO: mirar com fer bé
 						mesh->Draw(vMaterials[0]->checkered, vMaterials[0]->color);
 
 						if (mesh->showVertexNormals)
@@ -204,7 +205,7 @@ bool GameObject::AddComponent(C_TYPE type, void* var, ai::POLY_PRIMITIVE_TYPE po
 			R_Mesh* m = static_cast<R_Mesh*>(var);
 			if (m != nullptr)
 			{
-				temp = new C_Material(this, &m->tex, numMaterials);
+				temp = new C_Material(this, m->tex, numMaterials);
 				vComponents.push_back(temp);
 			}
 			else
