@@ -269,7 +269,7 @@ void C_Camera::SetFOV(float horizontalFOV)
 	frustum.verticalFov = 2 * (Atan(Tan(frustum.horizontalFov / 2) * (1 / aspect_ratio)));
 }
 
-void C_Camera::draw()
+void C_Camera::Draw()
 {
 	glLoadIdentity();
 	glMatrixMode(GL_PROJECTION);

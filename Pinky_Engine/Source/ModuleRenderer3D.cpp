@@ -172,7 +172,7 @@ bool ModuleRenderer3D::Init()
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
 
-	editorCam->draw();
+	editorCam->Draw();
 	// light 0 on cam pos
 	lights[0].SetPos(editorCam->frustum.pos.x, editorCam->frustum.pos.y, editorCam->frustum.pos.z);
 
