@@ -58,9 +58,13 @@ public:
 	std::vector<std::string> vLog;
 
 	//Viewport scene size
-	ImVec2 m_ViewportSize;
+	ImVec2 ViewportSize;
+	ImVec2 ViewportPos;
+	ImVec2 origin;
+	LineSegment pickingRay;
+
 	//Game scene size
-	ImVec2 m_GameViewSize;
+	ImVec2 GameViewSize;
 
 private:
 

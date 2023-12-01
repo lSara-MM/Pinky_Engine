@@ -927,11 +927,21 @@ void ModuleEditor::EditorWindow()
 		App->camera->CameraInput();
 	}
 
-	ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-	m_ViewportSize = { viewportSize.x,viewportSize.y };
+	ImVec2 viewSize = ImGui::GetContentRegionAvail();
+	ImVec2 viewPos = ImGui::GetWindowPos();
+	ViewportPos = { viewPos.x,viewPos.y };
+	ViewportSize = { viewSize.x,viewSize.y };
 
-	App->renderer3D->editorCam->SetAspectRatio(m_ViewportSize.x, m_ViewportSize.y);
-	ImGui::Image((ImTextureID)App->renderer3D->editorCam->textureColourBuffer, m_ViewportSize, ImVec2(0, 1), ImVec2(1, 0));
+	//TODO: igual posar en funció
+	origin.x = (ImGui::GetMousePos().x - viewPos.x) / viewSize.x;
+	origin.y = (ImGui::GetMousePos().y - viewPos.y) / viewSize.y;
+	origin.x = (origin.x - 0.5f) * 2;
+	origin.y = -((origin.y - 0.5f) * 2);
+	pickingRay = App->renderer3D->editorCam->frustum.UnProjectLineSegment(origin.x, origin.y);
+	//App->camera->MousePick(pickingRay);
+
+	App->renderer3D->editorCam->SetAspectRatio(ViewportSize.x, ViewportSize.y);
+	ImGui::Image((ImTextureID)App->renderer3D->editorCam->textureColourBuffer, ViewportSize, ImVec2(0, 1), ImVec2(1, 0));
 
 	ImGui::End();
 
@@ -945,12 +955,12 @@ void ModuleEditor::GameWindow()
 	ImGui::Begin("Game", NULL);
 
 	ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-	m_GameViewSize = { viewportSize.x,viewportSize.y };
+	GameViewSize = { viewportSize.x,viewportSize.y };
 
 	if (App->renderer3D->gameCam != nullptr)
 	{
-		App->renderer3D->gameCam->SetAspectRatio(m_GameViewSize.x, m_GameViewSize.y);
-		ImGui::Image((ImTextureID)App->renderer3D->gameCam->textureColourBuffer, m_GameViewSize, ImVec2(0, 1), ImVec2(1, 0));
+		App->renderer3D->gameCam->SetAspectRatio(GameViewSize.x, GameViewSize.y);
+		ImGui::Image((ImTextureID)App->renderer3D->gameCam->textureColourBuffer, GameViewSize, ImVec2(0, 1), ImVec2(1, 0));
 	}
 
 	ImGui::End();

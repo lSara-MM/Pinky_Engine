@@ -22,14 +22,13 @@ public:
 	void FPScamera();
 	void Focus();
 	void Zoom(float zoom, float scrollSpeed);
-	void MousePick(float xNorm, float yNorm, float w, float h);
+	void MousePick(LineSegment ray);
 	//Handle all camera input, used in editor (isHovered)
 	void CameraInput();
 
 private:
 	C_Camera* MainCamera;//TODO: eliminat = nullptr
 	float mouseX, mouseY, speed, zoomPos;
-	float3 Reference = { 0, 0, 0 };//change to focused object
+	float3 Reference = { 0, 0, 0 };//TODO: change to focused object
 	float3 centerReference = { 0, 0, 0 };
-	LineSegment pickingRay;
 };
