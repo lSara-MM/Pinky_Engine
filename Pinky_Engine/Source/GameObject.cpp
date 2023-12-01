@@ -360,13 +360,15 @@ void GameObject::ReParent(GameObject* newParent)
 
 	pParent = newParent;
 	pParent->vChildren.push_back(this);
-
+	
+	//TODO: clean up this mess
 	//recalculate local values and global matrix when reparenting
 	//this->transform->localMatrix = pParent->transform->globalMatrix.Transposed() * this->transform->globalMatrix;
-	this->transform->localMatrix = pParent->transform->globalMatrix.Inverted() * this->transform->globalMatrix;
-	this->transform->SetLocalValues(this->transform->localMatrix);
+	//transform->localMatrix = pParent->transform->globalMatrix.Inverted() * transform->globalMatrix;
+	//transform->SetLocalValues(transform->localMatrix);
+	transform->SetLocalValues(pParent->transform->globalMatrix.Inverted() * transform->globalMatrix);
 
-	this->transform->dirty_ = true;
+	transform->dirty_ = true;
 }
 
 void GameObject::AddChild(GameObject* go)

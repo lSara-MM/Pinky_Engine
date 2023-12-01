@@ -83,6 +83,9 @@ void C_Transform::SetLocalValues(float4x4 matrix)
 	position = pos;
 	rotation = rot.Normalized();
 	eulerRot = rotation.ToEulerXYZ();
+	eulerRot.x = RadToDeg(eulerRot.x);
+	eulerRot.y = RadToDeg(eulerRot.y);
+	eulerRot.z = RadToDeg(eulerRot.z);
 	scale = sc;
 }
 

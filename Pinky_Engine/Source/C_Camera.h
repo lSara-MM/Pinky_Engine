@@ -38,7 +38,7 @@ public:
 
 
 	//Buffer functions
-	void draw();
+	void Draw();
 	void createCamBuffers(int width, int height);
 	void bindFrameBuffer();
 	void unbindFrameBuffer();
