@@ -17,6 +17,7 @@ public:
 
 	bool BindTexture(R_Mesh* m);
 	void ImportTexture(R_Mesh* m, const char* texturefileDir);
+
 public:
 
 	uint tex_id;

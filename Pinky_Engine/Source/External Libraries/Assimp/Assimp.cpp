@@ -126,7 +126,6 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 		if (children[i]->mNumMeshes > 0)
 		{
 			const aiMesh* m = s->mMeshes[children[i]->mMeshes[0]];
-			mesh* ourMesh = new mesh;
 			R_Mesh* mesh = new R_Mesh();
 
 			if (!I_Mesh::Import(m, mesh))
@@ -138,6 +137,8 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 
 			std::string path = App->resource->SaveToLibrary(mesh);
 			//mesh = static_cast<R_Mesh*>(App->resource->LoadFromLibrary(path));
+
+			mesh->InitBuffers();
 
 			//---Transform---
 			aiVector3D pos, scale;
@@ -170,10 +171,9 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 			if (!component) { obj->AddComponent(C_TYPE::MATERIAL, mesh); }
 
 			//TODO: pushback elsewhere
-			//App->resource->meshes.push_back(mesh);
+			App->renderer3D->meshes.push_back(mesh);
 
 			m = nullptr;
-			ourMesh = nullptr;
 		}
 	}
 
@@ -325,62 +325,62 @@ void ai::LoadCheckers(GLuint& buffer)
 bool ai::BindTexture(mesh* m)
 {
 	//texture coordinates
-	glBindBuffer(GL_ARRAY_BUFFER, m->id_tex_uvs);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->num_tex_uvs * 2, m->tex_uvs, GL_STATIC_DRAW);
+	//glBindBuffer(GL_ARRAY_BUFFER, m->id_tex_uvs);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->num_tex_uvs * 2, m->tex_uvs, GL_STATIC_DRAW);
 	return true;
 }
 
 void ai::ImportTexture(mesh* m, const char* texturefileDir)
 {
-	ILuint imageID = 0;
-	ILuint textureID;
-	ilGenImages(1, &imageID);
-	ilBindImage(imageID);
-	ILubyte* data = ilGetData();
+	//ILuint imageID = 0;
+	//ILuint textureID;
+	//ilGenImages(1, &imageID);
+	//ilBindImage(imageID);
+	//ILubyte* data = ilGetData();
 
-	glGenTextures(1, &textureID);
-	glBindTexture(GL_TEXTURE_2D, textureID);
+	//glGenTextures(1, &textureID);
+	//glBindTexture(GL_TEXTURE_2D, textureID);
 
-	ILboolean success;
-	success = ilLoadImage(texturefileDir);
+	//ILboolean success;
+	//success = ilLoadImage(texturefileDir);
 
-	if (ilLoadImage(texturefileDir))
-	{
-		ILinfo ImageInfo;
-		iluGetImageInfo(&ImageInfo);
+	//if (ilLoadImage(texturefileDir))
+	//{
+	//	ILinfo ImageInfo;
+	//	iluGetImageInfo(&ImageInfo);
 
-		//Flip the image into the right way
-		if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT)
-		{
-			iluFlipImage();
-		}
+	//	//Flip the image into the right way
+	//	if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT)
+	//	{
+	//		iluFlipImage();
+	//	}
 
-		// Convert the image into a suitable format to work with
-		if (!ilConvertImage(ilGetInteger(IL_IMAGE_FORMAT), IL_UNSIGNED_BYTE))
-		{
-			LOG("[ERROR] %s", iluErrorString(ilGetError()));
-		}
+	//	// Convert the image into a suitable format to work with
+	//	if (!ilConvertImage(ilGetInteger(IL_IMAGE_FORMAT), IL_UNSIGNED_BYTE))
+	//	{
+	//		LOG("[ERROR] %s", iluErrorString(ilGetError()));
+	//	}
 
-		m->tex.tex_width = ilGetInteger(IL_IMAGE_WIDTH);
-		m->tex.tex_height = ilGetInteger(IL_IMAGE_HEIGHT);
-		m->tex.tex_type = ilGetInteger(IL_IMAGE_TYPE);
-		m->tex.tex_format = ilGetInteger(IL_IMAGE_FORMAT);
+	//	m->tex.tex_width = ilGetInteger(IL_IMAGE_WIDTH);
+	//	m->tex.tex_height = ilGetInteger(IL_IMAGE_HEIGHT);
+	//	m->tex.tex_type = ilGetInteger(IL_IMAGE_TYPE);
+	//	m->tex.tex_format = ilGetInteger(IL_IMAGE_FORMAT);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, m->tex.tex_format, m->tex.tex_width, m->tex.tex_height, 0, m->tex.tex_format, GL_UNSIGNED_BYTE, ilGetData());
-	}
-	else
-	{
-		LOG("[ERROR] %s", iluErrorString(ilGetError()));
-	}
+	//	glTexImage2D(GL_TEXTURE_2D, 0, m->tex.tex_format, m->tex.tex_width, m->tex.tex_height, 0, m->tex.tex_format, GL_UNSIGNED_BYTE, ilGetData());
+	//}
+	//else
+	//{
+	//	LOG("[ERROR] %s", iluErrorString(ilGetError()));
+	//}
 
-	//ilBindImage(0);
-	ilDeleteImages(1, &textureID);
+	////ilBindImage(0);
+	//ilDeleteImages(1, &textureID);
 
-	m->tex.path = texturefileDir;
-	m->tex.tex_id = textureID;
+	//m->tex.path = texturefileDir;
+	//m->tex.tex_id = textureID;
 }

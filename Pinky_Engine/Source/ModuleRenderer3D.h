@@ -18,6 +18,8 @@
 #include "External Libraries/Glew/include/glew.h"
 #include "C_Camera.h"
 
+#include "R_Mesh.h"
+
 #define MAX_LIGHTS 8
 #define CHECKERS_HEIGHT 256
 #define CHECKERS_WIDTH 256
@@ -54,7 +56,7 @@ public:
 	bool FaceNormals;
 	bool Vsync;
 
-	std::vector<ai::mesh*> meshes;
+	std::vector<R_Mesh*> meshes;
 
 	//init textures
 	GLuint texture_checker;

@@ -3,6 +3,7 @@
 #include "Globals.h"
 
 #include "Resource.h"
+#include "R_Mesh.h"
 
 class ModuleResource : public Module
 {
@@ -18,6 +19,9 @@ public:
 	void ImportFile(const char* path);
 	std::string SaveToLibrary(Resource* r);
 	Resource* LoadFromLibrary(std::string path);
+
+	bool BindTexture(R_Mesh* m);
+	void ImportTexture(R_Mesh* m, const char* texturefileDir);
 
 public:
 
