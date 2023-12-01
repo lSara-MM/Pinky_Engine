@@ -180,55 +180,6 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 	return obj;
 }
 
-bool ai::InitMesh(mesh* m)
-{
-	m->VBO = 0;
-	m->EBO = 0;
-	m->VAO = 0;
-
-	glGenBuffers(1, &m->VBO);
-	glGenBuffers(1, &m->EBO);
-	//glGenVertexArrays(1, &m->VAO);
-	//normals
-	glGenBuffers(1, &m->id_normals);
-	//texture coordinates
-	glGenBuffers(1, &m->id_tex_uvs);
-
-	if (m->VBO == 0 || m->EBO == 0 || /*m->VAO == 0 ||*/
-		m->id_normals == 0 || m->id_tex_uvs == 0)
-	{
-		LOG("[ERROR] buffer not created");
-		return false;
-	}
-
-	// VBO
-	glBindBuffer(GL_ARRAY_BUFFER, m->VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->num_vertex * 3, m->vertex, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	// EBO
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m->EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * m->num_index, m->index, GL_STATIC_DRAW); 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	// VAO
-	/*glBindVertexArray(m->VAO);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	glBindVertexArray(0);*/
-
-	//normals
-	glBindBuffer(GL_ARRAY_BUFFER, m->id_normals);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->num_normals * 3, m->normals, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	//texture coordinates
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m->id_tex_uvs);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * m->num_tex_uvs * 2, m->tex_uvs, GL_STATIC_DRAW);
-
-	return true;
-}
-
 void ai::CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go, bool component)
 {
 	switch (obj)
@@ -271,32 +222,6 @@ void ai::CreateCustomMehses(CUSTOM_MESH obj, GameObject* go)
 	}
 }
 
-void ai::DeleteSelectedMesh(mesh* m)
-{
-	//std::vector<R_Mesh*>* vMesh = &App->resource->meshes;
-
-	LOG("Deleted mesh");
-	DeleteMeshBuffers(m);
-
-	/*if (!vMesh->empty())
-	{
-		App->resource->meshes.erase(std::find(vMesh->begin(), vMesh->end(), m));
-		App->resource->meshes.shrink_to_fit();
-	}*/
-}
-
-void ai::DeleteMeshBuffers(mesh* m)
-{
-	glDeleteBuffers(1, &m->VBO);
-	m->VBO = 0;
-	glDeleteBuffers(1, &m->EBO);
-	m->EBO = 0;
-	glDeleteBuffers(1, &m->id_normals);
-	m->id_normals = 0;
-	glDeleteBuffers(1, &m->id_tex_uvs);
-	m->id_tex_uvs = 0;
-}
-
 void ai::LoadCheckers(GLuint& buffer)
 {
 	GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
@@ -320,67 +245,4 @@ void ai::LoadCheckers(GLuint& buffer)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
 		0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
-}
-
-bool ai::BindTexture(mesh* m)
-{
-	//texture coordinates
-	//glBindBuffer(GL_ARRAY_BUFFER, m->id_tex_uvs);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->num_tex_uvs * 2, m->tex_uvs, GL_STATIC_DRAW);
-	return true;
-}
-
-void ai::ImportTexture(mesh* m, const char* texturefileDir)
-{
-	//ILuint imageID = 0;
-	//ILuint textureID;
-	//ilGenImages(1, &imageID);
-	//ilBindImage(imageID);
-	//ILubyte* data = ilGetData();
-
-	//glGenTextures(1, &textureID);
-	//glBindTexture(GL_TEXTURE_2D, textureID);
-
-	//ILboolean success;
-	//success = ilLoadImage(texturefileDir);
-
-	//if (ilLoadImage(texturefileDir))
-	//{
-	//	ILinfo ImageInfo;
-	//	iluGetImageInfo(&ImageInfo);
-
-	//	//Flip the image into the right way
-	//	if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT)
-	//	{
-	//		iluFlipImage();
-	//	}
-
-	//	// Convert the image into a suitable format to work with
-	//	if (!ilConvertImage(ilGetInteger(IL_IMAGE_FORMAT), IL_UNSIGNED_BYTE))
-	//	{
-	//		LOG("[ERROR] %s", iluErrorString(ilGetError()));
-	//	}
-
-	//	m->tex.tex_width = ilGetInteger(IL_IMAGE_WIDTH);
-	//	m->tex.tex_height = ilGetInteger(IL_IMAGE_HEIGHT);
-	//	m->tex.tex_type = ilGetInteger(IL_IMAGE_TYPE);
-	//	m->tex.tex_format = ilGetInteger(IL_IMAGE_FORMAT);
-
-	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-	//	glTexImage2D(GL_TEXTURE_2D, 0, m->tex.tex_format, m->tex.tex_width, m->tex.tex_height, 0, m->tex.tex_format, GL_UNSIGNED_BYTE, ilGetData());
-	//}
-	//else
-	//{
-	//	LOG("[ERROR] %s", iluErrorString(ilGetError()));
-	//}
-
-	////ilBindImage(0);
-	//ilDeleteImages(1, &textureID);
-
-	//m->tex.path = texturefileDir;
-	//m->tex.tex_id = textureID;
 }

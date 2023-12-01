@@ -106,16 +106,11 @@ namespace ai
 	bool ImportMesh(const char* meshfileDir, GameObject* go = nullptr, bool component = false);
 	GameObject* MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component = false, bool foundParent = false);
 	
-	bool InitMesh(mesh* m);
 	void CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go = nullptr, bool component = false);
 	void CreateCustomMehses(CUSTOM_MESH obj, GameObject* go = nullptr);
 
-	void DeleteSelectedMesh(mesh* m);
-	void DeleteMeshBuffers(mesh* m);
 
 	// Textures
 	void LoadCheckers(GLuint& buffer);
-	bool BindTexture(mesh* m);
-	void ImportTexture(mesh* m, const char* texturefileDir);
 }
 #endif //!__MESH_H__
