@@ -28,8 +28,7 @@ public:
 	update_status Update(float dt);
 
 	//---Components---
-	//bool AddComponent(C_TYPE type, ai::mesh* m = nullptr, ai::POLY_PRIMITIVE_TYPE poly = ai::POLY_PRIMITIVE_TYPE::SPHERE);
-	bool AddComponent(C_TYPE type, R_Mesh* m = nullptr, ai::POLY_PRIMITIVE_TYPE poly = ai::POLY_PRIMITIVE_TYPE::SPHERE);
+	bool AddComponent(C_TYPE type, void* var = nullptr, ai::POLY_PRIMITIVE_TYPE poly = ai::POLY_PRIMITIVE_TYPE::SPHERE);
 	void RemoveComponent(Component* component);
 
 	std::vector<C_Mesh*> GetComponentsMesh();

@@ -165,7 +165,7 @@ update_status GameObject::Update(float dt)
 }
 
 //---Components---
-bool GameObject::AddComponent(C_TYPE type, R_Mesh* m, ai::POLY_PRIMITIVE_TYPE poly)
+bool GameObject::AddComponent(C_TYPE type, void* var, ai::POLY_PRIMITIVE_TYPE poly)
 {
 	Component* temp;
 	bool ret = true;
@@ -183,8 +183,9 @@ bool GameObject::AddComponent(C_TYPE type, R_Mesh* m, ai::POLY_PRIMITIVE_TYPE po
 		break;
 	case C_TYPE::MESH:
 		// A gameObject can't have more than one mesh
-		if (numMeshes == 0)	
+		if (numMeshes == 0)
 		{
+			R_Mesh* m = static_cast<R_Mesh*>(var);
 			if (m != nullptr)
 			{
 				temp = new C_Mesh(this, m, numMeshes);
@@ -201,14 +202,15 @@ bool GameObject::AddComponent(C_TYPE type, R_Mesh* m, ai::POLY_PRIMITIVE_TYPE po
 	case C_TYPE::MATERIAL:
 		// A gameObject can't have more than one material
 		// In unity there can be more than one if embeded (?) see snowman for reference 
-		if (numMaterials == 0)	
+		if (numMaterials == 0)
 		{
+			R_Mesh* m = static_cast<R_Mesh*>(var);
 			if (m != nullptr)
 			{
 				temp = new C_Material(this, &m->tex, numMaterials);
 				vComponents.push_back(temp);
 			}
-			else 
+			else
 			{
 				temp = new C_Material(this, nullptr, numMaterials);
 				vComponents.push_back(temp);
@@ -228,69 +230,6 @@ bool GameObject::AddComponent(C_TYPE type, R_Mesh* m, ai::POLY_PRIMITIVE_TYPE po
 	temp = nullptr;
 	return ret;
 }
-//bool GameObject::AddComponent(C_TYPE type, ai::mesh* m, ai::POLY_PRIMITIVE_TYPE poly)
-//{
-//	Component* temp;
-//	bool ret = true;
-//
-//	switch (type)
-//	{
-//	case C_TYPE::TRANSFORM:
-//		if (transform == nullptr)
-//		{
-//			temp = new C_Transform(this, float3(0, 0, 0), Quat(0, 0, 0, 0), float3(1, 1, 1));
-//			transform = (C_Transform*)temp;
-//			vComponents.push_back(transform);
-//		}
-//		else { ret = false; }
-//		break;
-//	case C_TYPE::MESH:
-//		// A gameObject can't have more than one mesh
-//		if (numMeshes == 0)	
-//		{
-//			if (m != nullptr)
-//			{
-//				temp = new C_Mesh(this, m, numMeshes);
-//				vComponents.push_back(temp);
-//				numMeshes++;
-//			}
-//			else
-//			{
-//				ai::CreatePolyPrimitive(poly, this, true);
-//			}
-//		}
-//		else { ret = false; }
-//		break;
-//	case C_TYPE::MATERIAL:
-//		// A gameObject can't have more than one material
-//		// In unity there can be more than one if embeded (?) see snowman for reference 
-//		if (numMaterials == 0)	
-//		{
-//			if (m != nullptr)
-//			{
-//				temp = new C_Material(this, &m->tex, numMaterials);
-//				vComponents.push_back(temp);
-//			}
-//			else 
-//			{
-//				temp = new C_Material(this, nullptr, numMaterials);
-//				vComponents.push_back(temp);
-//			}
-//			numMaterials++;
-//		}
-//		else { ret = false; }
-//		break;
-//	case C_TYPE::CAM:
-//		temp = new C_Camera(this);
-//		vComponents.push_back(temp);
-//		break;
-//	default:
-//		break;
-//	}
-//
-//	temp = nullptr;
-//	return ret;
-//}
 
 void GameObject::RemoveComponent(Component* component)
 {
