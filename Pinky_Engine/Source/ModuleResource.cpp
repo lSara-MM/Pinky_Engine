@@ -95,7 +95,61 @@ bool ModuleResource::SaveToLibrary(Resource* r)
 	path += ".pnk";
 
 	App->fs->Save(path.c_str(), buffer, size);
+
+	//RELEASE_ARRAY(buffer);	// TODO: peta jaja
+	buffer = nullptr;
+	return false;
+}
+
+bool ModuleResource::LoadFromLibrary(Resource* r)
+{
+	std::string path;
+	std::string file;
+
+	char* buffer = nullptr;
+	uint size = 0;
+
+	switch (r->GetType())
+	{
+	case R_TYPE::MESH:
+		path = MESHES_PATH;
+		//size = I_Mesh::Load(static_cast<R_Mesh*>(r), &buffer);
+		break;
+	case R_TYPE::TEXTURE:
+		path = TEXTURES_PATH;
+		//size = I_Texture::Load(static_cast<R_Texture*>(r), &buffer);
+		break;
+	case R_TYPE::SCENE:
+		break;
+	case R_TYPE::NONE:
+		break;
+	default:
+		break;
+	}
+
+	path += std::to_string(r->GetUID());
+	path += ".pnk";
+
+	App->fs->Load(path.c_str(), &buffer);
 	
+	switch (r->GetType())
+	{
+	case R_TYPE::MESH:
+		path = MESHES_PATH;
+		//size = I_Mesh::Load(static_cast<R_Mesh*>(r), &buffer);
+		break;
+	case R_TYPE::TEXTURE:
+		path = TEXTURES_PATH;
+		//size = I_Texture::Load(static_cast<R_Texture*>(r), &buffer);
+		break;
+	case R_TYPE::SCENE:
+		break;
+	case R_TYPE::NONE:
+		break;
+	default:
+		break;
+	}
+
 	//RELEASE_ARRAY(buffer);
 	return false;
 }

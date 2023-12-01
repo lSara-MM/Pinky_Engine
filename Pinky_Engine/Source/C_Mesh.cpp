@@ -23,7 +23,7 @@
 #include "Component.h"
 #include "ModuleRenderer3D.h"	
 
-C_Mesh::C_Mesh(GameObject* g, ai::mesh* m, uint i, bool start_enabled) : Component(C_TYPE::MESH, g, i, start_enabled, "Mesh")
+C_Mesh::C_Mesh(GameObject* g, R_Mesh* m, uint i, bool start_enabled) : Component(C_TYPE::MESH, g, i, start_enabled, "Mesh")
 {
 	mesh = m; 
 	showVertexNormals = false;
@@ -48,9 +48,12 @@ C_Mesh::C_Mesh(GameObject* g, C_Mesh* toCopy, bool start_enabled, uint i) : Comp
 
 C_Mesh::~C_Mesh()
 {
-	ai::DeleteSelectedMesh(mesh);
-	mesh->~mesh();
-	mesh = nullptr;
+	//ai::DeleteSelectedMesh(mesh);
+	//mesh->~mesh();
+
+	RELEASE(mesh);
+	/*mesh->~R_Mesh();
+	mesh = nullptr;*/
 }
 
 void C_Mesh::ShowInInspector()

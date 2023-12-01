@@ -137,11 +137,11 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 			}
 
 			
-			if (mesh->InitBuffers()/*InitMesh(ourMesh)*/)
+			if (mesh->InitBuffers()/*InitMesh(mesh)*/)
 			{
-				//BindTexture(ourMesh);
+				//BindTexture(mesh);
 
-				//(texfileDir != nullptr) ? ourMesh->hasTex = true : ourMesh->hasTex = false;
+				//(texfileDir != nullptr) ? mesh->hasTex = true : mesh->hasTex = false;
 
 				//---Transform---
 				aiVector3D pos, scale;
@@ -164,24 +164,21 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 					obj->transform->rotation, obj->transform->scale);
 
 				//---Local AABB---
-				ourMesh->local_aabb.SetNegativeInfinity();
-				ourMesh->local_aabb.Enclose((float3*)ourMesh->vertex, ourMesh->num_vertex);
+				mesh->local_aabb.SetNegativeInfinity();
+				mesh->local_aabb.Enclose((float3*)mesh->vertex, mesh->num_vertex);
 
 				//---Mesh---
-				obj->AddComponent(C_TYPE::MESH, ourMesh);				
+				obj->AddComponent(C_TYPE::MESH, mesh);
 
 				//---Material---
-				if (!component) { obj->AddComponent(C_TYPE::MATERIAL, ourMesh); }
+				if (!component) { obj->AddComponent(C_TYPE::MATERIAL, mesh); }
 
 				//TODO: pushback elsewhere
 				App->renderer3D->meshes.push_back(ourMesh);
 
 				App->resource->SaveToLibrary(mesh);
+				App->resource->LoadFromLibrary(mesh);
 			}
-
-			//TODO: does it go here?
-			ourMesh->local_aabb.SetNegativeInfinity();
-			ourMesh->local_aabb.Enclose((float3*)ourMesh->vertex, ourMesh->num_vertex);
 
 			m = nullptr;
 			ourMesh = nullptr;

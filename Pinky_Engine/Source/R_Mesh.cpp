@@ -20,6 +20,8 @@ R_Mesh::R_Mesh() : Resource(R_TYPE::MESH)
 	id_tex_uvs = 0;
 	num_tex_uvs = 0;
 	tex_uvs = nullptr;
+
+	uid = App->randomLCG->Int();
 }
 
 R_Mesh::~R_Mesh()
@@ -79,8 +81,7 @@ bool R_Mesh::InitBuffers()
 	//texture coordinates
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_tex_uvs);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * num_tex_uvs * 2, tex_uvs, GL_STATIC_DRAW);
-
-	// TODO: preguntar a andreu si aqui deberia haber un glBindBuffer(0)
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	return true;
 }

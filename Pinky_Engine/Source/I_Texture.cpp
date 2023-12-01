@@ -4,6 +4,7 @@
 
 void I_Texture::Import(const aiTexture* Texture, R_Texture* ourTexture)
 {
+
 }
 
 uint64 I_Texture::Save(const R_Texture* ourTexture, char** fileBuffer)

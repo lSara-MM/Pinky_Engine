@@ -73,7 +73,6 @@ bool ModuleEditor::Init()
 
 	// Module Settings
 	docking = true;
-	//docking = false;	// TODO: by default false because the scene not in a window yet
 	moduleSettingsWin = false;
 	styleEditor = false;
 	frcap = true;

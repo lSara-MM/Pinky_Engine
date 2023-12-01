@@ -40,10 +40,10 @@ public:
 public:
 
 	//Scene viewer camera
-	C_Camera* editorCam;//TODO: eliminat = nullptr
+	C_Camera* editorCam;
 
 	//Game viewer camera
-	C_Camera* gameCam = nullptr;
+	C_Camera* gameCam;
 
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;

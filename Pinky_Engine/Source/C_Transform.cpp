@@ -40,12 +40,6 @@ void C_Transform::ShowInInspector()
 {
 	if (ImGui::CollapsingHeader(name.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		//TODO: Change with window size
-		/*ImGui::Dummy(ImVec2(150, 0));	ImGui::SameLine(150);
-		ImGui::Text("X");				ImGui::SameLine(250);
-		ImGui::Text("Y");				ImGui::SameLine(350);
-		ImGui::Text("Z");*/
-
 		if (ImGui::DragFloat3("Position", &position[0], 0.1f))
 		{
 			SetTransform(position);

@@ -3,7 +3,6 @@
 #include "Light.h"
 
 #include "Resource.h"
-#include "GameObject.h"
 
 
 #include "External Libraries/MathGeoLib/include/Math/float3x3.h"
@@ -65,5 +64,6 @@ public:
 	//Frustum culling
 	AABB local_aabb;//local AABB
 
+	ai::texture tex;	// TODO: change to materil resource o lo que sea
 private:
 };

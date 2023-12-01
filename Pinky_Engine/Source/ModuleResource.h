@@ -17,6 +17,7 @@ public:
 
 	void ImportFile(const char* path);
 	bool SaveToLibrary(Resource* r);
+	bool LoadFromLibrary(Resource* r);
 
 private:
 	

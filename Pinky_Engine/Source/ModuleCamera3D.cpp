@@ -60,9 +60,6 @@ update_status ModuleCamera3D::Update(float dt)
 		speed = 40.0f * dt;
 	}
 
-	//TODO: treure, es fa en window scene editor
-	//CameraInput();
-
 	return UPDATE_CONTINUE;
 }
 

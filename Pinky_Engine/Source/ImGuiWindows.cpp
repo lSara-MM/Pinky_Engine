@@ -130,12 +130,12 @@ void Hierarchy::ShowWindow()
 	if (ImGui::Begin(title.c_str(), &show))
 	{
 		// ---Root node---
-		ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
+		ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow
 			| ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
 
 		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.953f, 0.533f, 0.969f, 1.0f));
 		ImGui::TreeNodeEx((void*)(intptr_t)App->scene->rootNode->GetUid(), node_flags, App->scene->rootNode->name.c_str());
-		ImGui::PopStyleColor(1);
+		ImGui::PopStyleColor();
 
 		// Root node only target, can't be dragged
 		if (ImGui::BeginDragDropTarget())
@@ -259,9 +259,12 @@ void Hierarchy::MouseEvents(GameObject* current)
 	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 	{
 		// Set payload to carry the index of our item (could be anything)
-		ImGui::SetDragDropPayload("GameObject", current, sizeof(GameObject*));
+		ImGui::SetDragDropPayload("GameObject", &current, sizeof(GameObject*));
+		//ImGui::SetDragDropPayload("GameObject", current, sizeof(GameObject*));
+		//ImGui::SetDragDropPayload("GameObject", current, sizeof(GameObject**));
 
 		SetDragged(current);
+		ImGui::Text(current->name.c_str());
 
 		// Display preview (could be anything, e.g. when dragging an image we could decide to display
 		// the filename and a small preview of the image, etc.)
@@ -272,6 +275,12 @@ void Hierarchy::MouseEvents(GameObject* current)
 	{
 		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
 		{
+			IM_ASSERT(payload->DataSize == sizeof(GameObject*));
+			GameObject* payload_n = (GameObject*)payload->Data;
+
+			// TODO:
+			//payload_n->pParent->ReParent(current);
+			
 			// If dragged go is parent of target go, don't do anything
 			GameObject* go = nullptr;
 			if (GetDragged()->FindChild(current->GetUid(), go) == nullptr)

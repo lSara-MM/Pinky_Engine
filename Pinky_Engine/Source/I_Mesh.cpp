@@ -177,7 +177,7 @@ void I_Mesh::Load(R_Mesh* ourMesh)
 	cursor += bytes;
 
 	// Load normals
-	bytes = sizeof(uint) * ourMesh->num_normals * 3;
+	bytes = sizeof(float) * ourMesh->num_normals * 3;
 	ourMesh->normals = new float[ourMesh->num_normals * 3];
 	memcpy(ourMesh->normals, cursor, bytes);
 	cursor += bytes;

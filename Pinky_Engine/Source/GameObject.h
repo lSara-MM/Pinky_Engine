@@ -12,6 +12,8 @@
 #include "C_Material.h"
 #include "C_Camera.h"
 
+#include "R_Mesh.h"
+
 class GameObject
 {
 public:
@@ -26,12 +28,13 @@ public:
 	update_status Update(float dt);
 
 	//---Components---
-	bool AddComponent(C_TYPE type, ai::mesh* m = nullptr, ai::POLY_PRIMITIVE_TYPE poly = ai::POLY_PRIMITIVE_TYPE::SPHERE);
+	//bool AddComponent(C_TYPE type, ai::mesh* m = nullptr, ai::POLY_PRIMITIVE_TYPE poly = ai::POLY_PRIMITIVE_TYPE::SPHERE);
+	bool AddComponent(C_TYPE type, R_Mesh* m = nullptr, ai::POLY_PRIMITIVE_TYPE poly = ai::POLY_PRIMITIVE_TYPE::SPHERE);
 	void RemoveComponent(Component* component);
 
 	std::vector<C_Mesh*> GetComponentsMesh();
 	std::vector<C_Material*> GetComponentsMaterial();
-	std::vector<C_Camera*> GetComponentsCamera();//TODO: this bad me thinks
+	std::vector<C_Camera*> GetComponentsCamera();
 
 
 	//---Parent/Child---

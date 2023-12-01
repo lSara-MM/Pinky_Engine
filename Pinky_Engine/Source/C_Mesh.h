@@ -7,10 +7,12 @@
 #include "Component.h"
 #include "Color.h"
 
+#include "R_Mesh.h"
+
 class C_Mesh : public Component
 {
 public:
-	C_Mesh(GameObject* g = nullptr, ai::mesh* m = nullptr, uint i = 0, bool start_enabled = true);
+	C_Mesh(GameObject* g = nullptr, R_Mesh* m = nullptr, uint i = 0, bool start_enabled = true);
 	C_Mesh(GameObject* g, C_Mesh* toCopy, bool start_enabled = true, uint i = 0);
 	~C_Mesh();
 
@@ -22,7 +24,7 @@ public:
 	void DrawOBB();
 
 public:
-	ai::mesh* mesh = nullptr;
+	R_Mesh* mesh;
 	bool showVertexNormals;
 	bool showFacesNormals;
 	bool showAABB;
