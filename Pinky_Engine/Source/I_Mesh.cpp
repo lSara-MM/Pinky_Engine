@@ -61,8 +61,9 @@ uint64 I_Mesh::Save(const R_Mesh* ourMesh, char** fileBufferCursor)
 	uint64 size = sizeof(ranges) + sizeof(uint) * ourMesh->num_index + (sizeof(uint) * 3) * (ourMesh->num_vertex + ourMesh->num_normals)
 		+ sizeof(uint) * ourMesh->num_tex_uvs * 2;
 
-	char* cursor = new char[size]; // Allocate
-	
+	*fileBufferCursor = new char[size];
+	char* cursor = *fileBufferCursor; // Allocate
+
 	// First store ranges
 	uint bytes = sizeof(ranges); 
 	memcpy(cursor, ranges, bytes);
@@ -88,16 +89,15 @@ uint64 I_Mesh::Save(const R_Mesh* ourMesh, char** fileBufferCursor)
 	memcpy(cursor, ourMesh->tex_uvs, bytes);
 	cursor += bytes;
 
-	*fileBufferCursor = cursor;
 	cursor = nullptr;
 	return size;
 }
 
-void I_Mesh::Load(R_Mesh* ourMesh)
+void I_Mesh::Load(R_Mesh* ourMesh, const char* buffer)
 {
-	char* cursor = nullptr;
+	const char* cursor = buffer;
 	// amount of indices / vertices / colors / normals / texture_coords
-	uint ranges[5];
+	uint ranges[4] = {};
 	uint bytes = sizeof(ranges);
 	memcpy(ranges, cursor, bytes);
 	cursor += bytes;
@@ -134,5 +134,6 @@ void I_Mesh::Load(R_Mesh* ourMesh)
 	ourMesh->InitBuffers();
 
 	LOG("Mesh %s Loaded");
-	RELEASE_ARRAY(cursor);
+	//RELEASE_ARRAY(cursor);
+	cursor = nullptr;
 }

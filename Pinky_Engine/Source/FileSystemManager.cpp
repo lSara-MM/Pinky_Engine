@@ -408,7 +408,9 @@ uint FileSystemManager::Load(const char* file, char** buffer) const
 		}
 
 		if (PHYSFS_close(fs_file) == 0)
+		{
 			LOG("[ERROR] File System: Could not close file %s: %s\n", file, PHYSFS_getLastError());
+		}
 	}
 	else
 	{
