@@ -102,7 +102,7 @@ std::string ModuleResource::SaveToLibrary(Resource* r)
 	return path;
 }
 
-Resource* ModuleResource::LoadFromLibrary(std::string path)
+Resource* ModuleResource::LoadFromLibrary(std::string path, R_TYPE type)
 {
 	std::string file;
 
@@ -111,23 +111,23 @@ Resource* ModuleResource::LoadFromLibrary(std::string path)
 
 	App->fs->Load(path.c_str(), &buffer);
 
-	//switch (r->GetType())
-	//{
-	//case R_TYPE::MESH:
-	//	path = MESHES_PATH;
-	//	//size = I_Mesh::Load(static_cast<R_Mesh*>(r), &buffer);
-	//	break;
-	//case R_TYPE::TEXTURE:
-	//	path = TEXTURES_PATH;
-	//	//size = I_Texture::Load(static_cast<R_Texture*>(r), &buffer);
-	//	break;
-	//case R_TYPE::SCENE:
-	//	break;
-	//case R_TYPE::NONE:
-	//	break;
-	//default:
-	//	break;
-	//}
+	switch (type)
+	{
+	case R_TYPE::MESH:
+		//R_Mesh* m = new R_Mesh();
+		//I_Mesh::Load(m);
+		break;
+	case R_TYPE::TEXTURE:
+		path = TEXTURES_PATH;
+		//size = I_Texture::Load(static_cast<R_Texture*>(r), &buffer);
+		break;
+	case R_TYPE::SCENE:
+		break;
+	case R_TYPE::NONE:
+		break;
+	default:
+		break;
+	}
 
 	//RELEASE_ARRAY(buffer);
 	return false;

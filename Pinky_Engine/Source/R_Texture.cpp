@@ -14,6 +14,8 @@ R_Texture::R_Texture() : Resource(R_TYPE::TEXTURE)
 
 R_Texture::~R_Texture()
 {
+	glDeleteBuffers(1, &tex_id);
+	tex_id = 0;
 }
 
 bool R_Texture::InitBuffers()

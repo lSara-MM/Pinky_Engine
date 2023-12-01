@@ -136,6 +136,7 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 			}
 
 			std::string path = App->resource->SaveToLibrary(mesh);
+			//RELEASE(mesh);
 			//mesh = static_cast<R_Mesh*>(App->resource->LoadFromLibrary(path));
 
 			mesh->InitBuffers();

@@ -31,7 +31,7 @@ R_Mesh::~R_Mesh()
 	RELEASE_ARRAY(normals);
 	RELEASE_ARRAY(tex_uvs);
 
-	//tex.~texture();
+	tex.~R_Texture();
 }
 
 bool R_Mesh::InitBuffers()

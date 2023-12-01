@@ -48,8 +48,6 @@ public:
 	uint num_tex_uvs;
 	math::float2* tex_uvs;
 
-	//texture tex;
-
 	GLuint VBO; // vertex buffer object
 	GLuint EBO; // element buffer object
 	GLuint VAO; // attribute buffer object
