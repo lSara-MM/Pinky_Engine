@@ -163,11 +163,9 @@ void ModuleCamera3D::CheckIntersection(GameObject* go)
 {
 	if (go->isActive)
 	{
-		std::vector<C_Mesh*> vMeshes = go->GetComponentsMesh();
-
-		for (auto i = 0; i < vMeshes.size(); i++)
+		if (go->mesh != nullptr)
 		{
-			bool hit = rayCam.Intersects(vMeshes[i]->global_aabb, entryDist, exitDist);
+			bool hit = rayCam.Intersects(go->mesh->global_aabb, entryDist, exitDist);
 
 			if (hit)
 			{

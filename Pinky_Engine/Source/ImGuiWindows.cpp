@@ -379,7 +379,7 @@ void Inspector::ShowWindow()
 
 				// Skip transform
 				// --- Add component Mesh ---
-				if (go->numMeshes == 0)
+				if (go->mesh == nullptr)
 				{
 					if (ImGui::BeginMenu("Mesh"))
 					{

@@ -31,7 +31,6 @@ GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 
 	AddComponent(C_TYPE::TRANSFORM);
 
-	numMeshes = 0;
 	numMaterials = 0;
 
 	vChildren = {};
@@ -66,7 +65,6 @@ GameObject::GameObject(GameObject* go, int size, GameObject* parent)
 		vComponents.push_back(go->vComponents[i]->CopyComponent(this));
 	}
 
-	numMeshes = go->numMeshes;
 	numMaterials = go->numMaterials;
 }
 
@@ -109,7 +107,6 @@ update_status GameObject::Update(float dt)
 
 		if (vComponents.size() > 1)
 		{
-			std::vector<C_Mesh*> vMeshes = GetComponentsMesh();
 			std::vector<C_Material*> vMaterials = GetComponentsMaterial();
 			std::vector<C_Camera*> vCams = GetComponentsCamera();
 
@@ -123,38 +120,38 @@ update_status GameObject::Update(float dt)
 				}
 			}
 
-			for (auto i = 0; i < vMeshes.size(); i++)
+			if (mesh != nullptr)
 			{
-				if (vMeshes[i]->isActive && !isCulled)
+				if (mesh->isActive && !isCulled)
 				{
-					if (!vMaterials.empty() && vMaterials[i]->isActive)
+					if (!vMaterials.empty() && vMaterials[0]->isActive)//TODO: mirar materials bé
 					{
-						vMeshes[i]->Draw(vMaterials[i]->checkered, vMaterials[i]->color);
+						mesh->Draw(vMaterials[0]->checkered, vMaterials[0]->color);
 
-						if (vMeshes[i]->showVertexNormals)
+						if (mesh->showVertexNormals)
 						{
-							vMeshes[i]->DrawVertexNormals();
+							mesh->DrawVertexNormals();
 						}
 						
-						if (vMeshes[i]->showFacesNormals)
+						if (mesh->showFacesNormals)
 						{
-							vMeshes[i]->DrawFaceNormals();
+							mesh->DrawFaceNormals();
 						}
 
-						if (vMeshes[i]->showAABB)
+						if (mesh->showAABB)
 						{
-							vMeshes[i]->DrawAABB();
+							mesh->DrawAABB();
 						}
 
-						if (vMeshes[i]->showOBB)
+						if (mesh->showOBB)
 						{
-							vMeshes[i]->DrawOBB();
+							mesh->DrawOBB();
 						}
 					}
 					else
 					{
 						// If it has no material, draw checkers
-						vMeshes[i]->Draw(true);
+						mesh->Draw(true);
 					}
 				}
 			}
@@ -183,14 +180,14 @@ bool GameObject::AddComponent(C_TYPE type, void* var, ai::POLY_PRIMITIVE_TYPE po
 		break;
 	case C_TYPE::MESH:
 		// A gameObject can't have more than one mesh
-		if (numMeshes == 0)
+		if (mesh == nullptr)
 		{
 			R_Mesh* m = static_cast<R_Mesh*>(var);
 			if (m != nullptr)
 			{
-				temp = new C_Mesh(this, m, numMeshes);
+				temp = new C_Mesh(this, m);
+				mesh = (C_Mesh*)temp;
 				vComponents.push_back(temp);
-				numMeshes++;
 			}
 			else
 			{
@@ -239,7 +236,6 @@ void GameObject::RemoveComponent(Component* component)
 	switch (component->type)
 	{
 	case C_TYPE::MESH:
-		numMeshes--;
 		break;
 	case C_TYPE::MATERIAL:
 		numMaterials--;
@@ -254,17 +250,17 @@ void GameObject::RemoveComponent(Component* component)
 }
 
 //---Parent/Child---
-std::vector<C_Mesh*> GameObject::GetComponentsMesh()
+C_Mesh* GameObject::GetComponentMesh()
 {
-	std::vector<C_Mesh*> vec = {};
+
 	for (auto i = 0; i < vComponents.size(); i++)
 	{
 		if (vComponents[i]->type == C_TYPE::MESH)
 		{
-			vec.push_back((C_Mesh*)vComponents[i]);
+			mesh = (C_Mesh*)vComponents[i];
 		}
 	}
-	return vec;
+	return mesh;
 }
 
 std::vector<C_Material*> GameObject::GetComponentsMaterial()

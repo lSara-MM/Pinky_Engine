@@ -26,8 +26,7 @@ Component* Component::CopyComponent(GameObject* go)
 		go->transform = (C_Transform*)temp;
 		break;
 	case C_TYPE::MESH:
-		temp = new C_Mesh(go, static_cast<C_Mesh*>(this), go->numMeshes);
-		go->numMeshes++;
+		temp = new C_Mesh(go, static_cast<C_Mesh*>(this), go->mesh);
 		break;
 	case C_TYPE::MATERIAL:
 		temp = new C_Material(go, static_cast<C_Material*>(this), go->numMaterials);

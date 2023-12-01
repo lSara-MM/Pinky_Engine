@@ -149,13 +149,11 @@ void C_Transform::UpdateGlobalMatrix()
 
 void C_Transform::UpdateBoundingBoxes()
 {
-	std::vector<C_Mesh*> vMeshes = gameObject->GetComponentsMesh();
-
-	for (auto i = 0; i < vMeshes.size(); i++)
+	if (gameObject->mesh != nullptr)
 	{
-		vMeshes[i]->obb = vMeshes[i]->mesh->local_aabb;
-		vMeshes[i]->obb.Transform(gameObject->transform->GetGlobalTransform());
-		vMeshes[i]->global_aabb.SetNegativeInfinity();
-		vMeshes[i]->global_aabb.Enclose(vMeshes[i]->obb);
+		gameObject->mesh->obb = gameObject->mesh->mesh->local_aabb;
+		gameObject->mesh->obb.Transform(gameObject->transform->GetGlobalTransform());
+		gameObject->mesh->global_aabb.SetNegativeInfinity();
+		gameObject->mesh->global_aabb.Enclose(gameObject->mesh->obb);
 	}
 }

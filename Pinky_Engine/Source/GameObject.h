@@ -31,7 +31,7 @@ public:
 	bool AddComponent(C_TYPE type, void* var = nullptr, ai::POLY_PRIMITIVE_TYPE poly = ai::POLY_PRIMITIVE_TYPE::SPHERE);
 	void RemoveComponent(Component* component);
 
-	std::vector<C_Mesh*> GetComponentsMesh();
+	C_Mesh* GetComponentMesh();
 	std::vector<C_Material*> GetComponentsMaterial();
 	std::vector<C_Camera*> GetComponentsCamera();
 
@@ -52,13 +52,13 @@ public:
 	std::string name;
 	bool isActive, isStatic;
 	C_Transform* transform = nullptr;
+	C_Mesh* mesh = nullptr;
 
 	bool selected;
 	bool hidden;
 	//Discard mesh if the global AABB is outside frustum
 	bool isCulled;
 
-	uint numMeshes;
 	uint numMaterials;
 
 private:

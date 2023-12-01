@@ -230,17 +230,15 @@ void C_Camera::FrustumCulling()//TODO: add toggle to enable/disable
 
 	for (auto i = 0; i < objectsToCull.size(); i++)
 	{
-		std::vector<C_Mesh*> vMeshes = objectsToCull[i]->GetComponentsMesh();
-
-		for (auto i = 0; i < vMeshes.size(); i++)
+		if (objectsToCull[i]->mesh != nullptr)
 		{
-			if (ContainsAABox(vMeshes[i]->global_aabb) == FrustumCulling::CULLING_OUT)
+			if (ContainsAABox(objectsToCull[i]->mesh->global_aabb) == FrustumCulling::CULLING_OUT)
 			{
-				vMeshes[i]->gameObject->isCulled = true;
+				objectsToCull[i]->isCulled = true;
 			}
 			else
 			{
-				vMeshes[i]->gameObject->isCulled = false;
+				objectsToCull[i]->isCulled = false;
 			}
 		}
 	}
