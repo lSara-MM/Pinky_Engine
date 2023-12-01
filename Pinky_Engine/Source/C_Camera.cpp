@@ -215,9 +215,6 @@ void C_Camera::OnResize(int width, int height)
 void C_Camera::UpdateCameraFrustum()
 {
 	C_Transform* transformComponent = gameObject->transform;//TODO: not good
-
-	float4x4 transform = transformComponent->GetGlobalTransform();
-
 	frustum.pos = transformComponent->GetGlobalPosition();
 	frustum.front = transformComponent->GetLocalRotation().WorldZ();
 	frustum.up = transformComponent->GetLocalRotation().WorldY();

@@ -933,12 +933,15 @@ void ModuleEditor::EditorWindow()
 	ViewportSize = { viewSize.x,viewSize.y };
 
 	//TODO: igual posar en funció
-	origin.x = (ImGui::GetMousePos().x - viewPos.x) / viewSize.x;
-	origin.y = (ImGui::GetMousePos().y - viewPos.y) / viewSize.y;
-	origin.x = (origin.x - 0.5f) * 2;
-	origin.y = -((origin.y - 0.5f) * 2);
-	pickingRay = App->renderer3D->editorCam->frustum.UnProjectLineSegment(origin.x, origin.y);
-	//App->camera->MousePick(pickingRay);
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LALT) != KEY_REPEAT) 
+	{
+		origin.x = (ImGui::GetMousePos().x - viewPos.x) / viewSize.x;
+		origin.y = (ImGui::GetMousePos().y - viewPos.y) / viewSize.y;
+		origin.x = (origin.x - 0.5f) * 2;
+		origin.y = -((origin.y - 0.5f) * 2);
+		pickingRay = App->renderer3D->editorCam->frustum.UnProjectLineSegment(origin.x, origin.y);
+		App->camera->MousePick(pickingRay);
+	}
 
 	App->renderer3D->editorCam->SetAspectRatio(ViewportSize.x, ViewportSize.y);
 	ImGui::Image((ImTextureID)App->renderer3D->editorCam->textureColourBuffer, ViewportSize, ImVec2(0, 1), ImVec2(1, 0));

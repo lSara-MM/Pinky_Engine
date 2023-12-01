@@ -33,7 +33,7 @@ C_Mesh::C_Mesh(GameObject* g, R_Mesh* m, uint i, bool start_enabled) : Component
 
 	//TODO: does it go here?
 	obb = mesh->local_aabb;
-	obb.Transform(this->gameObject->transform->GetGlobalTransform());
+	obb.Transform(gameObject->transform->GetGlobalTransform());
 	global_aabb.SetNegativeInfinity();
 	global_aabb.Enclose(obb);
 }

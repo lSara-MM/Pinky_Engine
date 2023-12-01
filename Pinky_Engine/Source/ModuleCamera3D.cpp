@@ -134,6 +134,8 @@ void ModuleCamera3D::Zoom(float zoom, float scrollSpeed)
 
 void ModuleCamera3D::MousePick(LineSegment ray)
 {
+	intersects.clear();
+
 	rayCam = ray;
 	entryDist = 0.0f;
 	exitDist = rayCam.Length();
@@ -187,45 +189,49 @@ void ModuleCamera3D::CheckTriangleIntersection()
 	Triangle tri;
 	std::map<float, GameObject*>::iterator iterator;
 
-	//for (iterator = intersects.begin(); iterator != intersects.end(); ++iterator)
-	//{
-	//	if (iterator->second->transform != nullptr && iterator->second->mesh)
-	//	{
-	//		trans = it->second->GetComponentTransform();
-	//		mesh = (CompMesh*)it->second->FindComponentByType(C_MESH);
+	for (iterator = intersects.begin(); iterator != intersects.end(); ++iterator)
+	{
+		if (iterator->second->transform != nullptr && iterator->second->mesh)
+		{
+			trans = iterator->second->transform;
+			mesh = (C_Mesh*)iterator->second->mesh;
 
-	//		// Transform ray coordinates into local space coordinates of the object
-	//		float4x4 object_transform = it->second->GetComponentTransform()->GetGlobalTransform();
-	//		ray_local_space.Transform(object_transform.Inverted());
+			float4x4 object_transform = iterator->second->transform->GetGlobalTransform();
+			rayCam.Transform(object_transform.Inverted());
 
-	//		for (uint i = 0; i < mesh->resourceMesh->num_indices; i += 3)
-	//		{
-	//			// Set Triangle vertices
-	//			tri.a = mesh->resourceMesh->vertices[mesh->resourceMesh->indices[i]].pos;
-	//			tri.b = mesh->resourceMesh->vertices[mesh->resourceMesh->indices[i + 1]].pos;
-	//			tri.c = mesh->resourceMesh->vertices[mesh->resourceMesh->indices[i + 2]].pos;
-	//			hit = ray_local_space.Intersects(tri, &entry_dist, &hit_point);
+			for (uint i = 0; i < mesh->mesh->num_index; i += 3)
+			{
+				uint index1 = mesh->mesh->index[i] * 3;
+				uint index2 = mesh->mesh->index[i + 1] * 3;
+				uint index3 = mesh->mesh->index[i + 2] * 3;
 
-	//			if (hit)
-	//			{
-	//				if (entry_dist < min_distance)
-	//				{
-	//					// Set the Game Objet to be picked
-	//					min_distance = entry_dist;
-	//					best_candidate = it->second;
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
+				math::float3 vec1(mesh->mesh->vertex[index1], mesh->mesh->vertex[index1 + 1], mesh->mesh->vertex[index1 + 2]);
+				math::float3 vec2(mesh->mesh->vertex[index2], mesh->mesh->vertex[index2 + 1], mesh->mesh->vertex[index2 + 2]);
+				math::float3 vec3(mesh->mesh->vertex[index3], mesh->mesh->vertex[index3 + 1], mesh->mesh->vertex[index3 + 2]);
 
-	//if (best_candidate != nullptr)
-	//{
-	//	//Set inspector window of this Game Object
-	//	((Inspector*)App->gui->winManager[INSPECTOR])->LinkObject(best_candidate);
-	//	App->camera->SetFocus(best_candidate);
-	//}
+				tri.a = vec1;
+				tri.b = vec2;
+				tri.c = vec3;
 
+				hit = rayCam.Intersects(tri, &entryDist, &hit_point);
+
+				if (hit)
+				{
+					if (entryDist < minDistance)
+					{
+						minDistance = entryDist;
+						closest = iterator->second;
+					}
+				}
+			}
+		}
+	}
+
+	if (closest != nullptr)
+	{
+		App->scene->h->SetSelected(closest);
+		//App->camera->SetFocus(closest);
+	}
 }
 
 
