@@ -10,7 +10,7 @@
 //
 #include "External Libraries/ImGui/imgui_custom.h"
 
-C_Material::C_Material(GameObject* g, ai::texture* t, uint i, bool start_enabled) : Component(C_TYPE::MATERIAL, g, i, start_enabled, "Material")
+C_Material::C_Material(GameObject* g, R_Texture* t, uint i, bool start_enabled) : Component(C_TYPE::MATERIAL, g, i, start_enabled, "Material")
 {
 	tex = t;
 	//(t->path != "") ? tex = t : tex = nullptr;

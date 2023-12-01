@@ -16,8 +16,10 @@ public:
 
 
 	void ImportFile(const char* path);
-	bool SaveToLibrary(Resource* r);
-	bool LoadFromLibrary(Resource* r);
+	std::string SaveToLibrary(Resource* r);
+	Resource* LoadFromLibrary(std::string path);
+
+public:
 
 private:
 	

@@ -1,15 +1,8 @@
 #pragma once
 #include "Globals.h"
-#include "Light.h"
 
 #include "Resource.h"
-
-
-#include "External Libraries/MathGeoLib/include/Math/float3x3.h"
-#include "External Libraries/MathGeoLib/include/Math/float4x4.h"
-#include "External Libraries/MathGeoLib/include/Math/Quat.h"
-
-#include "External Libraries/Assimp/Assimp.h"
+#include "R_Texture.h"
 
 enum class POLY_PRIMITIVE_TYPE
 {
@@ -64,6 +57,7 @@ public:
 	//Frustum culling
 	AABB local_aabb;//local AABB
 
-	ai::texture tex;	// TODO: change to materil resource o lo que sea
+	R_Texture tex;
+	//ai::texture tex;	// TODO: change to materil resource o lo que sea
 private:
 };

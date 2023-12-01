@@ -4,11 +4,7 @@
 
 #include "Resource.h"
 
-#include "External Libraries/MathGeoLib/include/Math/float3x3.h"
-#include "External Libraries/MathGeoLib/include/Math/float4x4.h"
-#include "External Libraries/MathGeoLib/include/Math/Quat.h"
-
-#include "External Libraries/Assimp/Assimp.h"
+class R_Mesh;
 
 class R_Texture : public Resource
 {
@@ -19,6 +15,8 @@ public:
 	bool InitBuffers();
 	void DeleteBuffers();
 
+	bool BindTexture(R_Mesh* m);
+	void ImportTexture(R_Mesh* m, const char* texturefileDir);
 public:
 
 	uint tex_id;

@@ -136,49 +136,41 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 				return nullptr;
 			}
 
-			
-			if (mesh->InitBuffers()/*InitMesh(mesh)*/)
-			{
-				//BindTexture(mesh);
+			std::string path = App->resource->SaveToLibrary(mesh);
+			//mesh = static_cast<R_Mesh*>(App->resource->LoadFromLibrary(path));
 
-				//(texfileDir != nullptr) ? mesh->hasTex = true : mesh->hasTex = false;
+			//---Transform---
+			aiVector3D pos, scale;
+			aiQuaternion rot;
+			children[i]->mTransformation.Decompose(scale, rot, pos);
 
-				//---Transform---
-				aiVector3D pos, scale;
-				aiQuaternion rot;
-				children[i]->mTransformation.Decompose(scale, rot, pos);
-		
 
-				float3 temp = { pos.x, pos.y, pos.z };
-				obj->transform->SetTransform(temp);
+			float3 temp = { pos.x, pos.y, pos.z };
+			obj->transform->SetTransform(temp);
 
-				float temp1[4] = { rot.x , rot.y, rot.z, rot.w };
-				float3 euler = Quat(temp1).ToEulerXYZ();
-				float3 eulerF = { euler.x * RADTODEG, euler.y * RADTODEG, euler.z * RADTODEG };
-				obj->transform->SetRotation(eulerF);
-				
-				float3 temp2 = { scale.x, scale.y, scale.z };
-				obj->transform->SetScale(temp2);
+			float temp1[4] = { rot.x , rot.y, rot.z, rot.w };
+			float3 euler = Quat(temp1).ToEulerXYZ();
+			float3 eulerF = { euler.x * RADTODEG, euler.y * RADTODEG, euler.z * RADTODEG };
+			obj->transform->SetRotation(eulerF);
 
-				obj->transform->globalMatrix = math::float4x4::FromTRS(obj->transform->position, 
-					obj->transform->rotation, obj->transform->scale);
+			float3 temp2 = { scale.x, scale.y, scale.z };
+			obj->transform->SetScale(temp2);
 
-				//---Local AABB---
-				mesh->local_aabb.SetNegativeInfinity();
-				mesh->local_aabb.Enclose((float3*)mesh->vertex, mesh->num_vertex);
+			obj->transform->globalMatrix = math::float4x4::FromTRS(obj->transform->position,
+				obj->transform->rotation, obj->transform->scale);
 
-				//---Mesh---
-				obj->AddComponent(C_TYPE::MESH, mesh);
+			//---Local AABB---
+			mesh->local_aabb.SetNegativeInfinity();
+			mesh->local_aabb.Enclose((float3*)mesh->vertex, mesh->num_vertex);
 
-				//---Material---
-				if (!component) { obj->AddComponent(C_TYPE::MATERIAL, mesh); }
+			//---Mesh---
+			obj->AddComponent(C_TYPE::MESH, mesh);
 
-				//TODO: pushback elsewhere
-				App->renderer3D->meshes.push_back(ourMesh);
+			//---Material---
+			if (!component) { obj->AddComponent(C_TYPE::MATERIAL, mesh); }
 
-				App->resource->SaveToLibrary(mesh);
-				App->resource->LoadFromLibrary(mesh);
-			}
+			//TODO: pushback elsewhere
+			//App->resource->meshes.push_back(mesh);
 
 			m = nullptr;
 			ourMesh = nullptr;
@@ -281,16 +273,16 @@ void ai::CreateCustomMehses(CUSTOM_MESH obj, GameObject* go)
 
 void ai::DeleteSelectedMesh(mesh* m)
 {
-	std::vector<ai::mesh*>* vMesh = &App->renderer3D->meshes;
+	//std::vector<R_Mesh*>* vMesh = &App->resource->meshes;
 
 	LOG("Deleted mesh");
 	DeleteMeshBuffers(m);
 
-	if (!vMesh->empty())
+	/*if (!vMesh->empty())
 	{
-		App->renderer3D->meshes.erase(std::find(vMesh->begin(), vMesh->end(), m));
-		App->renderer3D->meshes.shrink_to_fit();
-	}
+		App->resource->meshes.erase(std::find(vMesh->begin(), vMesh->end(), m));
+		App->resource->meshes.shrink_to_fit();
+	}*/
 }
 
 void ai::DeleteMeshBuffers(mesh* m)
