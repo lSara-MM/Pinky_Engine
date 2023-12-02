@@ -54,15 +54,15 @@ bool I_Mesh::Import(const aiMesh* mesh, R_Mesh* ourMesh)
 	return true;
 }
 
-uint64 I_Mesh::Save(const R_Mesh* ourMesh, char** fileBufferCursor)
+uint64 I_Mesh::Save(const R_Mesh* ourMesh, char** buffer)
 {
 	// amount of indices / vertices / colors / normals / texture_coords
 	uint ranges[4] = { ourMesh->num_index, ourMesh->num_vertex, ourMesh->num_normals, ourMesh->num_tex_uvs };
 	uint64 size = sizeof(ranges) + sizeof(uint) * ourMesh->num_index + (sizeof(uint) * 3) * (ourMesh->num_vertex + ourMesh->num_normals)
 		+ sizeof(uint) * ourMesh->num_tex_uvs * 2;
 
-	*fileBufferCursor = new char[size];
-	char* cursor = *fileBufferCursor; // Allocate
+	*buffer = new char[size];
+	char* cursor = *buffer; // Allocate
 
 	// First store ranges
 	uint bytes = sizeof(ranges); 

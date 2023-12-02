@@ -92,13 +92,13 @@ void ParsingJSON::ComponentsJSON(Component* comp, std::string name)
         break;
     case C_TYPE::MESH:
         json_object_dotset_number(root_object, (comp_name + ".UUID").c_str(), comp->GetUID());
-        json_object_dotset_number(root_object, (comp_name + ".Mesh UUID").c_str(), comp->GetUID());
-        json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), ("Libray\/Meshes\/" + std::to_string(comp->GetUID())).c_str());
+        json_object_dotset_number(root_object, (comp_name + ".Mesh UUID").c_str(), static_cast<C_Mesh*>(comp)->mesh->GetUID());
+        json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), ("Libray\/Meshes\/" + std::to_string(static_cast<C_Mesh*>(comp)->mesh->GetUID())).c_str());
         break;
     case C_TYPE::MATERIAL:
         json_object_dotset_number(root_object, (comp_name + ".UUID").c_str(), comp->GetUID());
         json_object_dotset_number(root_object, (comp_name + ".Material UUID").c_str(), comp->GetUID());
-        json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), ("Libray\/Textures\/" + std::to_string(comp->GetUID())).c_str());
+        json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), ("Libray\/Textures\/" + std::to_string(static_cast<C_Material*>(comp)->tex->GetUID())).c_str());
         break;
     case C_TYPE::CAM:
         break;

@@ -12,7 +12,7 @@
 namespace I_Mesh
 {
 	bool Import(const aiMesh* mesh, R_Mesh* ourMesh);
-	uint64 Save(const R_Mesh* ourMesh, char** fileBufferCursor);
+	uint64 Save(const R_Mesh* ourMesh, char** buffer);
 	void Load(R_Mesh* ourMesh, const char* buffer);
 }
 #endif //!__IMPORTER_MESH_H__

@@ -64,9 +64,9 @@ void ModuleResource::ImportFile(const char* fileDir)
 				tex->ImportTexture(fileDir);
 
 				std::string path = App->resource->SaveToLibrary(tex);
-				//RELEASE(tex);
+				RELEASE(tex);
 
-				//tex = static_cast<R_Texture*>(App->resource->LoadFromLibrary(path, R_TYPE::TEXTURE));
+				tex = static_cast<R_Texture*>(App->resource->LoadFromLibrary(path, R_TYPE::TEXTURE));
 
 				i->BindTexture(tex);
 			}
@@ -76,7 +76,7 @@ void ModuleResource::ImportFile(const char* fileDir)
 
 std::string ModuleResource::SaveToLibrary(Resource* r)
 {
-	std::string path;
+	std::string path, ext;
 
 	char* buffer = nullptr;
 	uint size = 0;
@@ -85,10 +85,12 @@ std::string ModuleResource::SaveToLibrary(Resource* r)
 	{
 	case R_TYPE::MESH:
 		path = MESHES_PATH;
+		ext = ".pnk";
 		size = I_Mesh::Save(static_cast<R_Mesh*>(r), &buffer);
 		break;
 	case R_TYPE::TEXTURE:
 		path = TEXTURES_PATH;
+		ext = ".sufrimientoinfernal"; // TODO: que nombre de extension tiene que tener? 
 		size = I_Texture::Save(static_cast<R_Texture*>(r), &buffer);
 		break;
 	case R_TYPE::SCENE:
@@ -99,8 +101,7 @@ std::string ModuleResource::SaveToLibrary(Resource* r)
 		break;
 	}
 
-	path += std::to_string(r->GetUID());
-	path += ".pnk";
+	path = path + std::to_string(r->GetUID()) + ext;
 
 	App->fs->Save(path.c_str(), buffer, size);
 
@@ -114,7 +115,7 @@ Resource* ModuleResource::LoadFromLibrary(std::string path, R_TYPE type)
 	char* buffer = nullptr;
 
 	Resource* r;
-	App->fs->Load(path.c_str(), &buffer);
+	uint size = App->fs->Load(path.c_str(), &buffer);
 
 	switch (type)
 	{
@@ -124,7 +125,7 @@ Resource* ModuleResource::LoadFromLibrary(std::string path, R_TYPE type)
 		break;
 	case R_TYPE::TEXTURE:
 		r = new R_Texture();
-		I_Texture::Load(static_cast<R_Texture*>(r), buffer);
+		I_Texture::Load(static_cast<R_Texture*>(r), buffer, size);
 		break;
 	case R_TYPE::SCENE:
 		break;
