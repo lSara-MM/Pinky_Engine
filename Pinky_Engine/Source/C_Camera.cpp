@@ -30,6 +30,7 @@ C_Camera::C_Camera(GameObject* g, uint i, bool start_enabled) : Component(C_TYPE
 	RBO = 0;
 	textureColourBuffer = 0;
 	isMainCam = false;
+	isCullEnabled = false;
 }
 
 C_Camera::~C_Camera()
@@ -82,6 +83,11 @@ void C_Camera::ShowInInspector()
 		if (ImGui::Checkbox("Main Camera", &isMainCam))
 		{	
 			SetAsMain(isMainCam);
+		}
+
+		if (ImGui::Checkbox("Frustum Culling", &isCullEnabled))
+		{
+			RestartCulling();
 		}
 
 		if (!isActive) { ImGui::EndDisabled(); }
@@ -220,7 +226,7 @@ void C_Camera::UpdateCameraFrustum()
 	frustum.up = transformComponent->GetLocalRotation().WorldY();
 }
 
-void C_Camera::FrustumCulling()//TODO: add toggle to enable/disable
+void C_Camera::FrustumCulling()
 {
 	std::vector<GameObject*> objectsToCull;
 	GetObjectsToCull(App->scene->rootNode, objectsToCull);
@@ -262,6 +268,17 @@ void C_Camera::SetFOV(float horizontalFOV)
 {
 	frustum.horizontalFov = horizontalFOV * DEGTORAD;
 	frustum.verticalFov = 2 * (Atan(Tan(frustum.horizontalFov / 2) * (1 / aspect_ratio)));
+}
+
+void C_Camera::RestartCulling()
+{
+	std::vector<GameObject*> objectsToCull;
+	GetObjectsToCull(App->scene->rootNode, objectsToCull);
+
+	for (auto i = 0; i < objectsToCull.size(); i++)
+	{
+		objectsToCull[i]->isCulled = false;
+	}
 }
 
 void C_Camera::Draw()
