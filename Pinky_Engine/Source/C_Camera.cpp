@@ -215,7 +215,7 @@ void C_Camera::SetAsMain(bool mainCam)
 void C_Camera::OnResize(int width, int height)
 {
 	glViewport(0, 0, width, height);
-	createCamBuffers(width, height);
+	CreateCamBuffers(width, height);
 }
 
 void C_Camera::UpdateCameraFrustum()
@@ -283,6 +283,8 @@ void C_Camera::RestartCulling()
 
 void C_Camera::Draw()
 {
+	glEnable(GL_DEPTH_TEST);
+
 	glLoadIdentity();
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(GetProjectionMatrix());
@@ -295,7 +297,7 @@ void C_Camera::Draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void C_Camera::createCamBuffers(int width, int height)
+void C_Camera::CreateCamBuffers(int width, int height)
 {
 	SetAspectRatio(width, height);
 	DeleteBuffers();
@@ -334,7 +336,7 @@ void C_Camera::BindFrameBuffer()
 void C_Camera::UnbindFrameBuffer()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
+	glDisable(GL_DEPTH_TEST);
 }
 
 void C_Camera::DeleteBuffers()

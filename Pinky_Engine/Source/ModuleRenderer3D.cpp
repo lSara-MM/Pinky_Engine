@@ -157,6 +157,7 @@ bool ModuleRenderer3D::Init()
 
 	// Projection matrix for
 	editorCam->OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	gameCam->OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	Grid.axis = true;
 	wireframe = false;
@@ -176,12 +177,6 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	editorCam->Draw();
 	// light 0 on cam pos
 	lights[0].SetPos(editorCam->frustum.pos.x, editorCam->frustum.pos.y, editorCam->frustum.pos.z);
-
-	if (App->renderer3D->gameCam != nullptr)
-	{
-		//gameCam->draw();
-		//lights[0].SetPos(gameCam->frustum.pos.x, gameCam->frustum.pos.y, gameCam->frustum.pos.z);
-	}
 
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
@@ -222,9 +217,17 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 
 	editorCam->UnbindFrameBuffer();
+
 	if (App->renderer3D->gameCam != nullptr)
 	{
-		//gameCam->unbindFrameBuffer();
+		gameCam->Draw();
+
+		lights[0].SetPos(gameCam->frustum.pos.x, gameCam->frustum.pos.y, gameCam->frustum.pos.z);
+
+		for (uint i = 0; i < MAX_LIGHTS; ++i)
+			lights[i].Render();
+
+		gameCam->UnbindFrameBuffer();
 	}
 
 	return ret;

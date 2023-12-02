@@ -42,7 +42,7 @@ public:
 
 	//Buffer functions
 	void Draw();
-	void createCamBuffers(int width, int height);
+	void CreateCamBuffers(int width, int height);
 	void BindFrameBuffer();
 	void UnbindFrameBuffer();
 	void DeleteBuffers();

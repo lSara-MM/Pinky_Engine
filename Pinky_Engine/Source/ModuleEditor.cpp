@@ -153,7 +153,7 @@ update_status ModuleEditor::PostUpdate(float dt)
 	EditorWindow();
 
 	//Game window
-	//GameWindow();
+	GameWindow();
 
 	//LOG window
 	ConsoleWindow();
