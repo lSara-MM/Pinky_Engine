@@ -116,13 +116,16 @@ update_status GameObject::Update(float dt)
 				{
 					vCams[i]->DrawDebug();
 					vCams[i]->UpdateCameraFrustum();
-					vCams[i]->FrustumCulling();
+					if (vCams[i]->isCullEnabled)
+					{
+						vCams[i]->FrustumCulling();
+					}
 				}
 			}
 
 			if (mesh != nullptr)
 			{
-				if (mesh->isActive /*&& !isCulled*/)
+				if (mesh->isActive && !isCulled)
 				{
 					if (!vMaterials.empty() && vMaterials[0]->isActive)//TODO: mirar materials bé
 					{

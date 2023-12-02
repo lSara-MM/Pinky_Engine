@@ -36,6 +36,9 @@ public:
 	//user settings
 	void SetFOV(float horizontalFOV);
 
+	//restart values culling
+	void RestartCulling();
+
 
 	//Buffer functions
 	void Draw();
@@ -57,12 +60,10 @@ public:
 	GLuint textureColourBuffer; //texture id 
 
 	bool isMainCam = false;
-
-private:
-
 	//Editor settings
 	bool isCullEnabled = false;
 
+private:
 
 	//bool is_main = false;
 	float width = 0.0f;
