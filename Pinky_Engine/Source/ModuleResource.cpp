@@ -68,6 +68,8 @@ GameObject* ModuleResource::ImportFile(const char* fileDir, GameObject* goToLink
 				goToLink->mesh->mesh->tex->ImportTexture(fileDir);
 
 				std::string path = App->resource->SaveToLibrary(goToLink->mesh->mesh->tex);
+				
+				goToLink->mesh->mesh->tex = static_cast<R_Texture*>(App->resource->LoadFromLibrary(path, R_TYPE::TEXTURE));
 
 				/*R_Texture* tex = new R_Texture();
 				tex->ImportTexture(fileDir);

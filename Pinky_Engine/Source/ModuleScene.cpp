@@ -110,5 +110,5 @@ bool ModuleScene::CleanUp()
 
 void ModuleScene::BakerHouse()
 {
-	App->resource->ImportModel("Assets\\3dObject\\baker_house\\BakerHouse.fbx", std::vector<const char*> {"Assets\\3dObject\\baker_house\\Baker_house.dds"});
+	App->resource->ImportModel("PinkyAssets\\3dObject\\baker_house\\BakerHouse.fbx", std::vector<const char*> {"PinkyAssets\\3dObject\\baker_house\\Baker_house.dds"});
 }

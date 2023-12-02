@@ -182,16 +182,16 @@ void ai::CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go, bool compo
 	switch (obj)
 	{
 	case ai::POLY_PRIMITIVE_TYPE::CUBE:
-		ImportMesh("Assets\\3dObject\\cube.fbx", go, component);
+		ImportMesh("PinkyAssets\\3dObject\\cube.fbx", go, component);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::SPHERE:
-		ImportMesh("Assets\\3dObject\\sphere.fbx", go, component);
+		ImportMesh("PinkyAssets\\3dObject\\sphere.fbx", go, component);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::CYLINDER:
-		ImportMesh("Assets\\3dObject\\cylinder.fbx", go);
+		ImportMesh("PinkyAssets\\3dObject\\cylinder.fbx", go);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::PLANE:
-		ImportMesh("Assets\\3dObject\\plane.fbx", go);
+		ImportMesh("PinkyAssets\\3dObject\\plane.fbx", go);
 		break;
 	default:
 		break;
@@ -203,13 +203,13 @@ void ai::CreateCustomMehses(CUSTOM_MESH obj)
 	switch (obj)
 	{
 	case ai::CUSTOM_MESH::LAW:
-		App->resource->ImportModel("Assets\\Custom\\law_hat\\trafalgar-laws-hat.fbx", std::vector<const char*> {"Assets\\Custom\\law_hat\\law_hat_mat_BaseColor.dds"});
+		App->resource->ImportModel("PinkyAssets\\Custom\\law_hat\\trafalgar-laws-hat.fbx", std::vector<const char*> {"PinkyAssets\\Custom\\law_hat\\law_hat_mat_BaseColor.dds"});
 		break;
 	case ai::CUSTOM_MESH::KURO:
-		App->resource->ImportModel("Assets\\Custom\\kuro\\kuro.fbx", std::vector<const char*> {"Assets\\Custom\\kuro\\BODYKURO.dds"});
+		App->resource->ImportModel("PinkyAssets\\Custom\\kuro\\kuro.fbx", std::vector<const char*> {"PinkyAssets\\Custom\\kuro\\BODYKURO.dds"});
 		break;
 	case ai::CUSTOM_MESH::SHARK:
-		App->resource->ImportModel("Assets\\Custom\\king_shark\\kingsharksketch.fbx", std::vector<const char*> {"Assets\\Custom\\king_shark\\king_shark_tex.dds"});
+		App->resource->ImportModel("PinkyAssets\\Custom\\king_shark\\kingsharksketch.fbx", std::vector<const char*> {"PinkyAssets\\Custom\\king_shark\\king_shark_tex.dds"});
 		break;
 	default:
 		break;
