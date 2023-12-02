@@ -145,7 +145,7 @@ std::string ModuleResource::SaveToLibrary(Resource* r)
 		break;
 	case R_TYPE::TEXTURE:
 		path = TEXTURES_PATH;
-		ext = ".sufrimientoinfernal"; // TODO: que nombre de extension tiene que tener? 
+		ext = ".duk";
 		size = I_Texture::Save(static_cast<R_Texture*>(r), &buffer);
 		break;
 	case R_TYPE::SCENE:
