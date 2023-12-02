@@ -65,32 +65,10 @@ GameObject* ModuleResource::ImportFile(const char* fileDir, GameObject* goToLink
 		{
 			if (dir.find(tex_ext.at(i)) != std::string::npos)
 			{
-				goToLink->mesh->mesh->tex->ImportTexture(fileDir);
-
-				std::string path = App->resource->SaveToLibrary(goToLink->mesh->mesh->tex);
-				
-				goToLink->mesh->mesh->tex = static_cast<R_Texture*>(App->resource->LoadFromLibrary(path, R_TYPE::TEXTURE));
-
-				/*R_Texture* tex = new R_Texture();
-				tex->ImportTexture(fileDir);
-
-				std::string path = App->resource->SaveToLibrary(tex);
-				RELEASE(tex);
-
-				goToLink->mesh->mesh->tex = static_cast<R_Texture*>(App->resource->LoadFromLibrary(path, R_TYPE::TEXTURE));*/
-
-				/*for each (R_Mesh* i in App->renderer3D->meshes)
-				{
-					R_Texture* tex = new R_Texture();
-					tex->ImportTexture(fileDir);
-
-					std::string path = App->resource->SaveToLibrary(tex);
-					RELEASE(tex);
-
-					tex = static_cast<R_Texture*>(App->resource->LoadFromLibrary(path, R_TYPE::TEXTURE));
-
-					i->BindTexture(tex);
-				}*/
+				C_Material* mat = static_cast<C_Material*>(goToLink->GetComponentByType(C_TYPE::MATERIAL));
+				mat->tex->ImportTexture(fileDir);
+				std::string path = App->resource->SaveToLibrary(mat->tex);			
+				mat->tex = static_cast<R_Texture*>(App->resource->LoadFromLibrary(path, R_TYPE::TEXTURE));
 			}
 		}
 	}

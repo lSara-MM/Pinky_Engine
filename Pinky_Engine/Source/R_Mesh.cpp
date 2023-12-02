@@ -21,7 +21,6 @@ R_Mesh::R_Mesh() : Resource(R_TYPE::MESH)
 	num_tex_uvs = 0;
 	tex_uvs = nullptr;
 
-	tex = new R_Texture();
 	uid = App->randomLCG->Int();
 }
 
@@ -31,11 +30,6 @@ R_Mesh::~R_Mesh()
 	RELEASE_ARRAY(vertex);
 	RELEASE_ARRAY(normals);
 	RELEASE_ARRAY(tex_uvs);
-
-	if (tex != nullptr)
-	{
-		tex->~R_Texture();
-	}
 }
 
 bool R_Mesh::InitBuffers()
@@ -100,10 +94,4 @@ void R_Mesh::DeleteBuffers()
 	id_normals = 0;
 	glDeleteBuffers(1, &id_tex_uvs);
 	id_tex_uvs = 0;
-}
-
-void R_Mesh::BindTexture(R_Texture* t)
-{
-	RELEASE(tex);
-	tex = t;
 }

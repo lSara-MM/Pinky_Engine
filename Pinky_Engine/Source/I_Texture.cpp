@@ -13,13 +13,14 @@ uint64 I_Texture::Save(const R_Texture* ourTexture, char** fileBuffer)
 	ILubyte* cursor;
 
 	ilEnable(IL_FILE_OVERWRITE);
+	ilBindImage(ourTexture->tex_id);
 
 	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5); // To pick a specific DXT compression use
 	size = ilSaveL(IL_DDS, nullptr, 0); // Get the size of the data buffer
 
 	if (size > 0)
 	{
-		cursor = new ILubyte[size]; 
+		cursor = new ILubyte[size];
 		if (ilSaveL(IL_DDS, cursor, size) > 0) // Save to buffer with the ilSaveIL function
 		{
 			*fileBuffer = (char*)cursor;
@@ -35,6 +36,7 @@ uint64 I_Texture::Save(const R_Texture* ourTexture, char** fileBuffer)
 		}
 	}
 
+	ilBindImage(0);
 	return size;
 }
 
@@ -70,11 +72,16 @@ bool I_Texture::Load(R_Texture* ourTex, const char* buffer, uint size)
 		ILinfo i;
 		iluGetImageInfo(&i);
 
-		ourTex->tex_width = ilGetInteger(IL_IMAGE_WIDTH);
+		ourTex->tex_width = i.Width;
+		ourTex->tex_height = i.Height;
+		ourTex->tex_type = i.Type;
+		ourTex->tex_format = i.Format;
+
+		/*ourTex->tex_width = ilGetInteger(IL_IMAGE_WIDTH);
 		ourTex->tex_height = ilGetInteger(IL_IMAGE_HEIGHT);
 		ourTex->tex_type = ilGetInteger(IL_IMAGE_TYPE);
-		ourTex->tex_format = ilGetInteger(IL_IMAGE_FORMAT);
-		
+		ourTex->tex_format = ilGetInteger(IL_IMAGE_FORMAT);*/
+
 		ourTex->tex_id = ilutGLBindTexImage();
 		ilDeleteImages(1, &imageID);
 	}

@@ -12,9 +12,7 @@
 
 C_Material::C_Material(GameObject* g, R_Texture* t, uint i, bool start_enabled) : Component(C_TYPE::MATERIAL, g, i, start_enabled, "Material")
 {
-	tex = t;
-	//(t->path != "") ? tex = t : tex = nullptr;
-	//(t == nullptr || t->path == "") ? tex = nullptr : tex = t;
+	(t == nullptr) ? tex = new R_Texture() : tex = t;
 
 	checkered = false;
 	color = { 255, 255, 255, 255 };
@@ -63,11 +61,11 @@ void C_Material::ShowInInspector()
 		}
 		ImGui::SetItemTooltip("Use checkered texture");
 
-		if (tex != nullptr && tex->path != "")
+		if (tex != nullptr/* && tex->path != ""*/)
 		{
 			ImGui::Text("Texture Width: %d", tex->tex_width);
 			ImGui::Text("Texture Height: %d", tex->tex_height);
-			ImGui::TextWrapped("Texture Path: %s", tex->path);
+			ImGui::TextWrapped("Texture Path: %s", (tex->path != nullptr) ? tex->path : "");
 			ImGui::Image((void*)(intptr_t)tex->tex_id, ImVec2(100, 100));
 		}
 

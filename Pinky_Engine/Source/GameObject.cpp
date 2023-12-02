@@ -126,7 +126,6 @@ update_status GameObject::Update(float dt)
 				{
 					if (!vMaterials.empty() && vMaterials[0]->isActive)//TODO: mirar materials bé
 					{
-						vMaterials[0]->tex = mesh->mesh->tex; //TODO: mirar com fer bé
 						mesh->Draw(vMaterials[0]->checkered, vMaterials[0]->color);
 
 						if (mesh->showVertexNormals)
@@ -202,10 +201,10 @@ bool GameObject::AddComponent(C_TYPE type, void* var, ai::POLY_PRIMITIVE_TYPE po
 		// In unity there can be more than one if embeded (?) see snowman for reference 
 		if (numMaterials == 0)
 		{
-			R_Mesh* m = static_cast<R_Mesh*>(var);
-			if (m != nullptr)
+			R_Texture* t = static_cast<R_Texture*>(var);
+			if (t != nullptr)
 			{
-				temp = new C_Material(this, m->tex, numMaterials);
+				temp = new C_Material(this, t, numMaterials);
 				vComponents.push_back(temp);
 			}
 			else

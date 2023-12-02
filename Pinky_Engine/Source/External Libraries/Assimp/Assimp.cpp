@@ -165,7 +165,7 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 			obj->AddComponent(C_TYPE::MESH, mesh);
 
 			//---Material---
-			if (!component) { obj->AddComponent(C_TYPE::MATERIAL, mesh); }
+			if (!component) { obj->AddComponent(C_TYPE::MATERIAL); }
 
 			//TODO: pushback elsewhere
 			App->renderer3D->meshes.push_back(mesh);

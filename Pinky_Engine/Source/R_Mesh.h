@@ -27,7 +27,6 @@ public:
 
 	bool InitBuffers();
 	void DeleteBuffers();
-	void BindTexture(R_Texture* t);
 
 public:
 
@@ -56,7 +55,5 @@ public:
 	//Frustum culling
 	AABB local_aabb;//local AABB
 
-	R_Texture* tex;
-	//ai::texture tex;	// TODO: change to materil resource o lo que sea
 private:
 };
