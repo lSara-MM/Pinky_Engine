@@ -103,11 +103,11 @@ namespace ai
 	void EnableDebug();
 	void DisableDebug();
 
-	bool ImportMesh(const char* meshfileDir, GameObject* go = nullptr, bool component = false);
+	GameObject* ImportMesh(const char* meshfileDir, GameObject* go = nullptr, bool component = false);
 	GameObject* MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component = false, bool foundParent = false);
 	
 	void CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go = nullptr, bool component = false);
-	void CreateCustomMehses(CUSTOM_MESH obj, GameObject* go = nullptr);
+	void CreateCustomMehses(CUSTOM_MESH obj);
 
 
 	// Textures

@@ -253,7 +253,6 @@ void GameObject::RemoveComponent(Component* component)
 //---Parent/Child---
 C_Mesh* GameObject::GetComponentMesh()
 {
-
 	for (auto i = 0; i < vComponents.size(); i++)
 	{
 		if (vComponents[i]->type == C_TYPE::MESH)

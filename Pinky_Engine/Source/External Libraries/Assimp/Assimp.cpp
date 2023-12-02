@@ -33,7 +33,7 @@ void ai::DisableDebug()
 	LOG("Disable debug mode");
 }
 
-bool ai::ImportMesh(const char* meshfileDir, GameObject* go, bool component)
+GameObject* ai::ImportMesh(const char* meshfileDir, GameObject* go, bool component)
 {
 	const aiScene* scene = aiImportFile(meshfileDir, aiProcessPreset_TargetRealtime_MaxQuality);
 	GameObject* ret = nullptr;
@@ -68,10 +68,10 @@ bool ai::ImportMesh(const char* meshfileDir, GameObject* go, bool component)
 			ret = MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, App->scene->rootNode);
 		}
 
-		if (ret != nullptr) 
+		if (ret != nullptr)
 		{
 			LOG("%d meshes loaded.", scene->mNumMeshes);
-			App->parson->CreateGOMetaFile(ret);
+			//App->parson->CreateGOMetaFile(ret);
 		}
 		else { LOG("[ERROR] Couldn't load mesh.", scene->mNumMeshes); }
 
@@ -80,11 +80,10 @@ bool ai::ImportMesh(const char* meshfileDir, GameObject* go, bool component)
 	else
 	{
 		LOG("[ERROR] loading scene % s", meshfileDir);
-		return false;
+		return nullptr;
 	}
 
-	ret = nullptr;
-	return true;
+	return ret;
 }
 
 GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component, bool foundParent)
@@ -120,7 +119,7 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 			else
 			{
 				MeshHierarchy(s, children[i]->mChildren, children[i]->mNumChildren, obj, foundParent);
-			}			
+			}
 		}
 
 		if (children[i]->mNumMeshes > 0)
@@ -199,21 +198,18 @@ void ai::CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go, bool compo
 	}
 }
 
-void ai::CreateCustomMehses(CUSTOM_MESH obj, GameObject* go)
+void ai::CreateCustomMehses(CUSTOM_MESH obj)
 {
 	switch (obj)
 	{
 	case ai::CUSTOM_MESH::LAW:
-		ImportMesh("Assets\\Custom\\law_hat\\trafalgar-laws-hat.fbx", go);
-		App->resource->ImportFile("Assets\\Custom\\law_hat\\law_hat_mat_BaseColor.dds");
+		App->resource->ImportModel("Assets\\Custom\\law_hat\\trafalgar-laws-hat.fbx", std::vector<const char*> {"Assets\\Custom\\law_hat\\law_hat_mat_BaseColor.dds"});
 		break;
 	case ai::CUSTOM_MESH::KURO:
-		ImportMesh("Assets\\Custom\\kuro\\kuro.fbx", go);
-		App->resource->ImportFile("Assets\\Custom\\kuro\\BODYKURO.dds");
+		App->resource->ImportModel("Assets\\Custom\\kuro\\kuro.fbx", std::vector<const char*> {"Assets\\Custom\\kuro\\BODYKURO.dds"});
 		break;
 	case ai::CUSTOM_MESH::SHARK:
-		ImportMesh("Assets\\Custom\\king_shark\\kingsharksketch.fbx", go);
-		App->resource->ImportFile("Assets\\Custom\\king_shark\\king_shark_tex.dds");
+		App->resource->ImportModel("Assets\\Custom\\king_shark\\kingsharksketch.fbx", std::vector<const char*> {"Assets\\Custom\\king_shark\\king_shark_tex.dds"});
 		break;
 	default:
 		break;

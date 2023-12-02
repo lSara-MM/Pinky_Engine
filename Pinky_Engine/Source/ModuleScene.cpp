@@ -95,7 +95,7 @@ update_status ModuleScene::Update(float dt)
 update_status ModuleScene::PostUpdate(float dt)
 {
 	update_status ret = UPDATE_CONTINUE;
-	
+
 
 	return ret;
 }
@@ -110,10 +110,5 @@ bool ModuleScene::CleanUp()
 
 void ModuleScene::BakerHouse()
 {
-	App->resource->ImportFile("Assets\\3dObject\\baker_house\\BakerHouse.fbx");
-	App->resource->ImportFile("Assets\\3dObject\\baker_house\\Baker_house.dds");
-
-	// TODO: remove when copy wip done
-	//GameObject* go8 = new GameObject(rootNode->vChildren.back(), rootNode->vChildren.back()->vChildren.size(), rootNode->vChildren.back()->pParent);
-	//go8 = nullptr;
+	App->resource->ImportModel("Assets\\3dObject\\baker_house\\BakerHouse.fbx", std::vector<const char*> {"Assets\\3dObject\\baker_house\\Baker_house.dds"});
 }

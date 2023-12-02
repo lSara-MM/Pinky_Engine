@@ -3,6 +3,7 @@
 #include "ModuleResource.h"
 
 #include "FileSystemManager.h"
+#include "GameObject.h"
 
 #include "Resource.h"
 #include "I_Mesh.h"
@@ -39,39 +40,91 @@ bool ModuleResource::CleanUp()
 	return true;
 }
 
-void ModuleResource::ImportFile(const char* fileDir)
+GameObject* ModuleResource::ImportFile(const char* fileDir, GameObject* goToLink)
 {
 	std::string dir = fileDir;
 	std::array<std::string, 3> obj_ext = { ".fbx", ".FBX", ".obj", };
 	std::array<std::string, 6> tex_ext = { ".png", ".PNG", ".jpg", ".JPG", ".dds", ".DDS" };
 
+	GameObject* go = nullptr;
+	bool imported = false;
+
 	for (auto i = 0; i < obj_ext.size(); i++)
 	{
 		if (dir.find(obj_ext.at(i)) != std::string::npos)
 		{
-			ai::ImportMesh(fileDir);
+			imported = true;
+			go = ai::ImportMesh(fileDir);
 			break;
 		}
 	}
 
-	for (auto i = 0; i < tex_ext.size(); i++)
+	if (!imported)
 	{
-		if (dir.find(tex_ext.at(i)) != std::string::npos)
+		for (auto i = 0; i < tex_ext.size(); i++)
 		{
-			for each (R_Mesh* i in App->renderer3D->meshes)
+			if (dir.find(tex_ext.at(i)) != std::string::npos)
 			{
-				R_Texture* tex = new R_Texture();
+				goToLink->mesh->mesh->tex->ImportTexture(fileDir);
+
+				std::string path = App->resource->SaveToLibrary(goToLink->mesh->mesh->tex);
+
+				/*R_Texture* tex = new R_Texture();
 				tex->ImportTexture(fileDir);
 
 				std::string path = App->resource->SaveToLibrary(tex);
 				RELEASE(tex);
 
-				tex = static_cast<R_Texture*>(App->resource->LoadFromLibrary(path, R_TYPE::TEXTURE));
+				goToLink->mesh->mesh->tex = static_cast<R_Texture*>(App->resource->LoadFromLibrary(path, R_TYPE::TEXTURE));*/
 
-				i->BindTexture(tex);
+				/*for each (R_Mesh* i in App->renderer3D->meshes)
+				{
+					R_Texture* tex = new R_Texture();
+					tex->ImportTexture(fileDir);
+
+					std::string path = App->resource->SaveToLibrary(tex);
+					RELEASE(tex);
+
+					tex = static_cast<R_Texture*>(App->resource->LoadFromLibrary(path, R_TYPE::TEXTURE));
+
+					i->BindTexture(tex);
+				}*/
 			}
 		}
 	}
+
+	return go;
+}
+
+void ModuleResource::ImportModel(const char* meshPath, std::vector<const char*> texPaths)
+{
+	GameObject* go = nullptr;
+	go = ImportFile(meshPath);
+
+	if (texPaths.size() == 1)
+	{
+		for (int i = 0; i < go->vChildren.size(); i++)
+		{
+			ImportFile(texPaths[0], go->vChildren[i]);
+		}
+	}
+	else
+	{
+		for (int i = 0; i < go->vChildren.size(); i++)
+		{
+			if (i < texPaths.size())
+			{
+				ImportFile(texPaths[i], go->vChildren[i]);
+			}
+			else
+			{
+				ImportFile(texPaths[go->vChildren.size() - 1], go->vChildren[i]);
+			}
+		}
+	}
+
+	App->parson->CreateGOMetaFile(go);
+	go = nullptr;
 }
 
 std::string ModuleResource::SaveToLibrary(Resource* r)
