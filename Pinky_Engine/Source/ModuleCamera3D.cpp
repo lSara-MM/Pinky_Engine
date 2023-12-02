@@ -171,7 +171,7 @@ void ModuleCamera3D::CheckIntersection(GameObject* go)
 
 			if (hit)
 			{
-				intersects.insert(std::pair<float, GameObject*>(entryDist, go));
+				intersects[entryDist] = go;
 			}
 		}
 	}
@@ -197,7 +197,8 @@ void ModuleCamera3D::CheckTriangleIntersection()
 			mesh = (C_Mesh*)iterator->second->mesh;
 
 			float4x4 object_transform = iterator->second->transform->GetGlobalTransform();
-			rayCam.Transform(object_transform.Inverted());
+			LineSegment localrayCam = rayCam;
+			localrayCam.Transform(object_transform.Inverted());
 
 			for (uint i = 0; i < mesh->mesh->num_index; i += 3)
 			{

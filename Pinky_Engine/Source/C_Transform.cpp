@@ -157,3 +157,20 @@ void C_Transform::UpdateBoundingBoxes()
 		gameObject->mesh->global_aabb.Enclose(gameObject->mesh->obb);
 	}
 }
+
+void C_Transform::UpdateGlobalTransform(float4x4 matrix)
+{
+	float3 pos, sc;
+	Quat rot;
+	matrix.Decompose(pos, rot, sc);
+
+	scale = sc;
+	position = pos;
+	rotation = rot;
+	eulerRot = rotation.ToEulerXYZ();
+	eulerRot.x = RadToDeg(eulerRot.x);
+	eulerRot.y = RadToDeg(eulerRot.y);
+	eulerRot.z = RadToDeg(eulerRot.z);
+	
+	dirty_ = true;
+}

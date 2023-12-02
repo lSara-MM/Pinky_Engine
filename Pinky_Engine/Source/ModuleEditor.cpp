@@ -13,6 +13,7 @@
 #include "External Libraries/ImGui/imgui.h"
 #include "External Libraries/ImGui/backends/imgui_impl_sdl2.h"
 #include "External Libraries/ImGui/backends/imgui_impl_opengl3.h"
+#include "External Libraries/ImGuizmo/ImGuizmo.h"
 //
 #include "External Libraries/ImGui/imgui_custom.h"
 #include "External Libraries/Deviceld/DeviceId.h"
@@ -117,6 +118,10 @@ bool ModuleEditor::Init()
 	// Load Baker House at the start by default
 	App->scene->BakerHouse();
 	return ret;
+
+	//Guizmos
+	transformOperation = ImGuizmo::OPERATION::TRANSLATE;
+	guizmoMode = ImGuizmo::MODE::WORLD;
 }
 
 // PreUpdate: clear buffer
@@ -946,9 +951,62 @@ void ModuleEditor::EditorWindow()
 	App->renderer3D->editorCam->SetAspectRatio(ViewportSize.x, ViewportSize.y);
 	ImGui::Image((ImTextureID)App->renderer3D->editorCam->textureColourBuffer, ViewportSize, ImVec2(0, 1), ImVec2(1, 0));
 
+	//Guizmos
+	std::vector<GameObject*> selectedList;
+	selectedList = App->scene->h->GetSelectedGOs();
+
+	ImGuizmoControl();
+
+	for (auto i = 0; i < selectedList.size(); i++)
+	{
+		if (selectedList[i] != nullptr)
+		{
+			C_Transform* transform = (C_Transform*)selectedList[i]->transform;
+			float4x4 viewTrans = App->renderer3D->editorCam->frustum.ViewMatrix();
+			viewTrans.Transpose();
+			float4x4 projectionTrans = App->renderer3D->editorCam->frustum.ProjectionMatrix();
+			projectionTrans.Transpose();
+			float4x4 objectMatrix = transform->globalMatrix;
+			float4x4 deltaMatrix;
+			ImGuizmo::SetRect(viewPos.x, viewPos.y, viewSize.x, viewSize.y);
+			ImGuizmo::SetDrawlist();
+			ImGuizmo::Manipulate(viewTrans.ptr(), projectionTrans.ptr(), transformOperation, guizmoMode, objectMatrix.ptr(), deltaMatrix.ptr());
+
+			if (!ImGuizmo::IsUsing() && ImGui::IsWindowHovered())
+			{
+				float4x4 matrix = objectMatrix.Transposed();
+				transform->UpdateGlobalTransform(matrix);
+			}
+		}
+	}
+		
 	ImGui::End();
 
 	ImGui::PopStyleVar();
+}
+
+void ModuleEditor::ImGuizmoControl()
+{
+	if ((App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) && (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT) && (App->input->GetKey(SDL_SCANCODE_LSHIFT) != KEY_REPEAT))
+	{
+		transformOperation = ImGuizmo::OPERATION::TRANSLATE;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+	{
+		transformOperation = ImGuizmo::OPERATION::ROTATE;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+	{
+		transformOperation = ImGuizmo::OPERATION::SCALE;
+	}
+	if ((App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) && (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) && (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT))
+	{
+		guizmoMode = ImGuizmo::MODE::WORLD;
+	}
+	if ((App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) && (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN))
+	{
+		guizmoMode = ImGuizmo::MODE::LOCAL;
+	}
 }
 
 void ModuleEditor::GameWindow()

@@ -76,6 +76,9 @@
     <Filter Include="Sources\Resources">
       <UniqueIdentifier>{33d05545-13e8-44bf-898b-a7bc02666c09}</UniqueIdentifier>
     </Filter>
+    <Filter Include="External Libraries\ImGuizmo">
+      <UniqueIdentifier>{eeaea776-0188-4d1c-8ab6-077b21fe1249}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Module.h">
@@ -421,6 +424,21 @@
     <ClInclude Include="Source\ImGuiProjectFiles.h">
       <Filter>Sources\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Source\External Libraries\ImGuizmo\ImCurveEdit.h">
+      <Filter>External Libraries\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\External Libraries\ImGuizmo\ImGradient.h">
+      <Filter>External Libraries\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\External Libraries\ImGuizmo\ImGuizmo.h">
+      <Filter>External Libraries\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\External Libraries\ImGuizmo\ImSequencer.h">
+      <Filter>External Libraries\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\External Libraries\ImGuizmo\ImZoomSlider.h">
+      <Filter>External Libraries\ImGuizmo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ModuleCamera3D.cpp">
@@ -647,6 +665,18 @@
     </ClCompile>
     <ClCompile Include="Source\ImGuiProjectFiles.cpp">
       <Filter>Sources\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External Libraries\ImGuizmo\ImCurveEdit.cpp">
+      <Filter>External Libraries\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External Libraries\ImGuizmo\ImGradient.cpp">
+      <Filter>External Libraries\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External Libraries\ImGuizmo\ImGuizmo.cpp">
+      <Filter>External Libraries\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External Libraries\ImGuizmo\ImSequencer.cpp">
+      <Filter>External Libraries\ImGuizmo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

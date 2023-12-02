@@ -32,6 +32,7 @@ public:
 	void UpdateGlobalMatrix();
 	//update global AABB and OBB when updating transform
 	void UpdateBoundingBoxes();
+	void UpdateGlobalTransform(float4x4 matrix);
 
 
 public:
