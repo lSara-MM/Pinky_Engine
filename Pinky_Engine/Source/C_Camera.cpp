@@ -35,7 +35,7 @@ C_Camera::C_Camera(GameObject* g, uint i, bool start_enabled) : Component(C_TYPE
 
 C_Camera::~C_Camera()
 {
-	deleteBuffers();
+	DeleteBuffers();
 	if (isMainCam)
 	{
 		App->renderer3D->SetGameCamera(nullptr);
@@ -290,7 +290,7 @@ void C_Camera::Draw()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(GetViewMatrix());
 
-	bindFrameBuffer();
+	BindFrameBuffer();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
@@ -298,7 +298,7 @@ void C_Camera::Draw()
 void C_Camera::createCamBuffers(int width, int height)
 {
 	SetAspectRatio(width, height);
-	deleteBuffers();
+	DeleteBuffers();
 
 	glGenFramebuffers(1, &FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
@@ -325,19 +325,19 @@ void C_Camera::createCamBuffers(int width, int height)
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
 
-void C_Camera::bindFrameBuffer()
+void C_Camera::BindFrameBuffer()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 	//glViewport(0, 0, App->editor->m_ViewportSize.x, App->editor->m_ViewportSize.y);
 }
 
-void C_Camera::unbindFrameBuffer()
+void C_Camera::UnbindFrameBuffer()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 }
 
-void C_Camera::deleteBuffers()
+void C_Camera::DeleteBuffers()
 {
 	if (FBO!=0)
 	{

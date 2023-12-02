@@ -43,9 +43,9 @@ public:
 	//Buffer functions
 	void Draw();
 	void createCamBuffers(int width, int height);
-	void bindFrameBuffer();
-	void unbindFrameBuffer();
-	void deleteBuffers();
+	void BindFrameBuffer();
+	void UnbindFrameBuffer();
+	void DeleteBuffers();
 
 public:
 	ai::texture* tex;

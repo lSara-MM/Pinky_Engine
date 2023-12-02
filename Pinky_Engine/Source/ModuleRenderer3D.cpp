@@ -221,7 +221,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	(wireframe) ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 
-	editorCam->unbindFrameBuffer();
+	editorCam->UnbindFrameBuffer();
 	if (App->renderer3D->gameCam != nullptr)
 	{
 		//gameCam->unbindFrameBuffer();

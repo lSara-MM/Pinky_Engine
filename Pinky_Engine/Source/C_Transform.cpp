@@ -164,13 +164,22 @@ void C_Transform::UpdateGlobalTransform(float4x4 matrix)
 	Quat rot;
 	matrix.Decompose(pos, rot, sc);
 
-	scale = sc;
-	position = pos;
-	rotation = rot;
-	eulerRot = rotation.ToEulerXYZ();
-	eulerRot.x = RadToDeg(eulerRot.x);
-	eulerRot.y = RadToDeg(eulerRot.y);
-	eulerRot.z = RadToDeg(eulerRot.z);
-	
+	if (App->editor->transformOperation == ImGuizmo::OPERATION::SCALE) {
+		scale = sc;
+	}
+
+	else if (App->editor->transformOperation == ImGuizmo::OPERATION::ROTATE) {
+		rotation = rot.Normalized();
+		eulerRot = rotation.ToEulerXYZ();
+		eulerRot.x = RadToDeg(eulerRot.x);
+		eulerRot.y = RadToDeg(eulerRot.y);
+		eulerRot.z = RadToDeg(eulerRot.z);
+	}
+
+	else
+	{
+		position = pos;
+	}
+
 	dirty_ = true;
 }

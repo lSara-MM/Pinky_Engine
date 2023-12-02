@@ -972,7 +972,7 @@ void ModuleEditor::EditorWindow()
 			ImGuizmo::SetDrawlist();
 			ImGuizmo::Manipulate(viewTrans.ptr(), projectionTrans.ptr(), transformOperation, guizmoMode, objectMatrix.ptr(), deltaMatrix.ptr());
 
-			if (!ImGuizmo::IsUsing() && ImGui::IsWindowHovered())
+			if (ImGuizmo::IsUsing() && ImGui::IsWindowHovered())
 			{
 				float4x4 matrix = objectMatrix.Transposed();
 				transform->UpdateGlobalTransform(matrix);
@@ -999,14 +999,14 @@ void ModuleEditor::ImGuizmoControl()
 	{
 		transformOperation = ImGuizmo::OPERATION::SCALE;
 	}
-	if ((App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) && (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) && (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT))
-	{
-		guizmoMode = ImGuizmo::MODE::WORLD;
-	}
-	if ((App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) && (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN))
-	{
-		guizmoMode = ImGuizmo::MODE::LOCAL;
-	}
+	//if ((App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) && (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) && (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT))
+	//{
+	//	guizmoMode = ImGuizmo::MODE::WORLD;
+	//}
+	//if ((App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) && (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN))
+	//{
+	//	guizmoMode = ImGuizmo::MODE::LOCAL;
+	//}
 }
 
 void ModuleEditor::GameWindow()

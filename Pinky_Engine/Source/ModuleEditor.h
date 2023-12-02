@@ -69,6 +69,10 @@ public:
 	//Game scene size
 	ImVec2 GameViewSize;
 
+	//guizmos
+	ImGuizmo::OPERATION transformOperation;
+	ImGuizmo::MODE guizmoMode;
+
 private:
 
 	std::vector<ImGuiWindows*> vImGuiWindows;
@@ -103,8 +107,4 @@ private:
 
 	//Struct to get sdl version info
 	SDL_version versionSDL;
-
-	//guizmos
-	ImGuizmo::OPERATION transformOperation;
-	ImGuizmo::MODE guizmoMode;
 };

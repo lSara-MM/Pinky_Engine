@@ -6,6 +6,7 @@
 #include "C_Mesh.h"
 #include "C_Material.h"
 #include "C_Camera.h"
+#include "External Libraries/ImGuizmo/ImGuizmo.h"
 
 // If parent == nullptr --> its the root node
 GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
@@ -99,6 +100,52 @@ update_status GameObject::Update(float dt)
 				vChildren[i]->Update(dt);
 			}
 		}
+
+		/*if (selected)
+		{
+			ImGuizmo::Enable(true);
+
+			ImGuizmo::OPERATION gizmoOperation = ImGuizmo::TRANSLATE;
+			ImGuizmo::MODE gizmoMode = ImGuizmo::LOCAL;
+
+			ImGuizmo::SetRect(App->editor->ViewportSize.x, App->editor->ViewportSize.y, App->editor->ViewportPos.x, App->editor->ViewportPos.y);
+
+			float4x4 globalTransposed = transform->globalMatrix.Transposed();
+
+			if ((App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) && (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT) && (App->input->GetKey(SDL_SCANCODE_LSHIFT) != KEY_REPEAT))
+			{
+				gizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+			}
+			if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+			{
+				gizmoOperation = ImGuizmo::OPERATION::ROTATE;
+			}
+			if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+			{
+				gizmoOperation = ImGuizmo::OPERATION::SCALE;
+			}
+
+			ImGuizmo::Manipulate(App->renderer3D->editorCam->GetViewMatrix(), App->renderer3D->editorCam->GetProjectionMatrix(), gizmoOperation, gizmoMode, globalTransposed.ptr());
+
+			if (ImGuizmo::IsUsing() && App->input->GetKey(SDL_SCANCODE_LALT) != KEY_REPEAT)
+			{
+				globalTransposed.Transpose();
+
+				if (pParent->pParent == nullptr)
+				{
+					transform->localMatrix = globalTransposed;
+				}
+				else
+				{
+					 C_Transform* transform = pParent->transform;
+					transform->localMatrix = transform->GetGlobalTransform().Inverted() * globalTransposed;
+				}
+
+				transform->localMatrix.Decompose(transform->position, transform->rotation, transform->scale);
+				transform->eulerRot = transform->rotation.ToEulerXYZ() * RADTODEG;
+				transform->dirty_ = true;
+			}
+		}*/
 
 		if (transform->dirty_)
 		{
