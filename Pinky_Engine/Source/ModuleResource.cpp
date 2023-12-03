@@ -50,12 +50,27 @@ GameObject* ModuleResource::ImportFile(const char* fileDir, GameObject* goToLink
 
 	std::string normFileName = App->fs->NormalizePath((metaPath + ".meta.json").c_str());
 
-	//if (App->fs->Exists(normFileName.c_str()))
-	//{
-	//	App->parson->CreateGOfromMeta(normFileName);
-	//	//LoadFromLibrary(R_TYPE::MESH);
-	//}
-	//else
+	if (App->fs->Exists(normFileName.c_str()))
+	{
+		switch (CheckExtensionType(fileDir))
+		{
+		case R_TYPE::MESH:
+			go = App->parson->CreateGOfromMeta(normFileName);
+			LoadChildrenMeshes(go, go->vChildren.size());
+			break;
+		case R_TYPE::TEXTURE:
+			break;
+		case R_TYPE::SCENE:
+			break;
+		case R_TYPE::NONE:
+			break;
+		default:
+			break;
+		}
+
+		//LoadFromLibrary(R_TYPE::MESH);
+	}
+	else
 	{
 		bool imported = false;
 
@@ -66,7 +81,7 @@ GameObject* ModuleResource::ImportFile(const char* fileDir, GameObject* goToLink
 				imported = true;
 				go = ai::ImportMesh(fileDir);
 
-				App->parson->CreateJSON(go, "Assets\\");
+				//App->parson->CreateJSON(go, "Assets\\");
 				break;
 			}
 		}
@@ -84,6 +99,8 @@ GameObject* ModuleResource::ImportFile(const char* fileDir, GameObject* goToLink
 				}
 			}
 		}
+
+		App->parson->CreateJSON(go, fileDir);
 	}
 
 	return go;
@@ -99,7 +116,7 @@ void ModuleResource::ImportModel(const char* meshPath, std::vector<const char*> 
 
 	go = ImportFile(meshPath);
 
-	if (texPaths.empty())
+	/*if (texPaths.empty())
 	{
 	}
 	else if (texPaths.size() == 1)
@@ -122,7 +139,7 @@ void ModuleResource::ImportModel(const char* meshPath, std::vector<const char*> 
 				ImportFile(texPaths[go->vChildren.size() - 1], go->vChildren[i]);
 			}
 		}
-	}
+	}*/
 
 	App->parson->CreateJSON(go, meshPath);
 	go = nullptr;
@@ -168,29 +185,71 @@ Resource* ModuleResource::LoadFromLibrary(std::string path, R_TYPE type)
 {
 	char* buffer = nullptr;
 
-	Resource* r;
+	Resource* r = nullptr;
 	uint size = App->fs->Load(path.c_str(), &buffer);
 
-	switch (type)
+	if (size != 0)
 	{
-	case R_TYPE::MESH:
-		r = new R_Mesh();
-		I_Mesh::Load(static_cast<R_Mesh*>(r), buffer);
-		break;
-	case R_TYPE::TEXTURE:
-		r = new R_Texture();
-		I_Texture::Load(static_cast<R_Texture*>(r), buffer, size);
-		break;
-	case R_TYPE::SCENE:
-		break;
-	case R_TYPE::NONE:
-		break;
-	default:
-		break;
+		std::string filePath, fileName, fileExt;
+		App->fs->SplitFilePath(path.c_str(), &filePath, &fileName, &fileExt);
+
+		u32 i = std::stoi(fileName.c_str());
+		switch (type)
+		{
+		case R_TYPE::MESH:
+			r = new R_Mesh();
+
+			if (i != r->GetUID()) { r->SetUID(i); }
+
+			I_Mesh::Load(static_cast<R_Mesh*>(r), buffer);
+			break;
+		case R_TYPE::TEXTURE:
+			r = new R_Texture();
+			I_Texture::Load(static_cast<R_Texture*>(r), buffer, size);
+			break;
+		case R_TYPE::SCENE:
+			break;
+		case R_TYPE::NONE:
+			break;
+		default:
+			break;
+		}
+
+		//App->parson->CreateGOfromMeta(buffer);
+		//RELEASE_ARRAY(buffer);
+	}
+	buffer = nullptr;
+	
+	return r;
+}
+
+R_TYPE ModuleResource::CheckExtensionType(const char* fileDir)
+{
+	std::vector<std::string> obj_ext = { "fbx", "FBX", "obj", };
+	std::vector<std::string> tex_ext = { "png", "PNG", "jpg", "JPG", "dds", "DDS" };
+	
+	if (App->fs->HasExtension(fileDir, obj_ext))
+	{
+		return R_TYPE::MESH;
+	}
+	
+	if (App->fs->HasExtension(fileDir, tex_ext))
+	{
+		return R_TYPE::TEXTURE;
 	}
 
-	//App->parson->CreateGOfromMeta(buffer);
-	//RELEASE_ARRAY(buffer);
-	buffer = nullptr;
-	return r;
+	return R_TYPE::NONE;
+}
+
+void ModuleResource::LoadChildrenMeshes(GameObject* go, uint size)
+{
+	if (go->mesh != nullptr)
+	{
+		LoadFromLibrary(go->mesh->mesh->libraryFile + MESHES_EXT, R_TYPE::MESH);
+	}
+
+	for (int i = 0; i < size; i++)
+	{
+		LoadChildrenMeshes(go->vChildren[i], go->vChildren[i]->vChildren.size());
+	}
 }

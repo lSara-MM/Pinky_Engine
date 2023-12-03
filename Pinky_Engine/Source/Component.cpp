@@ -1,5 +1,6 @@
 #include "Component.h"
 #include "GameObject.h"
+#include "Application.h"
 
 #include "C_Transform.h"
 #include "C_Mesh.h"
@@ -8,11 +9,18 @@
 
 Component::Component(C_TYPE t, std::string n) : type(t), name(n)
 {
+	uid = App->randomLCG->Int();
 }
 
-Component::Component(C_TYPE t, GameObject* g, bool start_enabled, std::string n) : type(t), gameObject(g), isActive(start_enabled), name(n) {}
+Component::Component(C_TYPE t, GameObject* g, bool start_enabled, std::string n) : type(t), gameObject(g), isActive(start_enabled), name(n)
+{
+	uid = App->randomLCG->Int();
+}
 
-Component::Component(GameObject* g, bool start_enabled, std::string n) : gameObject(g), isActive(start_enabled), name(n) {}
+Component::Component(GameObject* g, bool start_enabled, std::string n) : gameObject(g), isActive(start_enabled), name(n)
+{
+	uid = App->randomLCG->Int();
+}
 
 Component::~Component()
 {

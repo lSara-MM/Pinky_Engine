@@ -23,6 +23,10 @@ public:
 	std::string SaveToLibrary(Resource* r);
 	Resource* LoadFromLibrary(std::string path, R_TYPE type = R_TYPE::NONE);
 
+	R_TYPE CheckExtensionType(const char* fileDir);
+
+	void LoadChildrenMeshes(GameObject* go, uint size);
+
 public:
 	std::map <uint, Resource*>* mResources;
 

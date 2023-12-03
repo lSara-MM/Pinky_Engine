@@ -4,6 +4,13 @@ extern Application* App = nullptr;
 
 Application::Application()
 {
+	App = this;
+	//------
+	randomLCG = new LCG();
+	fs = new FileSystemManager();
+	parson = new ParsingJSON();
+	//------
+
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
 	renderer3D = new ModuleRenderer3D(this);
@@ -30,11 +37,6 @@ Application::Application()
 	AddModule(scene);
 	AddModule(renderer3D);
 	AddModule(editor);
-
-	//------
-	randomLCG = new LCG();
-	fs = new FileSystemManager();
-	parson = new ParsingJSON();
 }
 
 Application::~Application()
@@ -49,7 +51,6 @@ Application::~Application()
 bool Application::Init()
 {
 	bool ret = true;
-	App = this;
 
 	// Call Init() in all modules
 	for (std::vector<Module*>::const_iterator it = list_modules.cbegin(); it != list_modules.cend() && ret; ++it)

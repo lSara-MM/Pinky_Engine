@@ -75,7 +75,7 @@ int ParsingJSON::GameObjectInfo(GameObject* go, std::string node_name, int count
 	counter++;
 
 	json_object_dotset_string(root_object, (node_name + ".Name").c_str(), go->name.c_str());
-	json_object_dotset_number(root_object, (node_name + ".UUID").c_str(), go->GetUID());
+	json_object_dotset_number(root_object, (node_name + ".UID").c_str(), go->GetUID());
 
 	for (int i = 0; i < go->vChildren.size(); i++)
 	{
@@ -90,7 +90,7 @@ void ParsingJSON::ComponentsJSON(Component* comp, std::string node_name, int i)
 	std::string comp_name = node_name + ".Components.Component " + std::to_string(i);
 	json_object_dotset_string(root_object, (comp_name + ".Name").c_str(), comp->name.c_str());
 	json_object_dotset_number(root_object, (comp_name + ".Type").c_str(), (double)comp->type);
-	json_object_dotset_number(root_object, (comp_name + ".UUID").c_str(), comp->GetUID());
+	json_object_dotset_number(root_object, (comp_name + ".Component UID").c_str(), comp->GetUID());
 
 	switch (comp->type)
 	{
@@ -100,14 +100,12 @@ void ParsingJSON::ComponentsJSON(Component* comp, std::string node_name, int i)
 		json_object_dotset_array(&static_cast<C_Transform*> (comp)->scale[0], 3, comp_name + ".Scale");
 		break;
 	case C_TYPE::MESH:
-		json_object_dotset_number(root_object, (comp_name + ".UUID").c_str(), comp->GetUID());
-		json_object_dotset_number(root_object, (comp_name + ".Mesh UUID").c_str(), static_cast<C_Mesh*>(comp)->mesh->GetUID());
+		json_object_dotset_number(root_object, (comp_name + ".Resource UID").c_str(), static_cast<C_Mesh*>(comp)->mesh->GetUID());
 		json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), ("Libray\/Meshes\/" +
 			std::to_string(static_cast<C_Mesh*>(comp)->mesh->GetUID())).c_str());
 		break;
 	case C_TYPE::MATERIAL:
-		json_object_dotset_number(root_object, (comp_name + ".UUID").c_str(), comp->GetUID());
-		json_object_dotset_number(root_object, (comp_name + ".Material UUID").c_str(), static_cast<C_Material*>(comp)->tex->GetUID());
+		json_object_dotset_number(root_object, (comp_name + ".Resource UID").c_str(), static_cast<C_Material*>(comp)->tex->GetUID());
 		json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), ("Libray\/Textures\/" +
 			std::to_string(static_cast<C_Material*>(comp)->tex->GetUID())).c_str());
 		break;
@@ -155,7 +153,7 @@ GameObject* ParsingJSON::GOfromMeta(std::string node_name)
 {
 	GameObject* go = new GameObject();
 	go->name = json_object_dotget_string(root_object, (node_name + ".Name").c_str());
-	int id = json_object_dotget_number(root_object, (node_name + ".UID").c_str());
+	u32 id = json_object_dotget_number(root_object, (node_name + ".UID").c_str());
 	go->SetUID(id);
 	id = json_object_dotget_number(root_object, (node_name + ".Parent UID").c_str());
 
@@ -188,10 +186,11 @@ Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
 	std::string comp_name = node_name + ".Components.Component " + std::to_string(i);
 
 	Component* comp;
-	C_TYPE comp_type = (C_TYPE)json_object_dotget_number(root_object, (comp_name + ".Type").c_str());
-
+	u32 id;
 	float* f = nullptr;
-	int id;
+
+	C_TYPE comp_type = (C_TYPE)json_object_dotget_number(root_object, (comp_name + ".Type").c_str());
+	id = json_object_dotget_number(root_object, (comp_name + ".Component UID").c_str());
 
 	switch (comp_type)
 	{
@@ -222,20 +221,14 @@ Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
 		break;
 	case C_TYPE::MESH:
 		comp = new C_Mesh();
-		id = json_object_dotget_number(root_object, (comp_name + ".Components.UUID").c_str());
-		comp->SetUID(id);
-
-		id = json_object_dotget_number(root_object, (comp_name + ".Components.Mesh UUID").c_str());
+		id = json_object_dotget_number(root_object, (comp_name + ".Resource UID").c_str());
 		static_cast<C_Mesh*>(comp)->mesh->SetUID(id);
 
 		static_cast<C_Mesh*>(comp)->mesh->libraryFile = json_object_dotget_string(root_object, (comp_name + ".Library dir").c_str());
 		break;
 	case C_TYPE::MATERIAL:
 		comp = new C_Material();
-		id = json_object_dotget_number(root_object, (comp_name + ".Components.UUID").c_str());
-		comp->SetUID(id);
-
-		id = json_object_dotget_number(root_object, (comp_name + ".Components.Material UUID").c_str());
+		id = json_object_dotget_number(root_object, (comp_name + ".Resource UID").c_str());
 		static_cast<C_Material*>(comp)->tex->SetUID(id);
 
 		static_cast<C_Material*>(comp)->tex->libraryFile = json_object_dotget_string(root_object, (comp_name + ".Library dir").c_str());
@@ -248,6 +241,7 @@ Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
 		break;
 	}
 
+	comp->SetUID(id);
 	comp->type = comp_type;
 
 	//RELEASE(f);

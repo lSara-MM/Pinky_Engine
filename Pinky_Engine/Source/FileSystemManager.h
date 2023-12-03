@@ -48,7 +48,9 @@ public:
 
 	// Check extension
 	bool HasExtension(const char* path) const;
+	//// Compare extension with a given one
 	bool HasExtension(const char* path, std::string extension) const;
+	//// Check if has one of x extension
 	bool HasExtension(const char* path, std::vector<std::string> extensions) const;
 
 	//
