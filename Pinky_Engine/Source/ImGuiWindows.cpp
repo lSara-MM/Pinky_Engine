@@ -362,7 +362,7 @@ void Inspector::ShowWindow()
 			// --- Add components button ---
 			ImGui::Separator();
 			ImGui::Dummy(ImVec2(0, 10));
-			std::array<std::string, 3> components = { "Transform", "Mesh", "Material" };
+			std::array<std::string, 4> components = { "Transform", "Mesh", "Material", "Camera"};
 
 			if (ImGui::Button("Add Component", ImVec2(110, 30)))
 			{
@@ -394,6 +394,16 @@ void Inspector::ShowWindow()
 						go->AddComponent(C_TYPE::MATERIAL);
 					}
 				}
+
+				// --- Add component Camera ---
+				if (go->camera == nullptr)
+				{
+					if (ImGui::MenuItem("Camera"))
+					{
+						go->AddComponent(C_TYPE::CAM);
+					}
+				}
+
 				ImGui::EndPopup();
 			}
 

@@ -40,6 +40,7 @@ C_Camera::~C_Camera()
 	{
 		App->renderer3D->SetGameCamera(nullptr);
 	}
+	
 }
 
 void C_Camera::ShowInInspector()
@@ -47,6 +48,7 @@ void C_Camera::ShowInInspector()
 	// --- Set ImGui ids ---
 	std::string checkbox = name.c_str();
 	std::string header = name.c_str();
+	bool exists = true;
 
 	checkbox.insert(checkbox.begin(), 2, '#');
 	checkbox.append(std::to_string(GetUID()));
@@ -59,7 +61,7 @@ void C_Camera::ShowInInspector()
 	ImGui::Checkbox(checkbox.c_str(), &isActive);
 	ImGui::SameLine();
 
-	if (ImGui::CollapsingHeader(header.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+	if (ImGui::CollapsingHeader(header.c_str(), &exists, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		if (!isActive) { ImGui::BeginDisabled(); }
 
@@ -92,6 +94,9 @@ void C_Camera::ShowInInspector()
 
 		if (!isActive) { ImGui::EndDisabled(); }
 	}
+	ImGui::SameLine();
+
+	if (!exists) { gameObject->RemoveComponent(this); }
 }
 
 void C_Camera::LookAt(const float3& position)
@@ -194,22 +199,19 @@ void C_Camera::SetAsMain(bool mainCam)
 {
 	if (mainCam)
 	{
-		if (App->renderer3D->gameCam == nullptr)
+		if (App->renderer3D->gameCam != nullptr)
 		{
-			App->renderer3D->SetGameCamera(this);
-			mainCam = true;
+			App->renderer3D->gameCam->isMainCam = false;
 		}
-		else
-		{
-			mainCam = false;
-		}
+
+		App->renderer3D->SetGameCamera(this);
 	}
 	else
 	{
-		App->renderer3D->SetGameCamera(nullptr);
-		mainCam = false;
+		App->renderer3D->gameCam = nullptr;
 	}
 
+	App->renderer3D->editorCam->OnResize(App->window->width, App->window->height);//TODO: no entenc per qué fa falta
 }
 
 void C_Camera::OnResize(int width, int height)

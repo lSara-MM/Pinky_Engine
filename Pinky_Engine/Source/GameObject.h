@@ -35,7 +35,7 @@ public:
 
 	C_Mesh* GetComponentMesh();
 	std::vector<C_Material*> GetComponentsMaterial();
-	std::vector<C_Camera*> GetComponentsCamera();
+	C_Camera* GetComponentCamera();
 
 	Component* GetComponentByType(C_TYPE type);
 
@@ -55,8 +55,9 @@ public:
 
 	std::string name;
 	bool isActive, isStatic;
-	C_Transform* transform = nullptr;
+	C_Transform* transform = nullptr;//TODO: limpiar .h
 	C_Mesh* mesh = nullptr;
+	C_Camera* camera = nullptr;
 
 	bool selected;
 	bool hidden;

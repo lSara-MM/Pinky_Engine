@@ -323,7 +323,7 @@ void ModuleRenderer3D::SetVsync(bool enable)
 
 void ModuleRenderer3D::SetGameCamera(C_Camera* cam)
 {
-	if (cam !=nullptr)
+	if (cam != nullptr)
 	{
 		cam->OnResize(App->window->width, App->window->height);
 		gameCam = cam;

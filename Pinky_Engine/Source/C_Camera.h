@@ -65,7 +65,6 @@ public:
 
 private:
 
-	//bool is_main = false;
 	float width = 0.0f;
 	float height = 0.0f;
 	float aspect_ratio = 0.0f;

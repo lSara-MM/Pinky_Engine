@@ -76,6 +76,16 @@ GameObject::~GameObject()
 
 	//RELEASE(transform);
 	transform = nullptr;
+	mesh = nullptr;
+	if (camera != nullptr)
+	{
+		if (App->renderer3D->gameCam == camera)
+		{
+			App->renderer3D->gameCam = nullptr;
+		}
+		camera = nullptr;
+	}
+
 
 	if (!vChildren.empty())
 	{
@@ -101,25 +111,27 @@ update_status GameObject::Update(float dt)
 			}
 		}
 
-		if (transform->dirty_)
+		if (transform != nullptr)
 		{
-			transform->UpdateTransformsChilds();
+			if (transform->dirty_)
+			{
+				transform->UpdateTransformsChilds();
+			}
 		}
-
+		
 		if (vComponents.size() > 1)
 		{
 			std::vector<C_Material*> vMaterials = GetComponentsMaterial();
-			std::vector<C_Camera*> vCams = GetComponentsCamera();
 
-			for (auto i = 0; i < vCams.size(); i++)
+			if (camera != nullptr)
 			{
-				if (vCams[i]->isActive)
+				if (camera->isActive)
 				{
-					vCams[i]->DrawDebug();
-					vCams[i]->UpdateCameraFrustum();
-					if (vCams[i]->isCullEnabled)
+					camera->DrawDebug();
+					camera->UpdateCameraFrustum();
+					if (camera->isCullEnabled)
 					{
-						vCams[i]->FrustumCulling();
+						camera->FrustumCulling();
 					}
 				}
 			}
@@ -221,8 +233,13 @@ bool GameObject::AddComponent(C_TYPE type, void* var, ai::POLY_PRIMITIVE_TYPE po
 		else { ret = false; }
 		break;
 	case C_TYPE::CAM:
-		temp = new C_Camera(this);
-		vComponents.push_back(temp);
+		if (camera == nullptr)
+		{
+			temp = new C_Camera(this);
+			camera = (C_Camera*)temp;
+			vComponents.push_back(temp);
+		}
+		else { ret = false; }
 		break;
 	default:
 		break;
@@ -251,6 +268,7 @@ bool GameObject::AddComponent(Component* component)
 		numMaterials++;
 		break;
 	case C_TYPE::CAM:
+		camera = (C_Camera*)component;
 		vComponents.push_back(component);
 		break;
 	default:
@@ -277,6 +295,7 @@ void GameObject::RemoveComponent(Component* component)
 		numMaterials--;
 		break;
 	case C_TYPE::CAM:
+		camera = nullptr;
 		break;
 	case C_TYPE::NONE:
 		break;
@@ -310,17 +329,16 @@ std::vector<C_Material*> GameObject::GetComponentsMaterial()
 	return vec;
 }
 
-std::vector<C_Camera*> GameObject::GetComponentsCamera()
+C_Camera* GameObject::GetComponentCamera()
 {
-	std::vector<C_Camera*> vec = {};
 	for (auto i = 0; i < vComponents.size(); i++)
 	{
 		if (vComponents[i]->type == C_TYPE::CAM)
 		{
-			vec.push_back((C_Camera*)vComponents[i]);
+			camera = (C_Camera*)vComponents[i];
 		}
 	}
-	return vec;
+	return camera;
 }
 
 Component* GameObject::GetComponentByType(C_TYPE type)
