@@ -106,4 +106,7 @@ private:
 
 	//Struct to get sdl version info
 	SDL_version versionSDL;
+
+	//Snap Guizmo
+	float snapValue;
 };

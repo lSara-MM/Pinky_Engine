@@ -967,7 +967,26 @@ void ModuleEditor::EditorWindow()
 			C_Transform* transform = (C_Transform*)selectedList[i]->transform;
 			float4x4 objectMatrix = transform->globalMatrix.Transposed();
 
-			ImGuizmo::Manipulate(App->renderer3D->editorCam->GetViewMatrix(), App->renderer3D->editorCam->GetProjectionMatrix(), transformOperation, ImGuizmo::MODE::LOCAL, objectMatrix.ptr());
+			//Snap
+			if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+			{			
+				snapValue = 1.0f; // Snap to 5.0m for translation/scale
+				if (transformOperation == ImGuizmo::OPERATION::ROTATE)
+				{
+					// Snap to 45 degrees for rotation
+					snapValue = 45.0f;
+				}
+			}
+			
+			else
+			{
+				snapValue = 0.0f;
+			}
+			
+			float snapValues[3] = { snapValue, snapValue, snapValue };
+
+			ImGuizmo::Manipulate(App->renderer3D->editorCam->GetViewMatrix(), App->renderer3D->editorCam->GetProjectionMatrix(), 
+				transformOperation, ImGuizmo::MODE::LOCAL, objectMatrix.ptr(), nullptr, snapValues);
 
 			if (ImGuizmo::IsUsing() && ImGui::IsWindowHovered())
 			{
@@ -984,7 +1003,7 @@ void ModuleEditor::EditorWindow()
 
 void ModuleEditor::ImGuizmoControl()
 {
-	if ((App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) && (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT) && (App->input->GetKey(SDL_SCANCODE_LSHIFT) != KEY_REPEAT))
+	if ((App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN))
 	{
 		transformOperation = ImGuizmo::OPERATION::TRANSLATE;
 	}
