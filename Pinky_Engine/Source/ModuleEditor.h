@@ -71,7 +71,6 @@ public:
 
 	//guizmos
 	ImGuizmo::OPERATION transformOperation;
-	ImGuizmo::MODE guizmoMode;
 
 private:
 

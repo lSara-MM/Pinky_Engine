@@ -121,7 +121,6 @@ bool ModuleEditor::Init()
 
 	//Guizmos
 	transformOperation = ImGuizmo::OPERATION::TRANSLATE;
-	guizmoMode = ImGuizmo::MODE::WORLD;
 }
 
 // PreUpdate: clear buffer
@@ -141,7 +140,7 @@ update_status ModuleEditor::PostUpdate(float dt)
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
-
+	ImGuizmo::BeginFrame();
 
 	ImGuiIO& io = ImGui::GetIO();
 
@@ -961,16 +960,14 @@ void ModuleEditor::EditorWindow()
 	{
 		if (selectedList[i] != nullptr)
 		{
-			C_Transform* transform = (C_Transform*)selectedList[i]->transform;
-			float4x4 viewTrans = App->renderer3D->editorCam->frustum.ViewMatrix();
-			viewTrans.Transpose();
-			float4x4 projectionTrans = App->renderer3D->editorCam->frustum.ProjectionMatrix();
-			projectionTrans.Transpose();
-			float4x4 objectMatrix = transform->globalMatrix;
-			float4x4 deltaMatrix;
-			ImGuizmo::SetRect(viewPos.x, viewPos.y, viewSize.x, viewSize.y);
 			ImGuizmo::SetDrawlist();
-			ImGuizmo::Manipulate(viewTrans.ptr(), projectionTrans.ptr(), transformOperation, guizmoMode, objectMatrix.ptr(), deltaMatrix.ptr());
+			ImGuizmo::SetRect(viewPos.x, viewPos.y, viewSize.x, viewSize.y);
+
+			//Selected go info
+			C_Transform* transform = (C_Transform*)selectedList[i]->transform;
+			float4x4 objectMatrix = transform->globalMatrix.Transposed();
+
+			ImGuizmo::Manipulate(App->renderer3D->editorCam->GetViewMatrix(), App->renderer3D->editorCam->GetProjectionMatrix(), transformOperation, ImGuizmo::MODE::LOCAL, objectMatrix.ptr());
 
 			if (ImGuizmo::IsUsing() && ImGui::IsWindowHovered())
 			{
@@ -999,14 +996,6 @@ void ModuleEditor::ImGuizmoControl()
 	{
 		transformOperation = ImGuizmo::OPERATION::SCALE;
 	}
-	//if ((App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) && (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) && (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT))
-	//{
-	//	guizmoMode = ImGuizmo::MODE::WORLD;
-	//}
-	//if ((App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) && (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN))
-	//{
-	//	guizmoMode = ImGuizmo::MODE::LOCAL;
-	//}
 }
 
 void ModuleEditor::GameWindow()
