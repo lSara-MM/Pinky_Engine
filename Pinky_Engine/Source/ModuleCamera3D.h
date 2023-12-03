@@ -34,8 +34,7 @@ public:
 private:
 	C_Camera* MainCamera;//TODO: eliminat = nullptr
 	float mouseX, mouseY, speed, zoomPos;
-	float3 Reference = { 0, 0, 0 };//TODO: change to focused object
-	float3 centerReference = { 0, 0, 0 };
+	float3 Reference = { 0, 0, 0 };
 
 	//Mouse Picking
 	float entryDist;

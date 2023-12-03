@@ -16,7 +16,6 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 	MainCamera->LookAt(float3(0.0f, 0.0f, 0.0f));
 	MainCamera->frustum.farPlaneDistance = 1000.0f;
 	Reference = float3(0.0f, 0.0f, 0.0f);//change to selected game object
-	centerReference = float3(0.0f, 0.0f, 0.0f);//TODO: delete when selected game object
 	App->renderer3D->editorCam = MainCamera;
 }
 
@@ -88,9 +87,6 @@ void ModuleCamera3D::CameraMovement()
 
 void ModuleCamera3D::Orbit()
 {
-	//Todo delete center Reference
-	Reference = centerReference;
-
 	float3 dir = MainCamera->frustum.pos - Reference;
 	Quat quaternionY(MainCamera->frustum.up, mouseX);
 	Quat quaternionX(MainCamera->frustum.WorldRight(), mouseY);
@@ -231,7 +227,6 @@ void ModuleCamera3D::CheckTriangleIntersection()
 	if (closest != nullptr)
 	{
 		App->scene->h->SetSelected(closest);
-		//App->camera->SetFocus(closest);
 	}
 }
 
@@ -263,6 +258,29 @@ void ModuleCamera3D::CameraInput()
 
 void ModuleCamera3D::Focus()
 {
-	MainCamera->frustum.pos = float3(5.0f, 5.0f, 5.0f);
-	MainCamera->LookAt(float3(0.0f, 0.0f, 0.0f));
+	std::vector<GameObject*> selectedList;
+	selectedList = App->scene->h->GetSelectedGOs();
+	float3 center = float3::zero;
+
+	for (auto i = 0; i < selectedList.size(); i++)
+	{
+		if (selectedList[i]->mesh != nullptr)
+		{
+			Reference = selectedList[i]->mesh->global_aabb.CenterPoint();
+			float3 size = selectedList[i]->mesh->global_aabb.Size();
+			center = selectedList[i]->mesh->global_aabb.CenterPoint();
+			MainCamera->frustum.pos.Set(center.x + size.x, center.y + size.y, center.z + size.z);
+			MainCamera->LookAt(Reference);
+		}
+		
+		else
+		{
+			C_Transform* transform = (C_Transform*)selectedList[i]->transform;
+			float3 position = transform->GetGlobalPosition();
+			Reference = position;
+			MainCamera->frustum.pos.Set(position.x + 5.0f, position.y + 5.0f, position.z + + 5.0f);
+			MainCamera->LookAt(position);
+		}
+	}
+
 }
