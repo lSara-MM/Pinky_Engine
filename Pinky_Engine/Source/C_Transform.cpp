@@ -83,13 +83,13 @@ void C_Transform::SetLocalValues(float4x4 matrix)
 	float3 pos, sc;
 	Quat rot;
 	matrix.Decompose(pos, rot, sc);
+	scale = sc;
 	position = pos;
-	rotation = rot.Normalized();
+	rotation = rot;
 	eulerRot = rotation.ToEulerXYZ();
 	eulerRot.x = RadToDeg(eulerRot.x);
 	eulerRot.y = RadToDeg(eulerRot.y);
 	eulerRot.z = RadToDeg(eulerRot.z);
-	scale = sc;
 }
 
 float4x4 C_Transform::GetGlobalTransform() const

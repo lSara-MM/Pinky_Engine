@@ -970,7 +970,7 @@ void ModuleEditor::EditorWindow()
 			//Snap
 			if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 			{			
-				snapValue = 1.0f; // Snap to 5.0m for translation/scale
+				snapValue = 1.0f; // Snap to 1.0m for translation/scale
 				if (transformOperation == ImGuizmo::OPERATION::ROTATE)
 				{
 					// Snap to 45 degrees for rotation

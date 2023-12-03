@@ -344,11 +344,7 @@ void GameObject::ReParent(GameObject* newParent)
 	pParent = newParent;
 	pParent->vChildren.push_back(this);
 
-	//TODO: clean up this mess
-	//recalculate local values and global matrix when reparenting
-	//this->transform->localMatrix = pParent->transform->globalMatrix.Transposed() * this->transform->globalMatrix;
-	//transform->localMatrix = pParent->transform->globalMatrix.Inverted() * transform->globalMatrix;
-	//transform->SetLocalValues(transform->localMatrix);
+	//Update transform values
 	transform->SetLocalValues(pParent->transform->globalMatrix.Inverted() * transform->globalMatrix);
 
 	transform->dirty_ = true;
