@@ -96,13 +96,13 @@ void ParsingJSON::ComponentsJSON(Component* comp, std::string node_name, int i)
 	{
 	case C_TYPE::TRANSFORM:
 		json_object_dotset_array(&static_cast<C_Transform*> (comp)->position[0], 3, comp_name + ".Position");
-		json_object_dotset_array(&static_cast<C_Transform*> (comp)->eulerRot[0], 3, comp_name + ".Rotation");
+		json_object_dotset_array(&static_cast<C_Transform*> (comp)->rotation.x, 4, comp_name + ".Rotation");
 		json_object_dotset_array(&static_cast<C_Transform*> (comp)->scale[0], 3, comp_name + ".Scale");
 		break;
 	case C_TYPE::MESH:
 		json_object_dotset_number(root_object, (comp_name + ".UUID").c_str(), comp->GetUID());
 		json_object_dotset_number(root_object, (comp_name + ".Mesh UUID").c_str(), static_cast<C_Mesh*>(comp)->mesh->GetUID());
-		json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), ("Libray/Meshes/" +
+		json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), ("Libray\/Meshes\/" +
 			std::to_string(static_cast<C_Mesh*>(comp)->mesh->GetUID())).c_str());
 		break;
 	case C_TYPE::MATERIAL:
@@ -126,24 +126,34 @@ GameObject* ParsingJSON::CreateGOfromMeta(std::string path)
 	root_value = json_parse_file(path.c_str());
 	root_object = json_value_get_object(root_value);
 
-	GameObject* go;
+	GameObject* go, *temp;
+	std::vector<GameObject*> vTemp;
+
 	go = GOfromMeta("GameObject.Parent");
+	vTemp.push_back(go);
 
 	int vChildrensize = json_object_dotget_number(root_object, "GameObject.Info.Children number");
 
 	// Count starts with 1
 	for (int i = 0; i < vChildrensize; i++)
 	{
-		GOfromMeta("GameObject.Child " + std::to_string(i + 1));
+		temp = GOfromMeta("GameObject.Child " + std::to_string(i + 1));
+		vTemp.push_back(temp);
 	}
 
+	for (auto it = vTemp.begin(); it != vTemp.end(); it++)
+	{
+		(*it)->SetUID(App->randomLCG->Int());
+		(*it) = nullptr;
+	}
+
+	ClearVec(vTemp);
 	return go;
 }
 
 GameObject* ParsingJSON::GOfromMeta(std::string node_name)
 {
 	GameObject* go = new GameObject();
-
 	go->name = json_object_dotget_string(root_object, (node_name + ".Name").c_str());
 	int id = json_object_dotget_number(root_object, (node_name + ".UID").c_str());
 	go->SetUID(id);
@@ -195,14 +205,13 @@ Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
 		static_cast<C_Transform*>(comp)->position.y = f[1];
 		static_cast<C_Transform*>(comp)->position.z = f[2];
 
-
-		// TODO: euler rotation changes the normal rotation?
 		//---Rotation---
 		f = C_json_object_dotget_array(static_cast<C_Transform*>(comp)->position.Size, comp_name + ".Rotation");
 
-		static_cast<C_Transform*>(comp)->eulerRot.x = f[0];
-		static_cast<C_Transform*>(comp)->eulerRot.y = f[1];
-		static_cast<C_Transform*>(comp)->eulerRot.z = f[2];
+		static_cast<C_Transform*>(comp)->rotation.x = f[0];
+		static_cast<C_Transform*>(comp)->rotation.y = f[1];
+		static_cast<C_Transform*>(comp)->rotation.z = f[2];
+		static_cast<C_Transform*>(comp)->rotation.w = f[3];
 
 		//---Scale---
 		f = C_json_object_dotget_array(static_cast<C_Transform*>(comp)->position.Size, comp_name + ".Scale");

@@ -16,7 +16,7 @@ ModuleResource::ModuleResource(Application* app, bool start_enabled) : Module(ap
 
 ModuleResource::~ModuleResource()
 {
-	
+
 }
 
 // -----------------------------------------------------------------
@@ -47,11 +47,8 @@ GameObject* ModuleResource::ImportFile(const char* fileDir, GameObject* goToLink
 	std::array<std::string, 6> tex_ext = { ".png", ".PNG", ".jpg", ".JPG", ".dds", ".DDS" };
 
 	GameObject* go = nullptr;
-	std::string filePath, fileName, fileExt;
-	App->fs->SplitFilePath(fileDir, &filePath, &fileName, &fileExt);
 
-	char* buffer = nullptr;
-	std::string normFileName = App->fs->NormalizePath((filePath + fileName + ".meta.json").c_str());
+	std::string normFileName = App->fs->NormalizePath((metaPath + ".meta.json").c_str());
 
 	//if (App->fs->Exists(normFileName.c_str()))
 	//{
@@ -87,7 +84,7 @@ GameObject* ModuleResource::ImportFile(const char* fileDir, GameObject* goToLink
 				}
 			}
 		}
-	}	
+	}
 
 	return go;
 }
@@ -95,10 +92,16 @@ GameObject* ModuleResource::ImportFile(const char* fileDir, GameObject* goToLink
 void ModuleResource::ImportModel(const char* meshPath, std::vector<const char*> texPaths)
 {
 	GameObject* go = nullptr;
+
+	std::string filePath, fileName, fileExt;
+	App->fs->SplitFilePath(meshPath, &filePath, &fileName, &fileExt);
+	metaPath = filePath + fileName;
+
 	go = ImportFile(meshPath);
 
 	if (texPaths.empty())
-	{ }
+	{
+	}
 	else if (texPaths.size() == 1)
 	{
 		for (int i = 0; i < go->vChildren.size(); i++)

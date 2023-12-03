@@ -24,7 +24,7 @@
 #include "ModuleRenderer3D.h"	
 
 
-C_Mesh::C_Mesh()
+C_Mesh::C_Mesh() : Component(C_TYPE::MESH, "Mesh")
 {
 	mesh = new R_Mesh();
 	showVertexNormals = false;

@@ -17,7 +17,6 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
-
 	GameObject* ImportFile(const char* path, GameObject* goToLink = nullptr);
 	void ImportModel(const char* meshPath, std::vector<const char*> texPaths);
 
@@ -25,7 +24,9 @@ public:
 	Resource* LoadFromLibrary(std::string path, R_TYPE type = R_TYPE::NONE);
 
 public:
-	std::map <uint, Resource> mResources;
+	std::map <uint, Resource*>* mResources;
+
 private:
-	
+	std::string metaPath; 
+	std::string normMetaPath;
 };

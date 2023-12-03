@@ -26,7 +26,7 @@ class GameObject;
 class Component
 {
 public:
-	Component();
+	Component(C_TYPE t, std::string n = "Component");
 	Component(C_TYPE t, GameObject* g = nullptr, bool start_enabled = true, std::string n = "Component");
 	Component(GameObject* g, bool start_enabled = true, std::string n = "Component");
 

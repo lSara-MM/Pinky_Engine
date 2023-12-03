@@ -6,7 +6,7 @@
 #include "C_Material.h"
 #include "C_Camera.h"
 
-Component::Component()
+Component::Component(C_TYPE t, std::string n) : type(t), name(n)
 {
 }
 

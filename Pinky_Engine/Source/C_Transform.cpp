@@ -7,8 +7,9 @@
 #include "GameObject.h"
 #include "Component.h"
 
-C_Transform::C_Transform() : Component()
+C_Transform::C_Transform() : Component(C_TYPE::TRANSFORM, "Transform")
 {
+	dirty_ = true;
 }
 
 C_Transform::C_Transform(GameObject* g, float3 pos, Quat rot, float3 sc, bool start_enabled) : Component(C_TYPE::TRANSFORM, g, start_enabled, "Transform")
@@ -32,7 +33,7 @@ C_Transform::C_Transform(GameObject* g, C_Transform* toCopy) : Component(C_TYPE:
 
 	globalMatrix = math::float4x4::FromTRS(position, rotation, scale);
 	localMatrix = math::float4x4::FromTRS(position, rotation, scale);
-	dirty_ = false;
+	dirty_ = true;
 }
 
 C_Transform::~C_Transform()

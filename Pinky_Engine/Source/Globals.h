@@ -46,6 +46,9 @@ enum update_status
 #define MESHES_PATH LIBRARY_PATH "Meshes/"
 #define TEXTURES_PATH LIBRARY_PATH "Textures/"
 
+// Extensions
+#define MESHES_EXT ".pnk"
+#define TEXTURES_EXT ".duk"
 
 // Deletes a buffer
 #define RELEASE( x )\
