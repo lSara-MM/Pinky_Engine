@@ -44,10 +44,9 @@ bool ModuleScene::Init()
 
 	//Main Camera  
 	mainCamera = new GameObject("Main Camera", rootNode);
+	float3 posIni = { 0, 2, -5 };
+	mainCamera->transform->SetTransform(posIni);
 	mainCamera->AddComponent(C_TYPE::CAM);
-	std::vector<C_Camera*> vCams = mainCamera->GetComponentsCamera();
-	vCams[0]->isMainCam = true;
-	vCams[0]->SetAsMain(vCams[0]->isMainCam);
 
 	return ret;
 }

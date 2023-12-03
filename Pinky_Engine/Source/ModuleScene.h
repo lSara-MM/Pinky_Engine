@@ -30,7 +30,7 @@ public:
 
 	Hierarchy* h;
 	Inspector* i;
-
-private:
 	GameObject* mainCamera;
+private:
+
 };

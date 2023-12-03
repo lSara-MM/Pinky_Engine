@@ -21,6 +21,8 @@
 #include "External Libraries/DevIL/include/ilut.h"
 #include "External Libraries/mmgr/mmgr.h"
 #include "C_Camera.h"
+#include "GameObject.h"
+#include "ModuleScene.h"
 
 #ifdef _DEBUG
 #pragma comment (lib, "Source/External Libraries/MathGeoLib/libx86/libDebug/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
@@ -157,7 +159,9 @@ bool ModuleRenderer3D::Init()
 
 	// Projection matrix for
 	editorCam->OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
-	gameCam->OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	C_Camera* Cam = (C_Camera*)App->scene->mainCamera->GetComponentByType(C_TYPE::CAM);
+	Cam->isMainCam = true;
+	Cam->SetAsMain(Cam->isMainCam);
 
 	Grid.axis = true;
 	wireframe = false;
@@ -210,12 +214,9 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	glLineWidth(1.0f);*/
 
 
-	glBindTexture(GL_TEXTURE_2D, 0);
+	//glBindTexture(GL_TEXTURE_2D, 0);
 	Grid.Render();
-
 	(wireframe) ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-
 	editorCam->UnbindFrameBuffer();
 
 	if (App->renderer3D->gameCam != nullptr)
@@ -226,6 +227,13 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 		for (uint i = 0; i < MAX_LIGHTS; ++i)
 			lights[i].Render();
+
+		App->scene->rootNode->Update(dt);//TODO: guarrada important?
+
+		glBindTexture(GL_TEXTURE_2D, 0);
+		Grid.Render();
+
+		(wireframe) ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		gameCam->UnbindFrameBuffer();
 	}
@@ -315,5 +323,9 @@ void ModuleRenderer3D::SetVsync(bool enable)
 
 void ModuleRenderer3D::SetGameCamera(C_Camera* cam)
 {
-	gameCam = cam;
+	if (cam !=nullptr)
+	{
+		cam->OnResize(App->window->width, App->window->height);
+		gameCam = cam;
+	}
 }
