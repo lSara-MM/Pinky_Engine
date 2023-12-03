@@ -134,7 +134,7 @@ void Hierarchy::ShowWindow()
 			| ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
 
 		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.953f, 0.533f, 0.969f, 1.0f));
-		ImGui::TreeNodeEx((void*)(intptr_t)App->scene->rootNode->GetUid(), node_flags, App->scene->rootNode->name.c_str());
+		ImGui::TreeNodeEx((void*)(intptr_t)App->scene->rootNode->GetUID(), node_flags, App->scene->rootNode->name.c_str());
 		ImGui::PopStyleColor();
 
 		// Root node only target, can't be dragged
@@ -211,7 +211,7 @@ bool Hierarchy::TreeNode(GameObject* current, ImGuiTreeNodeFlags node_flags)
 		ImGui::PushStyleColor(ImGuiCol_Text, disabledColor);
 	}
 
-	ret = ImGui::TreeNodeEx((void*)(intptr_t)current->GetUid(), node_flags, current->name.c_str());
+	ret = ImGui::TreeNodeEx((void*)(intptr_t)current->GetUID(), node_flags, current->name.c_str());
 	if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
 	{
 		ImGui::MenuItem(current->name.c_str());
@@ -282,12 +282,10 @@ void Hierarchy::MouseEvents(GameObject* current)
 			//payload_n->pParent->ReParent(current);
 			
 			// If dragged go is parent of target go, don't do anything
-			GameObject* go = nullptr;
-			if (GetDragged()->FindChild(current->GetUid(), go) == nullptr)
+			if (GetDragged()->FindChild(current->GetUID()) == nullptr)
 			{
 				GetDragged()->ReParent(current);
 			}
-			go = nullptr;
 		}
 		ImGui::EndDragDropTarget();
 	}
@@ -337,10 +335,10 @@ void Inspector::ShowWindow()
 			// --- Set ImGui ids ---
 			std::string name = go->name;
 			name.insert(name.begin(), 2, '#');
-			name.append(std::to_string(go->GetUid()));
+			name.append(std::to_string(go->GetUID()));
 
 			std::string toggle = "##Toggle ";
-			toggle.append(go->name + std::to_string(go->GetUid()));
+			toggle.append(go->name + std::to_string(go->GetUID()));
 			//------
 
 			if (ImGuiCustom::ToggleButton(toggle.c_str(), &go->isActive))
@@ -400,7 +398,6 @@ void Inspector::ShowWindow()
 			}
 
 			if (!go->isActive) { ImGui::EndDisabled(); }
-
 
 			go = nullptr;
 		}

@@ -25,7 +25,7 @@ public:
 	Resource* LoadFromLibrary(std::string path, R_TYPE type = R_TYPE::NONE);
 
 public:
-
+	std::map <uint, Resource> mResources;
 private:
 	
 };

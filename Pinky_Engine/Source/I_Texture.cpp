@@ -24,7 +24,7 @@ uint64 I_Texture::Save(const R_Texture* ourTexture, char** fileBuffer)
 		if (ilSaveL(IL_DDS, cursor, size) > 0) // Save to buffer with the ilSaveIL function
 		{
 			*fileBuffer = (char*)cursor;
-			//RELEASE_ARRAY(cursor);
+			RELEASE_ARRAY(cursor);
 		}
 	}
 	else

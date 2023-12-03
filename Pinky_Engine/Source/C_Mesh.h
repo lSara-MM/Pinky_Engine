@@ -12,8 +12,9 @@
 class C_Mesh : public Component
 {
 public:
-	C_Mesh(GameObject* g = nullptr, R_Mesh* m = nullptr, uint i = 0, bool start_enabled = true);
-	C_Mesh(GameObject* g, C_Mesh* toCopy, bool start_enabled = true, uint i = 0);
+	C_Mesh();
+	C_Mesh(GameObject* g, R_Mesh* m = nullptr, bool start_enabled = true);
+	C_Mesh(GameObject* g, C_Mesh* toCopy, bool start_enabled = true);
 	~C_Mesh();
 
 	void ShowInInspector();

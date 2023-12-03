@@ -18,7 +18,8 @@ GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 	}
 	else
 	{
-		uid = -1;
+		// If root node, id = 0
+		uid = 0;
 	}
 
 	name = n;
@@ -46,7 +47,7 @@ GameObject::GameObject(GameObject* go, int size, GameObject* parent)
 	parent->AddChild(this);
 	name = go->name;
 	isActive = go->isActive;
-	
+
 	for (int i = 0; i < size; i++)
 	{
 		GameObject* g = new GameObject(go->vChildren[i], go->vChildren[i]->vChildren.size(), this);
@@ -84,10 +85,9 @@ GameObject::~GameObject()
 	pParent = nullptr;
 }
 
-u32 GameObject::GetUid()
-{
-	return uid;
-}
+u32 GameObject::GetUID() { return uid; }
+
+void GameObject::SetUID(u32 id) { uid = id; }
 
 update_status GameObject::Update(float dt)
 {
@@ -182,7 +182,7 @@ update_status GameObject::Update(float dt)
 						{
 							mesh->DrawVertexNormals();
 						}
-						
+
 						if (mesh->showFacesNormals)
 						{
 							mesh->DrawFaceNormals();
@@ -254,12 +254,12 @@ bool GameObject::AddComponent(C_TYPE type, void* var, ai::POLY_PRIMITIVE_TYPE po
 			R_Texture* t = static_cast<R_Texture*>(var);
 			if (t != nullptr)
 			{
-				temp = new C_Material(this, t, numMaterials);
+				temp = new C_Material(this, t);
 				vComponents.push_back(temp);
 			}
 			else
 			{
-				temp = new C_Material(this, nullptr, numMaterials);
+				temp = new C_Material(this, nullptr);
 				vComponents.push_back(temp);
 			}
 			numMaterials++;
@@ -278,6 +278,34 @@ bool GameObject::AddComponent(C_TYPE type, void* var, ai::POLY_PRIMITIVE_TYPE po
 	return ret;
 }
 
+bool GameObject::AddComponent(Component* component)
+{
+	component->gameObject = this;
+	switch (component->type)
+	{
+	case C_TYPE::TRANSFORM:
+		RemoveComponent(transform);
+		transform = (C_Transform*)component;
+		vComponents.push_back(transform);
+		break;
+	case C_TYPE::MESH:
+		mesh = (C_Mesh*)component;
+		vComponents.push_back(mesh);
+		break;
+	case C_TYPE::MATERIAL:
+		vComponents.push_back(component);
+		numMaterials++;
+		break;
+	case C_TYPE::CAM:
+		vComponents.push_back(component);
+		break;
+	default:
+		break;
+	}
+
+	return true;
+}
+
 void GameObject::RemoveComponent(Component* component)
 {
 	vComponents.erase(std::find(vComponents.begin(), vComponents.end(), component));
@@ -285,7 +313,11 @@ void GameObject::RemoveComponent(Component* component)
 
 	switch (component->type)
 	{
+	case C_TYPE::TRANSFORM:
+		transform = nullptr;
+		break;
 	case C_TYPE::MESH:
+		mesh = nullptr;
 		break;
 	case C_TYPE::MATERIAL:
 		numMaterials--;
@@ -299,7 +331,6 @@ void GameObject::RemoveComponent(Component* component)
 	}
 }
 
-//---Parent/Child---
 C_Mesh* GameObject::GetComponentMesh()
 {
 	for (auto i = 0; i < vComponents.size(); i++)
@@ -347,15 +378,18 @@ Component* GameObject::GetComponentByType(C_TYPE type)
 			return vComponents[i];
 		}
 	}
+
+	return nullptr;
 }
 
+//---Parents/Children---
 void GameObject::ReParent(GameObject* newParent)
 {
 	pParent->RemoveChild(this);
 
 	pParent = newParent;
 	pParent->vChildren.push_back(this);
-	
+
 	//TODO: clean up this mess
 	//recalculate local values and global matrix when reparenting
 	//this->transform->localMatrix = pParent->transform->globalMatrix.Transposed() * this->transform->globalMatrix;
@@ -397,7 +431,7 @@ GameObject* GameObject::FindChild(u32 idToFind, GameObject* go)
 		{
 			go = vChildren[i]->FindChild(idToFind, go);
 		}
-		if (idToFind == vChildren[i]->GetUid())
+		if (idToFind == vChildren[i]->GetUID())
 		{
 			go = vChildren[i];
 			return go;

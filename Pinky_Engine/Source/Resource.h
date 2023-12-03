@@ -30,6 +30,8 @@ public:
 	virtual ~Resource();
 
 	int GetUID();
+	void SetUID(u32 id);
+
 	R_TYPE GetType();
 
 public:

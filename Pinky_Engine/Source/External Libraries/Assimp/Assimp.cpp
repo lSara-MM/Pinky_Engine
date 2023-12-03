@@ -71,7 +71,6 @@ GameObject* ai::ImportMesh(const char* meshfileDir, GameObject* go, bool compone
 		if (ret != nullptr)
 		{
 			LOG("%d meshes loaded.", scene->mNumMeshes);
-			//App->parson->CreateGOMetaFile(ret);
 		}
 		else { LOG("[ERROR] Couldn't load mesh.", scene->mNumMeshes); }
 
@@ -114,11 +113,11 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 		{
 			if (!foundParent)
 			{
-				obj = MeshHierarchy(s, children[i]->mChildren, children[i]->mNumChildren, obj, foundParent);
+				obj = MeshHierarchy(s, children[i]->mChildren, children[i]->mNumChildren, obj, component, foundParent);
 			}
 			else
 			{
-				MeshHierarchy(s, children[i]->mChildren, children[i]->mNumChildren, obj, foundParent);
+				MeshHierarchy(s, children[i]->mChildren, children[i]->mNumChildren, obj, component, foundParent);
 			}
 		}
 

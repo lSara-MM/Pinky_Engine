@@ -53,6 +53,8 @@ FileSystemManager::FileSystemManager()
 
 	AddPath("."); // Adding ProjectFolder (working directory)
 	AddPath("Assets");
+	//AddPath("Library");
+	AddPath("PinkyAssets");
 
 	CreateLibraryDirs();
 }
@@ -215,7 +217,7 @@ std::string FileSystemManager::GetRealDir(const char* path) const
 
 	dir.append(*PHYSFS_getSearchPath()).append("/");
 	dir.append(PHYSFS_getRealDir(path)).append("/").append(path);
-	
+
 	return dir;
 }
 
@@ -367,6 +369,28 @@ void FileSystemManager::SplitFilePath(const char* full_path, std::string* path, 
 			}
 		}
 	}
+}
+
+std::string FileSystemManager::GetFileName(const char* full_path) const
+{
+	std::string fileName;
+
+	if (full_path != nullptr)
+	{
+		std::string full(full_path);
+		size_t pos_separator = full.find_last_of("\\/");
+		size_t pos_dot = full.find_last_of(".");
+
+		if (pos_separator < full.length())
+		{
+			fileName = full.substr(pos_separator + 1, pos_dot - pos_separator - 1);
+		}
+		else
+		{
+			fileName = full.substr(0, pos_dot);
+		}
+	}
+	return fileName;
 }
 
 

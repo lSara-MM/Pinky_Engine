@@ -16,7 +16,7 @@ enum class FrustumCulling
 class C_Camera : public Component
 {
 public:
-	C_Camera(GameObject* g = nullptr, uint i = 0, bool start_enabled = true);
+	C_Camera(GameObject* g = nullptr, bool start_enabled = true);
 	~C_Camera();
 
 	void ShowInInspector();

@@ -23,9 +23,19 @@
 #include "Component.h"
 #include "ModuleRenderer3D.h"	
 
-C_Mesh::C_Mesh(GameObject* g, R_Mesh* m, uint i, bool start_enabled) : Component(C_TYPE::MESH, g, i, start_enabled, "Mesh")
+
+C_Mesh::C_Mesh()
 {
-	mesh = m; 
+	mesh = new R_Mesh();
+	showVertexNormals = false;
+	showFacesNormals = false;
+	showAABB = false;
+	showOBB = false;
+}
+
+C_Mesh::C_Mesh(GameObject* g, R_Mesh* m, bool start_enabled) : Component(C_TYPE::MESH, g, start_enabled, "Mesh")
+{
+	(m == nullptr) ? mesh = new R_Mesh() : mesh = m;
 	showVertexNormals = false;
 	showFacesNormals = false;
 	showAABB = false;
@@ -38,7 +48,7 @@ C_Mesh::C_Mesh(GameObject* g, R_Mesh* m, uint i, bool start_enabled) : Component
 	global_aabb.Enclose(obb);
 }
 
-C_Mesh::C_Mesh(GameObject* g, C_Mesh* toCopy, bool start_enabled, uint i) : Component(C_TYPE::MESH, g, i, toCopy->isActive, "Mesh")
+C_Mesh::C_Mesh(GameObject* g, C_Mesh* toCopy, bool start_enabled) : Component(C_TYPE::MESH, g, toCopy->isActive, "Mesh")
 {
 	memcpy(&mesh, &toCopy->mesh, sizeof(*mesh));
 	//mesh = toCopy->mesh;

@@ -10,7 +10,7 @@
 //
 #include "External Libraries/ImGui/imgui_custom.h"
 
-C_Material::C_Material(GameObject* g, R_Texture* t, uint i, bool start_enabled) : Component(C_TYPE::MATERIAL, g, i, start_enabled, "Material")
+C_Material::C_Material(GameObject* g, R_Texture* t, bool start_enabled) : Component(C_TYPE::MATERIAL, g, start_enabled, "Material")
 {
 	(t == nullptr) ? tex = new R_Texture() : tex = t;
 
@@ -18,7 +18,7 @@ C_Material::C_Material(GameObject* g, R_Texture* t, uint i, bool start_enabled) 
 	color = { 255, 255, 255, 255 };
 }
 
-C_Material::C_Material(GameObject* g, C_Material* toCopy, bool start_enabled, uint i) : Component(C_TYPE::MATERIAL, g, i, toCopy->isActive, "Material")
+C_Material::C_Material(GameObject* g, C_Material* toCopy, bool start_enabled) : Component(C_TYPE::MATERIAL, g, toCopy->isActive, "Material")
 {
 	//memcpy(&tex, &toCopy->tex, sizeof(*tex));
 	tex = toCopy->tex;
@@ -61,11 +61,19 @@ void C_Material::ShowInInspector()
 		}
 		ImGui::SetItemTooltip("Use checkered texture");
 
-		if (tex != nullptr/* && tex->path != ""*/)
+		if (tex != nullptr)
 		{
-			ImGui::Text("Texture Width: %d", tex->tex_width);
-			ImGui::Text("Texture Height: %d", tex->tex_height);
-			ImGui::TextWrapped("Texture Path: %s", (tex->path != nullptr) ? tex->path : "");
+			if (tex->path != "")
+			{
+				ImGui::Text("Texture Width: %d", tex->tex_width);
+				ImGui::Text("Texture Height: %d", tex->tex_height);
+				ImGui::TextWrapped("Texture Path: %s", tex->path);
+			}
+			else
+			{
+				ImGui::Text("Material: NoLambert");
+			}
+
 			ImGui::Image((void*)(intptr_t)tex->tex_id, ImVec2(100, 100));
 		}
 

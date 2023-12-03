@@ -54,6 +54,7 @@ public:
 	//
 	std::string NormalizePath(const char* path) const;
 	void SplitFilePath(const char* full_path, std::string* path, std::string* file = nullptr, std::string* extension = nullptr) const;
+	std::string GetFileName(const char* full_path) const;
 
 	// Loads
 	//// Open for Read/Write

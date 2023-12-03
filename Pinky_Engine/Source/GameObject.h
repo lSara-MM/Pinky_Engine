@@ -23,12 +23,14 @@ public:
 	~GameObject();
 
 
-	u32 GetUid();
+	u32 GetUID();
+	void SetUID(u32 id);
 
 	update_status Update(float dt);
 
 	//---Components---
 	bool AddComponent(C_TYPE type, void* var = nullptr, ai::POLY_PRIMITIVE_TYPE poly = ai::POLY_PRIMITIVE_TYPE::SPHERE);
+	bool AddComponent(Component* component);
 	void RemoveComponent(Component* component);
 
 	C_Mesh* GetComponentMesh();
@@ -44,7 +46,7 @@ public:
 	void DeleteChild(GameObject* go);
 	void RemoveChild(GameObject* go);
 	// Return nullptr if gameobject not found
-	GameObject* FindChild(u32 idToFind, GameObject* go);
+	GameObject* FindChild(u32 idToFind, GameObject* go = nullptr);
 
 public:
 	GameObject* pParent = nullptr;

@@ -7,7 +7,7 @@
 //
 #include "External Libraries/ImGui/imgui_custom.h"
 
-C_Camera::C_Camera(GameObject* g, uint i, bool start_enabled) : Component(C_TYPE::CAM, g, i, start_enabled, "Cam")
+C_Camera::C_Camera(GameObject* g, bool start_enabled) : Component(C_TYPE::CAM, g, start_enabled, "Cam")
 {
 	//aspect ratio 16:9 
 	width = 16;

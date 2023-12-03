@@ -47,31 +47,47 @@ GameObject* ModuleResource::ImportFile(const char* fileDir, GameObject* goToLink
 	std::array<std::string, 6> tex_ext = { ".png", ".PNG", ".jpg", ".JPG", ".dds", ".DDS" };
 
 	GameObject* go = nullptr;
-	bool imported = false;
+	std::string filePath, fileName, fileExt;
+	App->fs->SplitFilePath(fileDir, &filePath, &fileName, &fileExt);
 
-	for (auto i = 0; i < obj_ext.size(); i++)
-	{
-		if (dir.find(obj_ext.at(i)) != std::string::npos)
-		{
-			imported = true;
-			go = ai::ImportMesh(fileDir);
-			break;
-		}
-	}
+	char* buffer = nullptr;
+	std::string normFileName = App->fs->NormalizePath((filePath + fileName + ".meta.json").c_str());
 
-	if (!imported)
+	//if (App->fs->Exists(normFileName.c_str()))
+	//{
+	//	App->parson->CreateGOfromMeta(normFileName);
+	//	//LoadFromLibrary(R_TYPE::MESH);
+	//}
+	//else
 	{
-		for (auto i = 0; i < tex_ext.size(); i++)
+		bool imported = false;
+
+		for (auto i = 0; i < obj_ext.size(); i++)
 		{
-			if (dir.find(tex_ext.at(i)) != std::string::npos)
+			if (dir.find(obj_ext.at(i)) != std::string::npos)
 			{
-				C_Material* mat = static_cast<C_Material*>(goToLink->GetComponentByType(C_TYPE::MATERIAL));
-				mat->tex->ImportTexture(fileDir);
-				std::string path = App->resource->SaveToLibrary(mat->tex);			
-				mat->tex = static_cast<R_Texture*>(App->resource->LoadFromLibrary(path, R_TYPE::TEXTURE));
+				imported = true;
+				go = ai::ImportMesh(fileDir);
+
+				App->parson->CreateJSON(go, "Assets\\");
+				break;
 			}
 		}
-	}
+
+		if (!imported)
+		{
+			for (auto i = 0; i < tex_ext.size(); i++)
+			{
+				if (dir.find(tex_ext.at(i)) != std::string::npos)
+				{
+					C_Material* mat = static_cast<C_Material*>(goToLink->GetComponentByType(C_TYPE::MATERIAL));
+					mat->tex->ImportTexture(fileDir);
+					std::string path = App->resource->SaveToLibrary(mat->tex);
+					mat->tex = static_cast<R_Texture*>(App->resource->LoadFromLibrary(path, R_TYPE::TEXTURE));
+				}
+			}
+		}
+	}	
 
 	return go;
 }
@@ -81,7 +97,9 @@ void ModuleResource::ImportModel(const char* meshPath, std::vector<const char*> 
 	GameObject* go = nullptr;
 	go = ImportFile(meshPath);
 
-	if (texPaths.size() == 1)
+	if (texPaths.empty())
+	{ }
+	else if (texPaths.size() == 1)
 	{
 		for (int i = 0; i < go->vChildren.size(); i++)
 		{
@@ -103,7 +121,7 @@ void ModuleResource::ImportModel(const char* meshPath, std::vector<const char*> 
 		}
 	}
 
-	App->parson->CreateGOMetaFile(go);
+	App->parson->CreateJSON(go, meshPath);
 	go = nullptr;
 }
 
@@ -168,6 +186,7 @@ Resource* ModuleResource::LoadFromLibrary(std::string path, R_TYPE type)
 		break;
 	}
 
+	//App->parson->CreateGOfromMeta(buffer);
 	//RELEASE_ARRAY(buffer);
 	buffer = nullptr;
 	return r;

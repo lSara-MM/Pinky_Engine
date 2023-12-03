@@ -11,115 +11,263 @@ ParsingJSON::~ParsingJSON()
 {
 }
 
-void ParsingJSON::CreateGOMetaFile(GameObject* go)
+//---Create and write in .meta---
+void ParsingJSON::CreateJSON(GameObject* go, const char* path)
 {
-    int resource_count = 0;
-
-    std::string file_name = "Assets\\" + go->name + ".meta.json";
-    root_value = json_value_init_object();
-    root_object = json_value_get_object(root_value);
-    char* serialized_string = NULL;
-
-    std::string node_name = "GameObject.Info";
-    json_object_dotset_number(root_object, (node_name + ".Children number").c_str(), resource_count);
-    json_object_dotset_string(root_object, (node_name + ".Local Directory").c_str(), file_name.c_str());
-
-    resource_count = GameObjectInfo(go, node_name + ".Resources") - 1;
-
-    json_object_dotset_number(root_object, (node_name + ".Children number").c_str(), resource_count);
-
-    GameObjectJSON(go, "GameObject.Parent");
-   
-    serialized_string = json_serialize_to_string_pretty(root_value);
-    puts(serialized_string);
-
-    json_serialize_to_file(root_value, file_name.c_str());
-    json_free_serialized_string(serialized_string);
-    json_value_free(root_value);
+	std::string filePath, fileName, fileExt;
+	App->fs->SplitFilePath(path, &filePath, &fileName, &fileExt);
+	App->parson->CreateMetaFromGO(go, filePath);
 }
 
-int ParsingJSON::GameObjectJSON(GameObject* go, std::string name, int counter)
+void ParsingJSON::CreateMetaFromGO(GameObject* go, std::string path)
 {
-    counter++;
-    json_object_dotset_string(root_object, (name + ".Name").c_str(), go->name.c_str());
-    json_object_dotset_number(root_object, (name + ".UID").c_str(), go->GetUid());
-    json_object_dotset_number(root_object, (name + ".Parent UID").c_str(), go->pParent->GetUid());
-    json_object_dotset_boolean(root_object, (name + ".Active").c_str(), go->isActive);
-    json_object_dotset_boolean(root_object, (name + ".Static").c_str(), go->isStatic);
-    json_object_dotset_number(root_object, (name + ".Parent UID").c_str(), go->pParent->GetUid());
-    json_object_dotset_number(root_object, (name + ".Components num").c_str(), go->vComponents.size());
+	int resource_count = 0;
 
-    for (int i = 0; i < go->vComponents.size(); i++)
-    {
-        ComponentsJSON(go->vComponents[i], name);
-    }
+	std::string file_name = path + go->name + ".meta.json";
+	root_value = json_value_init_object();
+	root_object = json_value_get_object(root_value);
+	char* serialized_string = NULL;
 
-    for (int i = 0; i < go->vChildren.size(); i++)
-    {
-        counter = GameObjectJSON(go->vChildren[i], "GameObject.Child " + std::to_string(counter), counter);
-    }
+	std::string node_name = "GameObject.Info";
+	json_object_dotset_number(root_object, (node_name + ".Children number").c_str(), resource_count);
+	json_object_dotset_string(root_object, (node_name + ".Local Directory").c_str(), file_name.c_str());
 
-    return counter;
+	resource_count = GameObjectInfo(go, node_name + ".Resources") - 1;
+
+	json_object_dotset_number(root_object, (node_name + ".Children number").c_str(), resource_count);
+
+	GameObjectJSON(go, "GameObject.Parent");
+
+	serialized_string = json_serialize_to_string_pretty(root_value);
+	puts(serialized_string);
+
+	json_serialize_to_file(root_value, file_name.c_str());
+	json_free_serialized_string(serialized_string);
+	json_value_free(root_value);
 }
 
-int ParsingJSON::GameObjectInfo(GameObject* go, std::string name, int counter)
+int ParsingJSON::GameObjectJSON(GameObject* go, std::string node_name, int counter)
 {
-    counter++;
+	counter++;
+	json_object_dotset_string(root_object, (node_name + ".Name").c_str(), go->name.c_str());
+	json_object_dotset_number(root_object, (node_name + ".UID").c_str(), go->GetUID());
+	json_object_dotset_number(root_object, (node_name + ".Parent UID").c_str(), go->pParent->GetUID());
+	json_object_dotset_boolean(root_object, (node_name + ".Active").c_str(), go->isActive);
+	json_object_dotset_boolean(root_object, (node_name + ".Static").c_str(), go->isStatic);
+	json_object_dotset_number(root_object, (node_name + ".Parent UID").c_str(), go->pParent->GetUID());
+	json_object_dotset_number(root_object, (node_name + ".Components num").c_str(), go->vComponents.size());
 
-    json_object_dotset_string(root_object, (name + ".Name").c_str(), go->name.c_str());
-    json_object_dotset_number(root_object, (name + ".UUID").c_str(), go->GetUid());
+	for (int i = 0; i < go->vComponents.size(); i++)
+	{
+		ComponentsJSON(go->vComponents[i], node_name, i);
+	}
 
-    for (int i = 0; i < go->vChildren.size(); i++)
-    {
-        counter = GameObjectInfo(go->vChildren[i], name, counter);
-    }
+	for (int i = 0; i < go->vChildren.size(); i++)
+	{
+		counter = GameObjectJSON(go->vChildren[i], "GameObject.Child " + std::to_string(counter), counter);
+	}
 
-    return counter;
+	return counter;
 }
 
-void ParsingJSON::ComponentsJSON(Component* comp, std::string name)
+int ParsingJSON::GameObjectInfo(GameObject* go, std::string node_name, int counter)
 {
-    std::string comp_name = name + ".Components." + comp->name;
-    json_object_dotset_number(root_object, (comp_name + ".Type").c_str(), (double)comp->type);
-    json_object_dotset_number(root_object, (comp_name + ".UUID").c_str(), comp->GetUID());
+	counter++;
 
-    switch (comp->type)
-    {
-    case C_TYPE::TRANSFORM:
-        json_object_dotset_array(&static_cast<C_Transform*> (comp)->position[0], 3, comp_name + ".Position");
-        json_object_dotset_array(&static_cast<C_Transform*> (comp)->eulerRot[0], 3, comp_name + ".Rotation");
-        json_object_dotset_array(&static_cast<C_Transform*> (comp)->scale[0], 3, comp_name + ".Scale");
-        break;
-    case C_TYPE::MESH:
-        json_object_dotset_number(root_object, (comp_name + ".UUID").c_str(), comp->GetUID());
-        json_object_dotset_number(root_object, (comp_name + ".Mesh UUID").c_str(), static_cast<C_Mesh*>(comp)->mesh->GetUID());
-        json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), ("Libray\/Meshes\/" + 
-            std::to_string(static_cast<C_Mesh*>(comp)->mesh->GetUID())).c_str());
-        break;
-    case C_TYPE::MATERIAL:
-        json_object_dotset_number(root_object, (comp_name + ".UUID").c_str(), comp->GetUID());
-        json_object_dotset_number(root_object, (comp_name + ".Material UUID").c_str(), static_cast<C_Material*>(comp)->tex->GetUID());
-        json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), ("Libray\/Textures\/" + 
-            std::to_string(static_cast<C_Material*>(comp)->tex->GetUID())).c_str());
-        break;
-    case C_TYPE::CAM:
-        break;
-    case C_TYPE::NONE:
-        break;
-    default:
-        break;
-    }
+	json_object_dotset_string(root_object, (node_name + ".Name").c_str(), go->name.c_str());
+	json_object_dotset_number(root_object, (node_name + ".UUID").c_str(), go->GetUID());
+
+	for (int i = 0; i < go->vChildren.size(); i++)
+	{
+		counter = GameObjectInfo(go->vChildren[i], node_name, counter);
+	}
+
+	return counter;
 }
 
+void ParsingJSON::ComponentsJSON(Component* comp, std::string node_name, int i)
+{
+	std::string comp_name = node_name + ".Components.Component " + std::to_string(i);
+	json_object_dotset_string(root_object, (comp_name + ".Name").c_str(), comp->name.c_str());
+	json_object_dotset_number(root_object, (comp_name + ".Type").c_str(), (double)comp->type);
+	json_object_dotset_number(root_object, (comp_name + ".UUID").c_str(), comp->GetUID());
+
+	switch (comp->type)
+	{
+	case C_TYPE::TRANSFORM:
+		json_object_dotset_array(&static_cast<C_Transform*> (comp)->position[0], 3, comp_name + ".Position");
+		json_object_dotset_array(&static_cast<C_Transform*> (comp)->eulerRot[0], 3, comp_name + ".Rotation");
+		json_object_dotset_array(&static_cast<C_Transform*> (comp)->scale[0], 3, comp_name + ".Scale");
+		break;
+	case C_TYPE::MESH:
+		json_object_dotset_number(root_object, (comp_name + ".UUID").c_str(), comp->GetUID());
+		json_object_dotset_number(root_object, (comp_name + ".Mesh UUID").c_str(), static_cast<C_Mesh*>(comp)->mesh->GetUID());
+		json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), ("Libray/Meshes/" +
+			std::to_string(static_cast<C_Mesh*>(comp)->mesh->GetUID())).c_str());
+		break;
+	case C_TYPE::MATERIAL:
+		json_object_dotset_number(root_object, (comp_name + ".UUID").c_str(), comp->GetUID());
+		json_object_dotset_number(root_object, (comp_name + ".Material UUID").c_str(), static_cast<C_Material*>(comp)->tex->GetUID());
+		json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), ("Libray\/Textures\/" +
+			std::to_string(static_cast<C_Material*>(comp)->tex->GetUID())).c_str());
+		break;
+	case C_TYPE::CAM:
+		break;
+	case C_TYPE::NONE:
+		break;
+	default:
+		break;
+	}
+}
+
+//---Load from .meta---
+GameObject* ParsingJSON::CreateGOfromMeta(std::string path)
+{
+	root_value = json_parse_file(path.c_str());
+	root_object = json_value_get_object(root_value);
+
+	GameObject* go;
+	go = GOfromMeta("GameObject.Parent");
+
+	int vChildrensize = json_object_dotget_number(root_object, "GameObject.Info.Children number");
+
+	// Count starts with 1
+	for (int i = 0; i < vChildrensize; i++)
+	{
+		GOfromMeta("GameObject.Child " + std::to_string(i + 1));
+	}
+
+	return go;
+}
+
+GameObject* ParsingJSON::GOfromMeta(std::string node_name)
+{
+	GameObject* go = new GameObject();
+
+	go->name = json_object_dotget_string(root_object, (node_name + ".Name").c_str());
+	int id = json_object_dotget_number(root_object, (node_name + ".UID").c_str());
+	go->SetUID(id);
+	id = json_object_dotget_number(root_object, (node_name + ".Parent UID").c_str());
+
+	if (id == 0)
+	{
+		App->scene->rootNode->AddChild(go);
+	}
+	else
+	{
+		App->scene->rootNode->FindChild(id)->AddChild(go);
+	}
+
+	go->isActive = json_object_dotget_boolean(root_object, (node_name + ".Active").c_str());
+	go->isStatic = json_object_dotget_boolean(root_object, (node_name + ".Static").c_str());
+
+	int comp_num = json_object_dotget_number(root_object, (node_name + ".Components num").c_str());
+
+	for (int i = 0; i < comp_num; i++)
+	{
+		Component* comp = ComponentsFromMeta(node_name, i);
+		go->AddComponent(comp);
+		comp = nullptr;
+	}
+
+	return go;
+}
+
+Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
+{
+	std::string comp_name = node_name + ".Components.Component " + std::to_string(i);
+
+	Component* comp;
+	C_TYPE comp_type = (C_TYPE)json_object_dotget_number(root_object, (comp_name + ".Type").c_str());
+
+	float* f = nullptr;
+	int id;
+
+	switch (comp_type)
+	{
+	case C_TYPE::TRANSFORM:
+		comp = new C_Transform();
+
+		//---Position---
+		f = C_json_object_dotget_array(static_cast<C_Transform*>(comp)->position.Size, comp_name + ".Position");
+
+		static_cast<C_Transform*>(comp)->position.x = f[0];
+		static_cast<C_Transform*>(comp)->position.y = f[1];
+		static_cast<C_Transform*>(comp)->position.z = f[2];
+
+
+		// TODO: euler rotation changes the normal rotation?
+		//---Rotation---
+		f = C_json_object_dotget_array(static_cast<C_Transform*>(comp)->position.Size, comp_name + ".Rotation");
+
+		static_cast<C_Transform*>(comp)->eulerRot.x = f[0];
+		static_cast<C_Transform*>(comp)->eulerRot.y = f[1];
+		static_cast<C_Transform*>(comp)->eulerRot.z = f[2];
+
+		//---Scale---
+		f = C_json_object_dotget_array(static_cast<C_Transform*>(comp)->position.Size, comp_name + ".Scale");
+
+		static_cast<C_Transform*>(comp)->scale.x = f[0];
+		static_cast<C_Transform*>(comp)->scale.y = f[1];
+		static_cast<C_Transform*>(comp)->scale.z = f[2];
+		break;
+	case C_TYPE::MESH:
+		comp = new C_Mesh();
+		id = json_object_dotget_number(root_object, (comp_name + ".Components.UUID").c_str());
+		comp->SetUID(id);
+
+		id = json_object_dotget_number(root_object, (comp_name + ".Components.Mesh UUID").c_str());
+		static_cast<C_Mesh*>(comp)->mesh->SetUID(id);
+
+		static_cast<C_Mesh*>(comp)->mesh->libraryFile = json_object_dotget_string(root_object, (comp_name + ".Library dir").c_str());
+		break;
+	case C_TYPE::MATERIAL:
+		comp = new C_Material();
+		id = json_object_dotget_number(root_object, (comp_name + ".Components.UUID").c_str());
+		comp->SetUID(id);
+
+		id = json_object_dotget_number(root_object, (comp_name + ".Components.Material UUID").c_str());
+		static_cast<C_Material*>(comp)->tex->SetUID(id);
+
+		static_cast<C_Material*>(comp)->tex->libraryFile = json_object_dotget_string(root_object, (comp_name + ".Library dir").c_str());
+		break;
+	case C_TYPE::CAM:
+		break;
+	case C_TYPE::NONE:
+		break;
+	default:
+		break;
+	}
+
+	comp->type = comp_type;
+
+	//RELEASE(f);
+	return comp;
+}
+
+//---Custom functions---
 void ParsingJSON::json_object_dotset_array(float* num, int size, std::string name)
 {
-    JSON_Value* value = json_value_init_array();
-    JSON_Array* jArray = json_value_get_array(value);
+	JSON_Value* value = json_value_init_array();
+	JSON_Array* jArray = json_value_get_array(value);
 
-    json_object_dotset_value(root_object, name.c_str(), value);
+	json_object_dotset_value(root_object, name.c_str(), value);
 
-    for (int i = 0; i < size; i++)
-    {
-        json_array_append_number(jArray, num[i]);
-    }
+	for (int i = 0; i < size; i++)
+	{
+		json_array_append_number(jArray, num[i]);
+	}
+}
+
+float* ParsingJSON::C_json_object_dotget_array(int size, string name)
+{
+	JSON_Array* jArray = json_object_dotget_array(root_object, name.c_str());
+
+	float* ret = new float[size];
+	for (int i = 0; i < size; i++)
+	{
+		ret[i] = (float)json_value_get_number(json_array_get_value(jArray, i));
+	}
+
+	return ret;
 }

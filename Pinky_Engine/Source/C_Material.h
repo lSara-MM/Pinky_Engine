@@ -12,8 +12,8 @@
 class C_Material : public Component
 {
 public:
-	C_Material(GameObject* g = nullptr, R_Texture* t = nullptr, uint i = 0, bool start_enabled = true);
-	C_Material(GameObject* g, C_Material* toCopy, bool start_enabled, uint i = 0);
+	C_Material(GameObject* g = nullptr, R_Texture* t = nullptr, bool start_enabled = true);
+	C_Material(GameObject* g, C_Material* toCopy, bool start_enabled);
 	~C_Material();
 
 	void ShowInInspector();
