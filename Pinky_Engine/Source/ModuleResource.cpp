@@ -139,12 +139,12 @@ std::string ModuleResource::SaveToLibrary(Resource* r)
 	{
 	case R_TYPE::MESH:
 		path = MESHES_PATH;
-		ext = ".pnk";
+		ext = MESHES_EXT;	
 		size = I_Mesh::Save(static_cast<R_Mesh*>(r), &buffer);
 		break;
 	case R_TYPE::TEXTURE:
 		path = TEXTURES_PATH;
-		ext = ".duk";
+		ext = TEXTURES_EXT;
 		size = I_Texture::Save(static_cast<R_Texture*>(r), &buffer);
 		break;
 	case R_TYPE::SCENE:
