@@ -15,7 +15,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 	MainCamera->frustum.pos = float3(5.0f, 5.0f, 5.0f);
 	MainCamera->LookAt(float3(0.0f, 0.0f, 0.0f));
 	MainCamera->frustum.farPlaneDistance = 1000.0f;
-	Reference = float3(0.0f, 0.0f, 0.0f);//change to selected game object
+	Reference = float3(0.0f, 0.0f, 0.0f);
 	App->renderer3D->editorCam = MainCamera;
 }
 
