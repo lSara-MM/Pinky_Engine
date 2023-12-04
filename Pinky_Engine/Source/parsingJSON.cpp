@@ -12,18 +12,51 @@ ParsingJSON::~ParsingJSON()
 }
 
 //---Create and write in .meta---
-void ParsingJSON::CreateJSON(GameObject* go, const char* path)
+void ParsingJSON::CreateMeshMetaFile(std::vector<Resource*> resources, const char* path)
 {
 	std::string filePath, fileName, fileExt;
 	App->fs->SplitFilePath(path, &filePath, &fileName, &fileExt);
-	App->parson->CreateMetaFromGO(go, filePath);
-}
 
-void ParsingJSON::CreateMetaFromGO(GameObject* go, std::string path)
-{
+	std::string file_name = filePath + fileName + "." + fileExt + ".meta";
+	root_value = json_value_init_object();
+	root_object = json_value_get_object(root_value);
+	char* serialized_string = NULL;
+
 	int resource_count = 0;
 
-	std::string file_name = path + go->name + ".meta.json";
+	std::string node_name = "GameObject.Info";
+	json_object_dotset_string(root_object, (node_name + ".Local Directory").c_str(), file_name.c_str());
+
+	//resource_count = GameObjectInfo(go, node_name + ".Resources") - 1;
+
+	json_object_dotset_number(root_object, (node_name + ".Children number").c_str(), resource_count);
+
+	node_name += ".Mesh ";
+
+	for (int i = 0; i < resources.size(); i++)
+	{
+		json_object_dotset_number(root_object, (node_name + std::to_string(i) + ".UID").c_str(), resources.at(i)->GetUID());
+		json_object_dotset_string(root_object, (node_name + std::to_string(i) + ".Library Path").c_str(), (MESHES_PATH +
+			std::to_string(resources.at(i)->GetUID())).c_str());
+	}
+
+	serialized_string = json_serialize_to_string_pretty(root_value);
+	puts(serialized_string);
+
+	json_serialize_to_file(root_value, file_name.c_str());
+	json_free_serialized_string(serialized_string);
+	json_value_free(root_value);
+}
+
+//---Create and write GameObject information---
+void ParsingJSON::CreatePrefabFromGO(GameObject* go, const char* path)
+{
+	std::string filePath, fileName, fileExt;
+	App->fs->SplitFilePath(path, &filePath, &fileName, &fileExt);
+
+	int resource_count = 0;
+
+	std::string file_name = filePath + go->name + ".pgo";	// Pinky Game Object
 	root_value = json_value_init_object();
 	root_object = json_value_get_object(root_value);
 	char* serialized_string = NULL;
@@ -124,7 +157,7 @@ GameObject* ParsingJSON::CreateGOfromMeta(std::string path)
 	root_value = json_parse_file(path.c_str());
 	root_object = json_value_get_object(root_value);
 
-	GameObject* go, *temp;
+	GameObject* go, * temp;
 	std::vector<GameObject*> vTemp;
 
 	go = GOfromMeta("GameObject.Parent");
@@ -247,6 +280,13 @@ Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
 	//RELEASE(f);
 	return comp;
 }
+
+std::string ParsingJSON::GetLibraryPath(const char* path, R_TYPE type)
+{
+	return std::string();
+}
+
+
 
 //---Custom functions---
 void ParsingJSON::json_object_dotset_array(float* num, int size, std::string name)

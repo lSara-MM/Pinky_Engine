@@ -7,12 +7,6 @@
     <Filter Include="Sources\Modules">
       <UniqueIdentifier>{7b418be2-1631-4a31-9ef2-8a8b234a7339}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Importers">
-      <UniqueIdentifier>{5c672c23-3160-488b-b85e-db60521f6a49}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\GameObject">
-      <UniqueIdentifier>{4d0764d0-039b-45f6-a8bc-2519764af026}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Scene">
       <UniqueIdentifier>{c9d27834-56b4-44a2-940b-f95b270cf006}</UniqueIdentifier>
     </Filter>
@@ -73,11 +67,20 @@
     <Filter Include="External Libraries\PhysFS">
       <UniqueIdentifier>{4d257ed6-d82d-417b-987f-d7de49527596}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Resources">
-      <UniqueIdentifier>{33d05545-13e8-44bf-898b-a7bc02666c09}</UniqueIdentifier>
-    </Filter>
     <Filter Include="External Libraries\ImGuizmo">
       <UniqueIdentifier>{eeaea776-0188-4d1c-8ab6-077b21fe1249}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Cosos">
+      <UniqueIdentifier>{dfa2f7d9-6e18-4ee7-890e-7573403f3577}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Cosos\Importers">
+      <UniqueIdentifier>{5c672c23-3160-488b-b85e-db60521f6a49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Cosos\GameObject">
+      <UniqueIdentifier>{4d0764d0-039b-45f6-a8bc-2519764af026}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Cosos\Resources">
+      <UniqueIdentifier>{33d05545-13e8-44bf-898b-a7bc02666c09}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -121,10 +124,10 @@
       <Filter>Sources\Modules</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameObject.h">
-      <Filter>Sources\GameObject</Filter>
+      <Filter>Sources\Cosos\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component.h">
-      <Filter>Sources\GameObject</Filter>
+      <Filter>Sources\Cosos\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Source\ModuleScene.h">
       <Filter>Sources\Scene</Filter>
@@ -133,23 +136,23 @@
       <Filter>Sources\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\C_Material.h">
-      <Filter>Sources\GameObject</Filter>
+      <Filter>Sources\Cosos\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Source\C_Mesh.h">
-      <Filter>Sources\GameObject</Filter>
+      <Filter>Sources\Cosos\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Source\C_Transform.h">
-      <Filter>Sources\GameObject</Filter>
+      <Filter>Sources\Cosos\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Source\C_Camera.h">
-      <Filter>Sources\GameObject</Filter>
+      <Filter>Sources\Cosos\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
     <ClInclude Include="Source\I_Mesh.h">
-      <Filter>Sources\Importers</Filter>
+      <Filter>Sources\Cosos\Importers</Filter>
     </ClInclude>
     <ClInclude Include="Source\I_Texture.h">
-      <Filter>Sources\Importers</Filter>
+      <Filter>Sources\Cosos\Importers</Filter>
     </ClInclude>
     <ClInclude Include="Source\External Libraries\Deviceld\DeviceId.h">
       <Filter>External Libraries\Deviceld</Filter>
@@ -398,25 +401,25 @@
       <Filter>External Libraries\DevIL</Filter>
     </ClInclude>
     <ClInclude Include="Source\External Libraries\Assimp\Assimp.h">
-      <Filter>Sources\Importers</Filter>
+      <Filter>Sources\Cosos\Importers</Filter>
     </ClInclude>
     <ClInclude Include="Source\External Libraries\PhysFS\include\physfs.h">
       <Filter>External Libraries\PhysFS</Filter>
     </ClInclude>
     <ClInclude Include="Source\Resource.h">
-      <Filter>Sources\Resources</Filter>
+      <Filter>Sources\Cosos\Resources</Filter>
     </ClInclude>
     <ClInclude Include="Source\R_Mesh.h">
-      <Filter>Sources\Resources</Filter>
+      <Filter>Sources\Cosos\Resources</Filter>
     </ClInclude>
     <ClInclude Include="Source\FileSystemManager.h">
-      <Filter>Sources\Resources</Filter>
+      <Filter>Sources\Cosos\Resources</Filter>
     </ClInclude>
     <ClInclude Include="Source\parsingJSON.h">
-      <Filter>Sources\Importers</Filter>
+      <Filter>Sources\Cosos\Importers</Filter>
     </ClInclude>
     <ClInclude Include="Source\R_Texture.h">
-      <Filter>Sources\Resources</Filter>
+      <Filter>Sources\Cosos\Resources</Filter>
     </ClInclude>
     <ClInclude Include="Source\ModuleResource.h">
       <Filter>Sources\Modules</Filter>
@@ -481,7 +484,7 @@
       <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameObject.cpp">
-      <Filter>Sources\GameObject</Filter>
+      <Filter>Sources\Cosos\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModuleScene.cpp">
       <Filter>Sources\Scene</Filter>
@@ -490,25 +493,25 @@
       <Filter>Sources\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\C_Material.cpp">
-      <Filter>Sources\GameObject</Filter>
+      <Filter>Sources\Cosos\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Source\C_Mesh.cpp">
-      <Filter>Sources\GameObject</Filter>
+      <Filter>Sources\Cosos\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Source\C_Transform.cpp">
-      <Filter>Sources\GameObject</Filter>
+      <Filter>Sources\Cosos\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Source\C_Camera.cpp">
-      <Filter>Sources\GameObject</Filter>
+      <Filter>Sources\Cosos\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component.cpp">
-      <Filter>Sources\GameObject</Filter>
+      <Filter>Sources\Cosos\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Source\I_Mesh.cpp">
-      <Filter>Sources\Importers</Filter>
+      <Filter>Sources\Cosos\Importers</Filter>
     </ClCompile>
     <ClCompile Include="Source\I_Texture.cpp">
-      <Filter>Sources\Importers</Filter>
+      <Filter>Sources\Cosos\Importers</Filter>
     </ClCompile>
     <ClCompile Include="Source\External Libraries\Deviceld\DeviceId.cpp">
       <Filter>External Libraries\Deviceld</Filter>
@@ -643,22 +646,22 @@
       <Filter>External Libraries\parson</Filter>
     </ClCompile>
     <ClCompile Include="Source\External Libraries\Assimp\Assimp.cpp">
-      <Filter>Sources\Importers</Filter>
+      <Filter>Sources\Cosos\Importers</Filter>
     </ClCompile>
     <ClCompile Include="Source\Resource.cpp">
-      <Filter>Sources\Resources</Filter>
+      <Filter>Sources\Cosos\Resources</Filter>
     </ClCompile>
     <ClCompile Include="Source\R_Mesh.cpp">
-      <Filter>Sources\Resources</Filter>
+      <Filter>Sources\Cosos\Resources</Filter>
     </ClCompile>
     <ClCompile Include="Source\FileSystemManager.cpp">
-      <Filter>Sources\Resources</Filter>
+      <Filter>Sources\Cosos\Resources</Filter>
     </ClCompile>
     <ClCompile Include="Source\parsingJSON.cpp">
-      <Filter>Sources\Importers</Filter>
+      <Filter>Sources\Cosos\Importers</Filter>
     </ClCompile>
     <ClCompile Include="Source\R_Texture.cpp">
-      <Filter>Sources\Resources</Filter>
+      <Filter>Sources\Cosos\Resources</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModuleResource.cpp">
       <Filter>Sources\Modules</Filter>

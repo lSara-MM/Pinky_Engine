@@ -22,6 +22,7 @@ ModuleResource::~ModuleResource()
 // -----------------------------------------------------------------
 bool ModuleResource::Start()
 {
+	mResources = {};
 	return true;
 }
 
@@ -40,66 +41,132 @@ bool ModuleResource::CleanUp()
 	return true;
 }
 
-GameObject* ModuleResource::ImportFile(const char* fileDir, GameObject* goToLink)
+GameObject* ModuleResource::ImportVFile(const char* fileDir, GameObject* goToLink)
 {
 	std::string dir = fileDir;
-	std::array<std::string, 3> obj_ext = { ".fbx", ".FBX", ".obj", };
-	std::array<std::string, 6> tex_ext = { ".png", ".PNG", ".jpg", ".JPG", ".dds", ".DDS" };
-
 	GameObject* go = nullptr;
 
 	std::string normFileName = App->fs->NormalizePath((metaPath + ".meta.json").c_str());
 
-	//if (App->fs->Exists(normFileName.c_str()))
-	//{
-	//	switch (CheckExtensionType(fileDir))
-	//	{
-	//	case R_TYPE::MESH:
-	//		go = App->parson->CreateGOfromMeta(normFileName);
-	//		LoadChildrenMeshes(go, go->vChildren.size());
-	//		break;
-	//	case R_TYPE::TEXTURE:
-	//		break;
-	//	case R_TYPE::SCENE:
-	//		break;
-	//	case R_TYPE::NONE:
-	//		break;
-	//	default:
-	//		break;
-	//	}
-
-	//	//LoadFromLibrary(R_TYPE::MESH);
-	//}
-	//else
+	if (App->fs->Exists(normFileName.c_str()))
 	{
-		bool imported = false;
-
-		for (auto i = 0; i < obj_ext.size(); i++)
+		switch (CheckExtensionType(fileDir))
 		{
-			if (dir.find(obj_ext.at(i)) != std::string::npos)
-			{
-				imported = true;
-				go = ai::ImportMesh(fileDir);
+		case R_TYPE::MESH:
 
-				//App->parson->CreateJSON(go, "Assets\\");
-				break;
-			}
+			// get mesh uid and add to counter 
+
+
+
+			//go = App->parson->CreateGOfromMeta(normFileName);
+			//LoadChildrenMeshes(go, go->vChildren.size());
+			break;
+		case R_TYPE::TEXTURE:
+			//LoadFromLibrary(normFileName, R_TYPE::TEXTURE);
+			break;
+		case R_TYPE::SCENE:
+			break;
+		case R_TYPE::NONE:
+			break;
+		default:
+			break;
 		}
 
-		if (!imported)
+		//LoadFromLibrary(R_TYPE::MESH);
+	}
+	else
+	{
+		std::vector<Resource*>* vResources;
+		switch (CheckExtensionType(fileDir))
 		{
-			for (auto i = 0; i < tex_ext.size(); i++)
+		case R_TYPE::MESH:
+			vResources = ai::ImportVMesh(fileDir);
+			break;
+		case R_TYPE::TEXTURE:
+			if (true)
 			{
-				if (dir.find(tex_ext.at(i)) != std::string::npos)
-				{
-					C_Material* mat = static_cast<C_Material*>(goToLink->GetComponentByType(C_TYPE::MATERIAL));
-					mat->tex->ImportTexture(fileDir);
-					std::string path = App->resource->SaveToLibrary(mat->tex);
-					mat->tex = static_cast<R_Texture*>(App->resource->LoadFromLibrary(path, R_TYPE::TEXTURE));
-				}
+				C_Material* mat = static_cast<C_Material*>(goToLink->GetComponentByType(C_TYPE::MATERIAL));
+				mat->tex->ImportTexture(fileDir);
+				std::string path = App->resource->SaveToLibrary(mat->tex);
+				mat->tex = static_cast<R_Texture*>(App->resource->LoadFromLibrary(path, R_TYPE::TEXTURE));
 			}
+			break;
+		case R_TYPE::SCENE:
+			break;
+		case R_TYPE::NONE:
+			break;
+		default:
+			break;
 		}
 
+		App->parson->CreateMeshMetaFile(*vResources, fileDir);
+		//App->parson->CreateJSON(go, "Assets\\");
+		//App->parson->CreateJSON(go, fileDir);
+
+		//ClearVec(*vResources);
+	}
+
+	return go;
+}
+
+GameObject* ModuleResource::ImportFile(const char* fileDir, GameObject* goToLink)
+{
+	std::string dir = fileDir;
+	GameObject* go = nullptr;
+
+	std::string normFileName = App->fs->NormalizePath((metaPath + ".meta.json").c_str());
+
+	if (App->fs->Exists(normFileName.c_str()))
+	{
+		switch (CheckExtensionType(fileDir))
+		{
+		case R_TYPE::MESH:
+
+			// get mesh uid and add to counter 
+
+
+
+			//go = App->parson->CreateGOfromMeta(normFileName);
+			//LoadChildrenMeshes(go, go->vChildren.size());
+			break;
+		case R_TYPE::TEXTURE:
+			//LoadFromLibrary(normFileName, R_TYPE::TEXTURE);
+			break;
+		case R_TYPE::SCENE:
+			break;
+		case R_TYPE::NONE:
+			break;
+		default:
+			break;
+		}
+
+		//LoadFromLibrary(R_TYPE::MESH);
+	}
+	else
+	{
+		switch (CheckExtensionType(fileDir))
+		{
+		case R_TYPE::MESH:
+			go = ai::ImportMesh(fileDir);
+			break;
+		case R_TYPE::TEXTURE:
+			if (true)
+			{
+				C_Material* mat = static_cast<C_Material*>(goToLink->GetComponentByType(C_TYPE::MATERIAL));
+				mat->tex->ImportTexture(fileDir);
+				std::string path = App->resource->SaveToLibrary(mat->tex);
+				mat->tex = static_cast<R_Texture*>(App->resource->LoadFromLibrary(path, R_TYPE::TEXTURE));
+			}			
+			break;
+		case R_TYPE::SCENE:
+			break;
+		case R_TYPE::NONE:
+			break;
+		default:
+			break;
+		}
+		//App->parson->CreateMeshMetaFile(go, fileDir);
+		//App->parson->CreateJSON(go, "Assets\\");
 		//App->parson->CreateJSON(go, fileDir);
 	}
 
@@ -112,34 +179,34 @@ void ModuleResource::ImportModel(const char* meshPath, std::vector<const char*> 
 
 	Get_Set_FilePath(meshPath);
 
-	go = ImportFile(meshPath);
+	go = ImportVFile(meshPath);
 
-	/*if (texPaths.empty())
-	{
-	}
-	else if (texPaths.size() == 1)
-	{
-		for (int i = 0; i < go->vChildren.size(); i++)
-		{
-			ImportFile(texPaths[0], go->vChildren[i]);
-		}
-	}
-	else
-	{
-		for (int i = 0; i < go->vChildren.size(); i++)
-		{
-			if (i < texPaths.size())
-			{
-				ImportFile(texPaths[i], go->vChildren[i]);
-			}
-			else
-			{
-				ImportFile(texPaths[go->vChildren.size() - 1], go->vChildren[i]);
-			}
-		}
-	}*/
+	//if (texPaths.empty())
+	//{
+	//}
+	//else if (texPaths.size() == 1)
+	//{
+	//	for (int i = 0; i < go->vChildren.size(); i++)
+	//	{
+	//		ImportFile(texPaths[0], go->vChildren[i]);
+	//	}
+	//}
+	//else
+	//{
+	//	for (int i = 0; i < go->vChildren.size(); i++)
+	//	{
+	//		if (i < texPaths.size())
+	//		{
+	//			ImportFile(texPaths[i], go->vChildren[i]);
+	//		}
+	//		else
+	//		{
+	//			ImportFile(texPaths[go->vChildren.size() - 1], go->vChildren[i]);
+	//		}
+	//	}
+	//}
 
-	App->parson->CreateJSON(go, meshPath);
+	//App->parson->CreateJSON(go, meshPath);
 	go = nullptr;
 }
 
@@ -159,7 +226,7 @@ std::string ModuleResource::SaveToLibrary(Resource* r)
 		break;
 	case R_TYPE::TEXTURE:
 		path = TEXTURES_PATH;
-		ext = TEXTURES_EXT;
+		ext = ".dds";
 		size = I_Texture::Save(static_cast<R_Texture*>(r), &buffer);
 		break;
 	case R_TYPE::SCENE:
@@ -170,11 +237,12 @@ std::string ModuleResource::SaveToLibrary(Resource* r)
 		break;
 	}
 
+	//mResources->insert(std::pair<uint, Resource*>(r->GetUID(), r));
 	path = path + std::to_string(r->GetUID()) + ext;
 
 	App->fs->Save(path.c_str(), buffer, size);
 
-	RELEASE_ARRAY(buffer);	// TODO: peta jaja
+	//RELEASE_ARRAY(buffer);	// TODO: peta jaja
 	buffer = nullptr;
 	return path;
 }
@@ -213,7 +281,7 @@ Resource* ModuleResource::LoadFromLibrary(std::string path, R_TYPE type)
 			break;
 		}
 
-		//App->parson->CreateGOfromMeta(buffer);
+		//mResources->insert(std::pair<uint, Resource*>(r->GetUID(), r));
 		//RELEASE_ARRAY(buffer);
 	}
 	buffer = nullptr;
@@ -247,7 +315,7 @@ std::string ModuleResource::Get_Set_FilePath(const char* fileDir)
 	
 	if (dir.find("C:\\") != std::string::npos)
 	{
-		//metaPath = "Assets\\" + fileName;
+		metaPath = "Assets\\" + fileName;
 	}
 	else
 	{

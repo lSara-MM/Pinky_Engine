@@ -33,6 +33,160 @@ void ai::DisableDebug()
 	LOG("Disable debug mode");
 }
 
+std::vector<Resource*>* ai::ImportVMesh(const char* meshfileDir, GameObject* go, bool component)
+{
+	const aiScene* scene = aiImportFile(meshfileDir, aiProcessPreset_TargetRealtime_MaxQuality);
+	GameObject* ret = nullptr;
+
+	std::vector<Resource*>* vMeshes = &std::vector<Resource*>();
+
+	if (scene != nullptr && scene->HasMeshes())
+	{
+		if (go != nullptr)
+		{
+			(MeshVHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, go, vMeshes, component) != nullptr) ?
+				ret = go : ret = nullptr;
+		}
+
+		// If the imported 3D model has many meshes at the same level, create a new GameObject with the
+		// file name as a parent to group them all
+		else if (scene->mRootNode->mNumChildren > 1)
+		{
+			std::string name = meshfileDir;
+			// --- Get file name ---
+			int posI = name.find_last_of("\\") + 1;
+			int posF = name.find_last_of(".");
+
+			name = name.substr(posI, posF - posI);	// first position, size of the string to get
+			// ---------------------------------------------
+
+			GameObject* obj = new GameObject(name);
+			MeshVHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, obj, vMeshes);
+			ret = obj;
+			obj = nullptr;
+		}
+		else
+		{
+			ret = MeshVHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, App->scene->rootNode, vMeshes);
+		}
+
+		if (ret != nullptr)
+		{
+			LOG("%d meshes loaded.", scene->mNumMeshes);
+		}
+		else { LOG("[ERROR] Couldn't load mesh.", scene->mNumMeshes); }
+
+		aiReleaseImport(scene);
+	}
+	else
+	{
+		LOG("[ERROR] loading scene % s", meshfileDir);
+		return nullptr;
+	}
+
+	return vMeshes;
+}
+
+GameObject* ai::MeshVHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent,
+	std::vector<Resource*>* vMeshes, bool component, bool foundParent)
+{
+	GameObject* obj = nullptr;
+
+	static float3 ai_position = { 0,0,0 };
+	static float3 ai_rotation = { 0, 0, 0 };
+	static float3 ai_scale = { 0,0,0 };
+
+	//------
+
+	for (int i = 0; i < num; i++)
+	{
+		if (component)
+		{
+			obj = parent;
+		}
+		else
+		{
+			// --- Create new GameObject to store the mesh ---
+			std::string name = children[i]->mName.C_Str();
+			int posInString = name.find_first_of("$");
+
+			//(posInString == std::string::npos) ? obj = new GameObject(name, parent) : obj = parent;
+
+			if (posInString == std::string::npos)
+			{
+				obj = new GameObject(name, parent);
+				LoadTranslation(false, children[i], obj, parent, name);
+			}
+			else
+			{
+				obj = parent;
+				LoadTranslation(true, children[i], obj, parent, name);
+			}
+
+			if (!foundParent && posInString == std::string::npos)
+			{
+				foundParent = true;
+			}
+		}
+
+		if (children[i]->mChildren != NULL)
+		{
+			if (!foundParent)
+			{
+				obj = MeshVHierarchy(s, children[i]->mChildren, children[i]->mNumChildren, obj, vMeshes, component, foundParent);
+			}
+			else
+			{
+				MeshVHierarchy(s, children[i]->mChildren, children[i]->mNumChildren, obj, vMeshes, component, foundParent);
+			}
+		}
+
+		if (children[i]->mNumMeshes > 0)
+		{
+			const aiMesh* m = s->mMeshes[children[i]->mMeshes[0]];
+			R_Mesh* mesh = new R_Mesh();
+
+			if (!I_Mesh::Import(m, mesh))
+			{
+				//obj->~GameObject();
+				obj = nullptr;
+				return nullptr;
+			}
+
+			vMeshes->push_back(mesh);
+			std::string path = App->resource->SaveToLibrary(mesh);
+			RELEASE(mesh);
+			mesh = static_cast<R_Mesh*>(App->resource->LoadFromLibrary(path, R_TYPE::MESH));
+
+			ai_b_position = false;
+			ai_b_rotation = false;
+			ai_b_scale = false;
+
+			obj->transform->globalMatrix = math::float4x4::FromTRS(obj->transform->position,
+				obj->transform->rotation, obj->transform->scale);
+
+			//---Local AABB---
+			mesh->local_aabb.SetNegativeInfinity();
+			mesh->local_aabb.Enclose((float3*)mesh->vertex, mesh->num_vertex);
+
+			//---Mesh---
+			obj->AddComponent(C_TYPE::MESH, mesh);
+
+			//---Material---
+			if (!component) { obj->AddComponent(C_TYPE::MATERIAL); }
+
+			//TODO: pushback elsewhere
+			App->renderer3D->meshes.push_back(mesh);
+
+			m = nullptr;
+		}
+	}
+
+	return obj;
+}
+
+
+
 GameObject* ai::ImportMesh(const char* meshfileDir, GameObject* go, bool component)
 {
 	const aiScene* scene = aiImportFile(meshfileDir, aiProcessPreset_TargetRealtime_MaxQuality);
@@ -157,61 +311,6 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 			ai_b_position = false;
 			ai_b_rotation = false;
 			ai_b_scale = false;
-
-			/*ai_position = { pos.x, pos.y, pos.z };
-			float temp1[4] = { rot.x , rot.y, rot.z, rot.w };
-			float3 euler = Quat(temp1).ToEulerXYZ();
-			ai_rotation = { euler.x * RADTODEG, euler.y * RADTODEG, euler.z * RADTODEG };
-			ai_b_scale = true;
-			ai_scale = { scale.x, scale.y, scale.z };*/
-
-			//---Transform---
-			//children[i]->mTransformation.Decompose(scale, rot, pos);
-
-			////---Assimp Transform---
-			//if (ai_b_position)
-			//{
-			//	obj->transform->SetRotation(ai_rotation);
-			//}
-			//else
-			//{
-			//	float3 temp = { pos.x, pos.y, pos.z };
-			//	obj->transform->SetTransform(temp);
-			//}
-
-			//if (ai_b_rotation)
-			//{
-			//	obj->transform->SetRotation(ai_rotation);
-			//}
-			//else
-			//{
-			//	float temp1[4] = { rot.x , rot.y, rot.z, rot.w };
-			//	float3 euler = Quat(temp1).ToEulerXYZ();
-			//	float3 eulerF = { euler.x * RADTODEG, euler.y * RADTODEG, euler.z * RADTODEG };
-			//	obj->transform->SetRotation(eulerF);
-			//}			
-
-			//if (ai_b_scale)
-			//{
-			//	obj->transform->SetRotation(ai_rotation);
-			//}
-			//else
-			//{
-			//	float3 temp2 = { scale.x, scale.y, scale.z };
-			//	obj->transform->SetScale(temp2);
-			//}
-			//------
-
-			/*float3 temp = { pos.x, pos.y, pos.z };
-			obj->transform->SetTransform(temp);
-
-			float temp1[4] = { rot.x , rot.y, rot.z, rot.w };
-			float3 euler = Quat(temp1).ToEulerXYZ();
-			float3 eulerF = { euler.x * RADTODEG, euler.y * RADTODEG, euler.z * RADTODEG };
-			obj->transform->SetRotation(eulerF);
-
-			float3 temp2 = { scale.x, scale.y, scale.z };
-			obj->transform->SetScale(temp2);*/
 
 			obj->transform->globalMatrix = math::float4x4::FromTRS(obj->transform->position,
 				obj->transform->rotation, obj->transform->scale);

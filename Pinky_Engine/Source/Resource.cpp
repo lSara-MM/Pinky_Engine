@@ -7,12 +7,11 @@ Resource::Resource(R_TYPE t) : type (t)
 	uid = App->randomLCG->Int();
 	count = 0;
 	name = std::to_string(GetUID());
-
-	//App->resource->mResources[GetUID()] = *this;
 }
 
 Resource::~Resource()
 {
+	//App->resource->mResources->erase(uid);
 }
 
 int Resource::GetUID() { return uid; }

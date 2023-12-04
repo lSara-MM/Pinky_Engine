@@ -3,6 +3,7 @@
 #include <string>
 
 #include "External libraries/parson/parson.h"
+#include "Resource.h"
 
 using namespace std;
 
@@ -15,11 +16,10 @@ public:
 	ParsingJSON();
 	~ParsingJSON();
 
-	// From full path (with || w/o .ext) file, create the .meta file in the same dir
-	void CreateJSON(GameObject* go, const char* path);
+	void CreateMeshMetaFile(std::vector<Resource*> resources, const char* path);
+	int MeshesFromGO(GameObject* go, std::string node_name, int counter = 0);
 
-	// Use only if full path known
-	void CreateMetaFromGO(GameObject* go, std::string path);
+	void CreatePrefabFromGO(GameObject* go, const char* path);
 
 	int GameObjectJSON(GameObject* go, std::string node_name, int counter = 0);
 	int GameObjectInfo(GameObject* go, std::string node_name, int counter = 0);
@@ -28,6 +28,8 @@ public:
 	GameObject* CreateGOfromMeta(std::string path);
 	GameObject* GOfromMeta(std::string node_name);
 	Component* ComponentsFromMeta(std::string node_name, int i);
+
+	std::string GetLibraryPath(const char* path, R_TYPE type);
 
 private:
 	
