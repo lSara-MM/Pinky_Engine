@@ -174,7 +174,7 @@ std::string ModuleResource::SaveToLibrary(Resource* r)
 
 	App->fs->Save(path.c_str(), buffer, size);
 
-	//RELEASE_ARRAY(buffer);	// TODO: peta jaja
+	RELEASE_ARRAY(buffer);	// TODO: peta jaja
 	buffer = nullptr;
 	return path;
 }
