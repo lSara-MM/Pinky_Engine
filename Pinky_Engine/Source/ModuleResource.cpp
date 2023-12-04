@@ -62,7 +62,7 @@ GameObject* ModuleResource::ImportVFile(const char* fileDir, GameObject* goToLin
 			//LoadChildrenMeshes(go, go->vChildren.size());
 			break;
 		case R_TYPE::TEXTURE:
-			//LoadFromLibrary(normFileName, R_TYPE::TEXTURE);
+			LoadFromLibrary(normFileName, R_TYPE::TEXTURE);
 			break;
 		case R_TYPE::SCENE:
 			break;
@@ -76,19 +76,28 @@ GameObject* ModuleResource::ImportVFile(const char* fileDir, GameObject* goToLin
 	}
 	else
 	{
-		std::vector<Resource*>* vResources;
+		std::vector<Resource*>* vResources = &std::vector<Resource*>();
 		switch (CheckExtensionType(fileDir))
 		{
 		case R_TYPE::MESH:
 			vResources = ai::ImportVMesh(fileDir);
+
+			// TODO: Delete when we dupe
+			App->parson->CreateResourceMetaFile(*vResources, fileDir, ".fbx");
 			break;
 		case R_TYPE::TEXTURE:
 			if (true)
 			{
-				C_Material* mat = static_cast<C_Material*>(goToLink->GetComponentByType(C_TYPE::MATERIAL));
-				mat->tex->ImportTexture(fileDir);
-				std::string path = App->resource->SaveToLibrary(mat->tex);
-				mat->tex = static_cast<R_Texture*>(App->resource->LoadFromLibrary(path, R_TYPE::TEXTURE));
+				// TODO: no funciona jaja
+				R_Texture* t = new R_Texture();
+				t->ImportTexture(fileDir);
+				SaveToLibrary(t);
+				LoadFromLibrary(fileDir, R_TYPE::TEXTURE);
+
+				vResources->push_back(t);
+
+				// TODO: Delete when we dupe
+				App->parson->CreateResourceMetaFile(*vResources, fileDir, ".dds");
 			}
 			break;
 		case R_TYPE::SCENE:
@@ -99,15 +108,22 @@ GameObject* ModuleResource::ImportVFile(const char* fileDir, GameObject* goToLin
 			break;
 		}
 
-		App->parson->CreateMeshMetaFile(*vResources, fileDir);
-		//App->parson->CreateJSON(go, "Assets\\");
-		//App->parson->CreateJSON(go, fileDir);
+		App->parson->CreateResourceMetaFile(*vResources, fileDir);
 
-		//ClearVec(*vResources);
+		vResources = nullptr;
 	}
 
 	return go;
 }
+
+void ModuleResource::ImportVModel(const char* meshPath, std::vector<const char*> texPaths)
+{
+	Get_Set_FilePath(meshPath);
+
+	ImportVFile(meshPath);
+	ImportVFile(texPaths[0]);
+}
+
 
 GameObject* ModuleResource::ImportFile(const char* fileDir, GameObject* goToLink)
 {

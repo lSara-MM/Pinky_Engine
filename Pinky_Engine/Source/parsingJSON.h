@@ -16,8 +16,8 @@ public:
 	ParsingJSON();
 	~ParsingJSON();
 
-	void CreateMeshMetaFile(std::vector<Resource*> resources, const char* path);
-	int MeshesFromGO(GameObject* go, std::string node_name, int counter = 0);
+	void CreateResourceMetaFile(std::vector<Resource*> resources, const char* path, std::string ext = ".meta");
+	std::string GetResourceMetaFile(const char* path);
 
 	void CreatePrefabFromGO(GameObject* go, const char* path);
 

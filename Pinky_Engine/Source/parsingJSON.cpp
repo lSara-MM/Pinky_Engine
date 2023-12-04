@@ -12,12 +12,19 @@ ParsingJSON::~ParsingJSON()
 }
 
 //---Create and write in .meta---
-void ParsingJSON::CreateMeshMetaFile(std::vector<Resource*> resources, const char* path)
+void ParsingJSON::CreateResourceMetaFile(std::vector<Resource*> resources, const char* path, std::string ext)
 {
 	std::string filePath, fileName, fileExt;
 	App->fs->SplitFilePath(path, &filePath, &fileName, &fileExt);
 
-	std::string file_name = filePath + fileName + "." + fileExt + ".meta";
+	std::string file_name = filePath + fileName + "." + fileExt + ext;
+
+	// TODO: Remove when we have dupe
+	if (ext != ".meta")
+	{
+		file_name = "Assets//" + fileName + "." + ext;
+	}
+
 	root_value = json_value_init_object();
 	root_object = json_value_get_object(root_value);
 	char* serialized_string = NULL;
@@ -27,11 +34,23 @@ void ParsingJSON::CreateMeshMetaFile(std::vector<Resource*> resources, const cha
 	std::string node_name = "GameObject.Info";
 	json_object_dotset_string(root_object, (node_name + ".Local Directory").c_str(), file_name.c_str());
 
-	//resource_count = GameObjectInfo(go, node_name + ".Resources") - 1;
-
 	json_object_dotset_number(root_object, (node_name + ".Children number").c_str(), resource_count);
 
-	node_name += ".Mesh ";
+	switch (App->resource->CheckExtensionType(path))
+	{
+	case R_TYPE::MESH:
+		node_name += ".Mesh ";
+		break;
+	case R_TYPE::TEXTURE:
+		node_name += ".Texture ";
+		break;
+	case R_TYPE::SCENE:
+		break;
+	case R_TYPE::NONE:
+		break;
+	default:
+		break;
+	}
 
 	for (int i = 0; i < resources.size(); i++)
 	{
@@ -46,6 +65,16 @@ void ParsingJSON::CreateMeshMetaFile(std::vector<Resource*> resources, const cha
 	json_serialize_to_file(root_value, file_name.c_str());
 	json_free_serialized_string(serialized_string);
 	json_value_free(root_value);
+}
+
+std::string ParsingJSON::GetResourceMetaFile(const char* path)
+{
+	root_value = json_parse_file(path);
+	root_object = json_value_get_object(root_value);
+
+	//go->isActive = json_object_dotget_boolean(root_object, (node_name + ".Active").c_str());
+
+	return std::string();
 }
 
 //---Create and write GameObject information---

@@ -442,6 +442,9 @@
     <ClInclude Include="Source\External Libraries\ImGuizmo\ImZoomSlider.h">
       <Filter>External Libraries\ImGuizmo</Filter>
     </ClInclude>
+    <ClInclude Include="Source\R_Prefab.h">
+      <Filter>Sources\Cosos\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ModuleCamera3D.cpp">
@@ -680,6 +683,9 @@
     </ClCompile>
     <ClCompile Include="Source\External Libraries\ImGuizmo\ImSequencer.cpp">
       <Filter>External Libraries\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\R_Prefab.cpp">
+      <Filter>Sources\Cosos\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -18,6 +18,7 @@ public:
 	bool CleanUp();
 
 	GameObject* ImportVFile(const char* path, GameObject* goToLink = nullptr);
+	void ImportVModel(const char* meshPath, std::vector<const char*> texPaths);
 
 	GameObject* ImportFile(const char* path, GameObject* goToLink = nullptr);
 	void ImportModel(const char* meshPath, std::vector<const char*> texPaths);

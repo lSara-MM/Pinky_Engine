@@ -97,7 +97,6 @@ GameObject* ai::MeshVHierarchy(const aiScene* s, aiNode** children, int num, Gam
 	static float3 ai_scale = { 0,0,0 };
 
 	//------
-
 	for (int i = 0; i < num; i++)
 	{
 		if (component)
@@ -248,7 +247,6 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 	static float3 ai_scale = { 0,0,0 }; 
 	
 	//------
-
 	for (int i = 0; i < num; i++)
 	{
 		if (component)

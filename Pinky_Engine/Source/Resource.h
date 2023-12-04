@@ -16,6 +16,7 @@ enum class R_TYPE
 {
 	MESH,
 	TEXTURE,
+	PREFAB,
 	SCENE,
 
 	NONE
