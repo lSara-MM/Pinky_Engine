@@ -50,27 +50,27 @@ GameObject* ModuleResource::ImportFile(const char* fileDir, GameObject* goToLink
 
 	std::string normFileName = App->fs->NormalizePath((metaPath + ".meta.json").c_str());
 
-	if (App->fs->Exists(normFileName.c_str()))
-	{
-		switch (CheckExtensionType(fileDir))
-		{
-		case R_TYPE::MESH:
-			go = App->parson->CreateGOfromMeta(normFileName);
-			LoadChildrenMeshes(go, go->vChildren.size());
-			break;
-		case R_TYPE::TEXTURE:
-			break;
-		case R_TYPE::SCENE:
-			break;
-		case R_TYPE::NONE:
-			break;
-		default:
-			break;
-		}
+	//if (App->fs->Exists(normFileName.c_str()))
+	//{
+	//	switch (CheckExtensionType(fileDir))
+	//	{
+	//	case R_TYPE::MESH:
+	//		go = App->parson->CreateGOfromMeta(normFileName);
+	//		LoadChildrenMeshes(go, go->vChildren.size());
+	//		break;
+	//	case R_TYPE::TEXTURE:
+	//		break;
+	//	case R_TYPE::SCENE:
+	//		break;
+	//	case R_TYPE::NONE:
+	//		break;
+	//	default:
+	//		break;
+	//	}
 
-		//LoadFromLibrary(R_TYPE::MESH);
-	}
-	else
+	//	//LoadFromLibrary(R_TYPE::MESH);
+	//}
+	//else
 	{
 		bool imported = false;
 
@@ -100,7 +100,7 @@ GameObject* ModuleResource::ImportFile(const char* fileDir, GameObject* goToLink
 			}
 		}
 
-		App->parson->CreateJSON(go, fileDir);
+		//App->parson->CreateJSON(go, fileDir);
 	}
 
 	return go;
