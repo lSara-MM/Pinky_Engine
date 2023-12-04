@@ -59,8 +59,18 @@ namespace ai
 	void CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go = nullptr, bool component = false);
 	void CreateCustomMehses(CUSTOM_MESH obj);
 
-
+	void LoadTranslation(bool assimp, aiNode* children, GameObject* obj, GameObject* parent, std::string name);
+	
 	// Textures
 	void LoadCheckers(GLuint& buffer);
+
+	//
+	static float3 ai_position = { 0,0,0 };
+	static float3 ai_rotation = { 0, 0, 0 };
+	static float3 ai_scale = { 0,0,0 };
+
+	static bool ai_b_position = false;
+	static bool ai_b_rotation = false;
+	static bool ai_b_scale = false;
 }
 #endif //!__MESH_H__

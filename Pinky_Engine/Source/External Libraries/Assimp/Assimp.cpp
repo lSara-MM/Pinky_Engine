@@ -20,10 +20,10 @@
 void ai::EnableDebug()
 {
 	// Stream log messages to Debug window
-	struct aiLogStream stream;
+	/*struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
-	LOG("Enable debug mode");
+	LOG("Enable debug mode");*/
 }
 
 void ai::DisableDebug()
@@ -89,6 +89,12 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 {
 	GameObject* obj = nullptr;
 
+	static float3 ai_position = { 0,0,0 };
+	static float3 ai_rotation = { 0, 0, 0 };
+	static float3 ai_scale = { 0,0,0 }; 
+	
+	//------
+
 	for (int i = 0; i < num; i++)
 	{
 		if (component)
@@ -99,11 +105,22 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 		{
 			// --- Create new GameObject to store the mesh ---
 			std::string name = children[i]->mName.C_Str();
-			int pos = name.find_first_of("$");
+			int posInString = name.find_first_of("$");
 
-			(pos == std::string::npos) ? obj = new GameObject(name, parent) : obj = parent;
+			//(posInString == std::string::npos) ? obj = new GameObject(name, parent) : obj = parent;
 
-			if (!foundParent && pos == std::string::npos)
+			if (posInString == std::string::npos)
+			{
+				obj = new GameObject(name, parent);
+				LoadTranslation(false, children[i], obj, parent, name);
+			}
+			else
+			{
+				obj = parent;
+				LoadTranslation(true, children[i], obj, parent, name);
+			}
+
+			if (!foundParent && posInString == std::string::npos)
 			{
 				foundParent = true;
 			}
@@ -137,12 +154,55 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 			RELEASE(mesh);
 			mesh = static_cast<R_Mesh*>(App->resource->LoadFromLibrary(path, R_TYPE::MESH));
 
-			//---Transform---
-			aiVector3D pos, scale;
-			aiQuaternion rot;
-			children[i]->mTransformation.Decompose(scale, rot, pos);
+			ai_b_position = false;
+			ai_b_rotation = false;
+			ai_b_scale = false;
 
-			float3 temp = { pos.x, pos.y, pos.z };
+			/*ai_position = { pos.x, pos.y, pos.z };
+			float temp1[4] = { rot.x , rot.y, rot.z, rot.w };
+			float3 euler = Quat(temp1).ToEulerXYZ();
+			ai_rotation = { euler.x * RADTODEG, euler.y * RADTODEG, euler.z * RADTODEG };
+			ai_b_scale = true;
+			ai_scale = { scale.x, scale.y, scale.z };*/
+
+			//---Transform---
+			//children[i]->mTransformation.Decompose(scale, rot, pos);
+
+			////---Assimp Transform---
+			//if (ai_b_position)
+			//{
+			//	obj->transform->SetRotation(ai_rotation);
+			//}
+			//else
+			//{
+			//	float3 temp = { pos.x, pos.y, pos.z };
+			//	obj->transform->SetTransform(temp);
+			//}
+
+			//if (ai_b_rotation)
+			//{
+			//	obj->transform->SetRotation(ai_rotation);
+			//}
+			//else
+			//{
+			//	float temp1[4] = { rot.x , rot.y, rot.z, rot.w };
+			//	float3 euler = Quat(temp1).ToEulerXYZ();
+			//	float3 eulerF = { euler.x * RADTODEG, euler.y * RADTODEG, euler.z * RADTODEG };
+			//	obj->transform->SetRotation(eulerF);
+			//}			
+
+			//if (ai_b_scale)
+			//{
+			//	obj->transform->SetRotation(ai_rotation);
+			//}
+			//else
+			//{
+			//	float3 temp2 = { scale.x, scale.y, scale.z };
+			//	obj->transform->SetScale(temp2);
+			//}
+			//------
+
+			/*float3 temp = { pos.x, pos.y, pos.z };
 			obj->transform->SetTransform(temp);
 
 			float temp1[4] = { rot.x , rot.y, rot.z, rot.w };
@@ -151,7 +211,7 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 			obj->transform->SetRotation(eulerF);
 
 			float3 temp2 = { scale.x, scale.y, scale.z };
-			obj->transform->SetScale(temp2);
+			obj->transform->SetScale(temp2);*/
 
 			obj->transform->globalMatrix = math::float4x4::FromTRS(obj->transform->position,
 				obj->transform->rotation, obj->transform->scale);
@@ -213,6 +273,92 @@ void ai::CreateCustomMehses(CUSTOM_MESH obj)
 	default:
 		break;
 	}
+}
+
+void ai::LoadTranslation(bool assimp, aiNode* children, GameObject* obj, GameObject* parent, std::string name)
+{
+	//---Assimp translation---
+	aiVector3D pos, scale;
+	aiQuaternion rot;
+
+	children->mTransformation.Decompose(scale, rot, pos);
+
+	if (!assimp)
+	{
+		if (!ai_b_position)
+		{
+			ai_position = { pos.x, pos.y, pos.z };
+		}
+		obj->transform->SetTransform(ai_position);
+
+		if (!ai_b_rotation)
+		{
+			float temp1[4] = { rot.x , rot.y, rot.z, rot.w };
+			float3 euler = Quat(temp1).ToEulerXYZ();
+
+			ai_rotation = { euler.x * RADTODEG, euler.y * RADTODEG, euler.z * RADTODEG };
+		}
+		obj->transform->SetRotation(ai_rotation);
+
+		if (!ai_b_scale)
+		{
+			ai_scale = { scale.x, scale.y, scale.z };
+		}
+		obj->transform->SetScale(ai_scale);
+	}
+	else
+	{
+		if (name.find("_Translation\0") != std::string::npos)
+		{
+			ai_b_position = true;
+
+			ai_position = { pos.x, pos.y, pos.z };
+		}
+
+		if (name.find("_Rotation\0") != std::string::npos || name.find("_RotationPivot") != std::string::npos)
+		{
+			ai_b_rotation = true;
+
+			float temp1[4] = { rot.x , rot.y, rot.z, rot.w };
+			float3 euler = Quat(temp1).ToEulerXYZ();
+
+			ai_rotation = { euler.x * RADTODEG, euler.y * RADTODEG, euler.z * RADTODEG };
+		}
+
+		if (name.find("_Scaling") != std::string::npos)
+		{
+			ai_b_scale = false;
+
+			ai_scale = { scale.x, scale.y, scale.z };
+		}
+	}
+
+	/*if (name.find("_Translation\0") != std::string::npos || (!assimp && !ai_b_position))
+	{
+		ai_b_position = true;
+
+		ai_position = { pos.x, pos.y, pos.z };
+		obj->transform->SetTransform(ai_position);
+	}
+
+	if (name.find("_Rotation\0") != std::string::npos || name.find("_RotationPivot") != std::string::npos || (!assimp && !ai_b_rotation))
+	{
+		ai_b_rotation = true;
+
+		float temp1[4] = { rot.x , rot.y, rot.z, rot.w };
+		float3 euler = Quat(temp1).ToEulerXYZ();
+
+		ai_rotation = { euler.x * RADTODEG, euler.y * RADTODEG, euler.z * RADTODEG };
+		obj->transform->SetRotation(ai_rotation);
+	}
+
+	if (name.find("_Scaling") != std::string::npos || (!assimp && !ai_b_scale))
+	{
+		ai_b_scale = false;
+
+		ai_scale = { scale.x, scale.y, scale.z };
+		obj->transform->SetScale(ai_scale);
+	}*/
 }
 
 void ai::LoadCheckers(GLuint& buffer)
