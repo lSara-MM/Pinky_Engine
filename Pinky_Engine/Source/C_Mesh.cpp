@@ -193,15 +193,15 @@ void C_Mesh::DrawFaceNormals()
 		uint index2 = mesh->index[i + 1] * 3;
 		uint index3 = mesh->index[i + 2] * 3;
 
-		math::float3 vec1(mesh->vertex[index1], mesh->vertex[index1 + 1], mesh->vertex[index1 + 2]);
-		math::float3 vec2(mesh->vertex[index2], mesh->vertex[index2 + 1], mesh->vertex[index2 + 2]);
-		math::float3 vec3(mesh->vertex[index3], mesh->vertex[index3 + 1], mesh->vertex[index3 + 2]);
+		float3 vec1(mesh->vertex[index1], mesh->vertex[index1 + 1], mesh->vertex[index1 + 2]);
+		float3 vec2(mesh->vertex[index2], mesh->vertex[index2 + 1], mesh->vertex[index2 + 2]);
+		float3 vec3(mesh->vertex[index3], mesh->vertex[index3 + 1], mesh->vertex[index3 + 2]);
 
-		math::float3 v0 = vec2 - vec1;
-		math::float3 v1 = vec3 - vec1;
-		math::float3 crossV = math::Cross(v0, v1);
+		float3 v0 = vec2 - vec1;
+		float3 v1 = vec3 - vec1;
+		float3 crossV = math::Cross(v0, v1);
 
-		math::float3 crossNorm = crossV.Normalized();
+		float3 crossNorm = crossV.Normalized();
 
 		GLfloat vx = (vec1.x + vec2.x + vec3.x) / 3;
 		GLfloat vy = (vec1.y + vec2.y + vec3.y) / 3;

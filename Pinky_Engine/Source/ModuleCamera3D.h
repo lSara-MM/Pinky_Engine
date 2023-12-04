@@ -27,6 +27,7 @@ public:
 	void CheckIntersection(GameObject* go);
 	void CheckGameObjectsIntersection(GameObject* go);
 	bool CheckTriangleIntersection();
+	void DebugRaycast();
 
 	//Handle all camera input, used in editor (isHovered)
 	void CameraInput();

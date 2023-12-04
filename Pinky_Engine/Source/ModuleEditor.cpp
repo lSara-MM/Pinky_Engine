@@ -87,6 +87,7 @@ bool ModuleEditor::Init()
 	blend = false;
 	lineSmooth = true;
 	normalize = true;
+	raycast = false;
 
 	//
 	infoOutputWin = false;
@@ -408,6 +409,8 @@ update_status ModuleEditor::Toolbar()
 		AboutWindow();
 
 		ImGui::Checkbox("Wireframe", &App->renderer3D->wireframe);
+
+		ImGui::Checkbox("Raycast", &raycast);
 
 		ImGui::EndMainMenuBar();
 	}
@@ -922,14 +925,9 @@ void ModuleEditor::AboutWindow()
 
 void ModuleEditor::EditorWindow()
 {
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 2, 2 });
 
 	ImGui::Begin("Scene", NULL);
-
-	if (ImGui::IsWindowHovered())
-	{
-		App->camera->CameraInput();
-	}
 
 	ImVec2 viewSize = ImGui::GetContentRegionAvail();
 	ImVec2 viewPos = ImGui::GetWindowPos();
@@ -941,14 +939,18 @@ void ModuleEditor::EditorWindow()
 	{
 		App->camera->CameraInput();
 
-		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) != KEY_REPEAT)
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && !ImGuizmo::IsUsing() && App->input->GetKey(SDL_SCANCODE_LALT) != KEY_REPEAT)
 		{
-			origin.x = (ImGui::GetMousePos().x - ImGui::GetWindowPos().x) / ((ImGui::GetWindowPos().x + ImGui::GetWindowSize().x) - ImGui::GetWindowPos().x);
-			origin.y = (ImGui::GetMousePos().y - ImGui::GetWindowPos().y + ImGui::GetFrameHeight()) / (ImGui::GetWindowPos().y + ImGui::GetFrameHeight() + ImGui::GetWindowSize().y - ImGui::GetFrameHeight() - ImGui::GetWindowPos().y + ImGui::GetFrameHeight());
-			origin.x = (origin.x - 0.5f);
-			origin.y = -((origin.y - 0.5f));
-			pickingRay = App->renderer3D->editorCam->frustum.UnProjectLineSegment(origin.x, origin.y);
-			App->camera->MousePick(pickingRay);
+			origin.x = (ImGui::GetMousePos().x - viewPos.x) / viewSize.x;
+			origin.y = (ImGui::GetMousePos().y - viewPos.y) / viewSize.y;
+			origin.x = (origin.x - 0.5f) * 2;
+			origin.y = -((origin.y - 0.5f) * 2);
+
+			if (origin.x >= -1 && origin.x <= 1 && origin.y >= -1 && origin.y <= 1)
+			{
+				pickingRay = App->renderer3D->editorCam->frustum.UnProjectLineSegment(origin.x, origin.y);
+				App->camera->MousePick(pickingRay);
+			}
 		}
 	}
 

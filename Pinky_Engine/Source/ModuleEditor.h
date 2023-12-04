@@ -72,6 +72,8 @@ public:
 	//guizmos
 	ImGuizmo::OPERATION transformOperation;
 
+	//Raycast mousepicking
+	bool raycast;
 private:
 
 	std::vector<ImGuiWindows*> vImGuiWindows;

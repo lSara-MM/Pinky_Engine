@@ -163,9 +163,7 @@ void ModuleCamera3D::CheckIntersection(GameObject* go)
 	{
 		if (go->mesh != nullptr)
 		{
-			bool hit = rayCam.Intersects(go->mesh->global_aabb, entryDist, exitDist);
-
-			if (hit)
+			if (rayCam.Intersects(go->mesh->global_aabb, entryDist, exitDist))
 			{
 				intersects[entryDist] = go;
 			}
@@ -176,51 +174,33 @@ void ModuleCamera3D::CheckIntersection(GameObject* go)
 bool ModuleCamera3D::CheckTriangleIntersection()
 {
 	bool ret = false;
-	bool hit = false;
 	float3 hit_point = float3::zero;
 	localrayCam = rayCam;
 	GameObject* closest = nullptr;
-	const C_Transform* trans = nullptr;
-	const C_Mesh* mesh = nullptr;
-	Triangle tri;
+	const C_Mesh* meshInter = nullptr;
 	std::map<float, GameObject*>::iterator iterator;
 
 	for (iterator = intersects.begin(); iterator != intersects.end(); ++iterator)
 	{
 		if (iterator->second->transform != nullptr && iterator->second->mesh)
 		{
-			trans = iterator->second->transform;
-			mesh = (C_Mesh*)iterator->second->mesh;
-
+			meshInter = (C_Mesh*)iterator->second->mesh;
 			float4x4 object_transform = iterator->second->transform->GetGlobalTransform();
 			localrayCam.Transform(object_transform.Inverted());
 
-			for (uint i = 0; i < mesh->mesh->num_index; i += 3)
+			for (uint i = 0; i < meshInter->mesh->num_index; i += 3)
 			{
-				uint index1 = mesh->mesh->index[i] * 3;
-				uint index2 = mesh->mesh->index[i + 1] * 3;
-				uint index3 = mesh->mesh->index[i + 2] * 3;
+				uint index1 = meshInter->mesh->index[i] * 3;
+				uint index2 = meshInter->mesh->index[i + 1] * 3;
+				uint index3 = meshInter->mesh->index[i + 2] * 3;
 
-				math::float3 vec1(mesh->mesh->vertex[index1], mesh->mesh->vertex[index1 + 1], mesh->mesh->vertex[index1 + 2]);
-				math::float3 vec2(mesh->mesh->vertex[index2], mesh->mesh->vertex[index2 + 1], mesh->mesh->vertex[index2 + 2]);
-				math::float3 vec3(mesh->mesh->vertex[index3], mesh->mesh->vertex[index3 + 1], mesh->mesh->vertex[index3 + 2]);
+				float3 vec1(meshInter->mesh->vertex[index1], meshInter->mesh->vertex[index1 + 1], meshInter->mesh->vertex[index1 + 2]);
+				float3 vec2(meshInter->mesh->vertex[index2], meshInter->mesh->vertex[index2 + 1], meshInter->mesh->vertex[index2 + 2]);
+				float3 vec3(meshInter->mesh->vertex[index3], meshInter->mesh->vertex[index3 + 1], meshInter->mesh->vertex[index3 + 2]);
 
-				tri.a = vec1;
-				tri.b = vec2;
-				tri.c = vec3;
+				Triangle tri(vec1, vec2, vec3);
 
-				hit = localrayCam.Intersects(tri, nullptr, nullptr);
-
-				glColor3f(1.f, 0.f, 0.f);
-				glLineWidth(2.f);
-				glBegin(GL_LINES);
-				glVertex3fv(&localrayCam.a.x);
-				glVertex3fv(&localrayCam.b.x);
-				glEnd();
-				glLineWidth(1.f);
-				glColor3f(1.f, 1.f, 1.f);
-
-				if (hit)
+				if (localrayCam.Intersects(tri, nullptr, nullptr))
 				{
 					closest = iterator->second;
 					App->scene->h->SetSelected(closest);
@@ -232,6 +212,18 @@ bool ModuleCamera3D::CheckTriangleIntersection()
 	}
 
 	return ret;
+}
+
+void ModuleCamera3D::DebugRaycast()
+{
+	glColor3f(0.f, 1.f, 0.f);
+	glLineWidth(5.f);
+	glBegin(GL_LINES);
+	glVertex3fv(&App->editor->pickingRay.a.x);
+	glVertex3fv(&App->editor->pickingRay.b.x);
+	glEnd();
+	glLineWidth(1.f);
+	glColor3f(1.f, 0.f, 0.f);
 }
 
 

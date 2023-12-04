@@ -192,23 +192,12 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	update_status ret = UPDATE_CONTINUE;
-	glColor3f(0.f, 1.f, 0.f);
-	glLineWidth(5.f);
-	glBegin(GL_LINES);
-	glVertex3fv(&App->editor->pickingRay.a.x);
-	glVertex3fv(&App->editor->pickingRay.b.x);
-	glEnd();
-	glLineWidth(1.f);
-	glColor3f(0.f, 1.0f, 0.f);
 
-	glColor3f(1.0f, 0.f, 0.f);
-	glLineWidth(5.f);
-	glBegin(GL_LINES);
-	glVertex3fv(&App->camera->localrayCam.a.x);
-	glVertex3fv(&App->camera->localrayCam.b.x);
-	glEnd();
-	glLineWidth(1.f);
-	glColor3f(1.0f, 0.0f, 0.f);
+	if (App->editor->raycast)
+	{
+		App->camera->DebugRaycast();
+	}
+
 	//cube made with GL_TRIANGLES
 	/*glLineWidth(2.0f);
 	glBegin(GL_TRIANGLES);
