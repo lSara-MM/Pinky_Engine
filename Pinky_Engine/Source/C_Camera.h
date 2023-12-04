@@ -48,7 +48,6 @@ public:
 	void DeleteBuffers();
 
 public:
-	ai::texture* tex;
 	bool checkered;
 	Frustum frustum;
 

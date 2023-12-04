@@ -28,6 +28,13 @@ class GameObject;
 
 namespace ai
 {
+	struct Transform
+	{
+		float3 pos = { 0,0,0 };
+		math::float4 rotation = { 0, 0, 0, 0 };
+		float3 scale = { 0,0,0 };
+	};
+
 	enum class POLY_PRIMITIVE_TYPE
 	{
 		CUBE,	
@@ -41,63 +48,6 @@ namespace ai
 		LAW,
 		KURO,
 		SHARK,
-	};
-
-	struct texture
-	{
-		uint tex_id = 0;
-		uint tex_width = 0;
-		uint tex_height = 0;
-		uint tex_type = 0;
-		uint tex_format = 0;
-
-		const char* path = "";
-
-		~texture()
-		{
-			glDeleteBuffers(1, &tex_id);
-			tex_id = 0;
-		}
-	};
-
-	struct mesh
-	{
-		//indices
-		uint num_index = 0;
-		uint* index = nullptr;
-
-		//vertices
-		uint num_vertex = 0;
-		float* vertex = nullptr;
-
-		//normals
-		GLuint id_normals = 0;
-		uint num_normals = 0;
-		float* normals = nullptr;
-
-		//texture UVs
-		GLuint id_tex_uvs = 0;
-		uint num_tex_uvs = 0;
-		math::float2* tex_uvs = nullptr;
-
-		texture tex;
-
-		GLuint VBO; // vertex buffer object
-		GLuint EBO; // element buffer object
-		GLuint VAO; // attribute buffer object
-
-		//Frustum culling
-		AABB local_aabb;//local AABB
-
-		~mesh()
-		{
-			RELEASE_ARRAY(index);
-			RELEASE_ARRAY(vertex);
-			RELEASE_ARRAY(normals);
-			RELEASE_ARRAY(tex_uvs);
-
-			tex.~texture();
-		}
 	};
 
 	void EnableDebug();

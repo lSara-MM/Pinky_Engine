@@ -53,7 +53,7 @@ FileSystemManager::FileSystemManager()
 
 	AddPath("."); // Adding ProjectFolder (working directory)
 	AddPath("Assets");
-	//AddPath("Library");
+	AddPath("Library");
 	AddPath("PinkyAssets");
 
 	CreateLibraryDirs();

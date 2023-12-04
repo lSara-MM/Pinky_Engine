@@ -110,9 +110,7 @@ void ModuleResource::ImportModel(const char* meshPath, std::vector<const char*> 
 {
 	GameObject* go = nullptr;
 
-	std::string filePath, fileName, fileExt;
-	App->fs->SplitFilePath(meshPath, &filePath, &fileName, &fileExt);
-	metaPath = filePath + fileName;
+	Get_Set_FilePath(meshPath);
 
 	go = ImportFile(meshPath);
 
@@ -239,6 +237,25 @@ R_TYPE ModuleResource::CheckExtensionType(const char* fileDir)
 	}
 
 	return R_TYPE::NONE;
+}
+
+std::string ModuleResource::Get_Set_FilePath(const char* fileDir)
+{
+	string dir = fileDir;
+	std::string filePath, fileName, fileExt;
+	App->fs->SplitFilePath(fileDir, &filePath, &fileName, &fileExt);
+	
+	if (dir.find("C:\\") != std::string::npos)
+	{
+		//metaPath = "Assets\\" + fileName;
+	}
+	else
+	{
+		metaPath = filePath + fileName;
+	}
+	metaPath = filePath + fileName;
+
+	return metaPath;
 }
 
 void ModuleResource::LoadChildrenMeshes(GameObject* go, uint size)
