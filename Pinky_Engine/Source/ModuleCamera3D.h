@@ -26,7 +26,7 @@ public:
 	void MousePick(LineSegment ray);
 	void CheckIntersection(GameObject* go);
 	void CheckGameObjectsIntersection(GameObject* go);
-	void CheckTriangleIntersection();
+	bool CheckTriangleIntersection();
 
 	//Handle all camera input, used in editor (isHovered)
 	void CameraInput();

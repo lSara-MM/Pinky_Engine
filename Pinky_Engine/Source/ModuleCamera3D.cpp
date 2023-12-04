@@ -173,12 +173,11 @@ void ModuleCamera3D::CheckIntersection(GameObject* go)
 	}
 }
 
-void ModuleCamera3D::CheckTriangleIntersection()
+bool ModuleCamera3D::CheckTriangleIntersection()
 {
+	bool ret = false;
 	bool hit = false;
-	entryDist = 0;
 	float3 hit_point = float3::zero;
-	float minDistance = INFINITY;
 	GameObject* closest = nullptr;
 	const C_Transform* trans = nullptr;
 	const C_Mesh* mesh = nullptr;
@@ -210,24 +209,20 @@ void ModuleCamera3D::CheckTriangleIntersection()
 				tri.b = vec2;
 				tri.c = vec3;
 
-				hit = rayCam.Intersects(tri, &entryDist, &hit_point);
+				hit = localrayCam.Intersects(tri, nullptr, nullptr);
 
 				if (hit)
 				{
-					if (entryDist < minDistance)
-					{
-						minDistance = entryDist;
-						closest = iterator->second;
-					}
+					closest = iterator->second;
+					App->scene->h->SetSelected(closest);
+					ret = true;
+					return ret;
 				}
 			}
 		}
 	}
 
-	if (closest != nullptr)
-	{
-		App->scene->h->SetSelected(closest);
-	}
+	return ret;
 }
 
 
