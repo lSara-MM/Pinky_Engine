@@ -937,14 +937,19 @@ void ModuleEditor::EditorWindow()
 	ViewportSize = { viewSize.x,viewSize.y };
 
 	//TODO: igual posar en funció
-	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LALT) != KEY_REPEAT) 
+	if (ImGui::IsWindowHovered())
 	{
-		origin.x = (ImGui::GetMousePos().x - viewPos.x) / viewSize.x;
-		origin.y = (ImGui::GetMousePos().y - viewPos.y) / viewSize.y;
-		origin.x = (origin.x - 0.5f) * 2;
-		origin.y = -((origin.y - 0.5f) * 2);
-		pickingRay = App->renderer3D->editorCam->frustum.UnProjectLineSegment(origin.x, origin.y);
-		App->camera->MousePick(pickingRay);
+		App->camera->CameraInput();
+
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) != KEY_REPEAT)
+		{
+			origin.x = (ImGui::GetMousePos().x - ImGui::GetWindowPos().x) / ((ImGui::GetWindowPos().x + ImGui::GetWindowSize().x) - ImGui::GetWindowPos().x);
+			origin.y = (ImGui::GetMousePos().y - ImGui::GetWindowPos().y + ImGui::GetFrameHeight()) / (ImGui::GetWindowPos().y + ImGui::GetFrameHeight() + ImGui::GetWindowSize().y - ImGui::GetFrameHeight() - ImGui::GetWindowPos().y + ImGui::GetFrameHeight());
+			origin.x = (origin.x - 0.5f);
+			origin.y = -((origin.y - 0.5f));
+			pickingRay = App->renderer3D->editorCam->frustum.UnProjectLineSegment(origin.x, origin.y);
+			App->camera->MousePick(pickingRay);
+		}
 	}
 
 	App->renderer3D->editorCam->SetAspectRatio(ViewportSize.x, ViewportSize.y);

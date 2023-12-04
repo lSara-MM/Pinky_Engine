@@ -178,6 +178,7 @@ bool ModuleCamera3D::CheckTriangleIntersection()
 	bool ret = false;
 	bool hit = false;
 	float3 hit_point = float3::zero;
+	localrayCam = rayCam;
 	GameObject* closest = nullptr;
 	const C_Transform* trans = nullptr;
 	const C_Mesh* mesh = nullptr;
@@ -192,7 +193,6 @@ bool ModuleCamera3D::CheckTriangleIntersection()
 			mesh = (C_Mesh*)iterator->second->mesh;
 
 			float4x4 object_transform = iterator->second->transform->GetGlobalTransform();
-			LineSegment localrayCam = rayCam;
 			localrayCam.Transform(object_transform.Inverted());
 
 			for (uint i = 0; i < mesh->mesh->num_index; i += 3)
@@ -210,6 +210,15 @@ bool ModuleCamera3D::CheckTriangleIntersection()
 				tri.c = vec3;
 
 				hit = localrayCam.Intersects(tri, nullptr, nullptr);
+
+				glColor3f(1.f, 0.f, 0.f);
+				glLineWidth(2.f);
+				glBegin(GL_LINES);
+				glVertex3fv(&localrayCam.a.x);
+				glVertex3fv(&localrayCam.b.x);
+				glEnd();
+				glLineWidth(1.f);
+				glColor3f(1.f, 1.f, 1.f);
 
 				if (hit)
 				{

@@ -30,7 +30,7 @@ public:
 
 	//Handle all camera input, used in editor (isHovered)
 	void CameraInput();
-
+	LineSegment localrayCam;
 private:
 	C_Camera* MainCamera;//TODO: eliminat = nullptr
 	float mouseX, mouseY, speed, zoomPos;
@@ -41,4 +41,5 @@ private:
 	float exitDist;
 	LineSegment rayCam;
 	std::map<float, GameObject*> intersects;
+
 };
