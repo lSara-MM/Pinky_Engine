@@ -1029,7 +1029,11 @@ void ModuleEditor::GameWindow()
 	if (App->renderer3D->gameCam != nullptr)
 	{
 		App->renderer3D->gameCam->SetAspectRatio(GameViewSize.x, GameViewSize.y);
-		ImGui::Image((ImTextureID)App->renderer3D->gameCam->textureColourBuffer, GameViewSize, ImVec2(0, 1), ImVec2(1, 0));
+
+		if (App->renderer3D->gameCam->isActive)
+		{
+			ImGui::Image((ImTextureID)App->renderer3D->gameCam->textureColourBuffer, GameViewSize, ImVec2(0, 1), ImVec2(1, 0));
+		}
 	}
 
 	ImGui::End();
