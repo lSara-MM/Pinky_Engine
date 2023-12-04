@@ -32,7 +32,7 @@
 
 ProjectFiles::ProjectFiles(int i) : ImGuiWindows(i)
 {
-
+	selectedDir = ".";
 }
 
 ProjectFiles::~ProjectFiles()
@@ -54,15 +54,38 @@ void ProjectFiles::ShowWindow()
 			| ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
 
 		ImGui::Columns(2, "Folders", true);
+
+		// TODO: Set a default width but make it resizeable
+		ImGui::SetColumnWidth(0, 100);
+
 		if (ImGui::TreeNodeEx("Assets", node_flags))
 		{
-			if (ImGui::IsItemClicked())
+			// TODO: taria bien que se pudiera quitar eso y funcionar igualmente
+			if (ImGui::IsItemClicked() || selectedDir == ".")
 			{
 				std::vector<std::string> vDirs, vFiles;
 				selectedDir = ".";
 
 				App->fs->DiscoverFiles("Assets", vFiles, vDirs);
 				vSelectedDirFiles = vFiles;
+			}
+
+			// ---RMB Click event---
+			if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
+			{
+				ImGui::MenuItem("Assets");
+				ImGui::Separator();
+				if (ImGui::MenuItem("Create Folder"))
+				{
+
+				}
+				if (ImGui::MenuItem("Delete Folder"))
+				{
+
+				}
+
+				selectedDir = ".";
+				ImGui::EndPopup();
 			}
 
 			ShowDirectories("Assets");
@@ -73,7 +96,9 @@ void ProjectFiles::ShowWindow()
 
 		for (int i = 0; i < vSelectedDirFiles.size(); i++)
 		{
-			ImGui::Text(vSelectedDirFiles[i].c_str());
+			//ImGui::Text(vSelectedDirFiles[i].c_str());
+			ImGui::TreeNodeEx(vSelectedDirFiles[i].c_str(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen);
+			FilesMouseEvents(vSelectedDirFiles[i]);
 		}
 
 		ImGui::Columns(1);
@@ -102,7 +127,7 @@ void ProjectFiles::ShowDirectories(std::string directory)
 				| ImGuiTreeNodeFlags_SpanAvailWidth;
 
 			bool open = TreeNode(vDirs[i], node_flags, false);
-			MouseEvents(vDirs[i], vChildrenFiles);
+			DirsMouseEvents(vDirs[i], vChildrenFiles);
 
 			if (open)
 			{
@@ -116,7 +141,7 @@ void ProjectFiles::ShowDirectories(std::string directory)
 
 			TreeNode(vDirs[i], node_flags, true);
 
-			MouseEvents(vDirs[i], vChildrenFiles);
+			DirsMouseEvents(vDirs[i], vChildrenFiles);
 		}
 
 		vChildrenFiles.clear();
@@ -149,7 +174,7 @@ bool ProjectFiles::TreeNode(std::string currentDir, ImGuiTreeNodeFlags node_flag
 	return ret;
 }
 
-void ProjectFiles::MouseEvents(std::string current, std::vector<std::string> files)
+void ProjectFiles::DirsMouseEvents(std::string current, std::vector<std::string> files)
 {
 	// ---Click event---
 	if (ImGui::IsItemClicked())
@@ -158,6 +183,45 @@ void ProjectFiles::MouseEvents(std::string current, std::vector<std::string> fil
 		vSelectedDirFiles = files;
 	}
 	// ------
+
+	// ---RMB Click event---
+	if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
+	{
+		ImGui::MenuItem(current.c_str());
+		ImGui::Separator();
+		if (ImGui::MenuItem("Create Folder"))
+		{
+
+		}
+		if (ImGui::MenuItem("Delete Folder"))
+		{
+
+		}
+
+		selectedDir = current;
+		ImGui::EndPopup();
+	}
+}
+
+void ProjectFiles::FilesMouseEvents(std::string current)
+{
+	// ---RMB Click event---
+	if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
+	{
+		ImGui::MenuItem(current.c_str());
+		ImGui::Separator();
+		if (ImGui::MenuItem("Create File"))
+		{
+
+		}
+		if (ImGui::MenuItem("Delete File"))
+		{
+
+		}
+
+		selectedFile = current;
+		ImGui::EndPopup();
+	}
 }
 
 Console::Console(int i) : ImGuiWindows(i)

@@ -166,7 +166,7 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 		if (!current[i]->vChildren.empty())
 		{
 			bool open = TreeNode(current[i], node_flags);
-			MouseEvents(current[i]);
+			DirsMouseEvents(current[i]);
 
 			if (open)
 			{
@@ -177,7 +177,7 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 		else
 		{
 			TreeNode(current[i], node_flags);
-			MouseEvents(current[i]);
+			DirsMouseEvents(current[i]);
 		}
 	}
 
@@ -212,38 +212,6 @@ bool Hierarchy::TreeNode(GameObject* current, ImGuiTreeNodeFlags node_flags)
 	}
 
 	ret = ImGui::TreeNodeEx((void*)(intptr_t)current->GetUID(), node_flags, current->name.c_str());
-	if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
-	{
-		ImGui::MenuItem(current->name.c_str());
-		ImGui::Separator();
-		if (ImGui::MenuItem("(WIP) Copy", "Ctrl + C"))
-		{
-
-		}
-		if (ImGui::MenuItem("(WIP) Paste", "Ctrl + V"))
-		{
-
-		}
-		if (ImGui::MenuItem("(WIP) Paste as Child", "Ctrl + Shift + V"))
-		{
-
-		}
-		ImGui::Separator();
-		if (ImGui::MenuItem("Create Empty GameObject"))
-		{
-			GameObject* go = new GameObject("Empty GameObject", current);
-			go = nullptr;
-		}
-
-		if (ImGui::BeginMenu("Mesh"))
-		{
-			App->editor->PrimitivesMenu(current);
-			ImGui::EndMenu();
-		}
-
-		SetSelected(current);
-		ImGui::EndPopup();
-	}
 
 	if (!current->isActive)
 	{
@@ -253,7 +221,7 @@ bool Hierarchy::TreeNode(GameObject* current, ImGuiTreeNodeFlags node_flags)
 	return ret;
 }
 
-void Hierarchy::MouseEvents(GameObject* current)
+void Hierarchy::DirsMouseEvents(GameObject* current)
 {
 	// ---Drag and Drop event---
 	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
@@ -298,6 +266,40 @@ void Hierarchy::MouseEvents(GameObject* current)
 		SetSelected(current);
 	}
 	// ------
+
+	// ---RMB Click event---
+	if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
+	{
+		ImGui::MenuItem(current->name.c_str());
+		ImGui::Separator();
+		if (ImGui::MenuItem("(WIP) Copy", "Ctrl + C"))
+		{
+
+		}
+		if (ImGui::MenuItem("(WIP) Paste", "Ctrl + V"))
+		{
+
+		}
+		if (ImGui::MenuItem("(WIP) Paste as Child", "Ctrl + Shift + V"))
+		{
+
+		}
+		ImGui::Separator();
+		if (ImGui::MenuItem("Create Empty GameObject"))
+		{
+			GameObject* go = new GameObject("Empty GameObject", current);
+			go = nullptr;
+		}
+
+		if (ImGui::BeginMenu("Mesh"))
+		{
+			App->editor->PrimitivesMenu(current);
+			ImGui::EndMenu();
+		}
+
+		SetSelected(current);
+		ImGui::EndPopup();
+	}
 }
 
 GameObject* Hierarchy::GetDragged()

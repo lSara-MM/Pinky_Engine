@@ -22,7 +22,7 @@ void ParsingJSON::CreateResourceMetaFile(std::vector<Resource*> resources, const
 	// TODO: Remove when we have dupe
 	if (ext != ".meta")
 	{
-		file_name = "Assets//" + fileName + "." + ext;
+		file_name = "Assets//" + fileName + ext;
 	}
 
 	root_value = json_value_init_object();

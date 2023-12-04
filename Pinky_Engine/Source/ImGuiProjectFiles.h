@@ -32,9 +32,13 @@ public:
 	void ShowDirectories(std::string directory);
 
 	bool TreeNode(std::string currentDir, ImGuiTreeNodeFlags node_flags, bool finalDir);
-	void MouseEvents(std::string current, std::vector<std::string> files);
+	void DirsMouseEvents(std::string current, std::vector<std::string> files);
+
+	void FilesMouseEvents(std::string current);
 
 public:
 	std::string selectedDir;
 	std::vector<std::string> vSelectedDirFiles;
+
+	std::string selectedFile;
 };

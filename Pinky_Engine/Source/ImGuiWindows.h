@@ -52,7 +52,7 @@ public:
 private:
 	bool ShowChildren(std::vector<GameObject*> children, int num);
 	bool TreeNode(GameObject* current, ImGuiTreeNodeFlags node_flags);
-	void MouseEvents(GameObject* current);
+	void DirsMouseEvents(GameObject* current);
 
 private:
 	GameObject* draggedGO;
