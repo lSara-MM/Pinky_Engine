@@ -332,33 +332,6 @@ void ai::LoadTranslation(bool assimp, aiNode* children, GameObject* obj, GameObj
 			ai_scale = { scale.x, scale.y, scale.z };
 		}
 	}
-
-	/*if (name.find("_Translation\0") != std::string::npos || (!assimp && !ai_b_position))
-	{
-		ai_b_position = true;
-
-		ai_position = { pos.x, pos.y, pos.z };
-		obj->transform->SetTransform(ai_position);
-	}
-
-	if (name.find("_Rotation\0") != std::string::npos || name.find("_RotationPivot") != std::string::npos || (!assimp && !ai_b_rotation))
-	{
-		ai_b_rotation = true;
-
-		float temp1[4] = { rot.x , rot.y, rot.z, rot.w };
-		float3 euler = Quat(temp1).ToEulerXYZ();
-
-		ai_rotation = { euler.x * RADTODEG, euler.y * RADTODEG, euler.z * RADTODEG };
-		obj->transform->SetRotation(ai_rotation);
-	}
-
-	if (name.find("_Scaling") != std::string::npos || (!assimp && !ai_b_scale))
-	{
-		ai_b_scale = false;
-
-		ai_scale = { scale.x, scale.y, scale.z };
-		obj->transform->SetScale(ai_scale);
-	}*/
 }
 
 void ai::LoadCheckers(GLuint& buffer)
