@@ -51,6 +51,13 @@ bool ModuleScene::Init()
 	return ret;
 }
 
+bool ModuleScene::Start()
+{
+	LOG("Starting scene");
+	App->resource->ImportToScene("BakerHouse.fbx", PINKY_ASSETS_AUX "3dObject\\baker_house\\");
+	return true;
+}
+
 // PreUpdate: clear buffer
 update_status ModuleScene::PreUpdate(float dt)
 {
@@ -105,10 +112,4 @@ bool ModuleScene::CleanUp()
 	LOG("Destroying 3D Renderer");
 	RELEASE(rootNode);
 	return true;
-}
-
-void ModuleScene::BakerHouse()
-{
-	App->resource->ImportToScene("BakerHouse.fbx");
-	//App->resource->ImportVModel("PinkyAssets\\3dObject\\baker_house\\BakerHouse.fbx", std::vector<const char*> {"PinkyAssets\\3dObject\\baker_house\\Baker_house.dds"});
 }

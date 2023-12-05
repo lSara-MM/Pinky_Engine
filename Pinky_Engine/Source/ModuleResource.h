@@ -19,7 +19,7 @@ public:
 
 	GameObject* ImportFileToEngine(const char* path);
 	void ImportVModel(const char* meshPath, std::vector<const char*> texPaths);
-	int ImportToScene(std::string path);
+	int ImportToScene(std::string path, std::string dir);
 
 
 	GameObject* ImportFile(const char* path, GameObject* goToLink = nullptr);

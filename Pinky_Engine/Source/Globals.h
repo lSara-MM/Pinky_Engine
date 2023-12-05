@@ -49,6 +49,7 @@ enum update_status
 
 // TODO: remove when not necessary
 #define ASSETS_AUX "Assets/"
+#define PINKY_ASSETS_AUX "PinkyAssets/"
 
 // Extensions
 #define MESHES_EXT ".pnk"

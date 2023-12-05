@@ -67,7 +67,7 @@ void ProjectFiles::ShowWindow()
 		{
 			//ImGui::Text(vSelectedDirFiles[i].c_str());
 			ImGui::TreeNodeEx(vSelectedDirFiles[i].c_str(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen);
-			FilesMouseEvents(vSelectedDirFiles[i]);
+			FilesMouseEvents(vSelectedDirFiles[i], selectedDir + "/");
 		}
 
 		ImGui::Columns(1);
@@ -177,16 +177,16 @@ void ProjectFiles::DirsMouseEvents(std::string current, std::vector<std::string>
 	}
 }
 
-void ProjectFiles::FilesMouseEvents(std::string current)
+void ProjectFiles::FilesMouseEvents(std::string currentFile, std::string currentDir)
 {
 	// ---RMB Click event---
 	if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
 	{
-		ImGui::MenuItem(current.c_str(), NULL, false, false);
+		ImGui::MenuItem(currentFile.c_str(), NULL, false, false);
 		ImGui::Separator();
 		if (ImGui::MenuItem("Import to Scene"))
 		{
-			App->resource->ImportToScene(current);
+			App->resource->ImportToScene(currentFile, currentDir);
 		}
 		if (ImGui::MenuItem("Create File"))
 		{
@@ -197,7 +197,7 @@ void ProjectFiles::FilesMouseEvents(std::string current)
 
 		}
 
-		selectedFile = current;
+		selectedFile = currentFile;
 		ImGui::EndPopup();
 	}
 }

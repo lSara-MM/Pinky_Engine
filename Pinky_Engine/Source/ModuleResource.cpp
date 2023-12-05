@@ -89,11 +89,11 @@ void ModuleResource::ImportVModel(const char* meshPath, std::vector<const char*>
 /// </summary>
 /// <param name="path"></param>
 /// <returns></returns>
-int ModuleResource::ImportToScene(std::string path)
+int ModuleResource::ImportToScene(std::string path, std::string dir)
 {
 	GameObject* go = nullptr;
 	std::string::size_type i = 0;
-	std::string normFileName = App->fs->NormalizePath((ASSETS_AUX + path).c_str());
+	std::string normFileName = App->fs->NormalizePath((dir + path).c_str());
 	
 	//const char* realPath = App->parson->GetRealDirFF((ASSETS_AUX + path).c_str());
 	if (App->fs->Exists((normFileName + ".meta").c_str()))
