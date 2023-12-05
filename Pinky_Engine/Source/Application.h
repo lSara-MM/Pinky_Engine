@@ -25,8 +25,8 @@ public:
 	ModuleCamera3D* camera;
 	ModuleResource* resource;
 
-	ModuleEditor* editor;
 	ModuleScene* scene;
+	ModuleEditor* editor;
 
 
 	LCG* randomLCG;

@@ -28,6 +28,11 @@
 
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	hierarchy = nullptr;
+	inspector = nullptr;
+	console = nullptr;
+	project = nullptr;
+	rm = nullptr;
 }
 
 // Destructor
@@ -41,6 +46,22 @@ bool ModuleScene::Init()
 	bool ret = true;
 
 	rootNode = new GameObject("Root node", nullptr);
+
+	// Windows
+	hierarchy = new Hierarchy(0);
+	App->editor->AddWindow(hierarchy);
+
+	inspector = new Inspector(1);
+	App->editor->AddWindow(inspector);
+
+	console = new Console(2);
+	App->editor->AddWindow(console);
+
+	project = new ProjectFiles(3);
+	App->editor->AddWindow(project);
+
+	rm = new ResourcesManager(4);
+	App->editor->AddWindow(rm);
 
 	//Main Camera  
 	mainCamera = new GameObject("Main Camera", rootNode);
@@ -69,11 +90,11 @@ update_status ModuleScene::Update(float dt)
 {
 	rootNode->Update(dt);
 
-	if (!h->GetSelectedGOs().empty())
+	if (!hierarchy->GetSelectedGOs().empty())
 	{
-		if (h->GetSelectedGOs() != i->GetSelectedGOs())
+		if (hierarchy->GetSelectedGOs() != inspector->GetSelectedGOs())
 		{
-			i->SetSelected(h->GetSelectedGOs());
+			inspector->SetSelected(hierarchy->GetSelectedGOs());
 		}
 	}
 
@@ -82,15 +103,15 @@ update_status ModuleScene::Update(float dt)
 		App->input->GetKey(SDL_SCANCODE_BACKSPACE) == KEY_DOWN) && !ImGui::GetIO().WantTextInput)
 	{
 		// Delete all selected go
-		if (!h->GetSelectedGOs().empty())
+		if (!hierarchy->GetSelectedGOs().empty())
 		{
-			for (auto j = 0; j < h->GetSelectedGOs().size(); j++)
+			for (auto j = 0; j < hierarchy->GetSelectedGOs().size(); j++)
 			{
-				h->GetSelectedGOs()[j]->pParent->DeleteChild(h->GetSelectedGOs()[j]);
+				hierarchy->GetSelectedGOs()[j]->pParent->DeleteChild(hierarchy->GetSelectedGOs()[j]);
 			}
 
-			h->SetSelected(nullptr);
-			i->SetSelected(nullptr);
+			hierarchy->SetSelected(nullptr);
+			inspector->SetSelected(nullptr);
 		}
 	}
 
@@ -109,7 +130,14 @@ update_status ModuleScene::PostUpdate(float dt)
 // Called before quitting
 bool ModuleScene::CleanUp()
 {
-	LOG("Destroying 3D Renderer");
+	LOG("Destroying Scene");
+
+	hierarchy = nullptr;
+	inspector = nullptr;
+	console = nullptr;
+	project = nullptr;
+	rm = nullptr;
+
 	RELEASE(rootNode);
 	return true;
 }

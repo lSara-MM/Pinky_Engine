@@ -31,8 +31,6 @@ C_Mesh::C_Mesh() : Component(C_TYPE::MESH, "Mesh")
 	showFacesNormals = false;
 	showAABB = false;
 	showOBB = false;
-
-	//App->resource->mResources->at(mesh->GetUID())->count++;
 }
 
 C_Mesh::C_Mesh(GameObject* g, R_Mesh* m, bool start_enabled) : Component(C_TYPE::MESH, g, start_enabled, "Mesh")
@@ -48,8 +46,6 @@ C_Mesh::C_Mesh(GameObject* g, R_Mesh* m, bool start_enabled) : Component(C_TYPE:
 	obb.Transform(gameObject->transform->GetGlobalTransform());
 	global_aabb.SetNegativeInfinity();
 	global_aabb.Enclose(obb);
-
-	//App->resource->mResources->at(mesh->GetUID())->count++;
 }
 
 C_Mesh::C_Mesh(GameObject* g, C_Mesh* toCopy, bool start_enabled) : Component(C_TYPE::MESH, g, toCopy->isActive, "Mesh")
@@ -58,8 +54,6 @@ C_Mesh::C_Mesh(GameObject* g, C_Mesh* toCopy, bool start_enabled) : Component(C_
 	//mesh = toCopy->mesh;
 	showVertexNormals = toCopy->showVertexNormals;
 	showFacesNormals = toCopy->showFacesNormals;
-
-	App->resource->mResources->at(mesh->GetUID())->count++;
 }
 
 C_Mesh::~C_Mesh()

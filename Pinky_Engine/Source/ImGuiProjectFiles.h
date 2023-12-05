@@ -21,7 +21,6 @@ public:
 	bool consoleWin;
 };
 
-
 class ProjectFiles : public ImGuiWindows
 {
 public:
@@ -41,4 +40,14 @@ public:
 	std::vector<std::string> vSelectedDirFiles;
 
 	std::string selectedFile;
+};
+
+class ResourcesManager : public ImGuiWindows
+{
+public:
+	ResourcesManager(int i);
+	~ResourcesManager();
+
+	void ShowWindow();
+public:
 };

@@ -102,30 +102,11 @@ bool ModuleEditor::Init()
 	aboutColor = ImVec4(0.953f, 0.533f, 0.969f, 1.0f);
 	aboutWin = false;
 
-	Hierarchy* h = new Hierarchy(vImGuiWindows.size());
-	App->scene->h = h;
-	vImGuiWindows.push_back(h);
-	h = nullptr;
-
-	Inspector* i = new Inspector(vImGuiWindows.size());
-	App->scene->i = i;
-	vImGuiWindows.push_back(i);
-	i = nullptr;
-
-	ProjectFiles* p = new ProjectFiles(vImGuiWindows.size());
-	App->scene->p = p;
-	vImGuiWindows.push_back(p);
-	p = nullptr;
 	changeTimeState = false;
 
-
-	// Load Baker House at the start by default
-	//App->scene->BakerHouse();
-	return ret;
-
-	// TODO: Andreu aixo no s'executa mai, es un error o s'ha de borrar?
 	//Guizmos
 	transformOperation = ImGuizmo::OPERATION::TRANSLATE;
+	return ret;
 }
 
 // PreUpdate: clear buffer
@@ -188,9 +169,6 @@ update_status ModuleEditor::PostUpdate(float dt)
 	//Game window
 	GameWindow();
 
-	//LOG window
-	ConsoleWindow();
-
 	//Configwindow, change to fullscreen and such
 	ConfigWindow(io);
 	HardwareDetection(infoOutputWin);
@@ -232,7 +210,6 @@ bool ModuleEditor::CleanUp()
 
 	ClearVec(mFPSLog);
 	ClearVec(mSLog);
-	ClearVec(vLog);
 	ClearVec(MemLog);
 
 	ClearVecPtr(vImGuiWindows);
@@ -408,25 +385,42 @@ update_status ModuleEditor::Toolbar()
 		{
 			if (ImGui::MenuItem("Hierarchy"))
 			{
-				if (App->scene->h != nullptr)
+				if (App->scene->hierarchy != nullptr)
 				{
-					App->scene->h->show = !App->scene->h->show;
+					App->scene->hierarchy->show = !App->scene->hierarchy->show;
 				}
 				//vImGuiWindows.push_back(new Hierarchy(vImGuiWindows.size()));
 			}
 			if (ImGui::MenuItem("Inspector"))
 			{
-				if (App->scene->i != nullptr)
+				if (App->scene->inspector != nullptr)
 				{
-					App->scene->i->show = !App->scene->i->show;
+					App->scene->inspector->show = !App->scene->inspector->show;
 				}
 				//vImGuiWindows.push_back(new Inspector(vImGuiWindows.size()));
 			}
-
-			/*if (ImGui::MenuItem("Console##1"))
+			if (ImGui::MenuItem("Console"))
 			{
-				consoleWin != consoleWin;
-			}*/
+				if (App->scene->console != nullptr)
+				{
+					App->scene->console->show = !App->scene->console->show;
+				}
+				//consoleWin != consoleWin;
+			}
+			if (ImGui::MenuItem("Project"))
+			{
+				if (App->scene->project != nullptr)
+				{
+					App->scene->project->show = !App->scene->project->show;
+				}
+			}
+			if (ImGui::MenuItem("Resources"))
+			{
+				if (App->scene->rm != nullptr)
+				{
+					App->scene->rm->show = !App->scene->rm->show;
+				}
+			}
 			ImGui::EndMenu();
 		}
 
@@ -690,56 +684,6 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 	}
 }
 
-void ModuleEditor::ConsoleWindow()
-{
-	// Console window
-	ImVec2 pos = ImGui::GetMainViewport()->WorkPos;
-	ImVec2 size = ImGui::GetMainViewport()->Size;
-	pos.y += size.y;
-	ImGui::SetNextWindowPos(pos, ImGuiCond_Appearing, ImVec2(-0.01f, 1.0f));
-	ImGui::SetNextWindowSize(ImVec2(size.x - 15, 200), ImGuiCond_Appearing);
-
-	if (ImGui::Begin("Console", /*&consoleWin,*/ NULL, ImGuiWindowFlags_MenuBar))
-	{
-		ImGui::BeginMenuBar();
-		if (ImGui::Button("Clear"))
-		{
-			ClearVec(vLog);
-		}
-		if (ImGui::Button("Add Error message"))
-		{
-			vLog.push_back("[ERROR] debug error message");
-		}
-		if (ImGui::Button("Add Warning message"))
-		{
-			vLog.push_back("[WARNING] debug warning message");
-		}
-		ImGui::Dummy(ImVec2(225, 0));
-		static ImGuiTextFilter filter;
-		filter.Draw("Search", ImGui::GetFontSize() * 15);
-		ImGui::EndMenuBar();
-
-		//const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
-		ImGui::BeginChild("##output", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
-
-		for (int n = 0; n < vLog.size(); n++)
-		{
-			if (filter.PassFilter(vLog[n].c_str()))
-			{
-				if (strstr(vLog[n].c_str(), "[ERROR")) { ImGui::TextColored(ImVec4(0.9f, 0.0f, 0.0f, 1.0f), vLog[n].c_str()); }
-				else if (strstr(vLog[n].c_str(), "[WARNING")) { ImGui::TextColored(ImVec4(1.0f, 0.7f, 0.0f, 1.0f), vLog[n].c_str()); }
-				else { ImGui::Text(vLog[n].c_str(), n); }
-			}
-		}
-
-		// Keep up at the bottom of the scroll region if we were already at the bottom at the beginning of the frame.
-		// Using a scrollbar or mouse-wheel will take away from the bottom edge.
-		if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY()) { ImGui::SetScrollHereY(1.0f); }
-
-		ImGui::EndChild();
-	} ImGui::End();
-}
-
 void ModuleEditor::FpsWindow(ImGuiIO& io)
 {
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
@@ -787,6 +731,11 @@ void ModuleEditor::AddMem(std::vector<float>& vect, const float repMem)
 		vect.pop_back();
 		vect.push_back(repMem);
 	}
+}
+
+void ModuleEditor::AddWindow(ImGuiWindows* window)
+{
+	vImGuiWindows.push_back(window);
 }
 
 void ModuleEditor::HardwareDetection(bool& infoOutputWin)
@@ -1016,7 +965,7 @@ void ModuleEditor::EditorWindow()
 
 	//Guizmos
 	std::vector<GameObject*> selectedList;
-	selectedList = App->scene->h->GetSelectedGOs();
+	selectedList = App->scene->hierarchy->GetSelectedGOs();
 
 	ImGuizmoControl();
 

@@ -203,7 +203,7 @@ bool ModuleCamera3D::CheckTriangleIntersection()
 				if (localrayCam.Intersects(tri, nullptr, nullptr))
 				{
 					closest = iterator->second;
-					App->scene->h->SetSelected(closest);
+					App->scene->hierarchy->SetSelected(closest);
 					ret = true;
 					return ret;
 				}
@@ -255,7 +255,7 @@ void ModuleCamera3D::CameraInput()
 void ModuleCamera3D::Focus()
 {
 	std::vector<GameObject*> selectedList;
-	selectedList = App->scene->h->GetSelectedGOs();
+	selectedList = App->scene->hierarchy->GetSelectedGOs();
 	float3 center = float3::zero;
 
 	for (auto i = 0; i < selectedList.size(); i++)

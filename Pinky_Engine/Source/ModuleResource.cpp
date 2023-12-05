@@ -24,7 +24,6 @@ ModuleResource::~ModuleResource()
 bool ModuleResource::Start()
 {
 	mResources = {};
-	metaPath = ASSETS_AUX;
 
 	return true;
 }
@@ -282,12 +281,11 @@ std::string ModuleResource::SaveToLibrary(Resource* r)
 		break;
 	}
 
-	//mResources->insert(std::pair<uint, Resource*>(r->GetUID(), r));
 	path = path + std::to_string(r->GetUID()) + ext;
 
 	App->fs->Save(path.c_str(), buffer, size);
 
-	//RELEASE_ARRAY(buffer);	// TODO: peta jaja
+	RELEASE_ARRAY(buffer);	// TODO: peta jaja
 	buffer = nullptr;
 	return path;
 }
@@ -377,10 +375,31 @@ void ModuleResource::LoadChildrenMeshes(GameObject* go, uint size)
 	if (go->mesh != nullptr)
 	{
 		go->mesh->mesh = static_cast<R_Mesh*>(LoadFromLibrary(go->mesh->mesh->libraryFile + MESHES_EXT, R_TYPE::MESH));
+		AddResource(go->mesh->mesh);
 	}
 
 	for (int i = 0; i < size; i++)
 	{
 		LoadChildrenMeshes(go->vChildren[i], go->vChildren[i]->vChildren.size());
 	}
+}
+
+void ModuleResource::AddResource(Resource* r, bool i)
+{
+	// If i == true --> add, else substract resource
+	if (i)
+	{
+		r->count++;
+		mResources.insert(std::pair<uint, Resource*>(r->GetUID(), r));
+	}
+	else
+	{
+		r->count--;
+
+		if (r->count == 0)
+		{
+			RELEASE(r);
+		}
+	}
+
 }

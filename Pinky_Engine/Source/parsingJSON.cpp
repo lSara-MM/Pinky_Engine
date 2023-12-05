@@ -283,6 +283,7 @@ Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
 		static_cast<C_Transform*>(comp)->position.x = f[0];
 		static_cast<C_Transform*>(comp)->position.y = f[1];
 		static_cast<C_Transform*>(comp)->position.z = f[2];
+		RELEASE_ARRAY(f);
 
 		//---Rotation---
 		f = C_json_object_dotget_array(static_cast<C_Transform*>(comp)->position.Size, comp_name + ".Rotation");
@@ -291,6 +292,7 @@ Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
 		static_cast<C_Transform*>(comp)->rotation.y = f[1];
 		static_cast<C_Transform*>(comp)->rotation.z = f[2];
 		static_cast<C_Transform*>(comp)->rotation.w = f[3];
+		RELEASE_ARRAY(f);
 
 		//---Scale---
 		f = C_json_object_dotget_array(static_cast<C_Transform*>(comp)->position.Size, comp_name + ".Scale");
@@ -298,6 +300,7 @@ Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
 		static_cast<C_Transform*>(comp)->scale.x = f[0];
 		static_cast<C_Transform*>(comp)->scale.y = f[1];
 		static_cast<C_Transform*>(comp)->scale.z = f[2];
+		RELEASE_ARRAY(f);
 		break;
 	case C_TYPE::MESH:
 		comp = new C_Mesh();
@@ -326,7 +329,6 @@ Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
 	comp->SetUID(id);
 	comp->type = comp_type;
 
-	//RELEASE(f);
 	return comp;
 }
 

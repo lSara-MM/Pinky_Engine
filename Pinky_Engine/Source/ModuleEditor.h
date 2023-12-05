@@ -29,10 +29,10 @@ public:
 	void UseDockSpace(ImGuiIO& io);
 	update_status Toolbar();
 	void ConfigWindow(ImGuiIO& io);
-	void ConsoleWindow();
 	void FpsWindow(ImGuiIO& io);
 	void MemWindow();
 	void HardwareDetection(bool& infoOutputWin);
+
 	//---Viewports---
 	void AboutWindow();
 	void EditorWindow();
@@ -43,6 +43,8 @@ public:
 
 	void AddFPS(std::vector<float>& vect, const float aFPS);
 	void AddMem(std::vector<float>& vect, const float repMem);
+	void AddWindow(ImGuiWindows* window);
+
 	void OsOpenInShell(const char* path);	// https://stackoverflow.com/questions/71712920/how-to-open-a-webpage-in-imgui
 
 public:
@@ -58,9 +60,6 @@ public:
 
 	//Frame cap
 	bool frcap;
-
-	//Log vector
-	std::vector<std::string> vLog;
 
 	//Viewport scene size
 	ImVec2 ViewportSize;

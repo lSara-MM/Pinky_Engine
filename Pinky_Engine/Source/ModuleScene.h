@@ -28,9 +28,12 @@ public:
 public:
 	GameObject* rootNode;
 
-	Hierarchy* h;
-	Inspector* i;
-	ProjectFiles* p;
+	Hierarchy* hierarchy;
+	Inspector* inspector;
+	Console* console;
+	ProjectFiles* project;
+	ResourcesManager* rm;
+
 	GameObject* mainCamera;
 private:
 

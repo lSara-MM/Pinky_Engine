@@ -6,6 +6,7 @@ extern Application* App = nullptr;
 Application::Application()
 {
 	App = this;
+
 	//------
 	randomLCG = new LCG();
 	fs = new FileSystemManager();
@@ -19,8 +20,8 @@ Application::Application()
 
 	resource = new ModuleResource(this);
 
-	editor = new ModuleEditor(this);
 	scene = new ModuleScene(this);
+	editor = new ModuleEditor(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order

@@ -16,9 +16,10 @@ void log(const char file[], int line, const char* format, ...)
 	
 	if (App != nullptr)
 	{
-		if (App->editor != nullptr && App->ListModulesSize() != 0)
+		if (App->ListModulesSize() != 0 && App->scene->console != nullptr && App->scene->console->id > -1)
 		{
-			App->editor->vLog.push_back(tmp_string);
+			//App->editor->vLog.push_back(tmp_string);
+			App->scene->console->vLog.push_back(tmp_string);
 		}
 	}
 }
