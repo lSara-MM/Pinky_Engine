@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleResource.h"
+#include "ModuleScene.h"
 
 #include "FileSystemManager.h"
 #include "GameObject.h"
@@ -50,7 +51,7 @@ bool ModuleResource::CleanUp()
 /// <returns></returns>
 GameObject* ModuleResource::ImportFileToEngine(const char* fileDir)
 {
-	std::string filePath, fileName, fileExt, tempName;
+	std::string filePath, fileName, fileExt, tempName, finalPath;
 	GameObject* go = nullptr;
 
 	App->fs->SplitFilePath(fileDir, &filePath, &fileName, &fileExt);
@@ -67,7 +68,10 @@ GameObject* ModuleResource::ImportFileToEngine(const char* fileDir)
 		dir = ASSETS_AUX + tempName + "." + fileExt;
 	}
 
-	App->parson->CreateFile(tempName, fileExt, fileDir);
+	//App->fs->DuplicateFile(fileDir, App->scene->p->selectedDir.c_str(), finalPath);
+	App->fs->DuplicateFile(fileDir, ASSETS_AUX, finalPath);
+
+	//App->parson->CreateFile(tempName, fileExt, fileDir);
 	return go;
 }
 
@@ -90,30 +94,8 @@ int ModuleResource::ImportToScene(std::string path)
 	GameObject* go = nullptr;
 	std::string::size_type i = 0;
 	std::string normFileName = App->fs->NormalizePath((ASSETS_AUX + path + ".meta").c_str());
-
-	switch (CheckExtensionType(path.c_str()))
-	{
-	case R_TYPE::MESH:
-		i = path.find(".fbx");
-		break;
-	case R_TYPE::TEXTURE:
-		i = path.find(".dds");
-		break;
-	case R_TYPE::PREFAB:
-		break;
-	case R_TYPE::SCENE:
-		break;
-	case R_TYPE::NONE:
-		break;
-	default:
-		break;
-	}
-
-	//if (i != std::string::npos) { path.erase(i, 4); }
 	
-	//go = App->parson->CreateGOfromMeta(PREFABS_PATH + path + PREFABS_EXT);
-	
-	const char* realPath = App->parson->GetRealDirFF((ASSETS_AUX + path).c_str());
+	//const char* realPath = App->parson->GetRealDirFF((ASSETS_AUX + path).c_str());
 	if (App->fs->Exists(normFileName.c_str()))
 	{
 		switch (CheckExtensionType(path.c_str()))
@@ -134,15 +116,13 @@ int ModuleResource::ImportToScene(std::string path)
 		default:
 			break;
 		}
-
-		//LoadFromLibrary(R_TYPE::MESH);
 	}
 	else
 	{
 		switch (CheckExtensionType(path.c_str()))
 		{
 		case R_TYPE::MESH:
-			ai::ImportMesh(realPath);
+			ai::ImportMesh(normFileName.c_str());
 			break;
 		case R_TYPE::TEXTURE:
 			if (true)
@@ -164,7 +144,7 @@ int ModuleResource::ImportToScene(std::string path)
 			break;
 		}
 
-		// Assets/BakerHouse.fbx.meta
+		// Creates "Assets/name.ext.meta"
 		App->parson->CreateResourceMetaFile(vResources, normFileName.c_str());
 	}
 	go = nullptr;
@@ -173,6 +153,7 @@ int ModuleResource::ImportToScene(std::string path)
 }
 
 
+// TODO: DEPRECATED; NOT USED ANYMORE. KEEP ONLY FOR REFERENCE 
 GameObject* ModuleResource::ImportFile(const char* fileDir, GameObject* goToLink)
 {
 	std::string dir = fileDir;

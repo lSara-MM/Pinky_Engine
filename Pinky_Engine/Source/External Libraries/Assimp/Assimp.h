@@ -55,10 +55,6 @@ namespace ai
 	void EnableDebug();
 	void DisableDebug();
 
-	//std::vector<Resource*>* ImportVMesh(const char* meshfileDir, GameObject* go = nullptr, bool component = false);
-	//GameObject* MeshVHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component = false, bool foundParent = false);
-
-	// TODO: Deprecated
 	GameObject* ImportMesh(const char* meshfileDir, GameObject* go = nullptr, bool component = false);
 	GameObject* MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component = false, bool foundParent = false);
 	

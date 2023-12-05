@@ -136,9 +136,11 @@ update_status ModuleInput::PreUpdate(float dt)
 
 				LOG("File dropped from: %s", dropped_filedir);
 
-				GameObject* go = nullptr;
-				App->resource->Get_Set_FilePath(dropped_filedir);				
-				go = App->resource->ImportFile(dropped_filedir, nullptr);
+				//GameObject* go = nullptr;
+				//App->resource->Get_Set_FilePath(dropped_filedir);				
+				//go = App->resource->ImportFile(dropped_filedir, nullptr);
+
+				App->resource->ImportFileToEngine(dropped_filedir);
 
 				SDL_free(dropped_filedir);    // Free dropped_filedir memory
 				break;

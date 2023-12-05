@@ -8,6 +8,7 @@
 #include "External Libraries/ImGui/backends/imgui_impl_opengl3.h"
 
 #include "ImGuiWindows.h"
+#include "ImGuiProjectFiles.h"
 
 class GameObject;
 
@@ -30,6 +31,7 @@ public:
 
 	Hierarchy* h;
 	Inspector* i;
+	ProjectFiles* p;
 	GameObject* mainCamera;
 private:
 

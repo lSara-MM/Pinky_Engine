@@ -1,3 +1,5 @@
+#include <fstream>
+
 #include "Globals.h"
 #include "Application.h"
 #include "FileSystemManager.h"
@@ -7,7 +9,6 @@
 #include <gl/GLU.h>
 
 #include "External Libraries/PhysFS/include/physfs.h"
-//#include <fstream>
 #include <filesystem>
 #pragma comment( lib, "Source/External Libraries/PhysFS/libx86/physfs.lib" )
 
@@ -462,7 +463,7 @@ bool FileSystemManager::DuplicateFile(const char* file, const char* dstFolder, s
 bool FileSystemManager::DuplicateFile(const char* srcFile, const char* dstFile)
 {
 	//TODO: Compare performance to calling Load(srcFile) and then Save(dstFile)
-	/*std::ifstream src;
+	std::ifstream src;
 	src.open(srcFile, std::ios::binary);
 	bool srcOpen = src.is_open();
 	std::ofstream  dst(dstFile, std::ios::binary);
@@ -482,7 +483,7 @@ bool FileSystemManager::DuplicateFile(const char* srcFile, const char* dstFile)
 	{
 		LOG("[ERROR] File System: Could not be duplicated");
 		return false;
-	}*/
+	}
 	return false;
 }
 

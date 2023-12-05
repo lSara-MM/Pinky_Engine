@@ -33,7 +33,7 @@ void ai::DisableDebug()
 	LOG("Disable debug mode");
 }
 
-// TODO: Deprecated
+
 GameObject* ai::ImportMesh(const char* meshfileDir, GameObject* go, bool component)
 {
 	const aiScene* scene = aiImportFile(meshfileDir, aiProcessPreset_TargetRealtime_MaxQuality);

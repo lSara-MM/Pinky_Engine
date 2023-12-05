@@ -112,12 +112,13 @@ bool ModuleEditor::Init()
 	i = nullptr;
 
 	ProjectFiles* p = new ProjectFiles(vImGuiWindows.size());
+	App->scene->p = p;
 	vImGuiWindows.push_back(p);
 	p = nullptr;
 
 
 	// Load Baker House at the start by default
-	App->scene->BakerHouse();
+	//App->scene->BakerHouse();
 	return ret;
 
 	// TODO: Andreu aixo no s'executa mai, es un error o s'ha de borrar?
