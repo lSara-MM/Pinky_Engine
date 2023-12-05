@@ -58,41 +58,8 @@ void ProjectFiles::ShowWindow()
 		// TODO: Set a default width but make it resizeable
 		ImGui::SetColumnWidth(0, 300);
 
-		if (ImGui::TreeNodeEx("Assets", node_flags))
-		{
-			// TODO: taria bien que se pudiera quitar eso y funcionar igualmente
-			if (ImGui::IsItemClicked() || selectedDir == ".")
-			{
-				std::vector<std::string> vDirs, vFiles;
-				selectedDir = ".";
-
-				App->fs->DiscoverFiles("Assets", vFiles, vDirs);
-				vSelectedDirFiles = vFiles;
-			}
-
-			// ---RMB Click event---
-			if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
-			{
-				ImGui::MenuItem("Assets");
-				ImGui::Separator();
-				if (ImGui::MenuItem("Create Folder"))
-				{
-
-				}
-				if (ImGui::MenuItem("Delete Folder"))
-				{
-
-				}
-
-				selectedDir = ".";
-				ImGui::EndPopup();
-			}
-
-			ShowDirectories("Assets");
-			ImGui::TreePop();
-		}
-
-		ShowDirectories("PinkyAssets/..");
+		ShowDirectories("Assets");
+		ShowDirectories("PinkyAssets");
 
 		ImGui::NextColumn();
 
@@ -117,35 +84,42 @@ void ProjectFiles::ShowDirectories(std::string directory)
 
 	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_None;
 
-	for (int i = 0; i < vDirs.size(); i++)
+	if (TreeNode(directory, node_flags, false))
 	{
-		App->fs->DiscoverFiles((directory + "/" + vDirs[i]).c_str(), vChildrenFiles, vChildrenDirs);
+		DirsMouseEvents(directory, vFiles);
 
-		if (!vChildrenDirs.empty())
+		for (int i = 0; i < vDirs.size(); i++)
 		{
-			node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
-				| ImGuiTreeNodeFlags_SpanAvailWidth;
+			App->fs->DiscoverFiles((directory + "/" + vDirs[i]).c_str(), vChildrenFiles, vChildrenDirs);
 
-			bool open = TreeNode(vDirs[i], node_flags, false);
-			DirsMouseEvents(vDirs[i], vChildrenFiles);
-
-			if (open)
+			if (!vChildrenDirs.empty())
 			{
-				ShowDirectories(directory + "/" + vDirs[i]);
-				ImGui::TreePop();
+				node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
+					| ImGuiTreeNodeFlags_SpanAvailWidth;
+
+				bool open = TreeNode(vDirs[i], node_flags, false);
+				DirsMouseEvents(vDirs[i], vChildrenFiles);
+
+				if (open)
+				{
+					ShowDirectories(directory + "/" + vDirs[i]);
+					ImGui::TreePop();
+				}
 			}
+			else
+			{
+				node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+
+				TreeNode(vDirs[i], node_flags, true);
+
+				DirsMouseEvents(vDirs[i], vChildrenFiles);
+			}
+
+			vChildrenFiles.clear();
+			vChildrenDirs.clear();
 		}
-		else
-		{
-			node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 
-			TreeNode(vDirs[i], node_flags, true);
-
-			DirsMouseEvents(vDirs[i], vChildrenFiles);
-		}
-
-		vChildrenFiles.clear();
-		vChildrenDirs.clear();
+		ImGui::TreePop();
 	}
 }
 

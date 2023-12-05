@@ -179,23 +179,23 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 
 void ai::CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go, bool component)
 {
-	/*switch (obj)
+	switch (obj)
 	{
 	case ai::POLY_PRIMITIVE_TYPE::CUBE:
-		ImportVMesh("PinkyAssets\\3dObject\\cube.fbx", go, component);
+		ImportMesh("PinkyAssets\\3dObject\\cube.fbx", go, component);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::SPHERE:
-		ImportVMesh("PinkyAssets\\3dObject\\sphere.fbx", go, component);
+		ImportMesh("PinkyAssets\\3dObject\\sphere.fbx", go, component);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::CYLINDER:
-		ImportVMesh("PinkyAssets\\3dObject\\cylinder.fbx", go);
+		ImportMesh("PinkyAssets\\3dObject\\cylinder.fbx", go);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::PLANE:
-		ImportVMesh("PinkyAssets\\3dObject\\plane.fbx", go);
+		ImportMesh("PinkyAssets\\3dObject\\plane.fbx", go);
 		break;
 	default:
 		break;
-	}*/
+	}
 }
 
 void ai::CreateCustomMehses(CUSTOM_MESH obj)
