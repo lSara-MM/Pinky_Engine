@@ -23,13 +23,14 @@ ModuleResource::~ModuleResource()
 bool ModuleResource::Start()
 {
 	mResources = {};
+	metaPath = ASSETS_AUX;
+
 	return true;
 }
 
 // -----------------------------------------------------------------
 update_status ModuleResource::Update(float dt)
 {
-
 	return UPDATE_CONTINUE;
 }
 
@@ -41,25 +42,87 @@ bool ModuleResource::CleanUp()
 	return true;
 }
 
-GameObject* ModuleResource::ImportFileToEngine(const char* fileDir, GameObject* goToLink)
+/// <summary>
+/// If first time import to engine --> Create a copy in local space
+/// If it already exists the file --> Dupe it with another name (nameN.ext) { N == number}
+/// </summary>
+/// <param name="fileDir"> Directory File to Import </param>
+/// <returns></returns>
+GameObject* ModuleResource::ImportFileToEngine(const char* fileDir)
 {
-	std::string dir = fileDir;
+	std::string filePath, fileName, fileExt, tempName;
 	GameObject* go = nullptr;
 
-	std::string normFileName = App->fs->NormalizePath((metaPath + ".meta.json").c_str());
+	App->fs->SplitFilePath(fileDir, &filePath, &fileName, &fileExt);
+	std::string dir = ASSETS_AUX + fileName + "." + fileExt;
+	tempName = fileName;
 
+	int i = 0;
+
+	// TODO: Change to current selected dir
+	while (App->fs->Exists(dir.c_str()))
+	{
+		tempName = fileName;
+		tempName += std::to_string(++i);
+		dir = ASSETS_AUX + tempName + "." + fileExt;
+	}
+
+	App->parson->CreateFile(tempName, fileExt, fileDir);
+	return go;
+}
+
+void ModuleResource::ImportVModel(const char* meshPath, std::vector<const char*> texPaths)
+{
+	Get_Set_FilePath(meshPath);
+
+	ImportFileToEngine(meshPath);
+	ImportFileToEngine(texPaths[0]);
+}
+
+/// <summary>
+/// If first time import to engine --> Create a copy in local space
+/// If it already exists the file --> Dupe it with another name (nameN.ext) { N == number}
+/// </summary>
+/// <param name="path"></param>
+/// <returns></returns>
+int ModuleResource::ImportToScene(std::string path)
+{
+	GameObject* go = nullptr;
+	std::string::size_type i = 0;
+	std::string normFileName = App->fs->NormalizePath((ASSETS_AUX + path + ".meta").c_str());
+
+	switch (CheckExtensionType(path.c_str()))
+	{
+	case R_TYPE::MESH:
+		i = path.find(".fbx");
+		break;
+	case R_TYPE::TEXTURE:
+		i = path.find(".dds");
+		break;
+	case R_TYPE::PREFAB:
+		break;
+	case R_TYPE::SCENE:
+		break;
+	case R_TYPE::NONE:
+		break;
+	default:
+		break;
+	}
+
+	//if (i != std::string::npos) { path.erase(i, 4); }
+	
+	//go = App->parson->CreateGOfromMeta(PREFABS_PATH + path + PREFABS_EXT);
+	
+	const char* realPath = App->parson->GetRealDirFF((ASSETS_AUX + path).c_str());
 	if (App->fs->Exists(normFileName.c_str()))
 	{
-		switch (CheckExtensionType(fileDir))
+		switch (CheckExtensionType(path.c_str()))
 		{
 		case R_TYPE::MESH:
-
+			go = App->parson->CreateGOfromMeta(PREFABS_PATH + App->fs->GetFileName(path.c_str()) + PREFABS_EXT);
+			LoadChildrenMeshes(go, go->vChildren.size());
 			// get mesh uid and add to counter 
-
-
-
 			//go = App->parson->CreateGOfromMeta(normFileName);
-			//LoadChildrenMeshes(go, go->vChildren.size());
 			break;
 		case R_TYPE::TEXTURE:
 			LoadFromLibrary(normFileName, R_TYPE::TEXTURE);
@@ -76,28 +139,21 @@ GameObject* ModuleResource::ImportFileToEngine(const char* fileDir, GameObject* 
 	}
 	else
 	{
-		std::vector<Resource*>* vResources = &std::vector<Resource*>();
-		switch (CheckExtensionType(fileDir))
+		switch (CheckExtensionType(path.c_str()))
 		{
 		case R_TYPE::MESH:
-			vResources = ai::ImportVMesh(fileDir);
-
-			// TODO: Delete when we dupe
-			App->parson->CreateResourceMetaFile(*vResources, fileDir, ".fbx");
+			ai::ImportMesh(realPath);
 			break;
 		case R_TYPE::TEXTURE:
 			if (true)
 			{
 				// TODO: no funciona jaja
 				R_Texture* t = new R_Texture();
-				t->ImportTexture(fileDir);
+				t->ImportTexture(path.c_str());
 				SaveToLibrary(t);
-				LoadFromLibrary(fileDir, R_TYPE::TEXTURE);
+				LoadFromLibrary(path.c_str(), R_TYPE::TEXTURE);
 
-				vResources->push_back(t);
-
-				// TODO: Delete when we dupe
-				App->parson->CreateResourceMetaFile(*vResources, fileDir, ".dds");
+				vResources.push_back(t);
 			}
 			break;
 		case R_TYPE::SCENE:
@@ -108,32 +164,11 @@ GameObject* ModuleResource::ImportFileToEngine(const char* fileDir, GameObject* 
 			break;
 		}
 
-		App->parson->CreateResourceMetaFile(*vResources, fileDir);
-
-		vResources = nullptr;
+		// Assets/BakerHouse.fbx.meta
+		App->parson->CreateResourceMetaFile(vResources, normFileName.c_str());
 	}
+	go = nullptr;
 
-	return go;
-}
-
-void ModuleResource::ImportVModel(const char* meshPath, std::vector<const char*> texPaths)
-{
-	Get_Set_FilePath(meshPath);
-
-	ImportFileToEngine(meshPath);
-	ImportFileToEngine(texPaths[0]);
-}
-
-int ModuleResource::ImportToScene(const char* path)
-{
-	LOG("path %s", path);
-	path;
-	std::string normFileName = App->fs->NormalizePath((metaPath + ".meta.json").c_str());
-	std::string dir = "a";
-	GameObject* go = nullptr;
-	go = App->parson->CreateGOfromMeta(normFileName);
-
-	LOG("normFileName %s", normFileName);
 	return 0;
 }
 
@@ -176,7 +211,7 @@ GameObject* ModuleResource::ImportFile(const char* fileDir, GameObject* goToLink
 		switch (CheckExtensionType(fileDir))
 		{
 		case R_TYPE::MESH:
-			go = ai::ImportMesh(fileDir);
+			//go = ai::ImportMesh(fileDir);
 			break;
 		case R_TYPE::TEXTURE:
 			if (true)
@@ -341,16 +376,17 @@ std::string ModuleResource::Get_Set_FilePath(const char* fileDir)
 	string dir = fileDir;
 	std::string filePath, fileName, fileExt;
 	App->fs->SplitFilePath(fileDir, &filePath, &fileName, &fileExt);
-	
-	if (dir.find("C:\\") != std::string::npos)
+
+	metaPath = ASSETS_AUX + fileName;
+	/*if (dir.find("C:\\") != std::string::npos)
 	{
-		metaPath = "Assets\\" + fileName;
+		metaPath = ASSETS_AUX + fileName;
 	}
 	else
 	{
 		metaPath = filePath + fileName;
 	}
-	metaPath = filePath + fileName;
+	metaPath = filePath + fileName;*/
 
 	return metaPath;
 }
@@ -359,7 +395,7 @@ void ModuleResource::LoadChildrenMeshes(GameObject* go, uint size)
 {
 	if (go->mesh != nullptr)
 	{
-		LoadFromLibrary(go->mesh->mesh->libraryFile + MESHES_EXT, R_TYPE::MESH);
+		go->mesh->mesh = static_cast<R_Mesh*>(LoadFromLibrary(go->mesh->mesh->libraryFile + MESHES_EXT, R_TYPE::MESH));
 	}
 
 	for (int i = 0; i < size; i++)

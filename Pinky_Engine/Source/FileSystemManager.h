@@ -43,7 +43,7 @@ public:
 	void DiscoverFiles(const char* directory, std::vector<std::string>& vFiles, std::vector<std::string>& vDirs) const;
 	std::vector<std::string>& GetByExt(const char* directory, const char* extension, std::vector<std::string>& vFiles) const;
 	NodePath GetAllFiles(const char* directory, std::vector<std::string>* filter_ext = nullptr, std::vector<std::string>* ignore_ext = nullptr) const;
-	std::string GetRealDir(const char* path) const;
+	std::string GetRealDirFF(const char* path) const;
 	std::string GetPathRelativeToAssets(const char* originalPath) const;
 
 	// Check extension

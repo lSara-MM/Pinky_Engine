@@ -45,10 +45,14 @@ enum update_status
 #define LIBRARY_PATH "Library/"
 #define MESHES_PATH LIBRARY_PATH "Meshes/"
 #define TEXTURES_PATH LIBRARY_PATH "Textures/"
+#define PREFABS_PATH LIBRARY_PATH "Prefabs/"
+
+// TODO: remove when not necessary
+#define ASSETS_AUX "Assets/"
 
 // Extensions
 #define MESHES_EXT ".pnk"
-#define TEXTURES_EXT ".duk"
+#define PREFABS_EXT ".pgo"
 
 // Deletes a buffer
 #define RELEASE( x )\

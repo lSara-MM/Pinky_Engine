@@ -32,7 +32,7 @@ C_Mesh::C_Mesh() : Component(C_TYPE::MESH, "Mesh")
 	showAABB = false;
 	showOBB = false;
 
-	App->resource->mResources->at(mesh->GetUID())->count++;
+	//App->resource->mResources->at(mesh->GetUID())->count++;
 }
 
 C_Mesh::C_Mesh(GameObject* g, R_Mesh* m, bool start_enabled) : Component(C_TYPE::MESH, g, start_enabled, "Mesh")

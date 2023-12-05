@@ -120,6 +120,7 @@ bool ModuleEditor::Init()
 	App->scene->BakerHouse();
 	return ret;
 
+	// TODO: Andreu aixo no s'executa mai, es un error o s'ha de borrar?
 	//Guizmos
 	transformOperation = ImGuizmo::OPERATION::TRANSLATE;
 }

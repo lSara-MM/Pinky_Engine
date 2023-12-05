@@ -70,6 +70,7 @@ void FileSystemManager::CreateLibraryDirs()
 	CreateDir(LIBRARY_PATH);
 	CreateDir(MESHES_PATH);
 	CreateDir(TEXTURES_PATH);
+	CreateDir(PREFABS_PATH);
 }
 
 bool FileSystemManager::AddPath(std::string path)
@@ -206,7 +207,7 @@ NodePath FileSystemManager::GetAllFiles(const char* directory, std::vector<std::
 	return root;
 }
 
-std::string FileSystemManager::GetRealDir(const char* path) const
+std::string FileSystemManager::GetRealDirFF(const char* path) const
 {
 	std::string dir;
 	dir = PHYSFS_getBaseDir();
@@ -223,7 +224,7 @@ std::string FileSystemManager::GetRealDir(const char* path) const
 
 std::string FileSystemManager::GetPathRelativeToAssets(const char* originalPath) const
 {
-	return GetRealDir(originalPath);
+	return GetRealDirFF(originalPath);
 }
 
 

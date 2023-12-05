@@ -17,9 +17,9 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
-	GameObject* ImportFileToEngine(const char* path, GameObject* goToLink = nullptr);
+	GameObject* ImportFileToEngine(const char* path);
 	void ImportVModel(const char* meshPath, std::vector<const char*> texPaths);
-	int ImportToScene(const char* path);
+	int ImportToScene(std::string path);
 
 
 	GameObject* ImportFile(const char* path, GameObject* goToLink = nullptr);
@@ -35,7 +35,7 @@ public:
 
 public:
 	std::map <u32, Resource*>* mResources;
-
+	std::vector<Resource*> vResources;
 private:
 	std::string metaPath; 
 	std::string normMetaPath;

@@ -16,10 +16,13 @@ public:
 	ParsingJSON();
 	~ParsingJSON();
 
-	void CreateResourceMetaFile(std::vector<Resource*> resources, const char* path, std::string ext = ".meta");
+	void CreateFile(std::string fileName, std::string fileExt, const char* realDir);
+	const char* GetRealDirFF(const char* dir);
+
+	void CreateResourceMetaFile(std::vector<Resource*> resources, const char* path);
 	std::string GetResourceMetaFile(const char* path);
 
-	void CreatePrefabFromGO(GameObject* go, const char* path);
+	void CreatePrefabFromGO(GameObject* go);
 
 	int GameObjectJSON(GameObject* go, std::string node_name, int counter = 0);
 	int GameObjectInfo(GameObject* go, std::string node_name, int counter = 0);

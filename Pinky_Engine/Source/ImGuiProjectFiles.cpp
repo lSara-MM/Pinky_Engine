@@ -98,7 +98,7 @@ void ProjectFiles::ShowWindow()
 		{
 			//ImGui::Text(vSelectedDirFiles[i].c_str());
 			ImGui::TreeNodeEx(vSelectedDirFiles[i].c_str(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen);
-			FilesMouseEvents(vSelectedDirFiles[i], selectedDir);
+			FilesMouseEvents(vSelectedDirFiles[i]);
 		}
 
 		ImGui::Columns(1);
@@ -174,12 +174,12 @@ bool ProjectFiles::TreeNode(std::string currentDir, ImGuiTreeNodeFlags node_flag
 	return ret;
 }
 
-void ProjectFiles::DirsMouseEvents(std::string currentDir, std::vector<std::string> files)
+void ProjectFiles::DirsMouseEvents(std::string current, std::vector<std::string> files)
 {
 	// ---Click event---
 	if (ImGui::IsItemClicked())
 	{
-		selectedDir = currentDir;
+		selectedDir = current;
 		vSelectedDirFiles = files;
 	}
 	// ------
@@ -187,7 +187,7 @@ void ProjectFiles::DirsMouseEvents(std::string currentDir, std::vector<std::stri
 	// ---RMB Click event---
 	if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
 	{
-		ImGui::MenuItem(currentDir.c_str());
+		ImGui::MenuItem(current.c_str());
 		ImGui::Separator();
 		if (ImGui::MenuItem("Create Folder"))
 		{
@@ -198,21 +198,21 @@ void ProjectFiles::DirsMouseEvents(std::string currentDir, std::vector<std::stri
 
 		}
 
-		selectedDir = currentDir;
+		selectedDir = current;
 		ImGui::EndPopup();
 	}
 }
 
-void ProjectFiles::FilesMouseEvents(std::string currentFile, std::string currentDir)
+void ProjectFiles::FilesMouseEvents(std::string current)
 {
 	// ---RMB Click event---
 	if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
 	{
-		ImGui::MenuItem(currentFile.c_str());
+		ImGui::MenuItem(current.c_str());
 		ImGui::Separator();
 		if (ImGui::MenuItem("Import to Scene"))
 		{
-			App->resource->ImportToScene((currentDir + currentFile).c_str());
+			App->resource->ImportToScene(current);
 		}
 		if (ImGui::MenuItem("Create File"))
 		{
@@ -223,7 +223,7 @@ void ProjectFiles::FilesMouseEvents(std::string currentFile, std::string current
 
 		}
 
-		selectedFile = currentFile;
+		selectedFile = current;
 		ImGui::EndPopup();
 	}
 }

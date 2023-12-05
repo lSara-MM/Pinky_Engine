@@ -11,19 +11,43 @@ ParsingJSON::~ParsingJSON()
 {
 }
 
+void ParsingJSON::CreateFile(std::string fileName, std::string fileExt, const char* realDir)
+{
+	std::string file_name = "Assets//" + fileName + "." + fileExt;
+
+	root_value = json_value_init_object();
+	root_object = json_value_get_object(root_value);
+	char* serialized_string = NULL;
+
+	std::string node_name = "GameObject.Info";
+	json_object_dotset_string(root_object, (node_name + ".Name").c_str(), fileName.c_str());
+	json_object_dotset_string(root_object, (node_name + ".Real Directory").c_str(), realDir);
+	json_object_dotset_string(root_object, (node_name + ".Local Directory").c_str(), file_name.c_str());
+
+	serialized_string = json_serialize_to_string_pretty(root_value);
+	puts(serialized_string);
+
+	json_serialize_to_file(root_value, file_name.c_str());
+	json_free_serialized_string(serialized_string);
+	json_value_free(root_value);
+}
+
+const char* ParsingJSON::GetRealDirFF(const char* dir)
+{
+	root_value = json_parse_file(dir);
+	root_object = json_value_get_object(root_value);
+
+	return json_object_dotget_string(root_object, "GameObject.Info.Real Directory");
+}
+
 //---Create and write in .meta---
-void ParsingJSON::CreateResourceMetaFile(std::vector<Resource*> resources, const char* path, std::string ext)
+void ParsingJSON::CreateResourceMetaFile(std::vector<Resource*> resources, const char* path)
 {
 	std::string filePath, fileName, fileExt;
 	App->fs->SplitFilePath(path, &filePath, &fileName, &fileExt);
 
-	std::string file_name = filePath + fileName + "." + fileExt + ext;
+	std::string file_name = filePath + fileName + "." + fileExt;
 
-	// TODO: Remove when we have dupe
-	if (ext != ".meta")
-	{
-		file_name = "Assets//" + fileName + ext;
-	}
 
 	root_value = json_value_init_object();
 	root_object = json_value_get_object(root_value);
@@ -77,15 +101,12 @@ std::string ParsingJSON::GetResourceMetaFile(const char* path)
 	return std::string();
 }
 
-//---Create and write GameObject information---
-void ParsingJSON::CreatePrefabFromGO(GameObject* go, const char* path)
+//---Create and write GameObject structure information---
+void ParsingJSON::CreatePrefabFromGO(GameObject* go)
 {
-	std::string filePath, fileName, fileExt;
-	App->fs->SplitFilePath(path, &filePath, &fileName, &fileExt);
-
 	int resource_count = 0;
 
-	std::string file_name = filePath + go->name + ".pgo";	// Pinky Game Object
+	std::string file_name = PREFABS_PATH + go->name + ".pgo";	// Pinky Game Object
 	root_value = json_value_init_object();
 	root_object = json_value_get_object(root_value);
 	char* serialized_string = NULL;
@@ -219,13 +240,9 @@ GameObject* ParsingJSON::GOfromMeta(std::string node_name)
 	go->SetUID(id);
 	id = json_object_dotget_number(root_object, (node_name + ".Parent UID").c_str());
 
-	if (id == 0)
+	if (id != 0)
 	{
-		App->scene->rootNode->AddChild(go);
-	}
-	else
-	{
-		App->scene->rootNode->FindChild(id)->AddChild(go);
+		go->ReParent(App->scene->rootNode->FindChild(id));
 	}
 
 	go->isActive = json_object_dotget_boolean(root_object, (node_name + ".Active").c_str());
@@ -251,6 +268,7 @@ Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
 	u32 id;
 	float* f = nullptr;
 
+	// TODO: Components uid should be unique right?
 	C_TYPE comp_type = (C_TYPE)json_object_dotget_number(root_object, (comp_name + ".Type").c_str());
 	id = json_object_dotget_number(root_object, (comp_name + ".Component UID").c_str());
 
@@ -284,6 +302,8 @@ Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
 	case C_TYPE::MESH:
 		comp = new C_Mesh();
 		id = json_object_dotget_number(root_object, (comp_name + ".Resource UID").c_str());
+
+		// When create the component, add the resource already existing;
 		static_cast<C_Mesh*>(comp)->mesh->SetUID(id);
 
 		static_cast<C_Mesh*>(comp)->mesh->libraryFile = json_object_dotget_string(root_object, (comp_name + ".Library dir").c_str());
