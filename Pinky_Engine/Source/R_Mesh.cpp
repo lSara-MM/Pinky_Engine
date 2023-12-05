@@ -30,6 +30,8 @@ R_Mesh::~R_Mesh()
 	RELEASE_ARRAY(vertex);
 	RELEASE_ARRAY(normals);
 	RELEASE_ARRAY(tex_uvs);
+
+	DeleteBuffers();
 }
 
 bool R_Mesh::InitBuffers()

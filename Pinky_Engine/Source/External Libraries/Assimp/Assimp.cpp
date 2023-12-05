@@ -51,15 +51,12 @@ GameObject* ai::ImportMesh(const char* meshfileDir, GameObject* go, bool compone
 		// file name as a parent to group them all
 		else if (scene->mRootNode->mNumChildren > 1)
 		{
-			std::string name = meshfileDir;
 			// --- Get file name ---
-			int posI = name.find_last_of("\\") + 1;
-			int posF = name.find_last_of(".");
-
-			name = name.substr(posI, posF - posI);	// first position, size of the string to get
+			std::string filePath, fileName, fileExt, tempName, finalPath;
+			App->fs->SplitFilePath(meshfileDir, &filePath, &fileName, &fileExt);
 			// ---------------------------------------------
 
-			GameObject* obj = new GameObject(name);
+			GameObject* obj = new GameObject(fileName);
 			MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, obj);
 			ret = obj;
 			obj = nullptr;
@@ -153,6 +150,7 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 
 			std::string path = App->resource->SaveToLibrary(mesh);
 			App->resource->vResources.push_back(mesh);
+
 			/*RELEASE(mesh);
 			mesh = static_cast<R_Mesh*>(App->resource->LoadFromLibrary(path, R_TYPE::MESH));*/
 
@@ -172,10 +170,6 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 
 			//---Material---
 			if (!component) { obj->AddComponent(C_TYPE::MATERIAL); }
-
-			//TODO: pushback elsewhere
-			App->renderer3D->meshes.push_back(mesh);
-
 			m = nullptr;
 		}
 	}

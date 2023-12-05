@@ -51,6 +51,7 @@ bool I_Mesh::Import(const aiMesh* mesh, R_Mesh* ourMesh)
 		}
 	}
 
+	ourMesh->InitBuffers();
 	return true;
 }
 

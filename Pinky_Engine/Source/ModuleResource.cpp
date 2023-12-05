@@ -93,10 +93,10 @@ int ModuleResource::ImportToScene(std::string path)
 {
 	GameObject* go = nullptr;
 	std::string::size_type i = 0;
-	std::string normFileName = App->fs->NormalizePath((ASSETS_AUX + path + ".meta").c_str());
+	std::string normFileName = App->fs->NormalizePath((ASSETS_AUX + path).c_str());
 	
 	//const char* realPath = App->parson->GetRealDirFF((ASSETS_AUX + path).c_str());
-	if (App->fs->Exists(normFileName.c_str()))
+	if (App->fs->Exists((normFileName + ".meta").c_str()))
 	{
 		switch (CheckExtensionType(path.c_str()))
 		{
@@ -107,7 +107,7 @@ int ModuleResource::ImportToScene(std::string path)
 			//go = App->parson->CreateGOfromMeta(normFileName);
 			break;
 		case R_TYPE::TEXTURE:
-			LoadFromLibrary(normFileName, R_TYPE::TEXTURE);
+			LoadFromLibrary((normFileName + ".meta"), R_TYPE::TEXTURE);
 			break;
 		case R_TYPE::SCENE:
 			break;
@@ -145,7 +145,7 @@ int ModuleResource::ImportToScene(std::string path)
 		}
 
 		// Creates "Assets/name.ext.meta"
-		App->parson->CreateResourceMetaFile(vResources, normFileName.c_str());
+		App->parson->CreateResourceMetaFile(vResources, (normFileName + ".meta").c_str());
 	}
 	go = nullptr;
 

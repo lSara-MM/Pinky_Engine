@@ -166,7 +166,7 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 		if (!current[i]->vChildren.empty())
 		{
 			bool open = TreeNode(current[i], node_flags);
-			DirsMouseEvents(current[i]);
+			MouseEvents(current[i]);
 
 			if (open)
 			{
@@ -177,7 +177,7 @@ bool Hierarchy::ShowChildren(std::vector<GameObject*> current, int num)
 		else
 		{
 			TreeNode(current[i], node_flags);
-			DirsMouseEvents(current[i]);
+			MouseEvents(current[i]);
 		}
 	}
 
@@ -204,14 +204,16 @@ bool Hierarchy::TreeNode(GameObject* current, ImGuiTreeNodeFlags node_flags)
 		node_flags |= ImGuiTreeNodeFlags_Selected;
 	}
 
-
-	// TODO: en release parpadea nose porque
 	if (!current->isActive)
 	{
 		ImGui::PushStyleColor(ImGuiCol_Text, disabledColor);
 	}
 
 	ret = ImGui::TreeNodeEx((void*)(intptr_t)current->GetUID(), node_flags, current->name.c_str());
+
+
+	//ImGui::TreeNodeEx((void*)(intptr_t)(current->GetUID() + 1), node_flags, " ");
+
 
 	if (!current->isActive)
 	{
@@ -221,7 +223,7 @@ bool Hierarchy::TreeNode(GameObject* current, ImGuiTreeNodeFlags node_flags)
 	return ret;
 }
 
-void Hierarchy::DirsMouseEvents(GameObject* current)
+void Hierarchy::MouseEvents(GameObject* current)
 {
 	// ---Drag and Drop event---
 	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
@@ -270,7 +272,7 @@ void Hierarchy::DirsMouseEvents(GameObject* current)
 	// ---RMB Click event---
 	if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
 	{
-		ImGui::MenuItem(current->name.c_str());
+		ImGui::MenuItem(current->name.c_str(), NULL, false, false);
 		ImGui::Separator();
 		if (ImGui::MenuItem("(WIP) Copy", "Ctrl + C"))
 		{

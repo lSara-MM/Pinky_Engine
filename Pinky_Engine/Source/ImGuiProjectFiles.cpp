@@ -56,7 +56,7 @@ void ProjectFiles::ShowWindow()
 		ImGui::Columns(2, "Folders", true);
 
 		// TODO: Set a default width but make it resizeable
-		ImGui::SetColumnWidth(0, 100);
+		ImGui::SetColumnWidth(0, 300);
 
 		if (ImGui::TreeNodeEx("Assets", node_flags))
 		{
@@ -92,6 +92,8 @@ void ProjectFiles::ShowWindow()
 			ImGui::TreePop();
 		}
 
+		ShowDirectories("PinkyAssets/..");
+
 		ImGui::NextColumn();
 
 		for (int i = 0; i < vSelectedDirFiles.size(); i++)
@@ -111,9 +113,7 @@ void ProjectFiles::ShowDirectories(std::string directory)
 	std::vector<std::string> vDirs, vFiles;
 	std::vector<std::string> vChildrenDirs, vChildrenFiles;
 
-	std::string dir = directory;
-
-	App->fs->DiscoverFiles(dir.c_str(), vFiles, vDirs);
+	App->fs->DiscoverFiles(directory.c_str(), vFiles, vDirs);
 
 	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_None;
 
@@ -131,7 +131,7 @@ void ProjectFiles::ShowDirectories(std::string directory)
 
 			if (open)
 			{
-				ShowDirectories(dir + "/" + vDirs[i]);
+				ShowDirectories(directory + "/" + vDirs[i]);
 				ImGui::TreePop();
 			}
 		}
@@ -187,7 +187,7 @@ void ProjectFiles::DirsMouseEvents(std::string current, std::vector<std::string>
 	// ---RMB Click event---
 	if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
 	{
-		ImGui::MenuItem(current.c_str());
+		ImGui::MenuItem(current.c_str(), NULL, false, false);
 		ImGui::Separator();
 		if (ImGui::MenuItem("Create Folder"))
 		{
@@ -208,7 +208,7 @@ void ProjectFiles::FilesMouseEvents(std::string current)
 	// ---RMB Click event---
 	if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
 	{
-		ImGui::MenuItem(current.c_str());
+		ImGui::MenuItem(current.c_str(), NULL, false, false);
 		ImGui::Separator();
 		if (ImGui::MenuItem("Import to Scene"))
 		{
