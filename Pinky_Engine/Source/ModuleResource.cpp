@@ -41,7 +41,7 @@ bool ModuleResource::CleanUp()
 	return true;
 }
 
-GameObject* ModuleResource::ImportVFile(const char* fileDir, GameObject* goToLink)
+GameObject* ModuleResource::ImportFileToEngine(const char* fileDir, GameObject* goToLink)
 {
 	std::string dir = fileDir;
 	GameObject* go = nullptr;
@@ -120,8 +120,21 @@ void ModuleResource::ImportVModel(const char* meshPath, std::vector<const char*>
 {
 	Get_Set_FilePath(meshPath);
 
-	ImportVFile(meshPath);
-	ImportVFile(texPaths[0]);
+	ImportFileToEngine(meshPath);
+	ImportFileToEngine(texPaths[0]);
+}
+
+int ModuleResource::ImportToScene(const char* path)
+{
+	LOG("path %s", path);
+	path;
+	std::string normFileName = App->fs->NormalizePath((metaPath + ".meta.json").c_str());
+	std::string dir = "a";
+	GameObject* go = nullptr;
+	go = App->parson->CreateGOfromMeta(normFileName);
+
+	LOG("normFileName %s", normFileName);
+	return 0;
 }
 
 
@@ -195,7 +208,7 @@ void ModuleResource::ImportModel(const char* meshPath, std::vector<const char*> 
 
 	Get_Set_FilePath(meshPath);
 
-	go = ImportVFile(meshPath);
+	go = ImportFileToEngine(meshPath);
 
 	//if (texPaths.empty())
 	//{
