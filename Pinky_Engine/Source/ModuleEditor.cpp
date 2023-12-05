@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleEditor.h"
 #include "ModuleWindow.h"
+#include "TimeManager.h"
 #include "External Libraries/SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -115,6 +116,7 @@ bool ModuleEditor::Init()
 	App->scene->p = p;
 	vImGuiWindows.push_back(p);
 	p = nullptr;
+	changeTimeState = false;
 
 
 	// Load Baker House at the start by default
@@ -150,6 +152,35 @@ update_status ModuleEditor::PostUpdate(float dt)
 	UseDockSpace(io);
 
 	ret = Toolbar();
+
+	//Time
+	if (TimeManager::state == TimeManager::PlayState::STEP) 
+	{
+		TimeManager::Pause();
+	}
+		
+	if (changeTimeState) {
+		switch (TimeManager::state)
+		{
+		case TimeManager::PlayState::NONE:
+			TimeManager::Stop();
+			break;
+		case TimeManager::PlayState::PLAY:
+			TimeManager::Play();
+			break;
+		case TimeManager::PlayState::PAUSE:
+			TimeManager::Pause();
+			break;
+		case TimeManager::PlayState::STEP:
+			TimeManager::Step();
+			break;
+		default:
+			break;
+		}
+		changeTimeState = false;
+	}
+
+	TimeButtons();
 
 	//Scene window
 	EditorWindow();
@@ -941,6 +972,29 @@ void ModuleEditor::EditorWindow()
 	{
 		App->camera->CameraInput();
 
+		//prova mouse
+		//ImVec2 viewportMinRegion = ImGui::GetWindowContentRegionMin();
+		//ImVec2 viewportMaxRegion = ImGui::GetWindowContentRegionMax();
+		//ImVec2 viewportOffset = ImGui::GetWindowPos();
+		//float2 m_ViewportBounds[2];
+		//m_ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
+		//m_ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
+
+		//float mx = ImGui::GetMousePos().x;
+		//float my = ImGui::GetMousePos().y;
+		//mx -= m_ViewportBounds[0].x;
+		//my -= m_ViewportBounds[0].y;
+		//float2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
+		//my = viewportSize.y - my;
+		//int mouseX = (int)mx;
+		//int mouseY = (int)my;
+
+		//if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y) 
+		//{
+		//	pickingRay = App->renderer3D->editorCam->frustum.UnProjectLineSegment(mouseX, mouseY);
+		//	App->camera->MousePick(pickingRay);
+		//}
+
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && !ImGuizmo::IsUsing() && App->input->GetKey(SDL_SCANCODE_LALT) != KEY_REPEAT)
 		{
 			origin.x = (ImGui::GetMousePos().x - viewPos.x) / viewSize.x;
@@ -956,6 +1010,7 @@ void ModuleEditor::EditorWindow()
 		}
 	}
 
+	//igual esto fuerao cambiar orden
 	App->renderer3D->editorCam->SetAspectRatio(ViewportSize.x, ViewportSize.y);
 	ImGui::Image((ImTextureID)App->renderer3D->editorCam->textureColourBuffer, ViewportSize, ImVec2(0, 1), ImVec2(1, 0));
 
@@ -1048,6 +1103,87 @@ void ModuleEditor::GameWindow()
 	ImGui::End();
 
 	ImGui::PopStyleVar();
+}
+
+void ModuleEditor::TimeButtons()
+{
+	// Play Buttons
+	ImGui::Begin("Play Time");
+
+	if (TimeManager::state == TimeManager::PlayState::PLAY)
+	{
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.5, 0.5, 1, 1 });
+	}
+	else
+	{
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.25, 0.25, 0.25, 1 });
+	}
+	if (ImGui::Button("PLAY"))//posar imatge play igual
+	{
+		changeTimeState = true;
+		TimeManager::state = TimeManager::PlayState::PLAY;
+	}
+	ImGui::PopStyleColor();
+
+	ImGui::SameLine();
+
+	if (TimeManager::state == TimeManager::PlayState::PAUSE)
+	{
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.5, 0.5, 1, 1 });
+	}
+	else 
+	{
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.25, 0.25, 0.25, 1 });
+	}
+
+	if (ImGui::Button("STOP") && TimeManager::IsOnPlay())//posar imatge pause igual
+	{
+		changeTimeState = true;
+		TimeManager::state = TimeManager::PlayState::PAUSE;
+	}
+	ImGui::PopStyleColor();
+
+	ImGui::SameLine();
+
+	if (TimeManager::state == TimeManager::PlayState::STEP)
+	{
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.5, 0.5, 1, 1 });
+	}
+
+	else
+	{
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.25, 0.25, 0.25, 1 });
+	}
+
+	if (ImGui::Button("STEP") && TimeManager::IsOnPlay())//posar imatge step igual
+	{
+		changeTimeState = true;
+		TimeManager::state = TimeManager::PlayState::STEP;
+	}
+	ImGui::PopStyleColor();
+
+	// Vertical Separator
+	ImGui::SameLine();
+	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 7);
+	ImGui::Text("|");
+	ImGui::SameLine();
+
+	static float scale = 1.0f;
+	ImGui::PushItemWidth(75);
+	if (ImGui::SliderFloat("Play Speed", &scale, 0.1f, 10.0f, "%.2f")) {
+		TimeManager::SetScale(scale);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Reset Time"))
+	{
+		TimeManager::SetScale(1.0f);
+		scale = 1.0f;
+	}
+	ImGui::SameLine();
+	ImGui::Text("Seconds Since Game Start: %.2f", TimeManager::GetRealTime());
+	ImGui::SameLine();
+	ImGui::Text("Play Time: %.2f", TimeManager::GetGameTime());
+	ImGui::End();
 }
 
 void ModuleEditor::OsOpenInShell(const char* path)

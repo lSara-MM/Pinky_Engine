@@ -194,9 +194,9 @@ bool ModuleCamera3D::CheckTriangleIntersection()
 				uint index2 = meshInter->mesh->index[i + 1] * 3;
 				uint index3 = meshInter->mesh->index[i + 2] * 3;
 
-				float3 vec1(meshInter->mesh->vertex[index1], meshInter->mesh->vertex[index1 + 1], meshInter->mesh->vertex[index1 + 2]);
-				float3 vec2(meshInter->mesh->vertex[index2], meshInter->mesh->vertex[index2 + 1], meshInter->mesh->vertex[index2 + 2]);
-				float3 vec3(meshInter->mesh->vertex[index3], meshInter->mesh->vertex[index3 + 1], meshInter->mesh->vertex[index3 + 2]);
+				float3 vec1(meshInter->mesh->vertex[index1]);
+				float3 vec2(meshInter->mesh->vertex[index2]);
+				float3 vec3(meshInter->mesh->vertex[index3]);
 
 				Triangle tri(vec1, vec2, vec3);
 

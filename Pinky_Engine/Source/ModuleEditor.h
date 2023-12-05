@@ -39,6 +39,8 @@ public:
 	void ImGuizmoControl();
 	void GameWindow();
 
+	void TimeButtons();
+
 	void AddFPS(std::vector<float>& vect, const float aFPS);
 	void AddMem(std::vector<float>& vect, const float repMem);
 	void OsOpenInShell(const char* path);	// https://stackoverflow.com/questions/71712920/how-to-open-a-webpage-in-imgui
@@ -111,4 +113,7 @@ private:
 
 	//Snap Guizmo
 	float snapValue;
+
+	//Time
+	bool changeTimeState;
 };

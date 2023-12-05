@@ -363,9 +363,8 @@ void GameObject::ReParent(GameObject* newParent)
 	pParent->vChildren.push_back(this);
 
 	//Update transform values
-	transform->SetLocalValues(pParent->transform->globalMatrix.Inverted() * transform->globalMatrix);
+	transform->SetLocalValues(newParent->transform->globalMatrix.Inverted() * transform->globalMatrix);
 
-	transform->dirty_ = true;
 }
 
 void GameObject::AddChild(GameObject* go)

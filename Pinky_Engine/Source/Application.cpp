@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "TimeManager.h"
 
 extern Application* App = nullptr;
 
@@ -71,6 +72,8 @@ bool Application::Init()
 	maxFrameDuration = 1000/fps;
 	frcap = true;
 
+	TimeManager::StartEngineTime();
+
 	return ret;
 }
 
@@ -86,13 +89,23 @@ void Application::PrepareUpdate()
 
 	dt = (float)ms_timer.Read() / 1000.0f;
 
+	//if (TimeManager::state == TimeManager::IsPlay)
+	//{
+	//	TimeManager::delta_time = dt;
+	//}
+
+	//else
+	//{
+	//	TimeManager::delta_time = 0;
+	//}
+
 	ms_timer.Start();
 }
 
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
-	
+	TimeManager::Update();
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
@@ -127,7 +140,7 @@ bool Application::CleanUp()
 	{
 		ret = (*it)->CleanUp();
 	}
-
+	TimeManager::CleanUp();
 	RELEASE(randomLCG);
 	RELEASE(fs);
 	RELEASE(parson);

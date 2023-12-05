@@ -202,6 +202,7 @@
     <ClInclude Include="Source\R_Mesh.h" />
     <ClInclude Include="Source\R_Prefab.h" />
     <ClInclude Include="Source\R_Texture.h" />
+    <ClInclude Include="Source\TimeManager.h" />
     <ClInclude Include="Source\Timer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -284,6 +285,7 @@
     <ClCompile Include="Source\R_Mesh.cpp" />
     <ClCompile Include="Source\R_Prefab.cpp" />
     <ClCompile Include="Source\R_Texture.cpp" />
+    <ClCompile Include="Source\TimeManager.cpp" />
     <ClCompile Include="Source\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
