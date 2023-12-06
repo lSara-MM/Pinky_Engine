@@ -102,7 +102,7 @@ bool ModuleEditor::Init()
 	aboutWin = false;
 
 	changeTimeState = false;
-	currentTimeState = TimeManager::PlayState::NONE;
+	currentTimeState = TimeManager::PlayState::EDITOR;
 
 	//Guizmos
 	transformOperation = ImGuizmo::OPERATION::TRANSLATE;
@@ -143,7 +143,7 @@ update_status ModuleEditor::PostUpdate(float dt)
 	if (changeTimeState) {
 		switch (currentTimeState)
 		{
-		case TimeManager::PlayState::NONE:
+		case TimeManager::PlayState::EDITOR:
 			TimeManager::Stop();
 			break;
 		case TimeManager::PlayState::PLAY:
@@ -916,53 +916,10 @@ void ModuleEditor::EditorWindow()
 	ViewportPos = { viewPos.x,viewPos.y };
 	ViewportSize = { viewSize.x,viewSize.y };
 
-	//TODO: igual posar en funció
-	if (ImGui::IsWindowHovered())
-	{
-		App->camera->CameraInput();
-
-		//prova mouse
-		//ImVec2 viewportMinRegion = ImGui::GetWindowContentRegionMin();
-		//ImVec2 viewportMaxRegion = ImGui::GetWindowContentRegionMax();
-		//ImVec2 viewportOffset = ImGui::GetWindowPos();
-		//float2 m_ViewportBounds[2];
-		//m_ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
-		//m_ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
-
-		//float mx = ImGui::GetMousePos().x;
-		//float my = ImGui::GetMousePos().y;
-		//mx -= m_ViewportBounds[0].x;
-		//my -= m_ViewportBounds[0].y;
-		//float2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
-		//my = viewportSize.y - my;
-		//int mouseX = (int)mx;
-		//int mouseY = (int)my;
-
-		//if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y) 
-		//{
-		//	pickingRay = App->renderer3D->editorCam->frustum.UnProjectLineSegment(mouseX, mouseY);
-		//	App->camera->MousePick(pickingRay);
-		//}
-
-		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && !ImGuizmo::IsUsing() && App->input->GetKey(SDL_SCANCODE_LALT) != KEY_REPEAT)
-		{
-			origin.x = (ImGui::GetMousePos().x - viewPos.x) / viewSize.x;
-			origin.y = (ImGui::GetMousePos().y - viewPos.y) / viewSize.y;
-			origin.x = (origin.x - 0.5f) * 2;
-			origin.y = -((origin.y - 0.5f) * 2);
-
-			if (origin.x >= -1 && origin.x <= 1 && origin.y >= -1 && origin.y <= 1)
-			{
-				pickingRay = App->renderer3D->editorCam->frustum.UnProjectLineSegment(origin.x, origin.y);
-				App->camera->MousePick(pickingRay);
-			}
-		}
-	}
-
-	//igual esto fuerao cambiar orden
+	//igual esto fuera o cambiar orden
 	App->renderer3D->editorCam->SetAspectRatio(ViewportSize.x, ViewportSize.y);
 	ImGui::Image((ImTextureID)App->renderer3D->editorCam->textureColourBuffer, ViewportSize, ImVec2(0, 1), ImVec2(1, 0));
-
+	
 	//Guizmos
 	std::vector<GameObject*> selectedList;
 	selectedList = App->scene->hierarchy->GetSelectedGOs();
@@ -1008,6 +965,28 @@ void ModuleEditor::EditorWindow()
 			}
 		}
 	}
+
+	//TODO: igual posar en funció
+	if (ImGui::IsWindowHovered())
+	{
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && !ImGuizmo::IsUsing() && App->input->GetKey(SDL_SCANCODE_LALT) != KEY_REPEAT)
+		{
+			origin.x = (ImGui::GetMousePos().x - viewPos.x) / viewSize.x;
+			origin.y = (ImGui::GetMousePos().y - viewPos.y) / viewSize.y;
+			origin.x = (origin.x - 0.5f) * 2;
+			origin.y = -((origin.y - 0.5f) * 2);
+
+			if (origin.x >= -1 && origin.x <= 1 && origin.y >= -1 && origin.y <= 1)
+			{
+				pickingRay = App->camera->MainCamera->frustum.UnProjectLineSegment(origin.x, origin.y + 0.05);//TODO: fix this, why the hell do i need an offset for this to work
+				App->camera->MousePick(pickingRay);
+			}
+		}
+
+		App->camera->CameraInput();
+
+	}
+
 		
 	ImGui::End();
 

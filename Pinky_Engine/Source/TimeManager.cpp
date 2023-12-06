@@ -15,7 +15,7 @@ void TimeManager::Update()
 
 	if (state == PlayState::PLAY || state == PlayState::STEP) 
 	{
-		gameTime = gameTimer->ReadeSecScale(timeScale);
+		gameTime = gameTimer->ReadSecScale(timeScale);
 	}
 }
 
@@ -23,14 +23,14 @@ void TimeManager::Play()
 {
 	switch (state)
 	{
-	case TimeManager::PlayState::NONE:
+	case TimeManager::PlayState::EDITOR:
 		//TODO: serializar escena
 		state = PlayState::PLAY;
 		gameTime = 0.0f;
 		gameTimer->Start();
 		break;
 	case TimeManager::PlayState::PLAY:
-		state = PlayState::NONE;
+		state = PlayState::EDITOR;
 		gameTime = 0.0F;
 		//TODO: cargar escena serializada
 		break;
@@ -49,7 +49,7 @@ void TimeManager::Pause()
 {
 	switch (state)
 	{
-	case TimeManager::PlayState::NONE:
+	case TimeManager::PlayState::EDITOR:
 		break;
 	case TimeManager::PlayState::PLAY:
 		state = PlayState::PAUSE;
@@ -71,7 +71,7 @@ void TimeManager::Step()
 {
 	switch (state)
 	{
-	case TimeManager::PlayState::NONE:
+	case TimeManager::PlayState::EDITOR:
 		break;
 	case TimeManager::PlayState::PLAY:
 		state = PlayState::STEP;
@@ -90,7 +90,7 @@ void TimeManager::Step()
 void TimeManager::Stop()
 {
 	gameTime = 0.0f;
-	state = PlayState::NONE;
+	state = PlayState::EDITOR;
 }
 
 void TimeManager::SetScale(float scale)
@@ -110,7 +110,7 @@ float TimeManager::GetRealTime()
 
 bool TimeManager::IsOnPlay()
 {
-	return state != PlayState::NONE;
+	return state != PlayState::EDITOR;
 }
 
 bool TimeManager::IsOnStep()

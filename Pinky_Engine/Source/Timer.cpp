@@ -62,7 +62,7 @@ float Timer::ReadSec()
 	}
 }
 
-float Timer::ReadeSecScale(float scale)
+float Timer::ReadSecScale(float scale)
 {
 	float realTime = float((SDL_GetTicks() - started_at - timeStep) / 1000.0f);
 	float time = realTime - currentTime;

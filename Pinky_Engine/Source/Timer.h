@@ -17,7 +17,7 @@ public:
 
 	Uint32 Read();
 	float ReadSec();
-	float ReadeSecScale(float scale);//read time with scale factor
+	float ReadSecScale(float scale);//read time with scale factor
 
 
 private:

@@ -193,10 +193,9 @@ bool ModuleCamera3D::CheckTriangleIntersection()
 				uint index1 = meshInter->mesh->index[i] * 3;
 				uint index2 = meshInter->mesh->index[i + 1] * 3;
 				uint index3 = meshInter->mesh->index[i + 2] * 3;
-
-				float3 vec1(meshInter->mesh->vertex[index1]);
-				float3 vec2(meshInter->mesh->vertex[index2]);
-				float3 vec3(meshInter->mesh->vertex[index3]);
+				float3 vec1(meshInter->mesh->vertex[index1], meshInter->mesh->vertex[index1 + 1], meshInter->mesh->vertex[index1 + 2]);
+				float3 vec2(meshInter->mesh->vertex[index2], meshInter->mesh->vertex[index2 + 1], meshInter->mesh->vertex[index2 + 2]);
+				float3 vec3(meshInter->mesh->vertex[index3], meshInter->mesh->vertex[index3 + 1], meshInter->mesh->vertex[index3 + 2]);
 
 				Triangle tri(vec1, vec2, vec3);
 
@@ -217,7 +216,7 @@ bool ModuleCamera3D::CheckTriangleIntersection()
 void ModuleCamera3D::DebugRaycast()
 {
 	glColor3f(0.f, 1.f, 0.f);
-	glLineWidth(5.f);
+	glLineWidth(5.0f);
 	glBegin(GL_LINES);
 	glVertex3fv(&App->editor->pickingRay.a.x);
 	glVertex3fv(&App->editor->pickingRay.b.x);

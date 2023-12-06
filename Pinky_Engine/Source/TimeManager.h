@@ -5,7 +5,7 @@
 namespace TimeManager
 {
 	enum class PlayState {
-		NONE,
+		EDITOR,//out of play mode
 		PLAY,
 		PAUSE,
 		STEP
@@ -24,7 +24,7 @@ namespace TimeManager
 	bool IsOnStep();
 	void CleanUp();
 
-	static PlayState state = PlayState::NONE;
+	static PlayState state = PlayState::EDITOR;
 	static float realTime = 0.0f;
 	static float gameTime = 0.0f;
 	static float timeScale = 1.0f;

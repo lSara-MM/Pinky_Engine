@@ -32,8 +32,9 @@ public:
 	//Handle all camera input, used in editor (isHovered)
 	void CameraInput();
 	LineSegment localrayCam;
-private:
 	C_Camera* MainCamera;//TODO: eliminat = nullptr
+
+private:
 	float mouseX, mouseY, speed, zoomPos;
 	float3 Reference = { 0, 0, 0 };
 
