@@ -28,7 +28,9 @@ public:
 	~ProjectFiles();
 
 	void ShowWindow();
+	void ShowDir(std::string directory);
 	void ShowDirectories(std::string directory);
+	void ManageFiles(std::string directory);
 
 	bool TreeNode(std::string currentDir, ImGuiTreeNodeFlags node_flags, bool finalDir);
 	void DirsMouseEvents(std::string current, std::vector<std::string> files);
@@ -39,6 +41,7 @@ public:
 	std::string selectedDir;
 	std::vector<std::string> vSelectedDirFiles;
 
+	std::string selectedFileFullPath;
 	std::string selectedFile;
 };
 

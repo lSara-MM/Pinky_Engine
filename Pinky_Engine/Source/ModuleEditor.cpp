@@ -27,7 +27,7 @@
 
 #include "ModuleScene.h"
 #include "GameObject.h"
-#include "ImGuiProjectFiles.h"
+#include "ImGuiResourcesWindows.h"
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
 {

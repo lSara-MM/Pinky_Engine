@@ -208,24 +208,19 @@ NodePath FileSystemManager::GetAllFiles(const char* directory, std::vector<std::
 	return root;
 }
 
-std::string FileSystemManager::GetRealDirFF(const char* path) const
+std::string FileSystemManager::GetPathRelativeToAssets(const char* originalPath) const
 {
 	std::string dir;
 	dir = PHYSFS_getBaseDir();
 
 	std::string baseDir = PHYSFS_getBaseDir();
 	std::string searchPath = *PHYSFS_getSearchPath();
-	std::string realDir = PHYSFS_getRealDir(path);
+	std::string realDir = PHYSFS_getRealDir(originalPath);
 
 	dir.append(*PHYSFS_getSearchPath()).append("/");
-	dir.append(PHYSFS_getRealDir(path)).append("/").append(path);
+	dir.append(PHYSFS_getRealDir(originalPath)).append("/").append(originalPath);
 
 	return dir;
-}
-
-std::string FileSystemManager::GetPathRelativeToAssets(const char* originalPath) const
-{
-	return GetRealDirFF(originalPath);
 }
 
 

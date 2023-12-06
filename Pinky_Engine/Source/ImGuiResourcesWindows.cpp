@@ -20,7 +20,7 @@
 #include "External Libraries/ImGui/misc/cpp/imgui_stdlib.h"
 //
 #include "External Libraries/ImGui/imgui_custom.h"
-#include "ImGuiProjectFiles.h"
+#include "ImGuiResourcesWindows.h"
 
 
 #ifdef _DEBUG
@@ -72,11 +72,11 @@ void Console::ShowWindow()
 			vLog.push_back("[WARNING] debug warning message");
 		}
 
-		ImGui::Dummy(ImVec2(size.x/4, 0));
+		ImGui::Dummy(ImVec2(size.x / 4, 0));
 		static ImGuiTextFilter filter;
 		filter.Draw("Search", ImGui::GetFontSize() * 15);
 		ImGui::EndMenuBar();
-		
+
 
 		//const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
 		ImGui::BeginChild("##output", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
@@ -103,7 +103,7 @@ void Console::ShowWindow()
 //---Project Files---
 ProjectFiles::ProjectFiles(int i) : ImGuiWindows(i)
 {
-	selectedDir = ".";
+	selectedDir = "Assets";
 }
 
 ProjectFiles::~ProjectFiles()
@@ -123,8 +123,7 @@ void ProjectFiles::ShowWindow()
 	ImGui::SetNextWindowSize(ImVec2(size.x - 15, 200), ImGuiCond_Appearing);
 	if (ImGui::Begin(title.c_str(), &show))
 	{
-		ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
-			| ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
+		ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 
 		ImGui::Columns(2, "Folders", true);
 
@@ -132,17 +131,25 @@ void ProjectFiles::ShowWindow()
 		ImGui::SetColumnWidth(0, 300);
 
 		ImGui::BeginChild("ProjectDirs");
-		ShowDirectories("Assets");
-		ShowDirectories("PinkyAssets");
+		ShowDir("Assets");
+		ShowDir("PinkyAssets");
 		ImGui::EndChild();
 
 		ImGui::NextColumn();
 
 		ImGui::BeginChild("ProjectFiles");
 		for (int i = 0; i < vSelectedDirFiles.size(); i++)
-		{
-			//ImGui::Text(vSelectedDirFiles[i].c_str());
-			ImGui::TreeNodeEx(vSelectedDirFiles[i].c_str(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen);
+		{			
+			if (selectedFile == vSelectedDirFiles[i])
+			{
+				node_flags |= ImGuiTreeNodeFlags_Selected;
+			}
+			else
+			{
+				node_flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+			}
+
+			ImGui::TreeNodeEx(vSelectedDirFiles[i].c_str(), node_flags);
 			FilesMouseEvents(vSelectedDirFiles[i], selectedDir + "/");
 		}
 		ImGui::EndChild();
@@ -152,7 +159,7 @@ void ProjectFiles::ShowWindow()
 	} ImGui::End();
 }
 
-void ProjectFiles::ShowDirectories(std::string directory)
+void ProjectFiles::ShowDir(std::string directory)
 {
 	std::vector<std::string> vDirs, vFiles;
 	std::vector<std::string> vChildrenDirs, vChildrenFiles;
@@ -161,42 +168,91 @@ void ProjectFiles::ShowDirectories(std::string directory)
 
 	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_None;
 
-	if (TreeNode(directory, node_flags, false))
+	if (TreeNode(directory, node_flags, vDirs.empty()))
 	{
-		DirsMouseEvents(directory, vFiles);
+		ShowDirectories(directory);
 
-		for (int i = 0; i < vDirs.size(); i++)
+		if (!vDirs.empty())
 		{
-			App->fs->DiscoverFiles((directory + "/" + vDirs[i]).c_str(), vChildrenFiles, vChildrenDirs);
+			ImGui::TreePop();
+		}
+	}
 
-			if (!vChildrenDirs.empty())
-			{
-				node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
-					| ImGuiTreeNodeFlags_SpanAvailWidth;
+	DirsMouseEvents(directory, vFiles);
+}
 
-				bool open = TreeNode(vDirs[i], node_flags, false);
-				DirsMouseEvents(vDirs[i], vChildrenFiles);
+void ProjectFiles::ShowDirectories(std::string directory)
+{
+	std::vector<std::string> vDirs, vFiles;
+	std::vector<std::string> vChildrenDirs, vChildrenFiles;
 
-				if (open)
-				{
-					ShowDirectories(directory + "/" + vDirs[i]);
-					ImGui::TreePop();
-				}
-			}
-			else
-			{
-				node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+	App->fs->DiscoverFiles(directory.c_str(), vFiles, vDirs);
+	
+	// Update info shown
+	if (vFiles.empty())
+	{
+		vSelectedDirFiles.clear();
+	}
 
-				TreeNode(vDirs[i], node_flags, true);
+	for (int i = 0; i < vFiles.size(); i++)
+	{
+		// Get full relative path
+		if (vFiles[i] == selectedFile)
+		{
+			selectedFileFullPath = selectedDir;
+		}
+		if (directory == selectedDir)
+		{
+			vSelectedDirFiles = vFiles;
+		}
+	}
 
-				DirsMouseEvents(vDirs[i], vChildrenFiles);
-			}
 
-			vChildrenFiles.clear();
-			vChildrenDirs.clear();
+	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_None;
+
+	for (int i = 0; i < vDirs.size(); i++)
+	{
+		App->fs->DiscoverFiles((directory + "/" + vDirs[i]).c_str(), vChildrenFiles, vChildrenDirs);
+		
+		// Update info shown
+		if (vDirs[i] == selectedDir)
+		{
+			vSelectedDirFiles = vChildrenFiles;
 		}
 
-		ImGui::TreePop();
+		// Get full relative path
+		for (int i = 0; i < vChildrenFiles.size(); i++)
+		{
+			if (vChildrenFiles[i] == selectedFile)
+			{
+				selectedFileFullPath = directory + "/" + selectedDir;
+			}
+		}
+
+		if (!vChildrenDirs.empty())
+		{
+			node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
+				| ImGuiTreeNodeFlags_SpanAvailWidth;
+
+			bool open = TreeNode(vDirs[i], node_flags, false);
+			DirsMouseEvents(vDirs[i], vChildrenFiles);
+
+			if (open)
+			{
+				ShowDirectories(directory + "/" + vDirs[i]);
+				ImGui::TreePop();
+			}
+		}
+		else
+		{
+			node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+
+			TreeNode(vDirs[i], node_flags, true);
+			DirsMouseEvents(vDirs[i], vChildrenFiles);
+		}
+
+		vChildrenFiles.clear();
+		vChildrenDirs.clear();
 	}
 }
 
@@ -256,6 +312,13 @@ void ProjectFiles::DirsMouseEvents(std::string current, std::vector<std::string>
 
 void ProjectFiles::FilesMouseEvents(std::string currentFile, std::string currentDir)
 {
+	// ---Click event---
+	if (ImGui::IsItemClicked())
+	{
+		selectedFile = currentFile;
+	}
+	// ------
+	// 
 	// ---RMB Click event---
 	if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
 	{
@@ -263,15 +326,15 @@ void ProjectFiles::FilesMouseEvents(std::string currentFile, std::string current
 		ImGui::Separator();
 		if (ImGui::MenuItem("Import to Scene"))
 		{
-			App->resource->ImportToScene(currentFile, currentDir);
+			App->resource->ImportToScene(currentFile, selectedFileFullPath + "/");
 		}
-		if (ImGui::MenuItem("Create File"))
+		if (ImGui::MenuItem("Create File (WIP)", NULL, false, false))	// TODO:
 		{
 
 		}
 		if (ImGui::MenuItem("Delete File"))
 		{
-
+			App->fs->Remove((selectedFileFullPath + "/" + currentFile).c_str());
 		}
 
 		selectedFile = currentFile;

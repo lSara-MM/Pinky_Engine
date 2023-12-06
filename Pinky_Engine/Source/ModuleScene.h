@@ -8,7 +8,7 @@
 #include "External Libraries/ImGui/backends/imgui_impl_opengl3.h"
 
 #include "ImGuiWindows.h"
-#include "ImGuiProjectFiles.h"
+#include "ImGuiResourcesWindows.h"
 
 class GameObject;
 

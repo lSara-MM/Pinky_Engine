@@ -424,7 +424,7 @@
     <ClInclude Include="Source\ModuleResource.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ImGuiProjectFiles.h">
+    <ClInclude Include="Source\ImGuiResourcesWindows.h">
       <Filter>Sources\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\External Libraries\ImGuizmo\ImCurveEdit.h">
@@ -672,7 +672,7 @@
     <ClCompile Include="Source\ModuleResource.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ImGuiProjectFiles.cpp">
+    <ClCompile Include="Source\ImGuiResourcesWindows.cpp">
       <Filter>Sources\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\External Libraries\ImGuizmo\ImCurveEdit.cpp">

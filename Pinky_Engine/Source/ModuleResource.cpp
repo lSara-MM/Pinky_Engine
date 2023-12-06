@@ -93,7 +93,7 @@ int ModuleResource::ImportToScene(std::string path, std::string dir)
 	GameObject* go = nullptr;
 	std::string::size_type i = 0;
 	std::string normFileName = App->fs->NormalizePath((dir + path).c_str());
-	
+
 	//const char* realPath = App->parson->GetRealDirFF((ASSETS_AUX + path).c_str());
 	if (App->fs->Exists((normFileName + ".meta").c_str()))
 	{
@@ -146,8 +146,10 @@ int ModuleResource::ImportToScene(std::string path, std::string dir)
 		// Creates "Assets/name.ext.meta"
 		App->parson->CreateResourceMetaFile(vResources, (normFileName + ".meta").c_str());
 	}
-	go = nullptr;
 
+	LOG("%s imported", normFileName);
+
+	go = nullptr;
 	return 0;
 }
 
