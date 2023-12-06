@@ -18,23 +18,23 @@ void Timer::Start()
 	started_at = SDL_GetTicks();
 	currentTime = 0;
 	lastTime = 0;
-	time_passed = 0;
-	offset = 0;
+	timeElapsed = 0;
+	timeStep = 0;
 }
 
 // ---------------------------------------------
 void Timer::Stop()
 {
-	time_passed = float((SDL_GetTicks() - started_at - offset) / 1000.0f);
+	timeElapsed = float((SDL_GetTicks() - started_at - timeStep) / 1000.0f);
 	running = false;
 	stopped_at = SDL_GetTicks();
 }
 
-void Timer::Resume()
+void Timer::Step()
 {
 	Uint32 time = SDL_GetTicks();
-	offset = time - stopped_at + offset;
-	running = false;
+	timeStep = time - stopped_at + timeStep;
+	running = true;
 }
 
 // ---------------------------------------------
@@ -52,19 +52,19 @@ Uint32 Timer::Read()
 
 float Timer::ReadSec()
 {
-	if (running == true)
+	if (running)
 	{
-		return float(SDL_GetTicks() - started_at) / 1000.0f;
+		return float(SDL_GetTicks() - started_at - timeStep) / 1000.0f;
 	}
 	else
 	{
-		return float(stopped_at - started_at) / 1000.0f;
+		return timeElapsed;
 	}
 }
 
 float Timer::ReadeSecScale(float scale)
 {
-	float realTime = float((SDL_GetTicks() - started_at) / 1000.0f);
+	float realTime = float((SDL_GetTicks() - started_at - timeStep) / 1000.0f);
 	float time = realTime - currentTime;
 
 	lastTime = lastTime + time * scale;

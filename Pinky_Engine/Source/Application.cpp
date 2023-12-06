@@ -90,16 +90,6 @@ void Application::PrepareUpdate()
 
 	dt = (float)ms_timer.Read() / 1000.0f;
 
-	//if (TimeManager::state == TimeManager::IsPlay)
-	//{
-	//	TimeManager::delta_time = dt;
-	//}
-
-	//else
-	//{
-	//	TimeManager::delta_time = 0;
-	//}
-
 	ms_timer.Start();
 }
 

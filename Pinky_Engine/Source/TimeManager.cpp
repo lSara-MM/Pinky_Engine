@@ -13,7 +13,8 @@ void TimeManager::Update()
 {
 	realTime = realTimer->ReadSec();
 
-	if (state == PlayState::PLAY || state == PlayState::STEP) {
+	if (state == PlayState::PLAY || state == PlayState::STEP) 
+	{
 		gameTime = gameTimer->ReadeSecScale(timeScale);
 	}
 }
@@ -34,7 +35,8 @@ void TimeManager::Play()
 		//TODO: cargar escena serializada
 		break;
 	case TimeManager::PlayState::PAUSE:
-		gameTimer->Resume();
+		state = PlayState::PLAY;
+		gameTimer->Step();
 		break;
 	case TimeManager::PlayState::STEP:
 		break;
@@ -75,6 +77,7 @@ void TimeManager::Step()
 		state = PlayState::STEP;
 		break;
 	case TimeManager::PlayState::PAUSE:
+		gameTimer->Step();
 		state = PlayState::STEP;
 		break;
 	case TimeManager::PlayState::STEP:
@@ -108,6 +111,11 @@ float TimeManager::GetRealTime()
 bool TimeManager::IsOnPlay()
 {
 	return state != PlayState::NONE;
+}
+
+bool TimeManager::IsOnStep()
+{
+	return state == PlayState::STEP;
 }
 
 void TimeManager::CleanUp()

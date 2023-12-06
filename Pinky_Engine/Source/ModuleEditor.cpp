@@ -2,7 +2,6 @@
 #include "Application.h"
 #include "ModuleEditor.h"
 #include "ModuleWindow.h"
-#include "TimeManager.h"
 #include "External Libraries/SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -103,6 +102,7 @@ bool ModuleEditor::Init()
 	aboutWin = false;
 
 	changeTimeState = false;
+	currentTimeState = TimeManager::PlayState::NONE;
 
 	//Guizmos
 	transformOperation = ImGuizmo::OPERATION::TRANSLATE;
@@ -135,13 +135,13 @@ update_status ModuleEditor::PostUpdate(float dt)
 	ret = Toolbar();
 
 	//Time
-	if (TimeManager::state == TimeManager::PlayState::STEP) 
+	if (TimeManager::IsOnStep())
 	{
 		TimeManager::Pause();
 	}
 		
 	if (changeTimeState) {
-		switch (TimeManager::state)
+		switch (currentTimeState)
 		{
 		case TimeManager::PlayState::NONE:
 			TimeManager::Stop();
@@ -1070,7 +1070,7 @@ void ModuleEditor::TimeButtons()
 	if (ImGui::Button("PLAY"))//posar imatge play igual
 	{
 		changeTimeState = true;
-		TimeManager::state = TimeManager::PlayState::PLAY;
+		currentTimeState = TimeManager::PlayState::PLAY;
 	}
 	ImGui::PopStyleColor();
 
@@ -1088,7 +1088,7 @@ void ModuleEditor::TimeButtons()
 	if (ImGui::Button("STOP") && TimeManager::IsOnPlay())//posar imatge pause igual
 	{
 		changeTimeState = true;
-		TimeManager::state = TimeManager::PlayState::PAUSE;
+		currentTimeState = TimeManager::PlayState::PAUSE;
 	}
 	ImGui::PopStyleColor();
 
@@ -1107,14 +1107,12 @@ void ModuleEditor::TimeButtons()
 	if (ImGui::Button("STEP") && TimeManager::IsOnPlay())//posar imatge step igual
 	{
 		changeTimeState = true;
-		TimeManager::state = TimeManager::PlayState::STEP;
+		currentTimeState = TimeManager::PlayState::STEP;
 	}
 	ImGui::PopStyleColor();
 
-	// Vertical Separator
 	ImGui::SameLine();
 	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 7);
-	ImGui::Text("|");
 	ImGui::SameLine();
 
 	static float scale = 1.0f;
@@ -1123,13 +1121,9 @@ void ModuleEditor::TimeButtons()
 		TimeManager::SetScale(scale);
 	}
 	ImGui::SameLine();
-	if (ImGui::Button("Reset Time"))
-	{
-		TimeManager::SetScale(1.0f);
-		scale = 1.0f;
-	}
+
 	ImGui::SameLine();
-	ImGui::Text("Seconds Since Game Start: %.2f", TimeManager::GetRealTime());
+	ImGui::Text("Real time: %.2f", TimeManager::GetRealTime());
 	ImGui::SameLine();
 	ImGui::Text("Play Time: %.2f", TimeManager::GetGameTime());
 	ImGui::End();

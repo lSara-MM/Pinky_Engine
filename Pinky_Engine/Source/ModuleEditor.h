@@ -12,6 +12,7 @@
 #include "External Libraries/MathGeoLib/include/Math/float4x4.h"
 
 #include "ImGuiWindows.h"
+#include "TimeManager.h"
 
 class ModuleEditor : public Module
 {
@@ -115,4 +116,6 @@ private:
 
 	//Time
 	bool changeTimeState;
+	TimeManager::PlayState currentTimeState;
+
 };

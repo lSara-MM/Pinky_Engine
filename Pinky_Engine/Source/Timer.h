@@ -13,7 +13,7 @@ public:
 
 	void Start();
 	void Stop();
-	void Resume();
+	void Step();
 
 	Uint32 Read();
 	float ReadSec();
@@ -25,8 +25,8 @@ private:
 	bool running;
 	Uint32	started_at;
 	Uint32	stopped_at;
-	Uint32	time_passed;
-	Uint32	offset;
+	Uint32	timeElapsed;
+	Uint32	timeStep;
 	float currentTime;
 	float lastTime;
 };
