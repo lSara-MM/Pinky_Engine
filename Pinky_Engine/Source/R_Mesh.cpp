@@ -1,5 +1,6 @@
 #include "R_Mesh.h"
 #include "GameObject.h"
+#include "ModuleResource.h"
 
 R_Mesh::R_Mesh() : Resource(R_TYPE::MESH)
 {
@@ -26,12 +27,29 @@ R_Mesh::R_Mesh() : Resource(R_TYPE::MESH)
 
 R_Mesh::~R_Mesh()
 {
-	RELEASE_ARRAY(index);
-	RELEASE_ARRAY(vertex);
-	RELEASE_ARRAY(normals);
-	RELEASE_ARRAY(tex_uvs);
+	//if (!App->resource->AddResource(this, false))
+	{
+		RELEASE_ARRAY(index);
+		RELEASE_ARRAY(vertex);
+		RELEASE_ARRAY(normals);
+		RELEASE_ARRAY(tex_uvs);
 
-	DeleteBuffers();
+		DeleteBuffers();
+	}
+}
+
+void R_Mesh::CleanUp()
+{
+	App->resource->AddResource(this, false);
+	/*if (!App->resource->AddResource(this, false))
+	{
+		RELEASE_ARRAY(index);
+		RELEASE_ARRAY(vertex);
+		RELEASE_ARRAY(normals);
+		RELEASE_ARRAY(tex_uvs);
+
+		DeleteBuffers();
+	}*/
 }
 
 bool R_Mesh::InitBuffers()

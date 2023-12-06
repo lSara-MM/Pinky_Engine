@@ -76,8 +76,6 @@ GameObject* ModuleResource::ImportFileToEngine(const char* fileDir)
 
 void ModuleResource::ImportVModel(const char* meshPath, std::vector<const char*> texPaths)
 {
-	Get_Set_FilePath(meshPath);
-
 	ImportFileToEngine(meshPath);
 	ImportFileToEngine(texPaths[0]);
 }
@@ -97,6 +95,11 @@ int ModuleResource::ImportToScene(std::string path, std::string dir)
 	//const char* realPath = App->parson->GetRealDirFF((ASSETS_AUX + path).c_str());
 	if (App->fs->Exists((normFileName + ".meta").c_str()))
 	{
+		if (true)
+		{
+
+		}
+
 		switch (CheckExtensionType(path.c_str()))
 		{
 		case R_TYPE::MESH:
@@ -309,7 +312,7 @@ Resource* ModuleResource::LoadFromLibrary(std::string path, R_TYPE type)
 		{
 		case R_TYPE::MESH:
 			r = new R_Mesh();
-
+			
 			if (i != r->GetUID()) { r->SetUID(i); }
 
 			I_Mesh::Load(static_cast<R_Mesh*>(r), buffer);
@@ -376,7 +379,22 @@ void ModuleResource::LoadChildrenMeshes(GameObject* go, uint size)
 {
 	if (go->mesh != nullptr)
 	{
-		go->mesh->mesh = static_cast<R_Mesh*>(LoadFromLibrary(go->mesh->mesh->libraryFile + MESHES_EXT, R_TYPE::MESH));
+		std::string filePath, fileName, fileExt;
+		App->fs->SplitFilePath((go->mesh->mesh->libraryFile + MESHES_EXT).c_str(), &filePath, &fileName, &fileExt);
+
+		u32 i = std::stoi(fileName.c_str());
+
+		auto itr = mResources.find(i);
+		if (itr != mResources.end())
+		{
+			RELEASE(go->mesh->mesh);
+			go->mesh->mesh = static_cast<R_Mesh*>(itr->second);
+		}
+		else
+		{
+			go->mesh->mesh = static_cast<R_Mesh*>(LoadFromLibrary(go->mesh->mesh->libraryFile + MESHES_EXT, R_TYPE::MESH));
+		}
+
 		AddResource(go->mesh->mesh);
 	}
 
@@ -386,7 +404,7 @@ void ModuleResource::LoadChildrenMeshes(GameObject* go, uint size)
 	}
 }
 
-void ModuleResource::AddResource(Resource* r, bool i)
+bool ModuleResource::AddResource(Resource* r, bool i)
 {
 	// If i == true --> add, else substract resource
 	if (i)
@@ -400,8 +418,11 @@ void ModuleResource::AddResource(Resource* r, bool i)
 
 		if (r->count == 0)
 		{
+			mResources.erase(r->GetUID());
 			RELEASE(r);
+			return false;
 		}
 	}
 
+	return true;
 }

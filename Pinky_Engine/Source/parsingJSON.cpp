@@ -337,8 +337,6 @@ std::string ParsingJSON::GetLibraryPath(const char* path, R_TYPE type)
 	return std::string();
 }
 
-
-
 //---Custom functions---
 void ParsingJSON::json_object_dotset_array(float* num, int size, std::string name)
 {

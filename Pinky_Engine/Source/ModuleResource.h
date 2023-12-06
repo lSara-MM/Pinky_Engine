@@ -33,7 +33,8 @@ public:
 
 	void LoadChildrenMeshes(GameObject* go, uint size);
 
-	void AddResource(Resource* r, bool i = true);
+	// Return false if pending to delete
+	bool AddResource(Resource* r, bool i = true);
 
 public:
 	std::map <u32, Resource*> mResources;

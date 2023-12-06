@@ -21,6 +21,7 @@ bool I_Mesh::Import(const aiMesh* mesh, R_Mesh* ourMesh)
 			{
 				LOG("[WARNING], geometry face with != 3 indices!");
 				
+				// TODO: should it have delete?
 				mesh = nullptr;
 				ourMesh = nullptr;
 				return false;

@@ -30,6 +30,8 @@ public:
 	Resource(R_TYPE t);
 	virtual ~Resource();
 
+	virtual void CleanUp();
+
 	int GetUID();
 	void SetUID(u32 id);
 

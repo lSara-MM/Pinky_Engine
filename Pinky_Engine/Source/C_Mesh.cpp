@@ -61,9 +61,10 @@ C_Mesh::~C_Mesh()
 	//ai::DeleteSelectedMesh(mesh);
 	//mesh->~mesh();
 
-	RELEASE(mesh);
-	/*mesh->~R_Mesh();
-	mesh = nullptr;*/
+	//RELEASE(mesh);
+
+	mesh->CleanUp();
+	mesh = nullptr;
 }
 
 void C_Mesh::ShowInInspector()

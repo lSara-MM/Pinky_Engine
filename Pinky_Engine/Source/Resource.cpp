@@ -11,7 +11,10 @@ Resource::Resource(R_TYPE t) : type (t)
 
 Resource::~Resource()
 {
-	//App->resource->mResources->erase(uid);
+}
+
+void Resource::CleanUp()
+{
 }
 
 int Resource::GetUID() { return uid; }
