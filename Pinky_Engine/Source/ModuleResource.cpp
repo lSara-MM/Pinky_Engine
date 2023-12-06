@@ -67,8 +67,8 @@ GameObject* ModuleResource::ImportFileToEngine(const char* fileDir)
 		dir = ASSETS_AUX + tempName + "." + fileExt;
 	}
 
-	//App->fs->DuplicateFile(fileDir, App->scene->p->selectedDir.c_str(), finalPath);
-	App->fs->DuplicateFile(fileDir, ASSETS_AUX, finalPath);
+	App->fs->DuplicateFile(fileDir, App->scene->project->selectedDir.c_str(), finalPath);
+	//App->fs->DuplicateFile(fileDir, ASSETS_AUX, finalPath);
 
 	//App->parson->CreateFile(tempName, fileExt, fileDir);
 	return go;

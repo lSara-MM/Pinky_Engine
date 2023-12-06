@@ -48,7 +48,6 @@ void ParsingJSON::CreateResourceMetaFile(std::vector<Resource*> resources, const
 
 	std::string file_name = filePath + fileName + "." + fileExt;
 
-
 	root_value = json_value_init_object();
 	root_object = json_value_get_object(root_value);
 	char* serialized_string = NULL;

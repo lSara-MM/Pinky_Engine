@@ -257,7 +257,10 @@ std::string FileSystemManager::GetUniqueName(const char* path, const char* name)
 		// Iterate through all the files to find a matching name
 		for (uint f = 0; f < vFiles.size(); ++f)
 		{
-			if (finalName == vFiles[f])
+			std::string filePath, fileName, fileExt;
+			SplitFilePath(vFiles[f].c_str(), &filePath, &fileName, &fileExt);
+
+			if (finalName == fileName)
 			{
 				unique = false;
 				break;
@@ -448,10 +451,9 @@ bool FileSystemManager::DuplicateFile(const char* file, const char* dstFolder, s
 	std::string fileStr, extensionStr;
 	SplitFilePath(file, nullptr, &fileStr, &extensionStr);
 
-	relativePath = relativePath.append(dstFolder).append("/") + fileStr.append(".") + extensionStr;
-	std::string finalPath = std::string(*PHYSFS_getSearchPath()).append("/") + relativePath;
-
-	return DuplicateFile(file, finalPath.c_str());
+	std::string finalName = dstFolder;
+	std::string name = finalName + "/" + GetUniqueName(dstFolder, fileStr.c_str()) + "." + extensionStr;
+	return DuplicateFile(file, name.c_str());
 
 }
 

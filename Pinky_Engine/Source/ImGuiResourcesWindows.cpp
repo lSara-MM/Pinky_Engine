@@ -21,13 +21,7 @@
 //
 #include "External Libraries/ImGui/imgui_custom.h"
 #include "ImGuiResourcesWindows.h"
-
-
-#ifdef _DEBUG
-#pragma comment (lib, "Source/External Libraries/MathGeoLib/libx86/libDebug/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
-#else
-#pragma comment (lib, "Source/External Libraries/MathGeoLib/libx86/libRelease/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
-#endif // _DEBUG
+#include "ModuleResource.h"
 
 Console::Console(int i) : ImGuiWindows(i)
 {
@@ -360,26 +354,23 @@ void ResourcesManager::ShowWindow()
 	ImGui::SetNextWindowSize(ImVec2(500, 300), ImGuiCond_Appearing);
 	if (ImGui::Begin("Resources", &show))
 	{
-		ImGui::BeginChild("left pane", ImVec2(150, 300), true);
-		ImGui::TextWrapped("MIT LicenseCopyright\n(c) 2023\n");
-		ImGui::TextWrapped("Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to dealin the Software without restriction, including without limitation the rightsto use, copy, modify, merge, publish, distribute, sublicense, and/or sellcopies of the Software, and to permit persons to whom the Software isfurnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in allcopies or substantial portions of the Software.THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS ORIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THEAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHERLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THESOFTWARE.");
-		ImGui::EndChild();
 
-		ImGui::SameLine();
-
-		ImGui::BeginGroup();
-		ImGui::BeginChild("right pane", ImVec2(500 - 200, -ImGui::GetFrameHeightWithSpacing())); // Leave room for 1 line below us
-
-		if (ImGui::BeginTabBar("Pinky Engine"), ImGuiTabBarFlags_Reorderable | ImGuiTabBarFlags_TabListPopupButton)
+		if (ImGui::BeginTable("Resources", 3, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_Resizable | ImGuiTableFlags_BordersOuter
+			| ImGuiTableFlags_BordersV | ImGuiTableFlags_ContextMenuInBody | ImGuiTableFlags_NoHostExtendX))
 		{
-			if (ImGui::BeginTabItem("Pinky Engine"))
+			ImGui::TableSetupColumn("UID");
+			ImGui::TableSetupColumn("Name");
+			ImGui::TableSetupColumn(" ");
+			ImGui::TableHeadersRow();
+
+			for (int row = 0; row < App->resource->vResources.size(); row++)
 			{
-				ImGui::TextWrapped("3D Game engine done for the Game Engines subject in the CITM bachelor's degree in Video Game Design and Development");
-				ImGui::EndTabItem();
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				ImGui::TableSetColumnIndex(1);
+				ImGui::TableSetColumnIndex(2);
 			}
-			ImGui::EndTabBar();
+			ImGui::EndTable();
 		}
-		ImGui::EndChild();
-		ImGui::EndGroup();
 	} ImGui::End();
 }
