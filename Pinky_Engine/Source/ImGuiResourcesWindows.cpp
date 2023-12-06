@@ -354,7 +354,6 @@ void ResourcesManager::ShowWindow()
 	ImGui::SetNextWindowSize(ImVec2(500, 300), ImGuiCond_Appearing);
 	if (ImGui::Begin("Resources", &show))
 	{
-
 		if (ImGui::BeginTable("Resources", 3, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_Resizable | ImGuiTableFlags_BordersOuter
 			| ImGuiTableFlags_BordersV | ImGuiTableFlags_ContextMenuInBody | ImGuiTableFlags_NoHostExtendX))
 		{
@@ -363,14 +362,25 @@ void ResourcesManager::ShowWindow()
 			ImGui::TableSetupColumn(" ");
 			ImGui::TableHeadersRow();
 
-			for (int row = 0; row < App->resource->vResources.size(); row++)
+			std::map<u32, Resource*>::iterator it = App->resource->mResources.begin();
+			while (it != App->resource->mResources.end())
 			{
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
+				ImGui::Text("%d", it->first);
+
 				ImGui::TableSetColumnIndex(1);
+				ImGui::Text(it->second->name.c_str());
+
 				ImGui::TableSetColumnIndex(2);
-			}
+				if (ImGui::Button("Delete"))
+				{
+
+				}
+				++it;
+			}			
 			ImGui::EndTable();
 		}
+
 	} ImGui::End();
 }

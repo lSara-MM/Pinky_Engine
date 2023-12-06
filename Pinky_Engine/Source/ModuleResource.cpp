@@ -92,11 +92,6 @@ int ModuleResource::ImportToScene(std::string path, std::string dir)
 	//const char* realPath = App->parson->GetRealDirFF((ASSETS_AUX + path).c_str());
 	if (App->fs->Exists((normFileName + ".meta").c_str()))
 	{
-		if (true)
-		{
-
-		}
-
 		switch (CheckExtensionType(path.c_str()))
 		{
 		case R_TYPE::MESH:
@@ -145,6 +140,7 @@ int ModuleResource::ImportToScene(std::string path, std::string dir)
 
 		// Creates "Assets/name.ext.meta"
 		App->parson->CreateResourceMetaFile(vResources, (normFileName + ".meta").c_str());
+		ClearVec(vResources);
 	}
 
 	LOG("%s imported", normFileName);
