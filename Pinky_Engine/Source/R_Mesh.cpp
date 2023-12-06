@@ -83,6 +83,10 @@ bool R_Mesh::InitBuffers()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * num_tex_uvs * 2, tex_uvs, GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
+	//---Local AABB---
+	local_aabb.SetNegativeInfinity();
+	local_aabb.Enclose((float3*)vertex, num_vertex);
+
 	return true;
 }
 
