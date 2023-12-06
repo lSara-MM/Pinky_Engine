@@ -375,7 +375,7 @@ void ResourcesManager::ShowWindow()
 				ImGui::TableSetColumnIndex(2);
 				if (ImGui::Button("Delete"))
 				{
-
+					App->resource->vPendingToDelete.push_back(it->second);
 				}
 				++it;
 			}			

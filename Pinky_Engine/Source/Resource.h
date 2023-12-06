@@ -1,16 +1,7 @@
 #pragma once
 #include "Globals.h"
-#include "Light.h"
 
-#include "External Libraries/ImGui/imgui.h"
-#include "External Libraries/ImGui/backends/imgui_impl_sdl2.h"
-#include "External Libraries/ImGui/backends/imgui_impl_opengl3.h"
-
-#include "External Libraries/MathGeoLib/include/Math/float3x3.h"
-#include "External Libraries/MathGeoLib/include/Math/float4x4.h"
-#include "External Libraries/MathGeoLib/include/Math/Quat.h"
-
-#include "External Libraries/Assimp/Assimp.h"
+#include "Component.h"
 
 enum class R_TYPE
 {
@@ -28,7 +19,7 @@ class Resource
 {
 public:
 	Resource(R_TYPE t);
-	virtual ~Resource();
+	~Resource();
 
 	virtual void CleanUp();
 
@@ -45,6 +36,7 @@ public:
 	uint count;
 	R_TYPE type;
 
+	std::vector<Component*> vComponents;
 protected:
 	u32 uid;
 };

@@ -15,6 +15,7 @@ public:
 
 	bool Start();
 	update_status Update(float dt);
+	update_status PostUpdate(float dt);
 	bool CleanUp();
 
 	GameObject* ImportFileToEngine(const char* path);
@@ -38,6 +39,7 @@ public:
 
 public:
 	std::map <u32, Resource*> mResources;
+	std::vector<Resource*> vPendingToDelete;
 	std::vector<Resource*> vResources;
 private:
 	std::string metaPath; 

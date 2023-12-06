@@ -11,6 +11,7 @@ Resource::Resource(R_TYPE t) : type (t)
 
 Resource::~Resource()
 {
+	ClearVec(vComponents);
 }
 
 void Resource::CleanUp()

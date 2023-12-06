@@ -27,6 +27,8 @@
 C_Mesh::C_Mesh() : Component(C_TYPE::MESH, "Mesh")
 {
 	mesh = new R_Mesh();
+	mesh->vComponents.push_back(this);
+
 	showVertexNormals = false;
 	showFacesNormals = false;
 	showAABB = false;
@@ -36,6 +38,8 @@ C_Mesh::C_Mesh() : Component(C_TYPE::MESH, "Mesh")
 C_Mesh::C_Mesh(GameObject* g, R_Mesh* m, bool start_enabled) : Component(C_TYPE::MESH, g, start_enabled, "Mesh")
 {
 	(m == nullptr) ? mesh = new R_Mesh() : mesh = m;
+	mesh->vComponents.push_back(this);
+
 	showVertexNormals = false;
 	showFacesNormals = false;
 	showAABB = false;

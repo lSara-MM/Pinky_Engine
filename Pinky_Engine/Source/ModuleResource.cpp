@@ -34,6 +34,30 @@ update_status ModuleResource::Update(float dt)
 	return UPDATE_CONTINUE;
 }
 
+update_status ModuleResource::PostUpdate(float dt)
+{
+	for (auto it = vPendingToDelete.begin(); it != vPendingToDelete.end(); it++)
+	{
+		for (int i = 0; i < (*it)->vComponents.size(); i++)
+		{
+			(*it)->vComponents[i]->gameObject->RemoveComponent((*it)->vComponents[i]);
+		}
+		//RELEASE((*it));
+		/*for (int i = 0; i < (*it)->vComponents.size(); i++)
+		{
+			RELEASE((*it)->vComponents[i]);
+		}*/
+
+		/*for (auto comp = (*it)->vComponents.begin(); comp != (*it)->vComponents.end(); comp++)
+		{
+			RELEASE((*comp));
+		}*/
+	}
+
+	ClearVec(vPendingToDelete);
+	return UPDATE_CONTINUE;
+}
+
 // -----------------------------------------------------------------
 bool ModuleResource::CleanUp()
 {
@@ -54,7 +78,7 @@ GameObject* ModuleResource::ImportFileToEngine(const char* fileDir)
 
 	std::string filePath, fileName, fileExt, tempName, finalPath;
 	App->fs->SplitFilePath(fileDir, &filePath, &fileName, &fileExt);
-	
+
 	//std::string dir = ASSETS_AUX + fileName + "." + fileExt;
 	//tempName = fileName;
 	//int i = 0;
@@ -198,7 +222,7 @@ GameObject* ModuleResource::ImportFile(const char* fileDir, GameObject* goToLink
 				mat->tex->ImportTexture(fileDir);
 				std::string path = App->resource->SaveToLibrary(mat->tex);
 				mat->tex = static_cast<R_Texture*>(App->resource->LoadFromLibrary(path, R_TYPE::TEXTURE));
-			}			
+			}
 			break;
 		case R_TYPE::SCENE:
 			break;
@@ -263,7 +287,7 @@ std::string ModuleResource::SaveToLibrary(Resource* r)
 	{
 	case R_TYPE::MESH:
 		path = MESHES_PATH;
-		ext = MESHES_EXT;	
+		ext = MESHES_EXT;
 		size = I_Mesh::Save(static_cast<R_Mesh*>(r), &buffer);
 		break;
 	case R_TYPE::TEXTURE:
@@ -305,7 +329,7 @@ Resource* ModuleResource::LoadFromLibrary(std::string path, R_TYPE type)
 		{
 		case R_TYPE::MESH:
 			r = new R_Mesh();
-			
+
 			if (i != r->GetUID()) { r->SetUID(i); }
 
 			I_Mesh::Load(static_cast<R_Mesh*>(r), buffer);
@@ -326,7 +350,7 @@ Resource* ModuleResource::LoadFromLibrary(std::string path, R_TYPE type)
 		//RELEASE_ARRAY(buffer);
 	}
 	buffer = nullptr;
-	
+
 	return r;
 }
 
@@ -334,12 +358,12 @@ R_TYPE ModuleResource::CheckExtensionType(const char* fileDir)
 {
 	std::vector<std::string> obj_ext = { "fbx", "FBX", "obj", };
 	std::vector<std::string> tex_ext = { "png", "PNG", "jpg", "JPG", "dds", "DDS" };
-	
+
 	if (App->fs->HasExtension(fileDir, obj_ext))
 	{
 		return R_TYPE::MESH;
 	}
-	
+
 	if (App->fs->HasExtension(fileDir, tex_ext))
 	{
 		return R_TYPE::TEXTURE;
@@ -382,10 +406,12 @@ void ModuleResource::LoadChildrenMeshes(GameObject* go, uint size)
 		{
 			RELEASE(go->mesh->mesh);
 			go->mesh->mesh = static_cast<R_Mesh*>(itr->second);
+			go->mesh->mesh->vComponents.push_back(go->mesh);
 		}
 		else
 		{
 			go->mesh->mesh = static_cast<R_Mesh*>(LoadFromLibrary(go->mesh->mesh->libraryFile + MESHES_EXT, R_TYPE::MESH));
+			go->mesh->mesh->vComponents.push_back(go->mesh);
 		}
 
 		AddResource(go->mesh->mesh);
@@ -411,6 +437,10 @@ bool ModuleResource::AddResource(Resource* r, bool i)
 
 		if (r->count == 0)
 		{
+			/*for (int i = 0; i < r->vComponents.size(); i++)
+			{
+				r->vComponents[i]->gameObject->RemoveComponent(r->vComponents[i]);
+			}*/
 			mResources.erase(r->GetUID());
 			RELEASE(r);
 			return false;
