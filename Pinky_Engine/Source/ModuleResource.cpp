@@ -50,27 +50,24 @@ bool ModuleResource::CleanUp()
 /// <returns></returns>
 GameObject* ModuleResource::ImportFileToEngine(const char* fileDir)
 {
-	std::string filePath, fileName, fileExt, tempName, finalPath;
 	GameObject* go = nullptr;
 
+	std::string filePath, fileName, fileExt, tempName, finalPath;
 	App->fs->SplitFilePath(fileDir, &filePath, &fileName, &fileExt);
-	std::string dir = ASSETS_AUX + fileName + "." + fileExt;
-	tempName = fileName;
-
-	int i = 0;
-
-	// TODO: Change to current selected dir
-	while (App->fs->Exists(dir.c_str()))
-	{
-		tempName = fileName;
-		tempName += std::to_string(++i);
-		dir = ASSETS_AUX + tempName + "." + fileExt;
-	}
+	
+	//std::string dir = ASSETS_AUX + fileName + "." + fileExt;
+	//tempName = fileName;
+	//int i = 0;
+	//while (App->fs->Exists(dir.c_str()))
+	//{
+	//	tempName = fileName;
+	//	tempName += std::to_string(++i);
+	//	dir = ASSETS_AUX + tempName + "." + fileExt;
+	//}
+	//App->parson->CreateFile(tempName, fileExt, fileDir);
 
 	App->fs->DuplicateFile(fileDir, App->scene->project->selectedDir.c_str(), finalPath);
-	//App->fs->DuplicateFile(fileDir, ASSETS_AUX, finalPath);
 
-	//App->parson->CreateFile(tempName, fileExt, fileDir);
 	return go;
 }
 
