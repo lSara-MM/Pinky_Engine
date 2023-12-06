@@ -916,7 +916,6 @@ void ModuleEditor::EditorWindow()
 	ViewportPos = { viewPos.x,viewPos.y };
 	ViewportSize = { viewSize.x,viewSize.y };
 
-	//igual esto fuera o cambiar orden
 	App->renderer3D->editorCam->SetAspectRatio(ViewportSize.x, ViewportSize.y);
 	ImGui::Image((ImTextureID)App->renderer3D->editorCam->textureColourBuffer, ViewportSize, ImVec2(0, 1), ImVec2(1, 0));
 	
@@ -987,7 +986,6 @@ void ModuleEditor::EditorWindow()
 
 	}
 
-		
 	ImGui::End();
 
 	ImGui::PopStyleVar();

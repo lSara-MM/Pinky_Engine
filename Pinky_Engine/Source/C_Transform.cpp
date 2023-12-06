@@ -91,6 +91,7 @@ void C_Transform::SetLocalValues(float4x4 matrix)
 	eulerRot.x = RadToDeg(eulerRot.x);
 	eulerRot.y = RadToDeg(eulerRot.y);
 	eulerRot.z = RadToDeg(eulerRot.z);
+
 	dirty_ = true;
 }
 
