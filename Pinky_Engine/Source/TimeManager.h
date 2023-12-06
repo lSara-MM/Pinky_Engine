@@ -20,8 +20,10 @@ namespace TimeManager
 	void SetScale(float scale);
 	float GetGameTime();
 	float GetRealTime();
-	bool IsOnPlay();//Know if engine is in play mode
+	bool IsOnGame();//Know if engine is in play mode
 	bool IsOnStep();
+	bool IsOnPause();
+	bool IsOnPlay();
 	void CleanUp();
 
 	static PlayState state = PlayState::EDITOR;

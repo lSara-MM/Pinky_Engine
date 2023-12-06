@@ -1044,7 +1044,18 @@ void ModuleEditor::TimeButtons()
 	{
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.25, 0.25, 0.25, 1 });
 	}
-	if (ImGui::Button("PLAY"))//posar imatge play igual
+
+	string playButton;
+	if (TimeManager::IsOnPlay())
+	{
+		playButton = "STOP";
+	}
+	else
+	{
+		playButton = "PLAY";
+	}
+
+	if (ImGui::Button(playButton.c_str()))//posar imatge play igual
 	{
 		changeTimeState = true;
 		currentTimeState = TimeManager::PlayState::PLAY;
@@ -1061,8 +1072,8 @@ void ModuleEditor::TimeButtons()
 	{
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.25, 0.25, 0.25, 1 });
 	}
-
-	if (ImGui::Button("STOP") && TimeManager::IsOnPlay())//posar imatge pause igual
+	
+	if (ImGui::Button("PAUSE") && TimeManager::IsOnGame())//posar imatge pause igual
 	{
 		changeTimeState = true;
 		currentTimeState = TimeManager::PlayState::PAUSE;
@@ -1081,7 +1092,7 @@ void ModuleEditor::TimeButtons()
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.25, 0.25, 0.25, 1 });
 	}
 
-	if (ImGui::Button("STEP") && TimeManager::IsOnPlay())//posar imatge step igual
+	if (ImGui::Button("STEP") && TimeManager::IsOnGame())//posar imatge step igual
 	{
 		changeTimeState = true;
 		currentTimeState = TimeManager::PlayState::STEP;

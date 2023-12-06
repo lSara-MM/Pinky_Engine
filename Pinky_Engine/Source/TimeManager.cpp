@@ -108,7 +108,7 @@ float TimeManager::GetRealTime()
 	return realTime;
 }
 
-bool TimeManager::IsOnPlay()
+bool TimeManager::IsOnGame()
 {
 	return state != PlayState::EDITOR;
 }
@@ -117,6 +117,17 @@ bool TimeManager::IsOnStep()
 {
 	return state == PlayState::STEP;
 }
+
+bool TimeManager::IsOnPause()
+{
+	return state == PlayState::PAUSE;
+}
+
+bool TimeManager::IsOnPlay()
+{
+	return state == PlayState::PLAY;
+}
+
 
 void TimeManager::CleanUp()
 {
