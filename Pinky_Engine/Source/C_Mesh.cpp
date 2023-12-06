@@ -90,6 +90,25 @@ void C_Mesh::ShowInInspector()
 	{
 		if (!isActive) { ImGui::BeginDisabled(); }
  
+		if (ImGui::BeginCombo("Mesh", mesh->name.c_str()))
+		{
+			for (int i = 0; i < App->resource->vMeshesResources.size(); i++)
+			{
+				const bool is_selected = (App->resource->vMeshesResources[i] == mesh);
+				if (ImGui::Selectable(App->resource->vMeshesResources[i]->name.c_str(), is_selected))
+				{
+					gameObject->ChangeComponentResource(this->mesh, App->resource->vMeshesResources[i]);
+				}
+
+				// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+				if (is_selected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+			ImGui::EndCombo();
+		}
+
 		if (mesh != nullptr)
 		{
 			ImGui::Text("Vertices: %d", mesh->num_vertex);

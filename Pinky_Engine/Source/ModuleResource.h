@@ -40,7 +40,11 @@ public:
 public:
 	std::map <u32, Resource*> mResources;
 	std::vector<Resource*> vPendingToDelete;
-	std::vector<Resource*> vResources;
+	std::vector<Resource*> vResources;	// Temp vector
+
+
+	std::vector<Resource*> vMeshesResources;
+	std::vector<Resource*> vTexturesResources;
 private:
 	std::string metaPath; 
 	std::string normMetaPath;

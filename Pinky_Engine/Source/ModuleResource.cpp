@@ -307,7 +307,7 @@ std::string ModuleResource::SaveToLibrary(Resource* r)
 
 	App->fs->Save(path.c_str(), buffer, size);
 
-	RELEASE_ARRAY(buffer);	// TODO: peta jaja
+	//RELEASE_ARRAY(buffer);	// TODO: peta jaja
 	buffer = nullptr;
 	return path;
 }
@@ -407,11 +407,13 @@ void ModuleResource::LoadChildrenMeshes(GameObject* go, uint size)
 			RELEASE(go->mesh->mesh);
 			go->mesh->mesh = static_cast<R_Mesh*>(itr->second);
 			go->mesh->mesh->vComponents.push_back(go->mesh);
+			go->mesh->mesh->name = go->name;
 		}
 		else
 		{
 			go->mesh->mesh = static_cast<R_Mesh*>(LoadFromLibrary(go->mesh->mesh->libraryFile + MESHES_EXT, R_TYPE::MESH));
 			go->mesh->mesh->vComponents.push_back(go->mesh);
+			go->mesh->mesh->name = go->name;
 		}
 
 		AddResource(go->mesh->mesh);
@@ -430,6 +432,24 @@ bool ModuleResource::AddResource(Resource* r, bool i)
 	{
 		r->count++;
 		mResources.insert(std::pair<uint, Resource*>(r->GetUID(), r));
+
+		switch (r->GetType())
+		{
+		case R_TYPE::MESH:
+			vMeshesResources.push_back(r);
+			break;
+		case R_TYPE::TEXTURE:
+			vTexturesResources.push_back(r);
+			break;
+		case R_TYPE::PREFAB:
+			break;
+		case R_TYPE::SCENE:
+			break;
+		case R_TYPE::NONE:
+			break;
+		default:
+			break;
+		}
 	}
 	else
 	{
@@ -437,12 +457,31 @@ bool ModuleResource::AddResource(Resource* r, bool i)
 
 		if (r->count == 0)
 		{
+			R_TYPE t = r->GetType();
 			/*for (int i = 0; i < r->vComponents.size(); i++)
 			{
 				r->vComponents[i]->gameObject->RemoveComponent(r->vComponents[i]);
 			}*/
 			mResources.erase(r->GetUID());
 			RELEASE(r);
+
+			switch (t)
+			{
+			case R_TYPE::MESH:
+				vMeshesResources.shrink_to_fit();
+				break;
+			case R_TYPE::TEXTURE:
+				vTexturesResources.shrink_to_fit();
+				break;
+			case R_TYPE::PREFAB:
+				break;
+			case R_TYPE::SCENE:
+				break;
+			case R_TYPE::NONE:
+				break;
+			default:
+				break;
+			}
 			return false;
 		}
 	}

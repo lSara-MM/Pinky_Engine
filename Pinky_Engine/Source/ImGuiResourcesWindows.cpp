@@ -354,7 +354,7 @@ void ResourcesManager::ShowWindow()
 	ImGui::SetNextWindowSize(ImVec2(500, 300), ImGuiCond_Appearing);
 	if (ImGui::Begin("Resources", &show))
 	{
-		if (ImGui::BeginTable("Resources", 3, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_Resizable | ImGuiTableFlags_BordersOuter
+		if (ImGui::BeginTable("Resources", 4, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_Resizable | ImGuiTableFlags_BordersOuter
 			| ImGuiTableFlags_BordersV | ImGuiTableFlags_ContextMenuInBody | ImGuiTableFlags_NoHostExtendX))
 		{
 			ImGui::TableSetupColumn("UID");
@@ -373,6 +373,9 @@ void ResourcesManager::ShowWindow()
 				ImGui::Text(it->second->name.c_str());
 
 				ImGui::TableSetColumnIndex(2);
+				ImGui::Text(std::to_string(it->second->count).c_str());
+
+				ImGui::TableSetColumnIndex(3);
 				if (ImGui::Button("Delete"))
 				{
 					App->resource->vPendingToDelete.push_back(it->second);

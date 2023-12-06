@@ -30,6 +30,8 @@ public:
 
 	//---Components---
 	bool AddComponent(C_TYPE type, void* var = nullptr, ai::POLY_PRIMITIVE_TYPE poly = ai::POLY_PRIMITIVE_TYPE::SPHERE);
+
+	// Add existing component
 	bool AddComponent(Component* component);
 	void RemoveComponent(Component* component);
 
@@ -39,25 +41,29 @@ public:
 
 	Component* GetComponentByType(C_TYPE type);
 
+	//---Resources---
+	bool ChangeComponentResource(Resource* oldResource, Resource* newResource);
 
 	//---Parent/Child---
 	void ReParent(GameObject* newParent);
 	void AddChild(GameObject* go);
 	void DeleteChild(GameObject* go);
 	void RemoveChild(GameObject* go);
+
 	// Return nullptr if gameobject not found
 	GameObject* FindChild(u32 idToFind, GameObject* go = nullptr);
 
 public:
-	GameObject* pParent = nullptr;
+	GameObject* pParent;
 	std::vector<GameObject*> vChildren;
 	std::vector<Component*> vComponents;
 
 	std::string name;
 	bool isActive, isStatic;
-	C_Transform* transform = nullptr;//TODO: limpiar .h
-	C_Mesh* mesh = nullptr;
-	C_Camera* camera = nullptr;
+
+	C_Transform* transform;
+	C_Mesh* mesh;
+	C_Camera* camera;
 
 	bool selected;
 	bool hidden;

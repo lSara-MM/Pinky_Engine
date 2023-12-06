@@ -19,6 +19,7 @@ GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 	else
 	{
 		// If root node, id = 0
+		pParent = nullptr;
 		uid = 0;
 	}
 
@@ -31,8 +32,10 @@ GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 	selected = false;
 	hidden = false;
 
+	transform = nullptr;
 	AddComponent(C_TYPE::TRANSFORM);
-
+	mesh = nullptr;
+	camera = nullptr;
 	numMaterials = 0;
 
 	vChildren = {};
@@ -249,7 +252,7 @@ bool GameObject::AddComponent(C_TYPE type, void* var, ai::POLY_PRIMITIVE_TYPE po
 	return ret;
 }
 
-bool GameObject::AddComponent(Component* component)
+bool GameObject::AddComponent(Component* component)		// TODO: release el componente actual?
 {
 	component->gameObject = this;
 	switch (component->type)
@@ -352,6 +355,37 @@ Component* GameObject::GetComponentByType(C_TYPE type)
 	}
 
 	return nullptr;
+}
+
+bool GameObject::ChangeComponentResource(Resource* oldResource, Resource* newResource)
+{
+	if (oldResource->GetType() == newResource->GetType())
+	{
+		//App->resource->AddResource(oldResource, false);
+		//App->resource->AddResource(newResource, false);
+
+		switch (oldResource->GetType())
+		{
+		case R_TYPE::MESH:
+			mesh->mesh = static_cast<R_Mesh*>(newResource);
+			break;
+		case R_TYPE::TEXTURE:
+			break;
+		case R_TYPE::PREFAB:
+			break;
+		case R_TYPE::SCENE:
+			break;
+		case R_TYPE::NONE:
+			break;
+		default:
+			break;
+		}
+	}
+	else
+	{
+		return false;
+	}
+	return true;
 }
 
 //---Parents/Children---
