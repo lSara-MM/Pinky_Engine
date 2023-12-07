@@ -144,6 +144,7 @@ void C_Transform::UpdateGlobalMatrix()
 	else
 	{
 		globalMatrix = localMatrix;
+		UpdateBoundingBoxes();
 	}
 }
 
