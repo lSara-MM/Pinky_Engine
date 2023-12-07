@@ -137,7 +137,7 @@ void C_Transform::UpdateGlobalMatrix()
 {
 	UpdateLocalMatrix();
 
-	if (gameObject->pParent != nullptr)
+	if (gameObject->pParent != nullptr && gameObject->pParent->transform != nullptr)
 	{
 		float4x4 Global_parent = gameObject->pParent->transform->globalMatrix;
 		globalMatrix = Global_parent * localMatrix;//Your global matrix = your parent’s global matrix * your local Matrix
@@ -147,7 +147,7 @@ void C_Transform::UpdateGlobalMatrix()
 
 void C_Transform::UpdateLocalMatrix()
 {
-	localMatrix = float4x4::FromTRS(position, rotation, scale);
+	localMatrix = float4x4::FromTRS(position, rotation, scale);//TODO: antes se normalizaba here, por si hay que revertir
 	eulerRot = rotation.ToEulerXYZ();
 	eulerRot *= RADTODEG;
 }
@@ -163,31 +163,37 @@ void C_Transform::UpdateBoundingBoxes()
 	}
 }
 
-void C_Transform::UpdateGlobalValues(float4x4 matrix)
+void C_Transform::UpdateTransformGuizmo(float4x4 matrix)
 {
-	float3 pos, sc;
-	Quat rot;
-	matrix.Decompose(pos, rot, sc);
-
-	if (App->editor->transformOperation == ImGuizmo::OPERATION::SCALE) {
-		scale = sc;
-	}
-
-	else if (App->editor->transformOperation == ImGuizmo::OPERATION::ROTATE) {
-		rotation = rot.Normalized();
-		eulerRot = rotation.ToEulerXYZ();
-		eulerRot.x = RadToDeg(eulerRot.x);
-		eulerRot.y = RadToDeg(eulerRot.y);
-		eulerRot.z = RadToDeg(eulerRot.z);
-	}
-
-	else
-	{
-		position = pos;
-	}
-
 	globalMatrix = matrix;
-	localMatrix = gameObject->pParent->transform->globalMatrix.Inverted() * globalMatrix;
+	float4x4 parentGlobal = gameObject->pParent->transform->globalMatrix;
+	parentGlobal.Inverse();
+
+	localMatrix = parentGlobal * globalMatrix;
+	localMatrix.Decompose(position, rotation, scale);
+	eulerRot = rotation.ToEulerXYZ();
+	eulerRot *= RADTODEG;
+
+	//manera original
+	//float3 pos, sc;
+	//Quat rot;
+	//matrix.Decompose(pos, rot, sc);
+	//if (App->editor->transformOperation == ImGuizmo::OPERATION::SCALE) {
+	//	scale = sc;
+	//}
+	//else if (App->editor->transformOperation == ImGuizmo::OPERATION::ROTATE) {
+	//	rotation = rot.Normalized();
+	//	eulerRot = rotation.ToEulerXYZ();
+	//	eulerRot.x = RadToDeg(eulerRot.x);
+	//	eulerRot.y = RadToDeg(eulerRot.y);
+	//	eulerRot.z = RadToDeg(eulerRot.z);
+	//}
+	//else
+	//{
+	//	position = pos;
+	//}
+	//globalMatrix = matrix;
+	//localMatrix = gameObject->pParent->transform->globalMatrix.Inverted() * globalMatrix;
 
 	dirty_ = true;
 }

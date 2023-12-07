@@ -933,7 +933,7 @@ void ModuleEditor::EditorWindow()
 			ImGuizmo::SetRect(viewPos.x, viewPos.y, viewSize.x, viewSize.y);
 
 			//Selected go info
-			C_Transform* transform = (C_Transform*)selectedList[i]->transform;
+			C_Transform* transform = selectedList[i]->transform;
 			float4x4 objectMatrix = transform->globalMatrix.Transposed();
 
 			//Snap
@@ -960,7 +960,7 @@ void ModuleEditor::EditorWindow()
 			if (ImGuizmo::IsUsing() && ImGui::IsWindowHovered())
 			{
 				float4x4 matrix = objectMatrix.Transposed();
-				transform->UpdateGlobalValues(matrix);
+				selectedList[i]->transform->UpdateTransformGuizmo(matrix);
 			}
 		}
 	}
@@ -1100,15 +1100,14 @@ void ModuleEditor::TimeButtons()
 	ImGui::PopStyleColor();
 
 	ImGui::SameLine();
-	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 7);
-	ImGui::SameLine();
 
 	static float scale = 1.0f;
+	ImGui::Text("Play Speed");
+	ImGui::SameLine();
 	ImGui::PushItemWidth(75);
-	if (ImGui::SliderFloat("Play Speed", &scale, 0.1f, 10.0f, "%.2f")) {
+	if (ImGui::SliderFloat("##", &scale, 0.1f, 10.0f, "%.2f")) {
 		TimeManager::SetScale(scale);
 	}
-	ImGui::SameLine();
 
 	ImGui::SameLine();
 	ImGui::Text("Real time: %.2f", TimeManager::GetRealTime());

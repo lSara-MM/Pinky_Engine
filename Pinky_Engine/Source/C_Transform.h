@@ -34,7 +34,7 @@ public:
 	void UpdateLocalMatrix();
 	//update global AABB and OBB when updating transform
 	void UpdateBoundingBoxes();
-	void UpdateGlobalValues(float4x4 matrix);
+	void UpdateTransformGuizmo(float4x4 matrix);
 
 
 public:
