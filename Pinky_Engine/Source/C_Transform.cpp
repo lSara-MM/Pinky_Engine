@@ -138,14 +138,14 @@ void C_Transform::UpdateGlobalMatrix()
 	{
 		float4x4 Global_parent = gameObject->pParent->transform->globalMatrix;
 		globalMatrix = Global_parent * localMatrix;//Your global matrix = your parent’s global matrix * your local Matrix
-		UpdateBoundingBoxes();
 	}
 
 	else
 	{
 		globalMatrix = localMatrix;
-		UpdateBoundingBoxes();
 	}
+
+	UpdateBoundingBoxes();
 }
 
 void C_Transform::UpdateLocalMatrix()

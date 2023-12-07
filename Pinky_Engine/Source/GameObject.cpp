@@ -274,9 +274,13 @@ bool GameObject::AddComponent(Component* component)		// TODO: release el compone
 	case C_TYPE::TRANSFORM:
 		RemoveComponent(transform);
 		transform = (C_Transform*)component;
+		transform->eulerRot = transform->rotation.ToEulerXYZ();
+		transform->globalMatrix = math::float4x4::FromTRS(transform->position, transform->rotation, transform->scale);
+		transform->localMatrix = math::float4x4::identity;
 		vComponents.push_back(transform);
 		break;
 	case C_TYPE::MESH:
+		RemoveComponent(mesh);
 		mesh = (C_Mesh*)component;
 		vComponents.push_back(mesh);
 		break;
@@ -285,6 +289,7 @@ bool GameObject::AddComponent(Component* component)		// TODO: release el compone
 		numMaterials++;
 		break;
 	case C_TYPE::CAM:
+		RemoveComponent(camera);
 		camera = (C_Camera*)component;
 		vComponents.push_back(component);
 		break;
@@ -297,7 +302,7 @@ bool GameObject::AddComponent(Component* component)		// TODO: release el compone
 
 void GameObject::RemoveComponent(Component* component)
 {
-	if (!vComponents.empty())
+	if (!vComponents.empty() && component != nullptr)
 	{
 		vComponents.erase(std::find(vComponents.begin(), vComponents.end(), component));
 		component->~Component();
