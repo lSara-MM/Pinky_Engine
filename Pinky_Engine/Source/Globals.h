@@ -46,6 +46,7 @@ enum update_status
 #define MESHES_PATH LIBRARY_PATH "Meshes/"
 #define TEXTURES_PATH LIBRARY_PATH "Textures/"
 #define PREFABS_PATH LIBRARY_PATH "Prefabs/"
+#define SCENES_TEMP_PATH LIBRARY_PATH "Scenes_Temp/"
 
 // TODO: remove when not necessary
 #define ASSETS_AUX "Assets/"

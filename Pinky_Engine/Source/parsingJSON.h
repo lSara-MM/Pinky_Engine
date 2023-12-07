@@ -38,7 +38,7 @@ public:
 	std::string GetLibraryPath(const char* path, R_TYPE type);
 
 	//---Scene---
-	void SaveScene(std::string name);
+	void SaveScene(std::string name, std::string dir = ASSETS_AUX);
 	void LoadScene(std::string path);
 
 private:

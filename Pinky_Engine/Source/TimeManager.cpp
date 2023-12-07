@@ -1,6 +1,9 @@
 #include "TimeManager.h"
 #include "Application.h"
 
+#include "ModuleScene.h"
+#include "GameObject.h"
+
 void TimeManager::StartEngineTime()
 {
 	gameTimer = new Timer();
@@ -24,12 +27,15 @@ void TimeManager::Play()
 	switch (state)
 	{
 	case TimeManager::PlayState::EDITOR:
-		//TODO: serializar escena
+		App->parson->SaveScene("Scene_Temp", SCENES_TEMP_PATH);
+
 		state = PlayState::PLAY;
 		gameTime = 0.0f;
 		gameTimer->Start();
 		break;
 	case TimeManager::PlayState::PLAY:
+		App->parson->LoadScene(SCENES_TEMP_PATH "Scene_Temp" SCENE_EXT);
+
 		state = PlayState::EDITOR;
 		gameTime = 0.0F;
 		//TODO: cargar escena serializada

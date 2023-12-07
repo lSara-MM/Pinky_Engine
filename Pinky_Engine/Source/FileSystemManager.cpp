@@ -72,6 +72,7 @@ void FileSystemManager::CreateLibraryDirs()
 	CreateDir(MESHES_PATH);
 	CreateDir(TEXTURES_PATH);
 	CreateDir(PREFABS_PATH);
+	CreateDir(SCENES_TEMP_PATH);
 }
 
 bool FileSystemManager::AddPath(std::string path)

@@ -382,9 +382,9 @@ std::string ParsingJSON::GetLibraryPath(const char* path, R_TYPE type)
 }
 
 //---Scene---
-void ParsingJSON::SaveScene(std::string name)	// Could be optimized in a single function with prefab creator
+void ParsingJSON::SaveScene(std::string name, std::string dir)	// Could be optimized in a single function with prefab creator
 {
-	std::string file_name = /*SCENES_AUX +*/ ASSETS_AUX + name + SCENE_EXT;
+	std::string file_name = /*SCENES_AUX +*/ dir + name + SCENE_EXT;
 
 	/*if (!App->fs->Exists(SCENES_AUX))
 	{
@@ -441,6 +441,7 @@ void ParsingJSON::LoadScene(std::string path)
 		ClearVec(App->scene->rootNode->vChildren);
 		RELEASE(App->scene->rootNode);
 		App->scene->rootNode = go;
+		go->pParent = nullptr;
 
 		int vChildrensize = json_object_dotget_number(root_object, "Scene.Info.Children number");
 
