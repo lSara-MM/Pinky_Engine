@@ -960,7 +960,7 @@ void ModuleEditor::EditorWindow()
 			if (ImGuizmo::IsUsing() && ImGui::IsWindowHovered())
 			{
 				float4x4 matrix = objectMatrix.Transposed();
-				transform->UpdateGlobalTransform(matrix);
+				transform->UpdateGlobalValues(matrix);
 			}
 		}
 	}

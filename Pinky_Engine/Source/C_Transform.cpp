@@ -79,19 +79,14 @@ void C_Transform::SetScale(float3 vec)
 	dirty_ = true;
 }
 
-void C_Transform::SetLocalValues(float4x4 matrix)
+void C_Transform::ReparentTransform(float4x4 matrix)
 {
-	float3 pos, sc;
-	Quat rot;
-	matrix.Decompose(pos, rot, sc);
-	scale = sc;
-	position = pos;
-	rotation = rot.Normalized();
+	matrix.Inverse();
+	localMatrix = matrix * globalMatrix;
+	localMatrix.Decompose(position, rotation, scale);
 	eulerRot = rotation.ToEulerXYZ();
-	eulerRot.x = RadToDeg(eulerRot.x);
-	eulerRot.y = RadToDeg(eulerRot.y);
-	eulerRot.z = RadToDeg(eulerRot.z);
-
+	eulerRot *= RADTODEG;
+	globalMatrix = matrix * localMatrix;
 	dirty_ = true;
 }
 
@@ -126,7 +121,7 @@ Quat C_Transform::GetLocalRotation() const
 
 void C_Transform::UpdateTransformsChilds()
 {
-	gameObject->transform->UpdateGlobalMatrix();
+	UpdateGlobalMatrix();
 
 	if (!gameObject->vChildren.empty())
 	{
@@ -140,17 +135,21 @@ void C_Transform::UpdateTransformsChilds()
 
 void C_Transform::UpdateGlobalMatrix()
 {
-	rotation = Quat::FromEulerXYZ(eulerRot.x * DEGTORAD, eulerRot.y * DEGTORAD, eulerRot.z * DEGTORAD);
-	rotation.Normalize();
-
-	localMatrix = float4x4::FromTRS(position, rotation, scale);
+	UpdateLocalMatrix();
 
 	if (gameObject->pParent != nullptr)
 	{
-		float4x4 Global_parent = gameObject->pParent->transform->GetGlobalTransform();
+		float4x4 Global_parent = gameObject->pParent->transform->globalMatrix;
 		globalMatrix = Global_parent * localMatrix;//Your global matrix = your parent’s global matrix * your local Matrix
 		UpdateBoundingBoxes();
 	}
+}
+
+void C_Transform::UpdateLocalMatrix()
+{
+	localMatrix = float4x4::FromTRS(position, rotation, scale);
+	eulerRot = rotation.ToEulerXYZ();
+	eulerRot *= RADTODEG;
 }
 
 void C_Transform::UpdateBoundingBoxes()
@@ -164,7 +163,7 @@ void C_Transform::UpdateBoundingBoxes()
 	}
 }
 
-void C_Transform::UpdateGlobalTransform(float4x4 matrix)
+void C_Transform::UpdateGlobalValues(float4x4 matrix)
 {
 	float3 pos, sc;
 	Quat rot;
@@ -186,6 +185,9 @@ void C_Transform::UpdateGlobalTransform(float4x4 matrix)
 	{
 		position = pos;
 	}
+
+	globalMatrix = matrix;
+	localMatrix = gameObject->pParent->transform->globalMatrix.Inverted() * globalMatrix;
 
 	dirty_ = true;
 }

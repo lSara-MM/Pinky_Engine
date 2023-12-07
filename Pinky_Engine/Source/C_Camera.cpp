@@ -211,7 +211,7 @@ void C_Camera::SetAsMain(bool mainCam)
 		App->renderer3D->gameCam = nullptr;
 	}
 
-	App->renderer3D->editorCam->OnResize(App->window->width, App->window->height);//TODO: no entenc per qué fa falta
+	App->renderer3D->editorCam->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);//TODO: no entenc per qué fa falta
 }
 
 void C_Camera::OnResize(int width, int height)

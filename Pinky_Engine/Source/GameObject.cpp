@@ -132,9 +132,9 @@ update_status GameObject::Update(float dt)
 				{
 					camera->DrawDebug();
 					camera->UpdateCameraFrustum();
-					if (camera->isCullEnabled)
+					if (camera->isCullEnabled && App->renderer3D->gameCam == camera)
 					{
-						camera->FrustumCulling();
+						App->renderer3D->gameCam->FrustumCulling();
 					}
 				}
 			}
@@ -392,19 +392,18 @@ bool GameObject::ChangeComponentResource(Resource* oldResource, Resource* newRes
 void GameObject::ReParent(GameObject* newParent)
 {
 	pParent->RemoveChild(this);
-
 	pParent = newParent;
 	pParent->vChildren.push_back(this);
 
 	//Update transform values
 	if (pParent->transform != nullptr)
 	{
-		transform->SetLocalValues(pParent->transform->globalMatrix.Inverted() * transform->globalMatrix);
+		transform->ReparentTransform(pParent->transform->globalMatrix);
 	}
 
 	else
 	{
-		transform->SetLocalValues(transform->globalMatrix);
+		transform->ReparentTransform(transform->globalMatrix);
 	}
 
 }
