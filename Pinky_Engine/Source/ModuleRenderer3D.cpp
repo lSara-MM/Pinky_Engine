@@ -332,7 +332,7 @@ void ModuleRenderer3D::SetGameCamera(C_Camera* cam)
 {
 	if (cam != nullptr)
 	{
-		cam->OnResize(App->window->width, App->window->height);
+		cam->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
 		gameCam = cam;
 	}
 }
