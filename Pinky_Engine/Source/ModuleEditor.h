@@ -34,6 +34,10 @@ public:
 	void MemWindow();
 	void HardwareDetection(bool& infoOutputWin);
 
+	//
+	void SaveAs();
+	std::string PopUpWithTextInput(bool* winBool, std::string title = "Write Something", std::string defaultString = "Write Here");
+
 	//---Viewports---
 	void AboutWindow();
 	void EditorWindow();
@@ -82,6 +86,10 @@ private:
 
 	bool docking;
 
+	// Save as
+	bool saveAs;
+	
+	//------
 	bool moduleSettingsWin;
 	bool styleEditor;
 	bool infoOutputWin;

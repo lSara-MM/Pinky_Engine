@@ -13,6 +13,9 @@
 #include "External Libraries/ImGui/imgui.h"
 #include "External Libraries/ImGui/backends/imgui_impl_sdl2.h"
 #include "External Libraries/ImGui/backends/imgui_impl_opengl3.h"
+#include "External Libraries/ImGui/misc/cpp/imgui_stdlib.h"
+//
+
 #include "External Libraries/ImGuizmo/ImGuizmo.h"
 //
 #include "External Libraries/ImGui/imgui_custom.h"
@@ -78,6 +81,8 @@ bool ModuleEditor::Init()
 	styleEditor = false;
 	frcap = true;
 
+	saveAs = false;
+
 	//// OpenGL configuration
 	depthTest = true;
 	cullFace = true;
@@ -139,7 +144,7 @@ update_status ModuleEditor::PostUpdate(float dt)
 	{
 		TimeManager::Pause();
 	}
-		
+
 	if (changeTimeState) {
 		switch (currentTimeState)
 		{
@@ -301,8 +306,8 @@ update_status ModuleEditor::Toolbar()
 				ImGui::MenuItem("fish_hat.h");
 				ImGui::EndMenu();
 			}
-			if (ImGui::MenuItem("Save", "Ctrl+S")) {}
-			if (ImGui::MenuItem("Save As..")) {}
+			if (ImGui::MenuItem("Save", "Ctrl+S")) { App->parson->SaveScene(App->scene->rootNode->name); }
+			if (ImGui::MenuItem("Save As...")) { saveAs = true; }
 
 			ImGui::Separator();
 			if (ImGui::BeginMenu("Options"))
@@ -343,7 +348,9 @@ update_status ModuleEditor::Toolbar()
 
 			ImGui::EndMenu();
 		}
+		SaveAs();
 
+		//------
 		if (ImGui::BeginMenu("Edit"))
 		{
 			if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
@@ -355,6 +362,7 @@ update_status ModuleEditor::Toolbar()
 			ImGui::EndMenu();
 		}
 
+		//------
 		if (ImGui::BeginMenu("Game Object"))
 		{
 			if (ImGui::MenuItem("Create Empty")) { new GameObject("Empty"); }
@@ -381,6 +389,7 @@ update_status ModuleEditor::Toolbar()
 			ImGui::EndMenu();
 		}
 
+		//------
 		if (ImGui::BeginMenu("Window"))
 		{
 			if (ImGui::MenuItem("Hierarchy"))
@@ -424,6 +433,7 @@ update_status ModuleEditor::Toolbar()
 			ImGui::EndMenu();
 		}
 
+		//------
 		if (ImGui::BeginMenu("Help"))
 		{
 			if (ImGui::MenuItem("Module Settings")) { moduleSettingsWin = true; }
@@ -432,11 +442,10 @@ update_status ModuleEditor::Toolbar()
 			if (ImGui::MenuItem("About")) { aboutWin = true; }
 			ImGui::EndMenu();
 		}
-
 		AboutWindow();
 
+		//------
 		ImGui::Checkbox("Wireframe", &App->renderer3D->wireframe);
-
 		ImGui::Checkbox("Raycast", &raycast);
 
 		ImGui::EndMainMenuBar();
@@ -807,6 +816,67 @@ void ModuleEditor::HardwareDetection(bool& infoOutputWin)
 	}
 }
 
+void ModuleEditor::SaveAs()
+{
+	if (saveAs)
+	{
+		ImGui::OpenPopup("Save As");
+	}
+
+	//PopUpWithTextInput(&saveAs, "Save As");
+
+	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+	if (ImGui::BeginPopupModal("Save As", &saveAs, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		ImGui::Text("Scene will be saved in %s as '%s'", ASSETS_AUX, SCENE_EXT);	// TODO: Change maybe in another folder?
+		ImGui::Separator();
+
+		static std::string sceneName_saveAS = App->scene->rootNode->name.c_str();
+		ImGui::InputText("File Name", &sceneName_saveAS);
+
+		if (ImGui::Button("OK", ImVec2(120, 0)))
+		{
+			App->parson->SaveScene(sceneName_saveAS);
+			saveAs = false;
+			sceneName_saveAS = App->scene->rootNode->name.c_str();
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SetItemDefaultFocus();
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel", ImVec2(120, 0)))
+		{
+			saveAs = false;
+			sceneName_saveAS = App->scene->rootNode->name.c_str();
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+}
+
+std::string  ModuleEditor::PopUpWithTextInput(bool* winBool, std::string title, std::string defaultString)
+{
+	/*if (ImGui::BeginPopupModal(title.c_str(), winBool, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		ImGui::Text("All those beautiful files will be deleted.\nThis operation cannot be undone!");
+		ImGui::Separator();
+
+		if (ImGui::Button("OK", ImVec2(120, 0)))
+		{
+			ImGui::CloseCurrentPopup(); return "a";
+		}
+		ImGui::SetItemDefaultFocus();
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel", ImVec2(120, 0)))
+		{
+			ImGui::CloseCurrentPopup(); return "";
+		}
+		ImGui::EndPopup();
+	}*/
+
+	return "";
+}
+
 void ModuleEditor::AboutWindow()
 {
 	if (aboutWin)
@@ -918,7 +988,7 @@ void ModuleEditor::EditorWindow()
 
 	App->renderer3D->editorCam->SetAspectRatio(ViewportSize.x, ViewportSize.y);
 	ImGui::Image((ImTextureID)App->renderer3D->editorCam->textureColourBuffer, ViewportSize, ImVec2(0, 1), ImVec2(1, 0));
-	
+
 	//Guizmos
 	std::vector<GameObject*> selectedList;
 	selectedList = App->scene->hierarchy->GetSelectedGOs();
@@ -938,7 +1008,7 @@ void ModuleEditor::EditorWindow()
 
 			//Snap
 			if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
-			{			
+			{
 				snapValue = 1.0f; // Snap to 1.0m for translation/scale
 				if (transformOperation == ImGuizmo::OPERATION::ROTATE)
 				{
@@ -946,15 +1016,15 @@ void ModuleEditor::EditorWindow()
 					snapValue = 45.0f;
 				}
 			}
-			
+
 			else
 			{
 				snapValue = 0.0f;
 			}
-			
+
 			float snapValues[3] = { snapValue, snapValue, snapValue };
 
-			ImGuizmo::Manipulate(App->renderer3D->editorCam->GetViewMatrix(), App->renderer3D->editorCam->GetProjectionMatrix(), 
+			ImGuizmo::Manipulate(App->renderer3D->editorCam->GetViewMatrix(), App->renderer3D->editorCam->GetProjectionMatrix(),
 				transformOperation, ImGuizmo::MODE::LOCAL, objectMatrix.ptr(), nullptr, snapValues);
 
 			if (ImGuizmo::IsUsing() && ImGui::IsWindowHovered())
@@ -1068,11 +1138,11 @@ void ModuleEditor::TimeButtons()
 	{
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.5, 0.5, 1, 1 });
 	}
-	else 
+	else
 	{
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.25, 0.25, 0.25, 1 });
 	}
-	
+
 	if (ImGui::Button("PAUSE") && TimeManager::IsOnGame())//posar imatge pause igual
 	{
 		changeTimeState = true;

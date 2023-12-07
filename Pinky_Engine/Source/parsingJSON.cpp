@@ -3,6 +3,8 @@
 #include "Globals.h"
 #include "GameObject.h"
 
+#include "ModuleScene.h"
+
 ParsingJSON::ParsingJSON()
 {
 }
@@ -133,10 +135,18 @@ int ParsingJSON::GameObjectJSON(GameObject* go, std::string node_name, int count
 	counter++;
 	json_object_dotset_string(root_object, (node_name + ".Name").c_str(), go->name.c_str());
 	json_object_dotset_number(root_object, (node_name + ".UID").c_str(), go->GetUID());
-	json_object_dotset_number(root_object, (node_name + ".Parent UID").c_str(), go->pParent->GetUID());
+
+	if (go->pParent != nullptr)
+	{
+		json_object_dotset_number(root_object, (node_name + ".Parent UID").c_str(), go->pParent->GetUID());
+	}
+	else
+	{
+		json_object_dotset_number(root_object, (node_name + ".Parent UID").c_str(), -1);
+	}
+
 	json_object_dotset_boolean(root_object, (node_name + ".Active").c_str(), go->isActive);
 	json_object_dotset_boolean(root_object, (node_name + ".Static").c_str(), go->isStatic);
-	json_object_dotset_number(root_object, (node_name + ".Parent UID").c_str(), go->pParent->GetUID());
 	json_object_dotset_number(root_object, (node_name + ".Components num").c_str(), go->vComponents.size());
 
 	for (int i = 0; i < go->vComponents.size(); i++)
@@ -334,6 +344,39 @@ Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
 std::string ParsingJSON::GetLibraryPath(const char* path, R_TYPE type)
 {
 	return std::string();
+}
+
+void ParsingJSON::SaveScene(std::string name)
+{
+	std::string file_name = /*SCENES_AUX +*/ ASSETS_AUX + name + SCENE_EXT;
+
+	/*if (!App->fs->Exists(SCENES_AUX))
+	{
+		App->fs->CreateDir(SCENES_AUX);
+	}*/
+
+	root_value = json_value_init_object();
+	root_object = json_value_get_object(root_value);
+	char* serialized_string = NULL;
+
+	int resource_count = 0;
+
+	std::string node_name = "Scene.Info";
+	json_object_dotset_number(root_object, (node_name + ".Children number").c_str(), resource_count);
+	json_object_dotset_string(root_object, (node_name + ".Directory").c_str(), file_name.c_str());
+
+	resource_count = GameObjectInfo(App->scene->rootNode, node_name + ".Resources") - 1;
+
+	json_object_dotset_number(root_object, (node_name + ".Children number").c_str(), resource_count);
+
+	GameObjectJSON(App->scene->rootNode, "GameObject.Parent");
+
+	serialized_string = json_serialize_to_string_pretty(root_value);
+	puts(serialized_string);
+
+	json_serialize_to_file(root_value, file_name.c_str());
+	json_free_serialized_string(serialized_string);
+	json_value_free(root_value);
 }
 
 //---Custom functions---

@@ -50,10 +50,12 @@ enum update_status
 // TODO: remove when not necessary
 #define ASSETS_AUX "Assets/"
 #define PINKY_ASSETS_AUX "PinkyAssets/"
+#define SCENES_AUX "Assets/Scenes/"
 
 // Extensions
-#define MESHES_EXT ".pnk"
+#define MESHES_EXT ".duk"
 #define PREFABS_EXT ".pgo"
+#define SCENE_EXT ".pnk"
 
 // Deletes a buffer
 #define RELEASE( x )\

@@ -141,7 +141,7 @@ update_status GameObject::Update(float dt)
 
 			if (mesh != nullptr)
 			{
-				if (mesh->isActive && !isCulled)
+				if (mesh->isActive && !isCulled && mesh->mesh != nullptr)
 				{
 					if (!vMaterials.empty() && vMaterials[0]->isActive)//TODO: mirar materials bé
 					{

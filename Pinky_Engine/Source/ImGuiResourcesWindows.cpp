@@ -300,6 +300,7 @@ void ProjectFiles::DirsMouseEvents(std::string current, std::vector<std::string>
 		}
 
 		selectedDir = current;
+		vSelectedDirFiles = files;
 		ImGui::EndPopup();
 	}
 }

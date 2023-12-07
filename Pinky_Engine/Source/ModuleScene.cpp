@@ -39,7 +39,7 @@ bool ModuleScene::Init()
 	LOG("Creating scene");
 	bool ret = true;
 
-	rootNode = new GameObject("Root node", nullptr);
+	rootNode = new GameObject("Scene", nullptr);
 
 	// Windows
 	hierarchy = new Hierarchy(0);
