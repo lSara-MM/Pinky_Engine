@@ -130,8 +130,21 @@ int ModuleResource::ImportToScene(std::string path, std::string dir)
 		switch (CheckExtensionType(path.c_str()))
 		{
 		case R_TYPE::MESH:
-			go = App->parson->CreateGOfromMeta(PREFABS_PATH + App->fs->GetFileName(path.c_str()) + PREFABS_EXT);
-			LoadChildrenMeshes(go, go->vChildren.size());
+
+			if (App->parson->HasToReImport((normFileName + ".meta").c_str()))
+			{
+				go = ai::ImportMesh(normFileName.c_str());
+
+				// Creates "Assets/name.ext.meta"
+				App->parson->CreateResourceMetaFile(vResources, (normFileName + ".meta").c_str());
+				go->ReSetUID();
+			}
+			else
+			{
+				go = App->parson->CreateGOfromMeta(PREFABS_PATH + App->fs->GetFileName(path.c_str()) + PREFABS_EXT);
+				LoadChildrenMeshes(go, go->vChildren.size());
+			}
+
 			// get mesh uid and add to counter 
 			//go = App->parson->CreateGOfromMeta(normFileName);
 			break;

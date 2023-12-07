@@ -362,7 +362,7 @@ void ResourcesManager::ShowWindow()
 		{
 			ImGui::TableSetupColumn("UID");
 			ImGui::TableSetupColumn("Name");
-			ImGui::TableSetupColumn(" ");
+			ImGui::TableSetupColumn("Count");
 			ImGui::TableHeadersRow();
 
 			std::map<u32, Resource*>::iterator it = App->resource->mResources.begin();
