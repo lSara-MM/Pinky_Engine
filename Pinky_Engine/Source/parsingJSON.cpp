@@ -220,6 +220,10 @@ void ParsingJSON::ComponentsJSON(Component* comp, std::string node_name, int i)
 			std::to_string(static_cast<C_Material*>(comp)->tex->GetUID())).c_str());
 		break;
 	case C_TYPE::CAM:
+		// TODO: ANDREU --> write camera properties
+		json_object_dotset_number(root_object, (comp_name + ".Near Plane").c_str(), static_cast<C_Camera*>(comp)->);
+		json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), (TEXTURES_PATH +
+			std::to_string(static_cast<C_Material*>(comp)->tex->GetUID())).c_str());
 		break;
 	case C_TYPE::NONE:
 		break;
@@ -362,6 +366,9 @@ Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
 		break;
 	case C_TYPE::CAM:
 		comp = new C_Camera();
+
+		// TODO: ANDREU --> read camera properties
+
 		break;
 	case C_TYPE::NONE:
 		break;
@@ -375,6 +382,7 @@ Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
 	return comp;
 }
 
+// Check if it has to be reimported (file doesn't exist in library)
 bool ParsingJSON::HasToReImport(const char* path)
 {
 	root_value = json_parse_file(path);

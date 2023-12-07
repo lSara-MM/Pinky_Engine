@@ -33,6 +33,9 @@ public:
 	void FrustumCulling();
 	void GetObjectsToCull(GameObject* go, std::vector<GameObject*>& list_go);
 
+	// Getters
+	
+	 
 	//user settings
 	void SetFOV(float horizontalFOV);
 
@@ -63,7 +66,6 @@ public:
 	bool isCullEnabled = false;
 
 private:
-
 	float width = 0.0f;
 	float height = 0.0f;
 	float aspect_ratio = 0.0f;
