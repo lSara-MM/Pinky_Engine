@@ -24,6 +24,7 @@ ModuleResource::~ModuleResource()
 bool ModuleResource::Start()
 {
 	mResources = {};
+	pendingToLoadScene = false;
 
 	return true;
 }
@@ -34,27 +35,37 @@ update_status ModuleResource::Update(float dt)
 	return UPDATE_CONTINUE;
 }
 
-update_status ModuleResource::PostUpdate(float dt)
+update_status ModuleResource::FinishUpdate(float dt)
 {
-	for (auto it = vPendingToDelete.begin(); it != vPendingToDelete.end(); it++)
+	if (pendingToLoadScene)
 	{
-		for (int i = 0; i < (*it)->vComponents.size(); i++)
+		RELEASE(App->scene->rootNode);
+		App->parson->LoadScene(sceneFileName);
+		pendingToLoadScene = false;
+	}
+	else
+	{
+		for (auto it = vPendingToDelete.begin(); it != vPendingToDelete.end(); it++)
 		{
-			(*it)->vComponents[i]->gameObject->RemoveComponent((*it)->vComponents[i]);
-		}
-		//RELEASE((*it));
-		/*for (int i = 0; i < (*it)->vComponents.size(); i++)
-		{
-			RELEASE((*it)->vComponents[i]);
-		}*/
+			for (int i = 0; i < (*it)->vComponents.size(); i++)
+			{
+				(*it)->vComponents[i]->gameObject->RemoveComponent((*it)->vComponents[i]);
+			}
+			//RELEASE((*it));
+			/*for (int i = 0; i < (*it)->vComponents.size(); i++)
+			{
+				RELEASE((*it)->vComponents[i]);
+			}*/
 
-		/*for (auto comp = (*it)->vComponents.begin(); comp != (*it)->vComponents.end(); comp++)
-		{
-			RELEASE((*comp));
-		}*/
+			/*for (auto comp = (*it)->vComponents.begin(); comp != (*it)->vComponents.end(); comp++)
+			{
+				RELEASE((*comp));
+			}*/
+		}
+
+		ClearVec(vPendingToDelete);
 	}
 
-	ClearVec(vPendingToDelete);
 	return UPDATE_CONTINUE;
 }
 
@@ -128,6 +139,7 @@ int ModuleResource::ImportToScene(std::string path, std::string dir)
 			LoadFromLibrary((normFileName + ".meta"), R_TYPE::TEXTURE);
 			break;
 		case R_TYPE::SCENE:
+			// This will never happen as scenes don't create meta
 			break;
 		case R_TYPE::NONE:
 			break;
@@ -141,6 +153,9 @@ int ModuleResource::ImportToScene(std::string path, std::string dir)
 		{
 		case R_TYPE::MESH:
 			ai::ImportMesh(normFileName.c_str());
+
+			// Creates "Assets/name.ext.meta"
+			App->parson->CreateResourceMetaFile(vResources, (normFileName + ".meta").c_str());
 			break;
 		case R_TYPE::TEXTURE:
 			if (true)
@@ -152,9 +167,14 @@ int ModuleResource::ImportToScene(std::string path, std::string dir)
 				LoadFromLibrary(path.c_str(), R_TYPE::TEXTURE);
 
 				vResources.push_back(t);
+
+				// Creates "Assets/name.ext.meta"
+				App->parson->CreateResourceMetaFile(vResources, (normFileName + ".meta").c_str());
 			}
 			break;
 		case R_TYPE::SCENE:
+			pendingToLoadScene = true;
+			sceneFileName = normFileName;
 			break;
 		case R_TYPE::NONE:
 			break;
@@ -162,8 +182,6 @@ int ModuleResource::ImportToScene(std::string path, std::string dir)
 			break;
 		}
 
-		// Creates "Assets/name.ext.meta"
-		App->parson->CreateResourceMetaFile(vResources, (normFileName + ".meta").c_str());
 		ClearVec(vResources);
 	}
 
@@ -173,77 +191,12 @@ int ModuleResource::ImportToScene(std::string path, std::string dir)
 	return 0;
 }
 
-
-// TODO: DEPRECATED; NOT USED ANYMORE. KEEP ONLY FOR REFERENCE 
-GameObject* ModuleResource::ImportFile(const char* fileDir, GameObject* goToLink)
-{
-	std::string dir = fileDir;
-	GameObject* go = nullptr;
-
-	std::string normFileName = App->fs->NormalizePath((metaPath + ".meta.json").c_str());
-
-	if (App->fs->Exists(normFileName.c_str()))
-	{
-		switch (CheckExtensionType(fileDir))
-		{
-		case R_TYPE::MESH:
-
-			// get mesh uid and add to counter 
-
-
-
-			//go = App->parson->CreateGOfromMeta(normFileName);
-			//LoadChildrenMeshes(go, go->vChildren.size());
-			break;
-		case R_TYPE::TEXTURE:
-			//LoadFromLibrary(normFileName, R_TYPE::TEXTURE);
-			break;
-		case R_TYPE::SCENE:
-			break;
-		case R_TYPE::NONE:
-			break;
-		default:
-			break;
-		}
-
-		//LoadFromLibrary(R_TYPE::MESH);
-	}
-	else
-	{
-		switch (CheckExtensionType(fileDir))
-		{
-		case R_TYPE::MESH:
-			//go = ai::ImportMesh(fileDir);
-			break;
-		case R_TYPE::TEXTURE:
-			if (true)
-			{
-				C_Material* mat = static_cast<C_Material*>(goToLink->GetComponentByType(C_TYPE::MATERIAL));
-				mat->tex->ImportTexture(fileDir);
-				std::string path = App->resource->SaveToLibrary(mat->tex);
-				mat->tex = static_cast<R_Texture*>(App->resource->LoadFromLibrary(path, R_TYPE::TEXTURE));
-			}
-			break;
-		case R_TYPE::SCENE:
-			break;
-		case R_TYPE::NONE:
-			break;
-		default:
-			break;
-		}
-		//App->parson->CreateMeshMetaFile(go, fileDir);
-		//App->parson->CreateJSON(go, "Assets\\");
-		//App->parson->CreateJSON(go, fileDir);
-	}
-
-	return go;
-}
-
+//
 void ModuleResource::ImportModel(const char* meshPath, std::vector<const char*> texPaths)
 {
 	GameObject* go = nullptr;
 
-	Get_Set_FilePath(meshPath);
+	//Get_Set_FilePath(meshPath);
 
 	go = ImportFileToEngine(meshPath);
 
@@ -275,6 +228,7 @@ void ModuleResource::ImportModel(const char* meshPath, std::vector<const char*> 
 	//App->parson->CreateJSON(go, meshPath);
 	go = nullptr;
 }
+//
 
 std::string ModuleResource::SaveToLibrary(Resource* r)
 {
@@ -369,6 +323,10 @@ R_TYPE ModuleResource::CheckExtensionType(const char* fileDir)
 		return R_TYPE::TEXTURE;
 	}
 
+	if (App->fs->HasExtension(fileDir, "pnk"))
+	{
+		return R_TYPE::SCENE;
+	}
 	return R_TYPE::NONE;
 }
 
@@ -378,7 +336,7 @@ std::string ModuleResource::Get_Set_FilePath(const char* fileDir)
 	std::string filePath, fileName, fileExt;
 	App->fs->SplitFilePath(fileDir, &filePath, &fileName, &fileExt);
 
-	metaPath = ASSETS_AUX + fileName;
+	//metaPath = ASSETS_AUX + fileName;
 	/*if (dir.find("C:\\") != std::string::npos)
 	{
 		metaPath = ASSETS_AUX + fileName;
@@ -389,7 +347,7 @@ std::string ModuleResource::Get_Set_FilePath(const char* fileDir)
 	}
 	metaPath = filePath + fileName;*/
 
-	return metaPath;
+	return "metapath";
 }
 
 void ModuleResource::LoadChildrenMeshes(GameObject* go, uint size)

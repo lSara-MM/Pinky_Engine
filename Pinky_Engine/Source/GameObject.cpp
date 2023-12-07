@@ -11,16 +11,19 @@
 // If parent == nullptr --> its the root node
 GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 {
+	transform = nullptr;
+
 	if (parent != nullptr)
 	{
 		parent->AddChild(this);
 		uid = App->randomLCG->Int();
+		AddComponent(C_TYPE::TRANSFORM);
 	}
 	else
 	{
-		// If root node, id = 0
+		// If root node, id = 1
 		pParent = nullptr;
-		uid = 0;
+		uid = 1;
 	}
 
 	name = n;
@@ -32,15 +35,12 @@ GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 	selected = false;
 	hidden = false;
 
-	transform = nullptr;
-	AddComponent(C_TYPE::TRANSFORM);
 	mesh = nullptr;
 	camera = nullptr;
 	numMaterials = 0;
 
 	vChildren = {};
 }
-
 
 // ---Copy Constructor---
 GameObject::GameObject(GameObject* go, int size, GameObject* parent)
@@ -283,27 +283,30 @@ bool GameObject::AddComponent(Component* component)		// TODO: release el compone
 
 void GameObject::RemoveComponent(Component* component)
 {
-	vComponents.erase(std::find(vComponents.begin(), vComponents.end(), component));
-	component->~Component();
-
-	switch (component->type)
+	if (!vComponents.empty())
 	{
-	case C_TYPE::TRANSFORM:
-		transform = nullptr;
-		break;
-	case C_TYPE::MESH:
-		mesh = nullptr;
-		break;
-	case C_TYPE::MATERIAL:
-		numMaterials--;
-		break;
-	case C_TYPE::CAM:
-		camera = nullptr;
-		break;
-	case C_TYPE::NONE:
-		break;
-	default:
-		break;
+		vComponents.erase(std::find(vComponents.begin(), vComponents.end(), component));
+		component->~Component();
+
+		switch (component->type)
+		{
+		case C_TYPE::TRANSFORM:
+			transform = nullptr;
+			break;
+		case C_TYPE::MESH:
+			mesh = nullptr;
+			break;
+		case C_TYPE::MATERIAL:
+			numMaterials--;
+			break;
+		case C_TYPE::CAM:
+			camera = nullptr;
+			break;
+		case C_TYPE::NONE:
+			break;
+		default:
+			break;
+		}
 	}
 }
 

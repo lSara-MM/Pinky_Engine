@@ -52,43 +52,53 @@ void ParsingJSON::CreateResourceMetaFile(std::vector<Resource*> resources, const
 
 	root_value = json_value_init_object();
 	root_object = json_value_get_object(root_value);
-	char* serialized_string = NULL;
 
-	int resource_count = 0;
-
-	std::string node_name = "GameObject.Info";
-	json_object_dotset_string(root_object, (node_name + ".Local Directory").c_str(), file_name.c_str());
-
-	json_object_dotset_number(root_object, (node_name + ".Children number").c_str(), resource_count);
-
-	switch (App->resource->CheckExtensionType(path))
+	if (root_value != nullptr)
 	{
-	case R_TYPE::MESH:
-		node_name += ".Mesh ";
-		break;
-	case R_TYPE::TEXTURE:
-		node_name += ".Texture ";
-		break;
-	case R_TYPE::SCENE:
-		break;
-	case R_TYPE::NONE:
-		break;
-	default:
-		break;
-	}
+		char* serialized_string = NULL;
 
-	for (int i = 0; i < resources.size(); i++)
+		int resource_count = 0;
+
+		std::string node_name = "GameObject.Info";
+		json_object_dotset_string(root_object, (node_name + ".Local Directory").c_str(), file_name.c_str());
+
+		json_object_dotset_number(root_object, (node_name + ".Children number").c_str(), resource_count);
+
+		switch (App->resource->CheckExtensionType(path))
+		{
+		case R_TYPE::MESH:
+			node_name += ".Mesh ";
+			break;
+		case R_TYPE::TEXTURE:
+			node_name += ".Texture ";
+			break;
+		case R_TYPE::SCENE:
+			break;
+		case R_TYPE::NONE:
+			break;
+		default:
+			break;
+		}
+
+		for (int i = 0; i < resources.size(); i++)
+		{
+			json_object_dotset_number(root_object, (node_name + std::to_string(i) + ".UID").c_str(), resources.at(i)->GetUID());
+			json_object_dotset_string(root_object, (node_name + std::to_string(i) + ".Library Path").c_str(), (MESHES_PATH +
+				std::to_string(resources.at(i)->GetUID())).c_str());
+		}
+
+		serialized_string = json_serialize_to_string_pretty(root_value);
+		puts(serialized_string);
+
+		json_serialize_to_file(root_value, file_name.c_str());
+		json_free_serialized_string(serialized_string);
+
+		LOG("Successfully created [%s]", path);
+	}
+	else
 	{
-		json_object_dotset_number(root_object, (node_name + std::to_string(i) + ".UID").c_str(), resources.at(i)->GetUID());
-		json_object_dotset_string(root_object, (node_name + std::to_string(i) + ".Library Path").c_str(), (MESHES_PATH +
-			std::to_string(resources.at(i)->GetUID())).c_str());
+		LOG("Could not create meta file of [%s]", path);
 	}
-
-	serialized_string = json_serialize_to_string_pretty(root_value);
-	puts(serialized_string);
-
-	json_serialize_to_file(root_value, file_name.c_str());
-	json_free_serialized_string(serialized_string);
 	json_value_free(root_value);
 }
 
@@ -110,27 +120,36 @@ void ParsingJSON::CreatePrefabFromGO(GameObject* go)
 	std::string file_name = PREFABS_PATH + go->name + ".pgo";	// Pinky Game Object
 	root_value = json_value_init_object();
 	root_object = json_value_get_object(root_value);
-	char* serialized_string = NULL;
+	if (root_value != nullptr)
+	{
+		char* serialized_string = NULL;
 
-	std::string node_name = "GameObject.Info";
-	json_object_dotset_number(root_object, (node_name + ".Children number").c_str(), resource_count);
-	json_object_dotset_string(root_object, (node_name + ".Local Directory").c_str(), file_name.c_str());
+		std::string node_name = "GameObject.Info";
+		json_object_dotset_number(root_object, (node_name + ".Children number").c_str(), resource_count);
+		json_object_dotset_string(root_object, (node_name + ".Local Directory").c_str(), file_name.c_str());
 
-	resource_count = GameObjectInfo(go, node_name + ".Resources") - 1;
+		resource_count = GameObjectInfo(go, node_name + ".Resources") - 1;
 
-	json_object_dotset_number(root_object, (node_name + ".Children number").c_str(), resource_count);
+		json_object_dotset_number(root_object, (node_name + ".Children number").c_str(), resource_count);
 
-	GameObjectJSON(go, "GameObject.Parent");
+		GameObjectJSON(go, "GameObject.Parent");
 
-	serialized_string = json_serialize_to_string_pretty(root_value);
-	puts(serialized_string);
+		serialized_string = json_serialize_to_string_pretty(root_value);
+		puts(serialized_string);
 
-	json_serialize_to_file(root_value, file_name.c_str());
-	json_free_serialized_string(serialized_string);
+		json_serialize_to_file(root_value, file_name.c_str());
+		json_free_serialized_string(serialized_string);
+
+		LOG("Successfully created [%s]", file_name);
+	}
+	else
+	{
+		LOG("Could not create meta file of [%s]", file_name);
+	}
 	json_value_free(root_value);
 }
 
-int ParsingJSON::GameObjectJSON(GameObject* go, std::string node_name, int counter)
+int ParsingJSON::GameObjectJSON(GameObject* go, std::string node_name, int counter, std::string subInfo)
 {
 	counter++;
 	json_object_dotset_string(root_object, (node_name + ".Name").c_str(), go->name.c_str());
@@ -142,7 +161,7 @@ int ParsingJSON::GameObjectJSON(GameObject* go, std::string node_name, int count
 	}
 	else
 	{
-		json_object_dotset_number(root_object, (node_name + ".Parent UID").c_str(), -1);
+		json_object_dotset_number(root_object, (node_name + ".Parent UID").c_str(), 0);
 	}
 
 	json_object_dotset_boolean(root_object, (node_name + ".Active").c_str(), go->isActive);
@@ -156,7 +175,7 @@ int ParsingJSON::GameObjectJSON(GameObject* go, std::string node_name, int count
 
 	for (int i = 0; i < go->vChildren.size(); i++)
 	{
-		counter = GameObjectJSON(go->vChildren[i], "GameObject.Child " + std::to_string(counter), counter);
+		counter = GameObjectJSON(go->vChildren[i], subInfo + ".Child " + std::to_string(counter), counter, subInfo);
 	}
 
 	return counter;
@@ -211,33 +230,44 @@ void ParsingJSON::ComponentsJSON(Component* comp, std::string node_name, int i)
 }
 
 //---Load from .meta---
-GameObject* ParsingJSON::CreateGOfromMeta(std::string path)
+GameObject* ParsingJSON::CreateGOfromMeta(std::string path, std::string subInfo)
 {
 	root_value = json_parse_file(path.c_str());
 	root_object = json_value_get_object(root_value);
 
 	GameObject* go, * temp;
-	std::vector<GameObject*> vTemp;
 
-	go = GOfromMeta("GameObject.Parent");
-	vTemp.push_back(go);
-
-	int vChildrensize = json_object_dotget_number(root_object, "GameObject.Info.Children number");
-
-	// Count starts with 1
-	for (int i = 0; i < vChildrensize; i++)
+	if (root_value != nullptr)
 	{
-		temp = GOfromMeta("GameObject.Child " + std::to_string(i + 1));
-		vTemp.push_back(temp);
+		std::vector<GameObject*> vTemp;
+
+		go = GOfromMeta(subInfo + ".Parent");
+		vTemp.push_back(go);
+
+		int vChildrensize = json_object_dotget_number(root_object, (subInfo + ".Info.Children number").c_str());
+
+		// Count starts with 1
+		for (int i = 0; i < vChildrensize; i++)
+		{
+			temp = GOfromMeta(subInfo + ".Child " + std::to_string(i + 1));
+			vTemp.push_back(temp);
+		}
+
+		for (auto it = vTemp.begin(); it != vTemp.end(); it++)
+		{
+			(*it)->SetUID(App->randomLCG->Int());
+			(*it) = nullptr;
+		}
+
+		ClearVec(vTemp);
+
+		LOG("Successfully created [%s]", path);
+	}
+	else
+	{
+		LOG("Could not create meta file of [%s]", path);
 	}
 
-	for (auto it = vTemp.begin(); it != vTemp.end(); it++)
-	{
-		(*it)->SetUID(App->randomLCG->Int());
-		(*it) = nullptr;
-	}
-
-	ClearVec(vTemp);
 	return go;
 }
 
@@ -249,21 +279,25 @@ GameObject* ParsingJSON::GOfromMeta(std::string node_name)
 	go->SetUID(id);
 	id = json_object_dotget_number(root_object, (node_name + ".Parent UID").c_str());
 
-	if (id != 0)
-	{
-		go->ReParent(App->scene->rootNode->FindChild(id));
-	}
-
 	go->isActive = json_object_dotget_boolean(root_object, (node_name + ".Active").c_str());
-	go->isStatic = json_object_dotget_boolean(root_object, (node_name + ".Static").c_str());
 
-	int comp_num = json_object_dotget_number(root_object, (node_name + ".Components num").c_str());
-
-	for (int i = 0; i < comp_num; i++)
+	if (id > 0)	// Root node has no parent nor components
 	{
-		Component* comp = ComponentsFromMeta(node_name, i);
-		go->AddComponent(comp);
-		comp = nullptr;
+		if (id > 1)	// If parent == root node --> don't reparent
+		{
+			go->ReParent(App->scene->rootNode->FindChild(id));
+		}
+
+		go->isStatic = json_object_dotget_boolean(root_object, (node_name + ".Static").c_str());
+
+		int comp_num = json_object_dotget_number(root_object, (node_name + ".Components num").c_str());
+
+		for (int i = 0; i < comp_num; i++)
+		{
+			Component* comp = ComponentsFromMeta(node_name, i);
+			go->AddComponent(comp);
+			comp = nullptr;
+		}
 	}
 
 	return go;
@@ -328,6 +362,7 @@ Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
 		static_cast<C_Material*>(comp)->tex->libraryFile = json_object_dotget_string(root_object, (comp_name + ".Library dir").c_str());
 		break;
 	case C_TYPE::CAM:
+		comp = new C_Camera();
 		break;
 	case C_TYPE::NONE:
 		break;
@@ -346,7 +381,8 @@ std::string ParsingJSON::GetLibraryPath(const char* path, R_TYPE type)
 	return std::string();
 }
 
-void ParsingJSON::SaveScene(std::string name)
+//---Scene---
+void ParsingJSON::SaveScene(std::string name)	// Could be optimized in a single function with prefab creator
 {
 	std::string file_name = /*SCENES_AUX +*/ ASSETS_AUX + name + SCENE_EXT;
 
@@ -357,26 +393,79 @@ void ParsingJSON::SaveScene(std::string name)
 
 	root_value = json_value_init_object();
 	root_object = json_value_get_object(root_value);
-	char* serialized_string = NULL;
+	if (root_value != nullptr)
+	{
+		char* serialized_string = NULL;
 
-	int resource_count = 0;
+		int resource_count = 0;
 
-	std::string node_name = "Scene.Info";
-	json_object_dotset_number(root_object, (node_name + ".Children number").c_str(), resource_count);
-	json_object_dotset_string(root_object, (node_name + ".Directory").c_str(), file_name.c_str());
+		std::string node_name = "Scene.Info";
+		json_object_dotset_number(root_object, (node_name + ".Children number").c_str(), resource_count);
+		json_object_dotset_string(root_object, (node_name + ".Local Directory").c_str(), file_name.c_str());
 
-	resource_count = GameObjectInfo(App->scene->rootNode, node_name + ".Resources") - 1;
+		resource_count = GameObjectInfo(App->scene->rootNode, node_name + ".Resources") - 1;
 
-	json_object_dotset_number(root_object, (node_name + ".Children number").c_str(), resource_count);
+		json_object_dotset_number(root_object, (node_name + ".Children number").c_str(), resource_count);
 
-	GameObjectJSON(App->scene->rootNode, "GameObject.Parent");
+		GameObjectJSON(App->scene->rootNode, "Scene.Parent", 0, "Scene");
 
-	serialized_string = json_serialize_to_string_pretty(root_value);
-	puts(serialized_string);
+		serialized_string = json_serialize_to_string_pretty(root_value);
+		puts(serialized_string);
 
-	json_serialize_to_file(root_value, file_name.c_str());
-	json_free_serialized_string(serialized_string);
+		json_serialize_to_file(root_value, file_name.c_str());
+		json_free_serialized_string(serialized_string);
+
+		LOG("Successfully created [%s]", file_name);
+	}
+	else
+	{
+		LOG("Could not create meta file of [%s]", file_name);
+	}
 	json_value_free(root_value);
+}
+
+void ParsingJSON::LoadScene(std::string path)
+{
+	root_value = json_parse_file(path.c_str());
+	root_object = json_value_get_object(root_value);
+
+	App->scene->rootNode = new GameObject("Scene", nullptr);
+
+	GameObject* go, *temp;
+	if (root_value != nullptr)
+	{
+		std::vector<GameObject*> vTemp;
+
+		go = GOfromMeta("Scene.Parent");
+		go->RemoveComponent(go->transform);
+		ClearVec(App->scene->rootNode->vChildren);
+		RELEASE(App->scene->rootNode);
+		App->scene->rootNode = go;
+
+		int vChildrensize = json_object_dotget_number(root_object, "Scene.Info.Children number");
+
+		// Count starts with 1
+		for (int i = 0; i < vChildrensize; i++)
+		{
+			temp = GOfromMeta("Scene.Child " + std::to_string(i + 1));
+			vTemp.push_back(temp);
+			temp = nullptr;
+		}
+
+		for (auto it = vTemp.begin(); it != vTemp.end(); it++)
+		{
+			(*it)->SetUID(App->randomLCG->Int());
+			(*it) = nullptr;
+		}
+
+		ClearVec(vTemp);
+
+		LOG("Successfully created [%s]", path);
+	}
+	else
+	{
+		LOG("Could not create meta file of [%s]", path);
+	}
 }
 
 //---Custom functions---

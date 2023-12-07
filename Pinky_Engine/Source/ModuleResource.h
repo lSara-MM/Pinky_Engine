@@ -15,7 +15,7 @@ public:
 
 	bool Start();
 	update_status Update(float dt);
-	update_status PostUpdate(float dt);
+	update_status FinishUpdate(float dt);
 	bool CleanUp();
 
 	GameObject* ImportFileToEngine(const char* path);
@@ -46,6 +46,9 @@ public:
 	std::vector<Resource*> vMeshesResources;
 	std::vector<Resource*> vTexturesResources;
 private:
-	std::string metaPath; 
+	bool pendingToLoadScene;
+	GameObject* temp;
+
+	std::string sceneFileName;
 	std::string normMetaPath;
 };

@@ -27,11 +27,11 @@ public:
 	//---Prefabs---
 	void CreatePrefabFromGO(GameObject* go);
 
-	int GameObjectJSON(GameObject* go, std::string node_name, int counter = 0);
+	int GameObjectJSON(GameObject* go, std::string node_name, int counter = 0, std::string subInfo = "GameObject");
 	int GameObjectInfo(GameObject* go, std::string node_name, int counter = 0);
 	void ComponentsJSON(Component* comp, std::string node_name, int i);
 
-	GameObject* CreateGOfromMeta(std::string path);
+	GameObject* CreateGOfromMeta(std::string path, std::string subInfo = "GameObject");
 	GameObject* GOfromMeta(std::string node_name);
 	Component* ComponentsFromMeta(std::string node_name, int i);
 
@@ -39,6 +39,7 @@ public:
 
 	//---Scene---
 	void SaveScene(std::string name);
+	void LoadScene(std::string path);
 
 private:
 	

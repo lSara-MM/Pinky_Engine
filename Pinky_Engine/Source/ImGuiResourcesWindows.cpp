@@ -296,7 +296,7 @@ void ProjectFiles::DirsMouseEvents(std::string current, std::vector<std::string>
 		}
 		if (ImGui::MenuItem("Delete Folder"))
 		{
-
+			//App->fs->Remove((selectedFileFullPath + "/" + current).c_str());
 		}
 
 		selectedDir = current;
@@ -319,6 +319,8 @@ void ProjectFiles::FilesMouseEvents(std::string currentFile, std::string current
 	{
 		ImGui::MenuItem(currentFile.c_str(), NULL, false, false);
 		ImGui::Separator();
+
+		//App->resource->CheckExtensionType(currentFile.c_str());
 		if (ImGui::MenuItem("Import to Scene"))
 		{
 			App->resource->ImportToScene(currentFile, selectedFileFullPath + "/");

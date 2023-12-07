@@ -120,6 +120,11 @@ update_status Application::Update()
 		ret = (*it)->PostUpdate(dt);
 	}
 
+	for (std::vector<Module*>::const_iterator it = list_modules.cbegin(); it != list_modules.cend() && ret == UPDATE_CONTINUE; ++it)
+	{
+		ret = (*it)->FinishUpdate(dt);
+	}
+
 	FinishUpdate();
 	return ret;
 }

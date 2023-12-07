@@ -41,6 +41,11 @@ public:
 		return UPDATE_CONTINUE;
 	}
 
+	virtual update_status FinishUpdate(float dt)
+	{
+		return UPDATE_CONTINUE;
+	}
+
 	virtual bool CleanUp() 
 	{ 
 		return true; 

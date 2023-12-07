@@ -10,6 +10,7 @@
 Component::Component(C_TYPE t, std::string n) : type(t), name(n)
 {
 	uid = App->randomLCG->Int();
+	gameObject = nullptr;
 }
 
 Component::Component(C_TYPE t, GameObject* g, bool start_enabled, std::string n) : type(t), gameObject(g), isActive(start_enabled), name(n)
