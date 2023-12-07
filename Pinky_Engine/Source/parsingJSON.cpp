@@ -221,7 +221,7 @@ void ParsingJSON::ComponentsJSON(Component* comp, std::string node_name, int i)
 		break;
 	case C_TYPE::CAM:
 		// TODO: ANDREU --> write camera properties
-		json_object_dotset_number(root_object, (comp_name + ".Near Plane").c_str(), static_cast<C_Camera*>(comp)->);
+		//json_object_dotset_number(root_object, (comp_name + ".Near Plane").c_str(), static_cast<C_Camera*>(comp)->);
 		json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), (TEXTURES_PATH +
 			std::to_string(static_cast<C_Material*>(comp)->tex->GetUID())).c_str());
 		break;

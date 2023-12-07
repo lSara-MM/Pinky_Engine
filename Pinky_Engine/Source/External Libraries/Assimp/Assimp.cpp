@@ -20,10 +20,10 @@
 void ai::EnableDebug()
 {
 	// Stream log messages to Debug window
-	/*struct aiLogStream stream;
+	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
-	LOG("Enable debug mode");*/
+	LOG("Enable debug mode");
 }
 
 void ai::DisableDebug()
