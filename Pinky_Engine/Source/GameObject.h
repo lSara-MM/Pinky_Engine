@@ -22,10 +22,12 @@ public:
 	GameObject(GameObject* go, int size, GameObject* parent);
 	~GameObject();
 
-
+	//
 	u32 GetUID();
 	void SetUID(u32 id);
+	void ReSetUID();
 
+	//
 	update_status Update(float dt);
 
 	//---Components---

@@ -152,10 +152,11 @@ int ModuleResource::ImportToScene(std::string path, std::string dir)
 		switch (CheckExtensionType(path.c_str()))
 		{
 		case R_TYPE::MESH:
-			ai::ImportMesh(normFileName.c_str());
+			go = ai::ImportMesh(normFileName.c_str());
 
 			// Creates "Assets/name.ext.meta"
 			App->parson->CreateResourceMetaFile(vResources, (normFileName + ".meta").c_str());
+			go->ReSetUID();
 			break;
 		case R_TYPE::TEXTURE:
 			if (true)
@@ -328,26 +329,6 @@ R_TYPE ModuleResource::CheckExtensionType(const char* fileDir)
 		return R_TYPE::SCENE;
 	}
 	return R_TYPE::NONE;
-}
-
-std::string ModuleResource::Get_Set_FilePath(const char* fileDir)
-{
-	string dir = fileDir;
-	std::string filePath, fileName, fileExt;
-	App->fs->SplitFilePath(fileDir, &filePath, &fileName, &fileExt);
-
-	//metaPath = ASSETS_AUX + fileName;
-	/*if (dir.find("C:\\") != std::string::npos)
-	{
-		metaPath = ASSETS_AUX + fileName;
-	}
-	else
-	{
-		metaPath = filePath + fileName;
-	}
-	metaPath = filePath + fileName;*/
-
-	return "metapath";
 }
 
 void ModuleResource::LoadChildrenMeshes(GameObject* go, uint size)

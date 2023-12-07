@@ -102,6 +102,20 @@ u32 GameObject::GetUID() { return uid; }
 
 void GameObject::SetUID(u32 id) { uid = id; }
 
+void GameObject::ReSetUID()
+{
+	for (int i = 0; i < vChildren.size(); i++)
+	{
+		if (!vChildren[i]->vChildren.empty())
+		{
+			vChildren[i]->ReSetUID();
+		}
+	}
+
+	SetUID(App->randomLCG->Int());
+}
+
+//
 update_status GameObject::Update(float dt)
 {
 	if (isActive)
@@ -121,7 +135,7 @@ update_status GameObject::Update(float dt)
 				transform->UpdateTransformsChilds();
 			}
 		}
-		
+
 		if (vComponents.size() > 1)
 		{
 			std::vector<C_Material*> vMaterials = GetComponentsMaterial();

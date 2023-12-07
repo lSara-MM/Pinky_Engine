@@ -30,7 +30,6 @@ public:
 	Resource* LoadFromLibrary(std::string path, R_TYPE type = R_TYPE::NONE);
 
 	R_TYPE CheckExtensionType(const char* fileDir);
-	std::string Get_Set_FilePath(const char* fileDir);
 
 	void LoadChildrenMeshes(GameObject* go, uint size);
 
