@@ -81,12 +81,9 @@ void C_Transform::SetScale(float3 vec)
 
 void C_Transform::ReparentTransform(float4x4 matrix)
 {
-	matrix.Inverse();
-	localMatrix = matrix * globalMatrix;
-	localMatrix.Decompose(position, rotation, scale);
+	matrix.Decompose(position, rotation, scale);
 	eulerRot = rotation.ToEulerXYZ();
 	eulerRot *= RADTODEG;
-	globalMatrix = matrix * localMatrix;
 	dirty_ = true;
 }
 
@@ -143,6 +140,11 @@ void C_Transform::UpdateGlobalMatrix()
 		globalMatrix = Global_parent * localMatrix;//Your global matrix = your parent’s global matrix * your local Matrix
 		UpdateBoundingBoxes();
 	}
+
+	else
+	{
+		globalMatrix = localMatrix;
+	}
 }
 
 void C_Transform::UpdateLocalMatrix()
@@ -166,10 +168,18 @@ void C_Transform::UpdateBoundingBoxes()
 void C_Transform::UpdateTransformGuizmo(float4x4 matrix)
 {
 	globalMatrix = matrix;
-	float4x4 parentGlobal = gameObject->pParent->transform->globalMatrix;
-	parentGlobal.Inverse();
+	if (gameObject->pParent->transform!=nullptr)
+	{
+		float4x4 parentGlobal = gameObject->pParent->transform->globalMatrix;
+		parentGlobal.Inverse();
 
-	localMatrix = parentGlobal * globalMatrix;
+		localMatrix = parentGlobal * globalMatrix;
+	}
+	else
+	{
+		localMatrix = globalMatrix;
+	}
+
 	localMatrix.Decompose(position, rotation, scale);
 	eulerRot = rotation.ToEulerXYZ();
 	eulerRot *= RADTODEG;

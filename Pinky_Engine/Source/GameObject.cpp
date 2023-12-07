@@ -401,7 +401,7 @@ void GameObject::ReParent(GameObject* newParent)
 	//Update transform values
 	if (pParent->transform != nullptr)
 	{
-		transform->ReparentTransform(pParent->transform->globalMatrix);
+		transform->ReparentTransform(pParent->transform->globalMatrix.Inverted() * transform->globalMatrix);
 	}
 
 	else
