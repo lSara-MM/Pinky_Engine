@@ -332,7 +332,7 @@ Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
 		RELEASE_ARRAY(f);
 
 		//---Rotation---
-		f = C_json_object_dotget_array(static_cast<C_Transform*>(comp)->position.Size, comp_name + ".Rotation");
+		f = C_json_object_dotget_array(4, comp_name + ".Rotation");
 
 		static_cast<C_Transform*>(comp)->rotation.x = f[0];
 		static_cast<C_Transform*>(comp)->rotation.y = f[1];
@@ -341,7 +341,7 @@ Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
 		RELEASE_ARRAY(f);
 
 		//---Scale---
-		f = C_json_object_dotget_array(static_cast<C_Transform*>(comp)->position.Size, comp_name + ".Scale");
+		f = C_json_object_dotget_array(static_cast<C_Transform*>(comp)->scale.Size, comp_name + ".Scale");
 
 		static_cast<C_Transform*>(comp)->scale.x = f[0];
 		static_cast<C_Transform*>(comp)->scale.y = f[1];
