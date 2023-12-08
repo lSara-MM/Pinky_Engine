@@ -160,8 +160,8 @@ bool ModuleRenderer3D::Init()
 	// Projection matrix for
 	editorCam->OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
 	C_Camera* Cam = (C_Camera*)App->scene->mainCamera->GetComponentByType(C_TYPE::CAM);
-	Cam->isMainCam = true;
-	Cam->SetAsMain(Cam->isMainCam);
+	Cam->isGameCam = true;
+	Cam->SetAsMain(Cam->isGameCam);
 
 	Grid.axis = true;
 	wireframe = false;

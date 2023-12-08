@@ -61,13 +61,9 @@ public:
 	GLuint RBO; //rendering buffer object
 	GLuint textureColourBuffer; //texture id 
 
-	bool isMainCam = false;
+	bool isGameCam = false;
 	//Editor settings
 	bool isCullEnabled = false;
-
-private:
-	float width = 0.0f;
-	float height = 0.0f;
 	float aspect_ratio = 0.0f;
 	float fov = 0.0f;
 };

@@ -10,9 +10,7 @@
 C_Camera::C_Camera(GameObject* g, bool start_enabled) : Component(C_TYPE::CAM, g, start_enabled, "Camera")
 {
 	//aspect ratio 16:9 
-	width = 16;
-	height = 9;
-	aspect_ratio = width / height; 
+	aspect_ratio = 16 / 9;
 	fov = 60; 
 
 	//frustum settings
@@ -29,18 +27,17 @@ C_Camera::C_Camera(GameObject* g, bool start_enabled) : Component(C_TYPE::CAM, g
 	FBO = 0;
 	RBO = 0;
 	textureColourBuffer = 0;
-	isMainCam = false;
+	isGameCam = false;
 	isCullEnabled = false;
 }
 
 C_Camera::~C_Camera()
 {
 	DeleteBuffers();
-	if (isMainCam)
+	if (isGameCam)
 	{
 		App->renderer3D->SetGameCamera(nullptr);
 	}
-	
 }
 
 void C_Camera::ShowInInspector()
@@ -82,9 +79,9 @@ void C_Camera::ShowInInspector()
 			SetFOV(fov);
 		}
 
-		if (ImGui::Checkbox("Main Camera", &isMainCam))
+		if (ImGui::Checkbox("Game Camera", &isGameCam))
 		{	
-			SetAsMain(isMainCam);
+			SetAsMain(isGameCam);
 		}
 
 		if (ImGui::Checkbox("Frustum Culling", &isCullEnabled))
@@ -201,7 +198,7 @@ void C_Camera::SetAsMain(bool mainCam)
 	{
 		if (App->renderer3D->gameCam != nullptr)
 		{
-			App->renderer3D->gameCam->isMainCam = false;
+			App->renderer3D->gameCam->isGameCam = false;
 		}
 
 		App->renderer3D->SetGameCamera(this);

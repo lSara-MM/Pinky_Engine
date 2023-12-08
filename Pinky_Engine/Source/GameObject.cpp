@@ -291,7 +291,17 @@ bool GameObject::AddComponent(Component* component)		// TODO: release el compone
 	case C_TYPE::CAM:
 		RemoveComponent(camera);
 		camera = (C_Camera*)component;
-		vComponents.push_back(component);
+		camera->aspect_ratio = 16 / 9;
+		camera->frustum.type = PerspectiveFrustum;
+		//camera->frustum.front = float3::unitZ;
+		//camera->frustum.up = float3::unitY;
+		camera->SetFOV(camera->fov);
+		//camera->FBO = 0;//TODO: revisar si fan falta reiniciar aquests valors
+		//camera->RBO = 0;
+		//camera->textureColourBuffer = 0;
+		camera->SetAsMain(camera->isGameCam);
+		camera->RestartCulling();
+		vComponents.push_back(camera);
 		break;
 	default:
 		break;

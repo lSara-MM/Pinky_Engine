@@ -220,10 +220,13 @@ void ParsingJSON::ComponentsJSON(Component* comp, std::string node_name, int i)
 			std::to_string(static_cast<C_Material*>(comp)->tex->GetUID())).c_str());
 		break;
 	case C_TYPE::CAM:
-		// TODO: ANDREU --> write camera properties
-		//json_object_dotset_number(root_object, (comp_name + ".Near Plane").c_str(), static_cast<C_Camera*>(comp)->);
+		json_object_dotset_number(root_object, (comp_name + ".Near Plane").c_str(), static_cast<C_Camera*>(comp)->frustum.nearPlaneDistance);
+		json_object_dotset_number(root_object, (comp_name + ".Far Plane").c_str(), static_cast<C_Camera*>(comp)->frustum.farPlaneDistance);
+		json_object_dotset_number(root_object, (comp_name + ".FOV").c_str(), static_cast<C_Camera*>(comp)->fov);
+		json_object_dotset_boolean(root_object, (comp_name + ".Game Camera").c_str(), static_cast<C_Camera*>(comp)->isGameCam);
+		json_object_dotset_boolean(root_object, (comp_name + ".Culling").c_str(), static_cast<C_Camera*>(comp)->isCullEnabled);
 		json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), (TEXTURES_PATH +
-			std::to_string(static_cast<C_Material*>(comp)->tex->GetUID())).c_str());
+			std::to_string(static_cast<C_Camera*>(comp)->GetUID())).c_str());
 		break;
 	case C_TYPE::NONE:
 		break;
@@ -366,9 +369,11 @@ Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
 		break;
 	case C_TYPE::CAM:
 		comp = new C_Camera();
-
-		// TODO: ANDREU --> read camera properties
-
+		static_cast<C_Camera*>(comp)->frustum.nearPlaneDistance = json_object_dotget_number(root_object, (comp_name + ".Near Plane").c_str());
+		static_cast<C_Camera*>(comp)->frustum.farPlaneDistance = json_object_dotget_number(root_object, (comp_name + ".Far Plane").c_str());
+		static_cast<C_Camera*>(comp)->fov = json_object_dotget_number(root_object, (comp_name + ".FOV").c_str());
+		static_cast<C_Camera*>(comp)->isGameCam = json_object_dotget_boolean(root_object, (comp_name + ".Game Camera").c_str());
+		static_cast<C_Camera*>(comp)->isCullEnabled = json_object_dotget_boolean(root_object, (comp_name + ".Culling").c_str());
 		break;
 	case C_TYPE::NONE:
 		break;
