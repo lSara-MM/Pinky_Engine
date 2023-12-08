@@ -37,6 +37,7 @@ void ai::DisableDebug()
 GameObject* ai::ImportMesh(const char* meshfileDir, GameObject* go, bool component)
 {
 	const aiScene* scene = aiImportFile(meshfileDir, aiProcessPreset_TargetRealtime_MaxQuality);
+	App->fs->SplitFilePath(meshfileDir, &dir);
 	GameObject* ret = nullptr;
 
 	if (scene != nullptr && scene->HasMeshes())
@@ -90,8 +91,8 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 
 	static float3 ai_position = { 0,0,0 };
 	static float3 ai_rotation = { 0, 0, 0 };
-	static float3 ai_scale = { 0,0,0 }; 
-	
+	static float3 ai_scale = { 0,0,0 };
+
 	//------
 	for (int i = 0; i < num; i++)
 	{
@@ -165,7 +166,24 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 			obj->AddComponent(C_TYPE::MESH, mesh);
 
 			//---Material---
-			if (!component) { obj->AddComponent(C_TYPE::MATERIAL); }
+			aiMaterial* mat = s->mMaterials[m->mMaterialIndex];
+			uint numTex = mat->GetTextureCount(aiTextureType_DIFFUSE);
+
+			if (!component)
+			{
+				for (int i = 0; i < numTex; i++)
+				{
+					aiString aiPath;
+					mat->GetTexture(aiTextureType_DIFFUSE, i, &aiPath);
+
+					obj->AddComponent(C_TYPE::MATERIAL);
+					std::string path = dir + aiPath.C_Str();
+
+					// TODO: el path que da es del png, lo que se necesita es el dds por lo que se tiene que hacer un save y un load en el formato correcto
+					static_cast<C_Material*>(obj->GetComponentByType(C_TYPE::MATERIAL))->tex->path = path.c_str();
+					static_cast<C_Material*>(obj->GetComponentByType(C_TYPE::MATERIAL))->tex->ImportTexture(path.c_str());
+				}
+			}
 			m = nullptr;
 		}
 	}

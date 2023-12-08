@@ -74,5 +74,8 @@ namespace ai
 	static bool ai_b_position = false;
 	static bool ai_b_rotation = false;
 	static bool ai_b_scale = false;
+
+	//
+	static std::string dir;
 }
 #endif //!__MESH_H__
