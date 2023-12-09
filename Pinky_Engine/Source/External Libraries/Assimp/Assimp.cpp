@@ -137,9 +137,12 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 					}
 					tempParent = tempParent->pParent;
 				}
-				obj->ReParent(tempParent);
+				if (tempAux->name.find_first_of("$") != std::string::npos)
+				{
+					obj->ReParent(tempParent);
+					tempParent->DeleteChild(tempAux);
+				}
 				tempParent = nullptr;
-				//RELEASE(tempAux);
 
 				foundParent = true;
 			}
@@ -160,6 +163,7 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 		if (children[i]->mNumMeshes > 0)
 		{
 			const aiMesh* m = s->mMeshes[children[i]->mMeshes[0]];
+
 			R_Mesh* mesh = new R_Mesh();
 
 			if (!I_Mesh::Import(m, mesh))

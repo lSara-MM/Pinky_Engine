@@ -453,8 +453,7 @@ void GameObject::AddChild(GameObject* go)
 void GameObject::DeleteChild(GameObject* go)
 {
 	RemoveChild(go);
-	go->~GameObject();
-	go = nullptr;
+	RELEASE(go);
 }
 
 void GameObject::RemoveChild(GameObject* go)

@@ -50,6 +50,7 @@ public:
 	void ReParent(GameObject* newParent);
 	void AddChild(GameObject* go);
 	void DeleteChild(GameObject* go);
+	//Remove from children vector (do not use)
 	void RemoveChild(GameObject* go);
 
 	// Return nullptr if gameobject not found
