@@ -55,6 +55,7 @@ enum update_status
 
 // Extensions
 #define MESHES_EXT ".duk"
+#define TEXTURES_EXT ".dds"
 #define PREFABS_EXT ".pgo"
 #define SCENE_EXT ".pnk"
 

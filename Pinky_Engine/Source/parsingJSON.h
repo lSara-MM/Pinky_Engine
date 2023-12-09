@@ -35,7 +35,7 @@ public:
 	GameObject* GOfromMeta(std::string node_name);
 	Component* ComponentsFromMeta(std::string node_name, int i);
 
-	bool HasToReImport(const char* path);
+	bool HasToReImport(const char* path, R_TYPE type);
 
 	//---Scene---
 	void SaveScene(std::string name, std::string dir = ASSETS_AUX);

@@ -387,7 +387,7 @@ Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
 }
 
 // Check if it has to be reimported (file doesn't exist in library)
-bool ParsingJSON::HasToReImport(const char* path)
+bool ParsingJSON::HasToReImport(const char* path, R_TYPE type)
 {
 	root_value = json_parse_file(path);
 	root_object = json_value_get_object(root_value);
@@ -399,6 +399,24 @@ bool ParsingJSON::HasToReImport(const char* path)
 	for (int i = 0; i < size; i++)
 	{
 		libPath = json_object_dotget_string(root_object, (node_name + std::to_string(i) + ".Library Path").c_str());
+
+		switch (type)
+		{
+		case R_TYPE::MESH:
+			libPath += MESHES_EXT;
+			break;
+		case R_TYPE::TEXTURE:
+			libPath += TEXTURES_EXT;
+			break;
+		case R_TYPE::PREFAB:
+			break;
+		case R_TYPE::SCENE:
+			break;
+		case R_TYPE::NONE:
+			break;
+		default:
+			break;
+		}
 
 		if (!App->fs->Exists(libPath.c_str()))
 		{

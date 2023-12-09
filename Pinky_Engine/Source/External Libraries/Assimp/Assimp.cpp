@@ -164,6 +164,9 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 
 			//---Mesh---
 			obj->AddComponent(C_TYPE::MESH, mesh);
+			obj->mesh->mesh->name = obj->name;
+			App->resource->AddResource(mesh);
+
 
 			//---Material---
 			aiMaterial* mat = s->mMaterials[m->mMaterialIndex];

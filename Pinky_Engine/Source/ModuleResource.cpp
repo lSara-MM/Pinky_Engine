@@ -133,7 +133,7 @@ int ModuleResource::ImportToScene(std::string path, std::string dir)
 		{
 		case R_TYPE::MESH:
 
-			if (App->parson->HasToReImport((normFileName + ".meta").c_str()))
+			if (App->parson->HasToReImport((normFileName + ".meta").c_str(), R_TYPE::MESH))
 			{
 				go = ai::ImportMesh(normFileName.c_str());
 
@@ -262,7 +262,7 @@ std::string ModuleResource::SaveToLibrary(Resource* r)
 		break;
 	case R_TYPE::TEXTURE:
 		path = TEXTURES_PATH;
-		ext = ".dds";
+		ext = TEXTURES_EXT;
 		size = I_Texture::Save(static_cast<R_Texture*>(r), &buffer);
 		break;
 	case R_TYPE::SCENE:
@@ -422,10 +422,10 @@ bool ModuleResource::AddResource(Resource* r, bool i)
 			switch (t)
 			{
 			case R_TYPE::MESH:
-				vMeshesResources.shrink_to_fit();
+				ClearVec(vMeshesResources);
 				break;
 			case R_TYPE::TEXTURE:
-				vTexturesResources.shrink_to_fit();
+				ClearVec(vTexturesResources);
 				break;
 			case R_TYPE::PREFAB:
 				break;
