@@ -41,6 +41,8 @@ update_status ModuleResource::FinishUpdate(float dt)
 	{
 		RELEASE(App->scene->rootNode);
 		App->parson->LoadScene(sceneFileName);
+		LoadChildrenMeshes(App->scene->rootNode, App->scene->rootNode->vChildren.size());
+
 		pendingToLoadScene = false;
 	}
 	else

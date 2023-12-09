@@ -44,10 +44,12 @@ public:
 
 	std::vector<Resource*> vMeshesResources;
 	std::vector<Resource*> vTexturesResources;
-private:
+
+	// Scene management
+	std::string sceneFileName;
 	bool pendingToLoadScene;
+private:
 	GameObject* temp;
 
-	std::string sceneFileName;
 	std::string normMetaPath;
 };

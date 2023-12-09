@@ -34,11 +34,12 @@ void TimeManager::Play()
 		gameTimer->Start();
 		break;
 	case TimeManager::PlayState::PLAY:
-		App->parson->LoadScene(SCENES_TEMP_PATH "Scene_Temp" SCENE_EXT);
 
+		// TODO: Maybe put this in a function so it can be called anywhere?
+		App->resource->sceneFileName = SCENES_TEMP_PATH "Scene_Temp" SCENE_EXT;
+		App->resource->pendingToLoadScene = true;
 		state = PlayState::EDITOR;
 		gameTime = 0.0F;
-		//TODO: cargar escena serializada
 		break;
 	case TimeManager::PlayState::PAUSE:
 		state = PlayState::PLAY;

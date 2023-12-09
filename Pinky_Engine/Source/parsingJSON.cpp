@@ -252,7 +252,6 @@ GameObject* ParsingJSON::CreateGOfromMeta(std::string path, std::string subInfo)
 
 		int vChildrensize = json_object_dotget_number(root_object, (subInfo + ".Info.Children number").c_str());
 
-		// Count starts with 1
 		for (int i = 0; i < vChildrensize; i++)
 		{
 			temp = GOfromMeta(subInfo + ".Child " + std::to_string(i + 1));
@@ -474,7 +473,7 @@ void ParsingJSON::LoadScene(std::string path)
 
 		int vChildrensize = json_object_dotget_number(root_object, "Scene.Info.Children number");
 
-		// Count starts with 1
+		//
 		for (int i = 0; i < vChildrensize; i++)
 		{
 			temp = GOfromMeta("Scene.Child " + std::to_string(i + 1));
