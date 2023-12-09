@@ -7,7 +7,7 @@ void I_Texture::Import(const aiTexture* Texture, R_Texture* ourTexture)
 
 }
 
-uint64 I_Texture::Save(const R_Texture* ourTexture, char** fileBuffer)
+uint64 I_Texture::Save(/*const R_Texture* ourTexture,*/ char** fileBuffer)
 {
 	ILuint size;
 	ILubyte* cursor;
@@ -31,7 +31,7 @@ uint64 I_Texture::Save(const R_Texture* ourTexture, char** fileBuffer)
 		ILenum error = ilGetError();
 		if (error != IL_NO_ERROR)
 		{
-			LOG("[ERROR] when saving %s - %d: %s", ourTexture->path, error, iluErrorString(error));
+			LOG("[ERROR] when saving: %d - %s", error, iluErrorString(error));
 		}
 	}
 

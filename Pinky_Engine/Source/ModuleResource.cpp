@@ -197,15 +197,18 @@ int ModuleResource::ImportToScene(std::string path, std::string dir)
 			if (true)
 			{
 				// TODO: no funciona jaja
+				/*R_Texture* t = new R_Texture();
+				t->ImportTexture(path.c_str());*/
+				
 				R_Texture* t = new R_Texture();
-				t->ImportTexture(path.c_str());
-				SaveToLibrary(t);
-				LoadFromLibrary(path.c_str(), R_TYPE::TEXTURE);
-
+				std::string a = SaveToLibrary(t);
 				vResources.push_back(t);
 
 				// Creates "Assets/name.ext.meta"
 				App->parson->CreateResourceMetaFile(vResources, (normFileName + ".meta").c_str());
+
+				RELEASE(t);
+				t = static_cast<R_Texture*>(LoadFromLibrary(a.c_str(), R_TYPE::TEXTURE));
 			}
 			break;
 		case R_TYPE::SCENE:
@@ -284,7 +287,7 @@ std::string ModuleResource::SaveToLibrary(Resource* r)
 	case R_TYPE::TEXTURE:
 		path = TEXTURES_PATH;
 		ext = TEXTURES_EXT;
-		size = I_Texture::Save(static_cast<R_Texture*>(r), &buffer);
+		size = I_Texture::Save(/*static_cast<R_Texture*>(r), */&buffer);
 		break;
 	case R_TYPE::SCENE:
 		break;
