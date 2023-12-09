@@ -30,13 +30,6 @@ class Resource;
 
 namespace ai
 {
-	struct Transform
-	{
-		float3 pos = { 0,0,0 };
-		math::float4 rotation = { 0, 0, 0, 0 };
-		float3 scale = { 0,0,0 };
-	};
-
 	enum class POLY_PRIMITIVE_TYPE
 	{
 		CUBE,	
@@ -57,27 +50,12 @@ namespace ai
 
 	GameObject* ImportMesh(const char* meshfileDir, GameObject* go = nullptr, bool component = false);
 	GameObject* MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component = false, bool foundParent = false);
-	GameObject* MeshVHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component = false, bool foundParent = false);
-	
+
 	void CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go = nullptr, bool component = false);
 	void CreateCustomMehses(CUSTOM_MESH obj);
-
-	void LoadTranslation(bool assimp, aiNode* children, GameObject* obj, GameObject* parent, std::string name);
 	
 	// Textures
 	void LoadCheckers(GLuint& buffer);
-
-	// 
-	static GameObject* auxParent;
-
-	//
-	static float3 ai_position = { 0,0,0 };
-	static float3 ai_rotation = { 0, 0, 0 };
-	static float3 ai_scale = { 0,0,0 };
-
-	static bool ai_b_position = false;
-	static bool ai_b_rotation = false;
-	static bool ai_b_scale = false;
 
 	//
 	static std::string dir;

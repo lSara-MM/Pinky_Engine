@@ -44,7 +44,7 @@ GameObject* ai::ImportMesh(const char* meshfileDir, GameObject* go, bool compone
 	{
 		if (go != nullptr)
 		{
-			(MeshVHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, go, component) != nullptr) ?
+			(MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, go, component) != nullptr) ?
 				ret = go : ret = nullptr;
 		}
 
@@ -55,17 +55,17 @@ GameObject* ai::ImportMesh(const char* meshfileDir, GameObject* go, bool compone
 			// --- Get file name ---
 			std::string filePath, fileName, fileExt, tempName, finalPath;
 			App->fs->SplitFilePath(meshfileDir, &filePath, &fileName, &fileExt);
+
 			// ---------------------------------------------
 
 			GameObject* obj = new GameObject(fileName);
-			auxParent = obj;
-			MeshVHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, obj);
+			MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, obj);
 			ret = obj;
 			obj = nullptr;
 		}
 		else
 		{
-			ret = MeshVHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, App->scene->rootNode);
+			ret = MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, App->scene->rootNode);
 		}
 
 		if (ret != nullptr)
@@ -86,7 +86,7 @@ GameObject* ai::ImportMesh(const char* meshfileDir, GameObject* go, bool compone
 	return ret;
 }
 
-GameObject* ai::MeshVHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component, bool foundParent)
+GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component, bool foundParent)
 {
 	GameObject* obj = nullptr;
 
@@ -102,8 +102,6 @@ GameObject* ai::MeshVHierarchy(const aiScene* s, aiNode** children, int num, Gam
 			// --- Create new GameObject to store the mesh ---
 			std::string name = children[i]->mName.C_Str();
 			int posInString = name.find_first_of("$");
-
-			//(posInString == std::string::npos) ? obj = new GameObject(name, parent) : obj = parent;
 
 			obj = new GameObject(name, parent);
 
@@ -124,135 +122,25 @@ GameObject* ai::MeshVHierarchy(const aiScene* s, aiNode** children, int num, Gam
 			float3 temp2 = { scale.x, scale.y, scale.z };
 			obj->transform->SetScale(temp2);
 
+			obj->transform->UpdateGlobalMatrix();
+
 			if (!foundParent && posInString == std::string::npos)
 			{
 				GameObject* tempParent = obj->pParent;
+				GameObject* tempAux = nullptr;
 
 				while (tempParent->name.find_first_of("$") != std::string::npos)
 				{
+					if (tempParent->pParent->name.find_first_of("$") == std::string::npos)
+					{
+						tempAux = tempParent;
+					}
 					tempParent = tempParent->pParent;
 				}
 				obj->ReParent(tempParent);
-				obj->transform->dirty_ = true;
 				tempParent = nullptr;
+				//RELEASE(tempAux);
 
-				foundParent = true;
-			}
-		}
-
-		if (children[i]->mChildren != NULL)
-		{
-			if (!foundParent)
-			{
-				obj = MeshVHierarchy(s, children[i]->mChildren, children[i]->mNumChildren, obj, component, foundParent);
-			}
-			else
-			{
-				MeshVHierarchy(s, children[i]->mChildren, children[i]->mNumChildren, obj, component, foundParent);
-			}
-		}
-
-		if (children[i]->mNumMeshes > 0)
-		{
-			const aiMesh* m = s->mMeshes[children[i]->mMeshes[0]];
-			R_Mesh* mesh = new R_Mesh();
-
-			if (!I_Mesh::Import(m, mesh))
-			{
-				//obj->~GameObject();
-				obj = nullptr;
-				return nullptr;
-			}
-
-			std::string path = App->resource->SaveToLibrary(mesh);
-
-			/*RELEASE(mesh);
-			mesh = static_cast<R_Mesh*>(App->resource->LoadFromLibrary(path, R_TYPE::MESH));*/
-
-			ai_b_position = false;
-			ai_b_rotation = false;
-			ai_b_scale = false;
-
-			obj->transform->globalMatrix = math::float4x4::FromTRS(obj->transform->position,
-				obj->transform->rotation, obj->transform->scale);
-
-			//---Mesh---
-			obj->AddComponent(C_TYPE::MESH, mesh);
-			obj->mesh->mesh->name = obj->name;
-			App->resource->vMeshesResources.push_back(mesh);
-			App->resource->AddResource(mesh);
-
-
-			//---Material---
-			aiMaterial* mat = s->mMaterials[m->mMaterialIndex];
-			uint numTex = mat->GetTextureCount(aiTextureType_DIFFUSE);
-
-			if (!component)
-			{
-				// TODO: To test
-				if (numTex != 0)
-				{
-					for (int i = 0; i < numTex; i++)
-					{
-						aiString aiPath;
-						mat->GetTexture(aiTextureType_DIFFUSE, i, &aiPath);
-
-						obj->AddComponent(C_TYPE::MATERIAL);
-						std::string path = dir + aiPath.C_Str();
-
-						// TODO: el path que da es del png, lo que se necesita es el dds por lo que se tiene que hacer un save y un load en el formato correcto
-						static_cast<C_Material*>(obj->GetComponentByType(C_TYPE::MATERIAL))->tex->path = path.c_str();
-						static_cast<C_Material*>(obj->GetComponentByType(C_TYPE::MATERIAL))->tex->ImportTexture(path.c_str());
-					}
-				}
-				else
-				{
-					obj->AddComponent(C_TYPE::MATERIAL);
-				}				
-			}
-			m = nullptr;
-		}
-	}
-
-	return obj;
-}
-
-GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component, bool foundParent)
-{
-	GameObject* obj = nullptr;
-
-	static float3 ai_position = { 0,0,0 };
-	static float3 ai_rotation = { 0, 0, 0 };
-	static float3 ai_scale = { 0,0,0 };
-
-	//------
-	for (int i = 0; i < num; i++)
-	{
-		if (component)
-		{
-			obj = parent;
-		}
-		else
-		{
-			// --- Create new GameObject to store the mesh ---
-			std::string name = children[i]->mName.C_Str();
-			int posInString = name.find_first_of("$");
-
-			//(posInString == std::string::npos) ? obj = new GameObject(name, parent) : obj = parent;
-
-			if (posInString == std::string::npos)
-			{
-				obj = new GameObject(name, parent);
-				LoadTranslation(false, children[i], obj, parent, name);
-			}
-			else
-			{
-				obj = parent;
-				LoadTranslation(true, children[i], obj, parent, name);
-			}
-
-			if (!foundParent && posInString == std::string::npos)
-			{
 				foundParent = true;
 			}
 		}
@@ -282,13 +170,6 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 			}
 
 			std::string path = App->resource->SaveToLibrary(mesh);
-
-			/*RELEASE(mesh);
-			mesh = static_cast<R_Mesh*>(App->resource->LoadFromLibrary(path, R_TYPE::MESH));*/
-
-			ai_b_position = false;
-			ai_b_rotation = false;
-			ai_b_scale = false;
 
 			obj->transform->globalMatrix = math::float4x4::FromTRS(obj->transform->position,
 				obj->transform->rotation, obj->transform->scale);
@@ -362,79 +243,17 @@ void ai::CreateCustomMehses(CUSTOM_MESH obj)
 	case ai::CUSTOM_MESH::LAW:
 		App->resource->ImportToScene("trafalgar-laws-hat.fbx", PINKY_ASSETS_AUX "Custom\\law_hat\\");
 		App->resource->ImportToScene("law_hat_mat_BaseColor.dds", PINKY_ASSETS_AUX "Custom\\law_hat\\");
-		//App->resource->ImportModel("PinkyAssets\\Custom\\law_hat\\trafalgar-laws-hat.fbx", std::vector<const char*> {"PinkyAssets\\Custom\\law_hat\\law_hat_mat_BaseColor.dds"});
 		break;
 	case ai::CUSTOM_MESH::KURO:
 		App->resource->ImportToScene("kuro.fbx", PINKY_ASSETS_AUX "Custom\\kuro\\");
 		App->resource->ImportToScene("BODYKURO.dds", PINKY_ASSETS_AUX "Custom\\kuro\\");
-		//App->resource->ImportModel("PinkyAssets\\Custom\\kuro\\kuro.fbx", std::vector<const char*> {"PinkyAssets\\Custom\\kuro\\BODYKURO.dds"});
 		break;
 	case ai::CUSTOM_MESH::SHARK:
 		App->resource->ImportToScene("kingsharksketch.fbx", PINKY_ASSETS_AUX "Custom\\king_shark\\");
 		App->resource->ImportToScene("king_shark_tex.dds", PINKY_ASSETS_AUX "Custom\\king_shark\\");
-		//App->resource->ImportModel("PinkyAssets\\Custom\\king_shark\\kingsharksketch.fbx", std::vector<const char*> {"PinkyAssets\\Custom\\king_shark\\king_shark_tex.dds"});
 		break;
 	default:
 		break;
-	}
-}
-
-void ai::LoadTranslation(bool assimp, aiNode* children, GameObject* obj, GameObject* parent, std::string name)
-{
-	//---Assimp translation---
-	aiVector3D pos, scale;
-	aiQuaternion rot;
-
-	children->mTransformation.Decompose(scale, rot, pos);
-
-	if (!assimp)
-	{
-		if (!ai_b_position)
-		{
-			ai_position = { pos.x, pos.y, pos.z };
-		}
-		obj->transform->SetTransform(ai_position);
-
-		if (!ai_b_rotation)
-		{
-			float temp1[4] = { rot.x , rot.y, rot.z, rot.w };
-			float3 euler = Quat(temp1).ToEulerXYZ();
-
-			ai_rotation = { euler.x * RADTODEG, euler.y * RADTODEG, euler.z * RADTODEG };
-		}
-		obj->transform->SetRotation(ai_rotation);
-
-		if (!ai_b_scale)
-		{
-			ai_scale = { scale.x, scale.y, scale.z };
-		}
-		obj->transform->SetScale(ai_scale);
-	}
-	else
-	{
-		if (name.find("_Translation\0") != std::string::npos)
-		{
-			ai_b_position = true;
-
-			ai_position = { pos.x, pos.y, pos.z };
-		}
-
-		if (name.find("_Rotation\0") != std::string::npos || name.find("_RotationPivot") != std::string::npos)
-		{
-			ai_b_rotation = true;
-
-			float temp1[4] = { rot.x , rot.y, rot.z, rot.w };
-			float3 euler = Quat(temp1).ToEulerXYZ();
-
-			ai_rotation = { euler.x * RADTODEG, euler.y * RADTODEG, euler.z * RADTODEG };
-		}
-
-		if (name.find("_Scaling") != std::string::npos)
-		{
-			ai_b_scale = false;
-
-			ai_scale = { scale.x, scale.y, scale.z };
-		}
 	}
 }
 
