@@ -85,10 +85,8 @@ bool ModuleResource::CleanUp()
 /// </summary>
 /// <param name="fileDir"> Directory File to Import </param>
 /// <returns></returns>
-GameObject* ModuleResource::ImportFileToEngine(const char* fileDir)
+std::string ModuleResource::ImportFileToEngine(const char* fileDir)
 {
-	GameObject* go = nullptr;
-
 	std::string filePath, fileName, fileExt, tempName, finalPath;
 	App->fs->SplitFilePath(fileDir, &filePath, &fileName, &fileExt);
 
@@ -105,7 +103,7 @@ GameObject* ModuleResource::ImportFileToEngine(const char* fileDir)
 
 	App->fs->DuplicateFile(fileDir, App->scene->project->selectedDir.c_str(), finalPath);
 
-	return go;
+	return filePath;
 }
 
 void ModuleResource::ImportVModel(const char* meshPath, std::vector<const char*> texPaths)
@@ -151,7 +149,29 @@ int ModuleResource::ImportToScene(std::string path, std::string dir)
 			//go = App->parson->CreateGOfromMeta(normFileName);
 			break;
 		case R_TYPE::TEXTURE:
-			LoadFromLibrary((normFileName + ".meta"), R_TYPE::TEXTURE);
+			if (App->parson->HasToReImport((normFileName + ".meta").c_str(), R_TYPE::MESH))
+			{
+				// TODO: no funciona jaja
+				R_Texture* t = new R_Texture();
+				t->ImportTexture(path.c_str());
+				SaveToLibrary(t);
+
+				vResources.push_back(t);
+
+				// Creates "Assets/name.ext.meta"
+				App->parson->CreateResourceMetaFile(vResources, (normFileName + ".meta").c_str());
+			}
+
+			if (true)
+			{
+				R_Texture* r = static_cast<R_Texture*>(LoadFromLibrary((normFileName + ".meta"), R_TYPE::TEXTURE));
+
+				for (auto it = App->scene->hierarchy->GetSelectedGOs().begin(); it != App->scene->hierarchy->GetSelectedGOs().end(); ++it)
+				{
+					static_cast<C_Material*>((*it)->GetComponentByType(C_TYPE::MATERIAL))->tex = r;
+					(*it) = nullptr;
+				}
+			}
 			break;
 		case R_TYPE::SCENE:
 			// This will never happen as scenes don't create meta
@@ -214,7 +234,8 @@ void ModuleResource::ImportModel(const char* meshPath, std::vector<const char*> 
 
 	//Get_Set_FilePath(meshPath);
 
-	go = ImportFileToEngine(meshPath);
+	ImportFileToEngine(meshPath);
+	//ImportToScene(meshPath);
 
 	//if (texPaths.empty())
 	//{

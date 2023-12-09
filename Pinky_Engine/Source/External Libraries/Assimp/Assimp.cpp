@@ -174,18 +174,27 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 
 			if (!component)
 			{
-				for (int i = 0; i < numTex; i++)
+				// TODO: To test
+				if (numTex != 0)
 				{
-					aiString aiPath;
-					mat->GetTexture(aiTextureType_DIFFUSE, i, &aiPath);
+					for (int i = 0; i < numTex; i++)
+					{
+						aiString aiPath;
+						mat->GetTexture(aiTextureType_DIFFUSE, i, &aiPath);
 
-					obj->AddComponent(C_TYPE::MATERIAL);
-					std::string path = dir + aiPath.C_Str();
+						obj->AddComponent(C_TYPE::MATERIAL);
+						std::string path = dir + aiPath.C_Str();
 
-					// TODO: el path que da es del png, lo que se necesita es el dds por lo que se tiene que hacer un save y un load en el formato correcto
-					static_cast<C_Material*>(obj->GetComponentByType(C_TYPE::MATERIAL))->tex->path = path.c_str();
-					static_cast<C_Material*>(obj->GetComponentByType(C_TYPE::MATERIAL))->tex->ImportTexture(path.c_str());
+						// TODO: el path que da es del png, lo que se necesita es el dds por lo que se tiene que hacer un save y un load en el formato correcto
+						static_cast<C_Material*>(obj->GetComponentByType(C_TYPE::MATERIAL))->tex->path = path.c_str();
+						static_cast<C_Material*>(obj->GetComponentByType(C_TYPE::MATERIAL))->tex->ImportTexture(path.c_str());
+					}
 				}
+				else
+				{
+					obj->AddComponent(C_TYPE::MATERIAL);
+				}
+				
 			}
 			m = nullptr;
 		}

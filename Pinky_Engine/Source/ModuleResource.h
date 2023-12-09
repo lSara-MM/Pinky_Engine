@@ -18,12 +18,10 @@ public:
 	update_status FinishUpdate(float dt);
 	bool CleanUp();
 
-	GameObject* ImportFileToEngine(const char* path);
+	std::string ImportFileToEngine(const char* path);
 	void ImportVModel(const char* meshPath, std::vector<const char*> texPaths);
 	int ImportToScene(std::string path, std::string dir);
 
-
-	GameObject* ImportFile(const char* path, GameObject* goToLink = nullptr);
 	void ImportModel(const char* meshPath, std::vector<const char*> texPaths);
 
 	std::string SaveToLibrary(Resource* r);
