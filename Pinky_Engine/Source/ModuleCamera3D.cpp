@@ -16,6 +16,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 	MainCamera->LookAt(float3(0.0f, 0.0f, 0.0f));
 	MainCamera->frustum.farPlaneDistance = 1000.0f;
 	Reference = float3(0.0f, 0.0f, 0.0f);
+	objectReference = float3(0.0f, 0.0f, 0.0f);
 	App->renderer3D->editorCam = MainCamera;
 }
 
@@ -87,6 +88,8 @@ void ModuleCamera3D::CameraMovement()
 
 void ModuleCamera3D::Orbit()
 {
+	Reference = objectReference;
+
 	float3 dir = MainCamera->frustum.pos - Reference;
 	Quat quaternionY(MainCamera->frustum.up, mouseX);
 	Quat quaternionX(MainCamera->frustum.WorldRight(), mouseY);
@@ -203,6 +206,7 @@ bool ModuleCamera3D::CheckTriangleIntersection()
 				{
 					closest = iterator->second;
 					App->scene->hierarchy->SetSelected(closest);
+					objectReference = closest->mesh->global_aabb.CenterPoint();
 					ret = true;
 					return ret;
 				}

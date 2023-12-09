@@ -36,7 +36,8 @@ public:
 
 private:
 	float mouseX, mouseY, speed, zoomPos;
-	float3 Reference = { 0, 0, 0 };
+	float3 Reference;
+	float3 objectReference;
 
 	//Mouse Picking
 	float entryDist;
