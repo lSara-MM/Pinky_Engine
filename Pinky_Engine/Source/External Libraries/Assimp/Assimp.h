@@ -57,6 +57,7 @@ namespace ai
 
 	GameObject* ImportMesh(const char* meshfileDir, GameObject* go = nullptr, bool component = false);
 	GameObject* MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component = false, bool foundParent = false);
+	GameObject* MeshVHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component = false, bool foundParent = false);
 	
 	void CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go = nullptr, bool component = false);
 	void CreateCustomMehses(CUSTOM_MESH obj);
@@ -65,6 +66,9 @@ namespace ai
 	
 	// Textures
 	void LoadCheckers(GLuint& buffer);
+
+	// 
+	static GameObject* auxParent;
 
 	//
 	static float3 ai_position = { 0,0,0 };

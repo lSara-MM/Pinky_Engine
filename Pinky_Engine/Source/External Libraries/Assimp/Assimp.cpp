@@ -44,7 +44,7 @@ GameObject* ai::ImportMesh(const char* meshfileDir, GameObject* go, bool compone
 	{
 		if (go != nullptr)
 		{
-			(MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, go, component) != nullptr) ?
+			(MeshVHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, go, component) != nullptr) ?
 				ret = go : ret = nullptr;
 		}
 
@@ -58,13 +58,14 @@ GameObject* ai::ImportMesh(const char* meshfileDir, GameObject* go, bool compone
 			// ---------------------------------------------
 
 			GameObject* obj = new GameObject(fileName);
-			MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, obj);
+			auxParent = obj;
+			MeshVHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, obj);
 			ret = obj;
 			obj = nullptr;
 		}
 		else
 		{
-			ret = MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, App->scene->rootNode);
+			ret = MeshVHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, App->scene->rootNode);
 		}
 
 		if (ret != nullptr)
@@ -83,6 +84,137 @@ GameObject* ai::ImportMesh(const char* meshfileDir, GameObject* go, bool compone
 	}
 
 	return ret;
+}
+
+GameObject* ai::MeshVHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component, bool foundParent)
+{
+	GameObject* obj = nullptr;
+
+	//------
+	for (int i = 0; i < num; i++)
+	{
+		if (component)
+		{
+			obj = parent;
+		}
+		else
+		{
+			// --- Create new GameObject to store the mesh ---
+			std::string name = children[i]->mName.C_Str();
+			int posInString = name.find_first_of("$");
+
+			//(posInString == std::string::npos) ? obj = new GameObject(name, parent) : obj = parent;
+
+			obj = new GameObject(name, parent);
+
+			//---Transform---
+			aiVector3D pos, scale;
+			aiQuaternion rot;
+			children[i]->mTransformation.Decompose(scale, rot, pos);
+
+
+			float3 temp = { pos.x , pos.y, pos.z };
+			obj->transform->SetTransform(temp);
+
+			float temp1[4] = { rot.x , rot.y, rot.z, rot.w };
+			float3 euler = Quat(temp1).ToEulerXYZ();
+			float3 eulerF = { euler.x * RADTODEG, euler.y * RADTODEG, euler.z * RADTODEG };
+			obj->transform->SetRotation(eulerF);
+
+			float3 temp2 = { scale.x, scale.y, scale.z };
+			obj->transform->SetScale(temp2);
+
+			if (!foundParent && posInString == std::string::npos)
+			{
+				GameObject* tempParent = obj->pParent;
+
+				while (tempParent->name.find_first_of("$") != std::string::npos)
+				{
+					tempParent = tempParent->pParent;
+				}
+				obj->ReParent(tempParent);
+				obj->transform->dirty_ = true;
+				tempParent = nullptr;
+
+				foundParent = true;
+			}
+		}
+
+		if (children[i]->mChildren != NULL)
+		{
+			if (!foundParent)
+			{
+				obj = MeshVHierarchy(s, children[i]->mChildren, children[i]->mNumChildren, obj, component, foundParent);
+			}
+			else
+			{
+				MeshVHierarchy(s, children[i]->mChildren, children[i]->mNumChildren, obj, component, foundParent);
+			}
+		}
+
+		if (children[i]->mNumMeshes > 0)
+		{
+			const aiMesh* m = s->mMeshes[children[i]->mMeshes[0]];
+			R_Mesh* mesh = new R_Mesh();
+
+			if (!I_Mesh::Import(m, mesh))
+			{
+				//obj->~GameObject();
+				obj = nullptr;
+				return nullptr;
+			}
+
+			std::string path = App->resource->SaveToLibrary(mesh);
+
+			/*RELEASE(mesh);
+			mesh = static_cast<R_Mesh*>(App->resource->LoadFromLibrary(path, R_TYPE::MESH));*/
+
+			ai_b_position = false;
+			ai_b_rotation = false;
+			ai_b_scale = false;
+
+			obj->transform->globalMatrix = math::float4x4::FromTRS(obj->transform->position,
+				obj->transform->rotation, obj->transform->scale);
+
+			//---Mesh---
+			obj->AddComponent(C_TYPE::MESH, mesh);
+			obj->mesh->mesh->name = obj->name;
+			App->resource->vMeshesResources.push_back(mesh);
+			App->resource->AddResource(mesh);
+
+
+			//---Material---
+			aiMaterial* mat = s->mMaterials[m->mMaterialIndex];
+			uint numTex = mat->GetTextureCount(aiTextureType_DIFFUSE);
+
+			if (!component)
+			{
+				// TODO: To test
+				if (numTex != 0)
+				{
+					for (int i = 0; i < numTex; i++)
+					{
+						aiString aiPath;
+						mat->GetTexture(aiTextureType_DIFFUSE, i, &aiPath);
+
+						obj->AddComponent(C_TYPE::MATERIAL);
+						std::string path = dir + aiPath.C_Str();
+
+						// TODO: el path que da es del png, lo que se necesita es el dds por lo que se tiene que hacer un save y un load en el formato correcto
+						static_cast<C_Material*>(obj->GetComponentByType(C_TYPE::MATERIAL))->tex->path = path.c_str();
+						static_cast<C_Material*>(obj->GetComponentByType(C_TYPE::MATERIAL))->tex->ImportTexture(path.c_str());
+					}
+				}
+				else
+				{
+					obj->AddComponent(C_TYPE::MATERIAL);
+				}				
+			}
+			m = nullptr;
+		}
+	}
+
+	return obj;
 }
 
 GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component, bool foundParent)
@@ -193,8 +325,7 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 				else
 				{
 					obj->AddComponent(C_TYPE::MATERIAL);
-				}
-				
+				}				
 			}
 			m = nullptr;
 		}
