@@ -118,22 +118,21 @@ void ModuleResource::ImportVModel(const char* meshPath, std::vector<const char*>
 /// </summary>
 /// <param name="path"></param>
 /// <returns></returns>
-int ModuleResource::ImportToScene(std::string path, std::string dir)
+int ModuleResource::ImportToScene(std::string path, std::string dir, GameObject* goParent, bool component)
 {
 	GameObject* go = nullptr;
 	std::string::size_type i = 0;
 	std::string normFileName = App->fs->NormalizePath((dir + path).c_str());
 
-	//const char* realPath = App->parson->GetRealDirFF((ASSETS_AUX + path).c_str());
+	//const char* realPath = App->parson->GetRealDirFF((ASSETS_AUX + path).c_str());	
 	if (App->fs->Exists((normFileName + ".meta").c_str()))
 	{
 		switch (CheckExtensionType(path.c_str()))
 		{
 		case R_TYPE::MESH:
-
 			if (App->parson->HasToReImport((normFileName + ".meta").c_str(), R_TYPE::MESH))
 			{
-				go = ai::ImportMesh(normFileName.c_str());
+				go = ai::ImportMesh(normFileName.c_str(), goParent, component);
 
 				// Creates "Assets/name.ext.meta"
 				App->parson->CreateResourceMetaFile(vResources, (normFileName + ".meta").c_str());
@@ -187,7 +186,7 @@ int ModuleResource::ImportToScene(std::string path, std::string dir)
 		switch (CheckExtensionType(path.c_str()))
 		{
 		case R_TYPE::MESH:
-			go = ai::ImportMesh(normFileName.c_str());
+			go = ai::ImportMesh(normFileName.c_str(), goParent, component);
 
 			// Creates "Assets/name.ext.meta"
 			App->parson->CreateResourceMetaFile(vResources, (normFileName + ".meta").c_str());
@@ -408,26 +407,32 @@ bool ModuleResource::AddResource(Resource* r, bool i)
 	// If i == true --> add, else substract resource
 	if (i)
 	{
+		auto itr = mResources.find(r->GetUID());
 		r->count++;
-		mResources.insert(std::pair<uint, Resource*>(r->GetUID(), r));
 
-		switch (r->GetType())
+		// Only add it to the vector if it hasn't been added
+		if (itr == mResources.end())
 		{
-		case R_TYPE::MESH:
-			vMeshesResources.push_back(r);
-			break;
-		case R_TYPE::TEXTURE:
-			vTexturesResources.push_back(r);
-			break;
-		case R_TYPE::PREFAB:
-			break;
-		case R_TYPE::SCENE:
-			break;
-		case R_TYPE::NONE:
-			break;
-		default:
-			break;
+			switch (r->GetType())
+			{
+			case R_TYPE::MESH:
+				vMeshesResources.push_back(r);
+				break;
+			case R_TYPE::TEXTURE:
+				vTexturesResources.push_back(r);
+				break;
+			case R_TYPE::PREFAB:
+				break;
+			case R_TYPE::SCENE:
+				break;
+			case R_TYPE::NONE:
+				break;
+			default:
+				break;
+			}
 		}
+
+		mResources.insert(std::pair<uint, Resource*>(r->GetUID(), r));
 	}
 	else
 	{

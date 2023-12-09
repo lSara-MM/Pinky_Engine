@@ -20,7 +20,7 @@ public:
 
 	std::string ImportFileToEngine(const char* path);
 	void ImportVModel(const char* meshPath, std::vector<const char*> texPaths);
-	int ImportToScene(std::string path, std::string dir);
+	int ImportToScene(std::string path, std::string dir, GameObject* goParent = nullptr, bool component = false);
 
 	void ImportModel(const char* meshPath, std::vector<const char*> texPaths);
 

@@ -150,7 +150,6 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 			}
 
 			std::string path = App->resource->SaveToLibrary(mesh);
-			App->resource->vResources.push_back(mesh);
 
 			/*RELEASE(mesh);
 			mesh = static_cast<R_Mesh*>(App->resource->LoadFromLibrary(path, R_TYPE::MESH));*/
@@ -165,6 +164,7 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 			//---Mesh---
 			obj->AddComponent(C_TYPE::MESH, mesh);
 			obj->mesh->mesh->name = obj->name;
+			App->resource->vMeshesResources.push_back(mesh);
 			App->resource->AddResource(mesh);
 
 
@@ -208,16 +208,16 @@ void ai::CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go, bool compo
 	switch (obj)
 	{
 	case ai::POLY_PRIMITIVE_TYPE::CUBE:
-		ImportMesh("PinkyAssets\\3dObject\\cube.fbx", go, component);
+		App->resource->ImportToScene("cube.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::SPHERE:
-		ImportMesh("PinkyAssets\\3dObject\\sphere.fbx", go, component);
+		App->resource->ImportToScene("sphere.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::CYLINDER:
-		ImportMesh("PinkyAssets\\3dObject\\cylinder.fbx", go);
+		App->resource->ImportToScene("cylinder.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::PLANE:
-		ImportMesh("PinkyAssets\\3dObject\\plane.fbx", go);
+		App->resource->ImportToScene("plane.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);
 		break;
 	default:
 		break;
