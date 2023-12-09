@@ -200,14 +200,15 @@ int ModuleResource::ImportToScene(std::string path, std::string dir, GameObject*
 				t->ImportTexture(path.c_str());*/
 				
 				R_Texture* t = new R_Texture();
-				std::string a = SaveToLibrary(t);
+				I_Texture::Import(normFileName.c_str(), t);
+				std::string texturePath = SaveToLibrary(t);
 				vResources.push_back(t);
 
 				// Creates "Assets/name.ext.meta"
 				App->parson->CreateResourceMetaFile(vResources, (normFileName + ".meta").c_str());
 
 				RELEASE(t);
-				t = static_cast<R_Texture*>(LoadFromLibrary(a.c_str(), R_TYPE::TEXTURE));
+				t = static_cast<R_Texture*>(LoadFromLibrary(texturePath.c_str(), R_TYPE::TEXTURE));
 			}
 			break;
 		case R_TYPE::SCENE:
@@ -286,7 +287,7 @@ std::string ModuleResource::SaveToLibrary(Resource* r)
 	case R_TYPE::TEXTURE:
 		path = TEXTURES_PATH;
 		ext = TEXTURES_EXT;
-		size = I_Texture::Save(/*static_cast<R_Texture*>(r), */&buffer);
+		size = I_Texture::Save(static_cast<R_Texture*>(r), &buffer);
 		break;
 	case R_TYPE::SCENE:
 		break;
@@ -329,7 +330,7 @@ Resource* ModuleResource::LoadFromLibrary(std::string path, R_TYPE type)
 			break;
 		case R_TYPE::TEXTURE:
 			r = new R_Texture();
-			I_Texture::Load(static_cast<R_Texture*>(r), buffer, size);
+			I_Texture::Load(static_cast<R_Texture*>(r), path.c_str());
 			break;
 		case R_TYPE::SCENE:
 			break;
@@ -340,7 +341,7 @@ Resource* ModuleResource::LoadFromLibrary(std::string path, R_TYPE type)
 		}
 
 		//mResources->insert(std::pair<uint, Resource*>(r->GetUID(), r));
-		//RELEASE_ARRAY(buffer);
+		RELEASE_ARRAY(buffer);
 	}
 	buffer = nullptr;
 
