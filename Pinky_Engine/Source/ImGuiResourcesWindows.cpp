@@ -162,7 +162,10 @@ void ProjectFiles::ShowDir(std::string directory)
 
 	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_None;
 
-	if (TreeNode(directory, node_flags, vDirs.empty()))
+	bool open = TreeNode(directory, node_flags, vDirs.empty());
+	DirsMouseEvents(directory, vFiles);
+
+	if (open)
 	{
 		ShowDirectories(directory);
 
@@ -171,8 +174,6 @@ void ProjectFiles::ShowDir(std::string directory)
 			ImGui::TreePop();
 		}
 	}
-
-	DirsMouseEvents(directory, vFiles);
 }
 
 void ProjectFiles::ShowDirectories(std::string directory)
@@ -183,11 +184,6 @@ void ProjectFiles::ShowDirectories(std::string directory)
 	App->fs->DiscoverFiles(directory.c_str(), vFiles, vDirs);
 	
 	// Update info shown
-	if (vFiles.empty())
-	{
-		vSelectedDirFiles.clear();
-	}
-
 	for (int i = 0; i < vFiles.size(); i++)
 	{
 		// Get full relative path
@@ -281,6 +277,7 @@ void ProjectFiles::DirsMouseEvents(std::string current, std::vector<std::string>
 	if (ImGui::IsItemClicked())
 	{
 		selectedDir = current;
+		ClearVec(vSelectedDirFiles);
 		vSelectedDirFiles = files;
 	}
 	// ------
@@ -300,6 +297,7 @@ void ProjectFiles::DirsMouseEvents(std::string current, std::vector<std::string>
 		}
 
 		selectedDir = current;
+		ClearVec(vSelectedDirFiles);
 		vSelectedDirFiles = files;
 		ImGui::EndPopup();
 	}
