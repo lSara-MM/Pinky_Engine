@@ -393,10 +393,10 @@ bool GameObject::ChangeComponentResource(Resource* oldResource, Resource* newRes
 {
 	if (oldResource->GetType() == newResource->GetType())
 	{
-		//App->resource->AddResource(oldResource, false);
-		//App->resource->AddResource(newResource, false);
+		App->resource->AddResource(oldResource, false);
+		App->resource->AddResource(newResource);
 
-		switch (oldResource->GetType())
+		switch (newResource->GetType())
 		{
 		case R_TYPE::MESH:
 			mesh->mesh = static_cast<R_Mesh*>(newResource);
