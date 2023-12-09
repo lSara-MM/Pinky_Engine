@@ -162,9 +162,11 @@ void ProjectFiles::ShowDir(std::string directory)
 
 	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_None;
 
-	if (TreeNode(directory, node_flags, vDirs.empty()))
+	bool open = TreeNode(directory, node_flags, vDirs.empty());
+	DirsMouseEvents(directory, vFiles);
+
+	if (open)
 	{
-		DirsMouseEvents(directory, vFiles);
 		ShowDirectories(directory);
 
 		if (!vDirs.empty())
