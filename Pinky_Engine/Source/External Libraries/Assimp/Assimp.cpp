@@ -208,7 +208,7 @@ void ai::CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go, bool compo
 	switch (obj)
 	{
 	case ai::POLY_PRIMITIVE_TYPE::CUBE:
-		App->resource->ImportToScene("cube.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);
+		App->resource->ImportToScene("cube.fbx", PINKY_ASSETS_AUX "Custom\\", go, component);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::SPHERE:
 		App->resource->ImportToScene("sphere.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);
@@ -229,13 +229,19 @@ void ai::CreateCustomMehses(CUSTOM_MESH obj)
 	switch (obj)
 	{
 	case ai::CUSTOM_MESH::LAW:
-		App->resource->ImportModel("PinkyAssets\\Custom\\law_hat\\trafalgar-laws-hat.fbx", std::vector<const char*> {"PinkyAssets\\Custom\\law_hat\\law_hat_mat_BaseColor.dds"});
+		App->resource->ImportToScene("trafalgar-laws-hat.fbx", PINKY_ASSETS_AUX "Custom\\law_hat\\");
+		App->resource->ImportToScene("law_hat_mat_BaseColor.dds", PINKY_ASSETS_AUX "Custom\\law_hat\\");
+		//App->resource->ImportModel("PinkyAssets\\Custom\\law_hat\\trafalgar-laws-hat.fbx", std::vector<const char*> {"PinkyAssets\\Custom\\law_hat\\law_hat_mat_BaseColor.dds"});
 		break;
 	case ai::CUSTOM_MESH::KURO:
-		App->resource->ImportModel("PinkyAssets\\Custom\\kuro\\kuro.fbx", std::vector<const char*> {"PinkyAssets\\Custom\\kuro\\BODYKURO.dds"});
+		App->resource->ImportToScene("kuro.fbx", PINKY_ASSETS_AUX "Custom\\kuro\\");
+		App->resource->ImportToScene("BODYKURO.dds", PINKY_ASSETS_AUX "Custom\\kuro\\");
+		//App->resource->ImportModel("PinkyAssets\\Custom\\kuro\\kuro.fbx", std::vector<const char*> {"PinkyAssets\\Custom\\kuro\\BODYKURO.dds"});
 		break;
 	case ai::CUSTOM_MESH::SHARK:
-		App->resource->ImportModel("PinkyAssets\\Custom\\king_shark\\kingsharksketch.fbx", std::vector<const char*> {"PinkyAssets\\Custom\\king_shark\\king_shark_tex.dds"});
+		App->resource->ImportToScene("kingsharksketch.fbx", PINKY_ASSETS_AUX "Custom\\king_shark\\");
+		App->resource->ImportToScene("king_shark_tex.dds", PINKY_ASSETS_AUX "Custom\\king_shark\\");
+		//App->resource->ImportModel("PinkyAssets\\Custom\\king_shark\\kingsharksketch.fbx", std::vector<const char*> {"PinkyAssets\\Custom\\king_shark\\king_shark_tex.dds"});
 		break;
 	default:
 		break;
