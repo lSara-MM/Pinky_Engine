@@ -1,5 +1,6 @@
 #include "imgui_custom.h"
 
+// Custom Themes
 void ImGuiCustom::Theme_SoftCherry()
 {
     // Soft Cherry style by Patitotective from ImThemes
@@ -347,6 +348,7 @@ void ImGuiCustom::Theme_RoomLoad()
     style.Colors[ImGuiCol_ScrollbarGrabActive] = darker;
 }
 
+// Other Widgets
 bool ImGuiCustom::ToggleButton(const char* str_id, bool* v, ImVec4 bg_color, bool anim)
 {
     ImGuiWindow* window = ImGui::GetCurrentWindow();
@@ -408,4 +410,18 @@ bool ImGuiCustom::ToggleButton(const char* str_id, bool* v, ImVec4 bg_color, boo
     }
     // ---------------------
     return toggle;
+}
+
+// Helper to display a little (?) mark which shows a tooltip when hovered.
+// In your own code you may want to display an actual icon if you are using a merged icon fonts (see docs/FONTS.md)
+void ImGuiCustom::HelpMarker(const char* desc)
+{
+    ImGui::TextDisabled("(?)");
+    if (ImGui::BeginItemTooltip())
+    {
+        ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+        ImGui::TextUnformatted(desc);
+        ImGui::PopTextWrapPos();
+        ImGui::EndTooltip();
+    }
 }

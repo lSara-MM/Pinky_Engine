@@ -13,11 +13,8 @@
 #include "External Libraries/ImGui/imgui.h"
 #include "External Libraries/ImGui/backends/imgui_impl_sdl2.h"
 #include "External Libraries/ImGui/backends/imgui_impl_opengl3.h"
-#include "External Libraries/DevIL/include/il.h"
-#include "External Libraries/DevIL/include/ilu.h"
-#include "External Libraries/DevIL/include/ilut.h"
-#include "External Libraries/mmgr/mmgr.h"
 
+#include "External Libraries/ImGui/imgui_custom.h"
 
 #include "GameObject.h"
 #include "Component.h"
@@ -90,7 +87,7 @@ void C_Mesh::ShowInInspector()
 	{
 		if (!isActive) { ImGui::BeginDisabled(); }
  
-		if (ImGui::BeginCombo("Mesh", mesh->name.c_str()))
+		if (ImGui::BeginCombo("##Mesh", mesh->name.c_str()))
 		{
 			for (int i = 0; i < App->resource->vMeshesResources.size(); i++)
 			{
@@ -108,6 +105,8 @@ void C_Mesh::ShowInInspector()
 			}
 			ImGui::EndCombo();
 		}
+		ImGui::SameLine();
+		ImGuiCustom::HelpMarker("If the current mesh has only one instance you will not be able to change it back unless a game object with that mesh is imported to scene");
 
 		if (mesh != nullptr)
 		{

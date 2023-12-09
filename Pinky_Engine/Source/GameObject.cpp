@@ -400,8 +400,12 @@ bool GameObject::ChangeComponentResource(Resource* oldResource, Resource* newRes
 		{
 		case R_TYPE::MESH:
 			mesh->mesh = static_cast<R_Mesh*>(newResource);
+			newResource->vComponents.push_back(mesh);
 			break;
 		case R_TYPE::TEXTURE:
+			// TODO: WIP
+			/*mesh->mesh = static_cast<R_Mesh*>(newResource);
+			newResource->vComponents.push_back(mesh);*/
 			break;
 		case R_TYPE::PREFAB:
 			break;
