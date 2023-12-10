@@ -364,6 +364,7 @@ void ResourcesManager::ShowWindow()
 			ImGui::TableHeadersRow();
 
 			std::map<u32, Resource*>::iterator it = App->resource->mResources.begin();
+			int i = 0;
 			while (it != App->resource->mResources.end())
 			{
 				ImGui::TableNextRow();
@@ -377,11 +378,13 @@ void ResourcesManager::ShowWindow()
 				ImGui::Text(std::to_string(it->second->count).c_str());
 
 				ImGui::TableSetColumnIndex(3);
-				if (ImGui::Button("Delete"))
+				
+				std::string deleteButton = "Delete##" + std::to_string(i);
+				if (ImGui::Button(deleteButton.c_str()))
 				{
 					App->resource->vPendingToDelete.push_back(it->second);
 				}
-				++it;
+				++it; ++i;
 			}			
 			ImGui::EndTable();
 		}

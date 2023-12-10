@@ -318,6 +318,9 @@ Resource* ModuleResource::LoadFromLibrary(std::string path, R_TYPE type)
 			break;
 		case R_TYPE::TEXTURE:
 			r = new R_Texture();
+
+			if (i != r->GetUID()) { r->SetUID(i); }
+
 			I_Texture::Load(static_cast<R_Texture*>(r), path.c_str());
 			break;
 		case R_TYPE::SCENE:
@@ -414,7 +417,7 @@ void ModuleResource::LoadChildrenTextures(std::string path)
 			
 			if (itr != mResources.end())
 			{
-				RELEASE(mat->tex);
+				//RELEASE(mat->tex);
 				mat->tex = static_cast<R_Texture*>(itr->second);
 				mat->tex->vComponents.push_back(mat);
 				mat->tex->name = it[i]->name;

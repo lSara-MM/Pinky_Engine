@@ -221,7 +221,8 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 						std::string filePath, fileName, fileExt;
 						App->fs->SplitFilePath(t->assetsFile.c_str(), &filePath, &fileName, &fileExt);
 
-						App->scene->hierarchy->SetSelectedP(obj);
+						App->scene->hierarchy->SetSelected(obj);
+						//App->scene->hierarchy->SetSelectedP(obj);
 
 						App->resource->ImportToScene((fileName + "." + fileExt).c_str(), filePath.c_str());
 						t = nullptr;

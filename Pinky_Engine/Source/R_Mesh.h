@@ -25,7 +25,7 @@ public:
 	R_Mesh();
 	~R_Mesh();
 
-	void CleanUp();
+	//void CleanUp();
 
 	bool InitBuffers();
 	void DeleteBuffers();

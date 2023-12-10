@@ -28,6 +28,8 @@ C_Material::C_Material(GameObject* g, C_Material* toCopy, bool start_enabled) : 
 
 C_Material::~C_Material()
 {
+	tex->CleanUp();
+	tex = nullptr;
 }
 
 void C_Material::ShowInInspector()

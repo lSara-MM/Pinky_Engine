@@ -16,6 +16,7 @@ Resource::~Resource()
 
 void Resource::CleanUp()
 {
+	App->resource->AddResource(this, false);
 }
 
 int Resource::GetUID() { return uid; }
