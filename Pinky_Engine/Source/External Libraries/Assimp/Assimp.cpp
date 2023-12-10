@@ -5,6 +5,7 @@
 #include "../../GameObject.h"
 #include "../../ModuleScene.h"
 
+#include "../FileSystemManager.h"
 #include "../ModuleResource.h"
 #include "../R_Mesh.h"
 #include "../Resource.h"
@@ -37,7 +38,10 @@ void ai::DisableDebug()
 GameObject* ai::ImportMesh(const char* meshfileDir, GameObject* go, bool component)
 {
 	const aiScene* scene = aiImportFile(meshfileDir, aiProcessPreset_TargetRealtime_MaxQuality);
-	App->fs->SplitFilePath(meshfileDir, &dir);
+	std::string auxPath;
+	App->fs->SplitFilePath(meshfileDir, &auxPath);
+	assimpDirectory = auxPath.c_str();
+
 	GameObject* ret = nullptr;
 
 	if (scene != nullptr && scene->HasMeshes())
@@ -173,7 +177,7 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 				return nullptr;
 			}
 
-			std::string path = App->resource->SaveToLibrary(mesh);
+			App->resource->SaveToLibrary(mesh);
 
 			obj->transform->globalMatrix = math::float4x4::FromTRS(obj->transform->position,
 				obj->transform->rotation, obj->transform->scale);
@@ -206,7 +210,6 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 
 			if (!component)
 			{
-				// TODO: To test
 				if (numTex != 0)
 				{
 					for (int i = 0; i < numTex; i++)
@@ -214,16 +217,24 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 						aiString aiPath;
 						mat->GetTexture(aiTextureType_DIFFUSE, i, &aiPath);
 
-						std::string path = dir + aiPath.C_Str();
+						std::string path = aiPath.C_Str();
+						std::string finalPath;
 
 						R_Texture* t = static_cast<C_Material*>(obj->GetComponentByType(C_TYPE::MATERIAL))->tex;
-						t->assetsFile = path.c_str();
 						std::string filePath, fileName, fileExt;
-						App->fs->SplitFilePath(t->assetsFile.c_str(), &filePath, &fileName, &fileExt);
+						App->fs->SplitFilePath(path.c_str(), &filePath, &fileName, &fileExt);
+
+						std::string inProjectPath = (assimpDirectory + fileName + "." + fileExt).c_str();
+
+						if (!App->fs->Exists(inProjectPath.c_str()))
+						{
+							App->fs->DuplicateFile(path.c_str(), inProjectPath.c_str(), finalPath);
+						}
+
+						t->assetsFile = path.c_str();
 
 						App->scene->hierarchy->SetSelected(obj);
-						//App->scene->hierarchy->SetSelectedP(obj);
-
+						
 						App->resource->ImportToScene((fileName + "." + fileExt).c_str(), filePath.c_str());
 						t = nullptr;
 					}

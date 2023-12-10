@@ -58,6 +58,6 @@ namespace ai
 	void LoadCheckers(GLuint& buffer);
 
 	//
-	static std::string dir;
+	static const char* assimpDirectory;
 }
 #endif //!__MESH_H__

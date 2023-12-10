@@ -425,8 +425,12 @@ void ModuleResource::LoadChildrenTextures(std::string path)
 			else
 			{
 				mat->tex = static_cast<R_Texture*>(LoadFromLibrary(mat->tex->libraryFile + TEXTURES_EXT, R_TYPE::TEXTURE));
-				mat->tex->vComponents.push_back(mat);
-				mat->tex->name = fileName;
+				
+				if (mat->tex != nullptr)
+				{
+					mat->tex->vComponents.push_back(mat);
+					mat->tex->name = fileName;
+				}
 			}
 			AddResource(mat->tex);
 		}
