@@ -19,7 +19,6 @@ public:
 	bool CleanUp();
 
 	std::string ImportFileToEngine(const char* path);
-	void ImportVModel(const char* meshPath, std::vector<const char*> texPaths);
 	int ImportToScene(std::string path, std::string dir, GameObject* goParent = nullptr, bool component = false);
 
 	void ImportModel(const char* meshPath, std::vector<const char*> texPaths);
@@ -30,6 +29,7 @@ public:
 	R_TYPE CheckExtensionType(const char* fileDir);
 
 	void LoadChildrenMeshes(GameObject* go, uint size);
+	void LoadChildrenTextures(std::string path = "");
 
 	// Return false if pending to delete
 	bool AddResource(Resource* r, bool i = true);
@@ -37,7 +37,9 @@ public:
 public:
 	std::map <u32, Resource*> mResources;
 	std::vector<Resource*> vPendingToDelete;
-	std::vector<Resource*> vResources;	// Temp vector
+
+	std::vector<Resource*> vTempM;	// Temp vector
+	std::vector<Resource*> vTempT;	// Temp vector
 
 
 	std::vector<Resource*> vMeshesResources;

@@ -31,23 +31,28 @@
 
 ImGuiWindows::ImGuiWindows(int i) : id(i)
 {
-	selectedGOs = {};
+	vSelectedGOs = {};
 }
 
 ImGuiWindows::~ImGuiWindows()
 {
-	ClearVec(selectedGOs);
+	ClearVec(vSelectedGOs);
 	show = true;
 }
 
 std::vector<GameObject*> ImGuiWindows::GetSelectedGOs()
 {
-	return selectedGOs;
+	return vSelectedGOs;
+}
+
+void ImGuiWindows::SetSelectedP(GameObject* go)
+{
+	vSelectedGOs.push_back(go);
 }
 
 void ImGuiWindows::SetSelected(std::vector<GameObject*> vSelected)
 {
-	selectedGOs = vSelected;
+	vSelectedGOs = vSelected;
 }
 
 void ImGuiWindows::SetSelected(GameObject* go)
@@ -57,11 +62,11 @@ void ImGuiWindows::SetSelected(GameObject* go)
 		// If ctrl not pressed, set everything to false clear and the selected go's vector 
 		if (!ImGui::GetIO().KeyCtrl)
 		{
-			for (auto i = 0; i < selectedGOs.size(); i++)
+			for (auto i = 0; i < vSelectedGOs.size(); i++)
 			{
-				SetSelectedState(selectedGOs[i], false);
+				SetSelectedState(vSelectedGOs[i], false);
 			}
-			ClearVec(selectedGOs);
+			ClearVec(vSelectedGOs);
 		}
 
 		// On click select or deselect item
@@ -70,19 +75,19 @@ void ImGuiWindows::SetSelected(GameObject* go)
 		// If the item was selected, add it to the vec, otherwise remove it
 		if (go->selected)
 		{
-			selectedGOs.push_back(go);
+			vSelectedGOs.push_back(go);
 			// Set selected go children to the same state as the clicked item
 			SetSelectedState(go, go->selected);
 		}
-		else if (!selectedGOs.empty())
+		else if (!vSelectedGOs.empty())
 		{
 			SetSelectedState(go, false);
-			selectedGOs.erase(std::find(selectedGOs.begin(), selectedGOs.end(), go));
+			vSelectedGOs.erase(std::find(vSelectedGOs.begin(), vSelectedGOs.end(), go));
 		}
 	}
 	else
 	{
-		ClearVec(selectedGOs);
+		ClearVec(vSelectedGOs);
 	}
 }
 

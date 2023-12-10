@@ -48,7 +48,7 @@ void ParsingJSON::CreateResourceMetaFile(std::vector<Resource*> resources, const
 	std::string filePath, fileName, fileExt;
 	App->fs->SplitFilePath(path, &filePath, &fileName, &fileExt);
 
-	std::string file_name = filePath + fileName + "." + fileExt;
+	std::string file_name = filePath + fileName + "." + fileExt + ".meta";
 
 	root_value = json_value_init_object();
 	root_object = json_value_get_object(root_value);
@@ -57,19 +57,22 @@ void ParsingJSON::CreateResourceMetaFile(std::vector<Resource*> resources, const
 	{
 		char* serialized_string = NULL;
 
-		std::string node_name = "GameObject";
+		std::string node_name = "Resource";
+		std::string node_path;
 		json_object_dotset_string(root_object, (node_name + ".Info.Local Directory").c_str(), file_name.c_str());
-		json_object_dotset_string(root_object, (node_name + ".Info.Origin").c_str(), (filePath + fileName).c_str());
+		json_object_dotset_string(root_object, (node_name + ".Info.Origin").c_str(), path);
 
 		json_object_dotset_number(root_object, (node_name + ".Info.Children number").c_str(), resources.size());
 
 		switch (App->resource->CheckExtensionType(path))
 		{
 		case R_TYPE::MESH:
-			node_name += ".Mesh ";
+			//node_name += ".Mesh ";
+			node_path = MESHES_PATH;
 			break;
 		case R_TYPE::TEXTURE:
-			node_name += ".Texture ";
+			//node_name += ".Texture ";
+			node_path = TEXTURES_PATH;
 			break;
 		case R_TYPE::SCENE:
 			break;
@@ -82,7 +85,7 @@ void ParsingJSON::CreateResourceMetaFile(std::vector<Resource*> resources, const
 		for (int i = 0; i < resources.size(); i++)
 		{
 			json_object_dotset_number(root_object, (node_name + std::to_string(i) + ".UID").c_str(), resources.at(i)->GetUID());
-			json_object_dotset_string(root_object, (node_name + std::to_string(i) + ".Library Path").c_str(), (MESHES_PATH +
+			json_object_dotset_string(root_object, (node_name + std::to_string(i) + ".Library Path").c_str(), (node_path +
 				std::to_string(resources.at(i)->GetUID())).c_str());
 		}
 
@@ -92,11 +95,11 @@ void ParsingJSON::CreateResourceMetaFile(std::vector<Resource*> resources, const
 		json_serialize_to_file(root_value, file_name.c_str());
 		json_free_serialized_string(serialized_string);
 
-		LOG("Successfully created [%s]", path);
+		LOG("Successfully created [%s]", file_name.c_str());
 	}
 	else
 	{
-		LOG("Could not create meta file of [%s]", path);
+		LOG("Could not create meta file of [%s]", file_name.c_str());
 	}
 	json_value_free(root_value);
 }
@@ -387,12 +390,12 @@ Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
 }
 
 // Check if it has to be reimported (file doesn't exist in library)
-bool ParsingJSON::HasToReImport(const char* path, R_TYPE type)
+std::string ParsingJSON::HasToReImport(const char* path, R_TYPE type)
 {
 	root_value = json_parse_file(path);
 	root_object = json_value_get_object(root_value);
 
-	std::string node_name = "GameObject";
+	std::string node_name = "Resource";
 	int size = json_object_dotget_number(root_object, (node_name + ".Info.Children number").c_str());
 	
 	std::string libPath;
@@ -420,11 +423,11 @@ bool ParsingJSON::HasToReImport(const char* path, R_TYPE type)
 
 		if (!App->fs->Exists(libPath.c_str()))
 		{
-			return true;
+			return "";
 		}
 	}
 
-	return false;
+	return libPath;
 }
 
 //---Scene---

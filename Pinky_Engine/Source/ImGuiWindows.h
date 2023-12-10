@@ -25,17 +25,20 @@ public:
 
 	// Hierarchy and Inspector use the same functions
 	std::vector<GameObject*> GetSelectedGOs();
+	
 	void SetSelected(std::vector<GameObject*> vSelected);
 	void SetSelected(GameObject* go);
 	void SetSelectedState(GameObject* go, bool selected);
 
+	// Do not use this one
+	void SetSelectedP(GameObject* go);
 public:
 	bool show;
 	int id;
 	W_TYPE type;
 
 private:
-	std::vector<GameObject*> selectedGOs;
+	std::vector<GameObject*> vSelectedGOs;
 };
 
 class Hierarchy : public ImGuiWindows
