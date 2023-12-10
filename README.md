@@ -38,9 +38,12 @@
 	* Toggle to enable and disable Game Object, it will not render and will appear slightly turned off in the hierarchy
 	* Clicking the name allows the user to change it (press enter to save it and esc to cancel)
 	* GameObjects can be picked from the world using the mouse
----------------------
-* Resource and CFF
----------------------
+* Resources and CFF
+	* Models, meshes and textures are saved with our own format under Library folder
+	* Scene can be serialized to a file that can be loaded
+	* Upon start, all resources not managed inside Assets are generated in Library 
+	* Library folder regenerates from Assets + meta content
+	* All resources use reference counting
 * Hierarchy:
 	* User can fold and unfold the children of a parent
 	* Multiple selection of Game Objects
