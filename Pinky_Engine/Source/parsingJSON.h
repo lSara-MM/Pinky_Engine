@@ -46,7 +46,12 @@ private:
 	void json_object_dotset_array(float* num, int size, string name);
 	float* C_json_object_dotget_array(int size, string name);
 
+public:
+	bool loadMeshes;
 private:
 	JSON_Value* root_value;
 	JSON_Object* root_object;
+
+	std::vector<std::string> vMeshesCheck;
+	std::vector<GameObject*> vGOCheck;
 };

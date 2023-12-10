@@ -59,5 +59,6 @@ namespace ai
 
 	//
 	static const char* assimpDirectory;
+	static const char* assimpFullDir;
 }
 #endif //!__MESH_H__

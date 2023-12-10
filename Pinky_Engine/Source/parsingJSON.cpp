@@ -3,6 +3,8 @@
 #include "Globals.h"
 #include "GameObject.h"
 
+#include "External Libraries/Assimp/Assimp.h"
+#include "ModuleResource.h"
 #include "ModuleScene.h"
 
 ParsingJSON::ParsingJSON()
@@ -213,6 +215,8 @@ void ParsingJSON::ComponentsJSON(Component* comp, std::string node_name, int i)
 		break;
 	case C_TYPE::MESH:
 		json_object_dotset_number(root_object, (comp_name + ".Resource UID").c_str(), static_cast<C_Mesh*>(comp)->mesh->GetUID());
+		json_object_dotset_string(root_object, (comp_name + ".Assets dir").c_str(), 
+			(static_cast<C_Mesh*>(comp)->mesh->assetsFile).c_str());		
 		json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), (MESHES_PATH +
 			std::to_string(static_cast<C_Mesh*>(comp)->mesh->GetUID())).c_str());
 		break;
@@ -281,6 +285,8 @@ GameObject* ParsingJSON::CreateGOfromMeta(std::string path, std::string subInfo)
 
 		ClearVec(vTemp);
 		temp = nullptr;
+		ClearVec(vMeshesCheck);
+		ClearVec(vGOCheck);
 
 		LOG("Successfully created [%s]", go->name.c_str());
 	}
@@ -317,6 +323,12 @@ GameObject* ParsingJSON::GOfromMeta(std::string node_name)
 		{
 			Component* comp = ComponentsFromMeta(node_name, i);
 			go->AddComponent(comp);
+			
+			if (comp->type == C_TYPE::MESH)
+			{
+				vMeshesCheck.push_back(static_cast<C_Mesh*>(comp)->mesh->assetsFile);
+				vGOCheck.push_back(go);
+			}
 
 			if (comp->type == C_TYPE::MATERIAL && static_cast<C_Material*>(comp)->tex->libraryFile != "")
 			{
@@ -380,6 +392,7 @@ Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
 		// When create the component, add the resource already existing;
 		static_cast<C_Mesh*>(comp)->mesh->SetUID(id);
 
+		static_cast<C_Mesh*>(comp)->mesh->assetsFile = json_object_dotget_string(root_object, (comp_name + ".Assets dir").c_str());
 		static_cast<C_Mesh*>(comp)->mesh->libraryFile = json_object_dotget_string(root_object, (comp_name + ".Library dir").c_str());
 		break;
 	case C_TYPE::MATERIAL:
@@ -527,6 +540,28 @@ void ParsingJSON::LoadScene(std::string path)
 			temp = nullptr;
 		}
 
+		loadMeshes = true;
+		for (int i = 0; i < vMeshesCheck.size(); i++)
+		{
+			std::string filePath, fileName, fileExt;
+			App->fs->SplitFilePath(vMeshesCheck[i].c_str(), &filePath, &fileName, &fileExt);
+
+			std::string libPath = App->parson->HasToReImport((vMeshesCheck[i] + ".meta").c_str(), R_TYPE::MESH);
+			if (libPath == "")
+			{
+				GameObject* goAux;
+				goAux = ai::ImportMesh(vMeshesCheck[i].c_str(), vGOCheck[i], true);
+				if (go != nullptr)
+				{
+					// Creates "Assets/name.ext.meta"
+					App->parson->CreateResourceMetaFile(App->resource->vTempM, vMeshesCheck[i].c_str());
+					goAux->ReSetUID();
+
+					ClearVec(App->resource->vTempM);
+				}
+				loadMeshes = false;
+			}
+		}
 		for (auto it = vTemp.begin(); it != vTemp.end(); it++)
 		{
 			(*it)->selected = false;
@@ -535,6 +570,8 @@ void ParsingJSON::LoadScene(std::string path)
 		}
 
 		ClearVec(vTemp);
+		ClearVec(vMeshesCheck);
+		ClearVec(vGOCheck);
 
 		LOG("Successfully created [%s]", path);
 	}

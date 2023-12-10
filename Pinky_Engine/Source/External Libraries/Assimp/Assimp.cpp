@@ -41,6 +41,7 @@ GameObject* ai::ImportMesh(const char* meshfileDir, GameObject* go, bool compone
 	std::string auxPath;
 	App->fs->SplitFilePath(meshfileDir, &auxPath);
 	assimpDirectory = auxPath.c_str();
+	assimpFullDir = meshfileDir;
 
 	GameObject* ret = nullptr;
 
@@ -175,7 +176,7 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 				obj = nullptr;
 				return nullptr;
 			}
-
+			mesh->assetsFile = assimpFullDir;
 			App->resource->SaveToLibrary(mesh);
 
 			obj->transform->globalMatrix = math::float4x4::FromTRS(obj->transform->position,

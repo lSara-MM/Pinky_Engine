@@ -43,8 +43,12 @@ update_status ModuleResource::FinishUpdate(float dt)
 	{
 		RELEASE(App->scene->rootNode);
 		App->parson->LoadScene(sceneFileName);
-		LoadChildrenMeshes(App->scene->rootNode, App->scene->rootNode->vChildren.size());
-
+		
+		//if (App->parson->loadMeshes)
+		{
+			LoadChildrenMeshes(App->scene->rootNode, App->scene->rootNode->vChildren.size());
+		}
+		
 		for (int i = 0; i < App->scene->hierarchy->vSelectedGOs.size(); i++)
 		{
 			App->scene->hierarchy->vSelectedGOs[i] = nullptr;
@@ -262,9 +266,6 @@ int ModuleResource::ImportToScene(std::string path, std::string dir, GameObject*
 		}
 	}
 
-	LOG("%s imported", normFileName.c_str());
-	ClearVec(App->scene->hierarchy->GetSelectedGOs());
-
 	go = nullptr;
 	return 0;
 }
@@ -277,34 +278,6 @@ void ModuleResource::ImportModel(const char* meshPath, std::vector<const char*> 
 	//Get_Set_FilePath(meshPath);
 
 	ImportFileToEngine(meshPath);
-	//ImportToScene(meshPath);
-
-	//if (texPaths.empty())
-	//{
-	//}
-	//else if (texPaths.size() == 1)
-	//{
-	//	for (int i = 0; i < go->vChildren.size(); i++)
-	//	{
-	//		ImportFile(texPaths[0], go->vChildren[i]);
-	//	}
-	//}
-	//else
-	//{
-	//	for (int i = 0; i < go->vChildren.size(); i++)
-	//	{
-	//		if (i < texPaths.size())
-	//		{
-	//			ImportFile(texPaths[i], go->vChildren[i]);
-	//		}
-	//		else
-	//		{
-	//			ImportFile(texPaths[go->vChildren.size() - 1], go->vChildren[i]);
-	//		}
-	//	}
-	//}
-
-	//App->parson->CreateJSON(go, meshPath);
 	go = nullptr;
 }
 //
