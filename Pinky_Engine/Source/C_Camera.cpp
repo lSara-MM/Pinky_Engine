@@ -82,6 +82,7 @@ void C_Camera::ShowInInspector()
 		if (ImGui::Checkbox("Game Camera", &isGameCam))
 		{	
 			SetAsMain(isGameCam);
+			RestartCulling();
 		}
 
 		if (ImGui::Checkbox("Frustum Culling", &isCullEnabled))
