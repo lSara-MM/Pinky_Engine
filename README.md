@@ -52,7 +52,7 @@
 	* Show the libraries initialization process
 	* Special messages for errors and warnings (highlighted in red and yellow)
 	* Button to clear the console.
-	* Search option to look for messages with the types introduced
+	* Search option to look for messages 
 * Play time: 
 	* User can user can Start / Pause / Stop / Step the simulation and recover its original state
 	* 2 timers show the real time since the engine started and the game time since the simulation started (play button)
