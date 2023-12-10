@@ -224,18 +224,16 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 						std::string filePath, fileName, fileExt;
 						App->fs->SplitFilePath(path.c_str(), &filePath, &fileName, &fileExt);
 
-						std::string inProjectPath = (assimpDirectory + fileName + "." + fileExt).c_str();
-
-						if (!App->fs->Exists(inProjectPath.c_str()))
+						if (!App->fs->Exists((assimpDirectory + fileName + "." + fileExt).c_str()))
 						{
-							App->fs->DuplicateFile(path.c_str(), inProjectPath.c_str(), finalPath);
+							App->fs->DuplicateFile(path.c_str(), assimpDirectory, finalPath);
 						}
 
 						t->assetsFile = path.c_str();
 
 						App->scene->hierarchy->SetSelected(obj);
-						
-						App->resource->ImportToScene((fileName + "." + fileExt).c_str(), filePath.c_str());
+
+						App->resource->ImportToScene((fileName + "." + fileExt).c_str(), assimpDirectory);
 						t = nullptr;
 					}
 				}
