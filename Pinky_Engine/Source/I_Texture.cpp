@@ -88,7 +88,7 @@ uint64 I_Texture::Save(const R_Texture* ourTexture, char** fileBuffer)
 	return size;
 }
 
-void I_Texture::Load(R_Texture* ourTex, const char* buffer)
+void I_Texture::Load(R_Texture* ourTex, const char* path)
 {
 	ILuint imageID = 0;
 	ILuint textureID;
@@ -99,7 +99,7 @@ void I_Texture::Load(R_Texture* ourTex, const char* buffer)
 	glGenTextures(1, &textureID);
 	glBindTexture(GL_TEXTURE_2D, textureID);
 
-	if (ilLoadImage(buffer))
+	if (ilLoadImage(path))
 	{
 		ILinfo ImageInfo;
 		iluGetImageInfo(&ImageInfo);
@@ -135,6 +135,6 @@ void I_Texture::Load(R_Texture* ourTex, const char* buffer)
 
 	ilBindImage(0);
 	ilDeleteImages(1, &textureID);
-	ourTex->path = buffer;
+	ourTex->path = path;
 	ourTex->tex_id = textureID;
 }
