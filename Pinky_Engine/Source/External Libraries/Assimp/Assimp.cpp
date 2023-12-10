@@ -250,7 +250,7 @@ void ai::CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go, bool compo
 	switch (obj)
 	{
 	case ai::POLY_PRIMITIVE_TYPE::CUBE:
-		App->resource->ImportToScene("cube.fbx", PINKY_ASSETS_AUX "Custom\\", go, component);
+		App->resource->ImportToScene("cube.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::SPHERE:
 		App->resource->ImportToScene("sphere.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);

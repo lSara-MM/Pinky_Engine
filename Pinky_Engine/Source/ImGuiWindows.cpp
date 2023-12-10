@@ -297,7 +297,10 @@ void Hierarchy::MouseEvents(GameObject* current)
 			GameObject* go = new GameObject("Empty GameObject", current);
 			go = nullptr;
 		}
-
+		/*if (ImGui::MenuItem("Delete", "Backspace"))
+		{
+			current->pParent->DeleteChild(current);
+		}*/
 		if (ImGui::BeginMenu("Mesh"))
 		{
 			App->editor->PrimitivesMenu(current);

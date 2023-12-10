@@ -129,12 +129,14 @@ int ModuleResource::ImportToScene(std::string path, std::string dir, GameObject*
 			if (libPath == "")
 			{
 				go = ai::ImportMesh(normFileName.c_str(), goParent, component);
+				if (go != nullptr)
+				{
+					// Creates "Assets/name.ext.meta"
+					App->parson->CreateResourceMetaFile(vTempM, normFileName.c_str());
+					go->ReSetUID();
 
-				// Creates "Assets/name.ext.meta"
-				App->parson->CreateResourceMetaFile(vTempM, normFileName.c_str());
-				go->ReSetUID();
-
-				ClearVec(vTempM);
+					ClearVec(vTempM);
+				}
 			}
 			else
 			{
@@ -180,12 +182,14 @@ int ModuleResource::ImportToScene(std::string path, std::string dir, GameObject*
 		{
 		case R_TYPE::MESH:
 			go = ai::ImportMesh(normFileName.c_str(), goParent, component);
+			if (go != nullptr)
+			{
+				// Creates "Assets/name.ext.meta"
+				App->parson->CreateResourceMetaFile(vTempM, normFileName.c_str());
+				go->ReSetUID();
 
-			// Creates "Assets/name.ext.meta"
-			App->parson->CreateResourceMetaFile(vTempM, normFileName.c_str());
-			go->ReSetUID();
-
-			ClearVec(vTempM);
+				ClearVec(vTempM);
+			}
 			break;
 		case R_TYPE::TEXTURE:
 			if (true)
