@@ -147,15 +147,17 @@ int ModuleResource::ImportToScene(std::string path, std::string dir, GameObject*
 			if (libPath == "")
 			{
 				R_Texture* t = new R_Texture();
-				I_Texture::Import(normFileName.c_str(), t);
-				std::string texturePath = SaveToLibrary(t);
-				vTempT.push_back(t);
+				if (I_Texture::Import(normFileName.c_str(), t))
+				{
+					std::string texturePath = SaveToLibrary(t);
+					vTempT.push_back(t);
 
-				// Creates "Assets/name.ext.meta"
-				App->parson->CreateResourceMetaFile(vTempT, normFileName.c_str());
+					// Creates "Assets/name.ext.meta"
+					App->parson->CreateResourceMetaFile(vTempT, normFileName.c_str());
 
+					LoadChildrenTextures(texturePath);
+				}
 				RELEASE(t);
-				LoadChildrenTextures(texturePath);
 				ClearVec(vTempT);
 			}
 			else
@@ -189,15 +191,17 @@ int ModuleResource::ImportToScene(std::string path, std::string dir, GameObject*
 			if (true)
 			{
 				R_Texture* t = new R_Texture();
-				I_Texture::Import(normFileName.c_str(), t);
-				std::string texturePath = SaveToLibrary(t);
-				vTempT.push_back(t);
+				if (I_Texture::Import(normFileName.c_str(), t))
+				{
+					std::string texturePath = SaveToLibrary(t);
+					vTempT.push_back(t);
 
-				// Creates "Assets/name.ext.meta"
-				App->parson->CreateResourceMetaFile(vTempT, normFileName.c_str());
+					// Creates "Assets/name.ext.meta"
+					App->parson->CreateResourceMetaFile(vTempT, normFileName.c_str());
 
+					LoadChildrenTextures(texturePath);
+				}
 				RELEASE(t);
-				LoadChildrenTextures(texturePath);
 				ClearVec(vTempT);
 			}
 			break;

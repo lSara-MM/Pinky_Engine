@@ -11,7 +11,7 @@
 
 namespace I_Texture
 {
-	void Import(const char* path, R_Texture* ourTexture);
+	bool Import(const char* path, R_Texture* ourTexture);
 	uint64 Save(const R_Texture* ourTex, char** fileBuffer);
 	void Load(R_Texture* ourTex, const char* buffer);
 }

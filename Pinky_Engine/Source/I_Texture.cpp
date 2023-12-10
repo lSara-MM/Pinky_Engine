@@ -1,6 +1,6 @@
 #include "I_Texture.h"
 
-void I_Texture::Import(const char* path, R_Texture* ourTexture)
+bool I_Texture::Import(const char* path, R_Texture* ourTexture)
 {
 	ILuint imageID = 0;
 	ILuint textureID;
@@ -43,12 +43,15 @@ void I_Texture::Import(const char* path, R_Texture* ourTexture)
 	else
 	{
 		LOG("[ERROR] %s", iluErrorString(ilGetError()));
+		return false;
 	}
 
 	//ilBindImage(0);
 	ilDeleteImages(1, &textureID);
 	ourTexture->path = path;
 	ourTexture->tex_id = textureID;
+
+	return true;
 }
 
 uint64 I_Texture::Save(const R_Texture* ourTexture, char** fileBuffer)
