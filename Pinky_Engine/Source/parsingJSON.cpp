@@ -217,14 +217,22 @@ void ParsingJSON::ComponentsJSON(Component* comp, std::string node_name, int i)
 			std::to_string(static_cast<C_Mesh*>(comp)->mesh->GetUID())).c_str());
 		break;
 	case C_TYPE::MATERIAL:
-		json_object_dotset_number(root_object, (comp_name + ".Resource UID").c_str(), static_cast<C_Material*>(comp)->tex->GetUID());
-		json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), (TEXTURES_PATH +
-			std::to_string(static_cast<C_Material*>(comp)->tex->GetUID())).c_str());
+		if (static_cast<C_Material*>(comp)->tex != nullptr)
+		{
+			json_object_dotset_number(root_object, (comp_name + ".Resource UID").c_str(), static_cast<C_Material*>(comp)->tex->GetUID());
+			json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), (TEXTURES_PATH +
+				std::to_string(static_cast<C_Material*>(comp)->tex->GetUID())).c_str());
 
-		json_object_dotset_number(root_object, (comp_name + ".Color.R").c_str(), static_cast<C_Material*>(comp)->color.r);
-		json_object_dotset_number(root_object, (comp_name + ".Color.G").c_str(), static_cast<C_Material*>(comp)->color.g);
-		json_object_dotset_number(root_object, (comp_name + ".Color.B").c_str(), static_cast<C_Material*>(comp)->color.b);
-		json_object_dotset_number(root_object, (comp_name + ".Color.A").c_str(), static_cast<C_Material*>(comp)->color.a);
+			json_object_dotset_number(root_object, (comp_name + ".Color.R").c_str(), static_cast<C_Material*>(comp)->color.r);
+			json_object_dotset_number(root_object, (comp_name + ".Color.G").c_str(), static_cast<C_Material*>(comp)->color.g);
+			json_object_dotset_number(root_object, (comp_name + ".Color.B").c_str(), static_cast<C_Material*>(comp)->color.b);
+			json_object_dotset_number(root_object, (comp_name + ".Color.A").c_str(), static_cast<C_Material*>(comp)->color.a);
+		}
+		else
+		{
+			LOG("[ERROR] Could not save material");
+		}
+		
 		break;
 	case C_TYPE::CAM:
 		json_object_dotset_number(root_object, (comp_name + ".Near Plane").c_str(), static_cast<C_Camera*>(comp)->frustum.nearPlaneDistance);
