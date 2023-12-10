@@ -178,9 +178,11 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 			obj->transform->globalMatrix = math::float4x4::FromTRS(obj->transform->position,
 				obj->transform->rotation, obj->transform->scale);
 
+
 			//---Mesh---
 			obj->AddComponent(C_TYPE::MESH, mesh);
 			obj->mesh->mesh->name = obj->name;
+			App->resource->vTempM.push_back(mesh);
 			App->resource->vMeshesResources.push_back(mesh);
 			App->resource->AddResource(mesh);
 
@@ -188,6 +190,19 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 			//---Material---
 			aiMaterial* mat = s->mMaterials[m->mMaterialIndex];
 			uint numTex = mat->GetTextureCount(aiTextureType_DIFFUSE);
+
+			aiColor3D color(0.f, 0.f, 0.f);
+			float a = 1.f;
+			obj->AddComponent(C_TYPE::MATERIAL);
+
+			if (mat->Get(AI_MATKEY_COLOR_DIFFUSE, color) == AI_SUCCESS)
+			{
+				static_cast<C_Material*>(obj->GetComponentByType(C_TYPE::MATERIAL))->color.Set(color.r, color.g, color.b);
+			}
+			if (mat->Get(AI_MATKEY_OPACITY, a) == AI_SUCCESS)
+			{
+				static_cast<C_Material*>(obj->GetComponentByType(C_TYPE::MATERIAL))->color.a = a;
+			}
 
 			if (!component)
 			{
@@ -199,18 +214,19 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 						aiString aiPath;
 						mat->GetTexture(aiTextureType_DIFFUSE, i, &aiPath);
 
-						obj->AddComponent(C_TYPE::MATERIAL);
 						std::string path = dir + aiPath.C_Str();
 
-						// TODO: el path que da es del png, lo que se necesita es el dds por lo que se tiene que hacer un save y un load en el formato correcto
-						static_cast<C_Material*>(obj->GetComponentByType(C_TYPE::MATERIAL))->tex->path = path.c_str();
-						static_cast<C_Material*>(obj->GetComponentByType(C_TYPE::MATERIAL))->tex->ImportTexture(path.c_str());
+						R_Texture* t = static_cast<C_Material*>(obj->GetComponentByType(C_TYPE::MATERIAL))->tex;
+						t->assetsFile = path.c_str();
+						std::string filePath, fileName, fileExt;
+						App->fs->SplitFilePath(t->assetsFile.c_str(), &filePath, &fileName, &fileExt);
+
+						App->scene->hierarchy->SetSelectedP(obj);
+
+						App->resource->ImportToScene((fileName + "." + fileExt).c_str(), filePath.c_str());
+						t = nullptr;
 					}
 				}
-				else
-				{
-					obj->AddComponent(C_TYPE::MATERIAL);
-				}				
 			}
 			m = nullptr;
 		}

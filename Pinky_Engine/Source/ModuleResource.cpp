@@ -106,12 +106,6 @@ std::string ModuleResource::ImportFileToEngine(const char* fileDir)
 	return filePath;
 }
 
-void ModuleResource::ImportVModel(const char* meshPath, std::vector<const char*> texPaths)
-{
-	ImportFileToEngine(meshPath);
-	ImportFileToEngine(texPaths[0]);
-}
-
 /// <summary>
 /// If first time import to engine --> Create a copy in local space
 /// If it already exists the file --> Dupe it with another name (nameN.ext) { N == number}
@@ -123,6 +117,7 @@ int ModuleResource::ImportToScene(std::string path, std::string dir, GameObject*
 	GameObject* go = nullptr;
 	std::string::size_type i = 0;
 	std::string normFileName = App->fs->NormalizePath((dir + path).c_str());
+	std::string libPath;
 
 	//const char* realPath = App->parson->GetRealDirFF((ASSETS_AUX + path).c_str());	
 	if (App->fs->Exists((normFileName + ".meta").c_str()))
@@ -130,46 +125,42 @@ int ModuleResource::ImportToScene(std::string path, std::string dir, GameObject*
 		switch (CheckExtensionType(path.c_str()))
 		{
 		case R_TYPE::MESH:
-			if (App->parson->HasToReImport((normFileName + ".meta").c_str(), R_TYPE::MESH))
+			libPath = App->parson->HasToReImport((normFileName + ".meta").c_str(), R_TYPE::MESH);
+			if (libPath == "")
 			{
 				go = ai::ImportMesh(normFileName.c_str(), goParent, component);
 
 				// Creates "Assets/name.ext.meta"
-				App->parson->CreateResourceMetaFile(vResources, (normFileName + ".meta").c_str());
+				App->parson->CreateResourceMetaFile(vTempM, normFileName.c_str());
 				go->ReSetUID();
+
+				ClearVec(vTempM);
 			}
 			else
 			{
 				go = App->parson->CreateGOfromMeta(PREFABS_PATH + App->fs->GetFileName(path.c_str()) + PREFABS_EXT);
 				LoadChildrenMeshes(go, go->vChildren.size());
 			}
-
-			// get mesh uid and add to counter 
-			//go = App->parson->CreateGOfromMeta(normFileName);
 			break;
 		case R_TYPE::TEXTURE:
-			if (App->parson->HasToReImport((normFileName + ".meta").c_str(), R_TYPE::MESH))
+			libPath = App->parson->HasToReImport((normFileName + ".meta").c_str(), R_TYPE::TEXTURE);
+			if (libPath == "")
 			{
-				// TODO: no funciona jaja
 				R_Texture* t = new R_Texture();
-				t->ImportTexture(path.c_str());
-				SaveToLibrary(t);
-
-				vResources.push_back(t);
+				I_Texture::Import(normFileName.c_str(), t);
+				std::string texturePath = SaveToLibrary(t);
+				vTempT.push_back(t);
 
 				// Creates "Assets/name.ext.meta"
-				App->parson->CreateResourceMetaFile(vResources, (normFileName + ".meta").c_str());
+				App->parson->CreateResourceMetaFile(vTempT, normFileName.c_str());
+
+				RELEASE(t);
+				LoadChildrenTextures(texturePath);
+				ClearVec(vTempT);
 			}
-
-			if (true)
+			else
 			{
-				R_Texture* r = static_cast<R_Texture*>(LoadFromLibrary((normFileName + ".meta"), R_TYPE::TEXTURE));
-
-				for (auto it = App->scene->hierarchy->GetSelectedGOs().begin(); it != App->scene->hierarchy->GetSelectedGOs().end(); ++it)
-				{
-					static_cast<C_Material*>((*it)->GetComponentByType(C_TYPE::MATERIAL))->tex = r;
-					(*it) = nullptr;
-				}
+				LoadChildrenTextures(libPath);
 			}
 			break;
 		case R_TYPE::SCENE:
@@ -189,26 +180,25 @@ int ModuleResource::ImportToScene(std::string path, std::string dir, GameObject*
 			go = ai::ImportMesh(normFileName.c_str(), goParent, component);
 
 			// Creates "Assets/name.ext.meta"
-			App->parson->CreateResourceMetaFile(vResources, (normFileName + ".meta").c_str());
+			App->parson->CreateResourceMetaFile(vTempM, normFileName.c_str());
 			go->ReSetUID();
+
+			ClearVec(vTempM);
 			break;
 		case R_TYPE::TEXTURE:
 			if (true)
 			{
-				// TODO: no funciona jaja
-				/*R_Texture* t = new R_Texture();
-				t->ImportTexture(path.c_str());*/
-				
 				R_Texture* t = new R_Texture();
 				I_Texture::Import(normFileName.c_str(), t);
 				std::string texturePath = SaveToLibrary(t);
-				vResources.push_back(t);
+				vTempT.push_back(t);
 
 				// Creates "Assets/name.ext.meta"
-				App->parson->CreateResourceMetaFile(vResources, (normFileName + ".meta").c_str());
+				App->parson->CreateResourceMetaFile(vTempT, normFileName.c_str());
 
 				RELEASE(t);
-				t = static_cast<R_Texture*>(LoadFromLibrary(texturePath.c_str(), R_TYPE::TEXTURE));
+				LoadChildrenTextures(texturePath);
+				ClearVec(vTempT);
 			}
 			break;
 		case R_TYPE::SCENE:
@@ -220,8 +210,6 @@ int ModuleResource::ImportToScene(std::string path, std::string dir, GameObject*
 		default:
 			break;
 		}
-
-		ClearVec(vResources);
 	}
 
 	LOG("%s imported", normFileName);
@@ -340,10 +328,8 @@ Resource* ModuleResource::LoadFromLibrary(std::string path, R_TYPE type)
 			break;
 		}
 
-		//mResources->insert(std::pair<uint, Resource*>(r->GetUID(), r));
 		RELEASE_ARRAY(buffer);
 	}
-	buffer = nullptr;
 
 	return r;
 }
@@ -402,6 +388,50 @@ void ModuleResource::LoadChildrenMeshes(GameObject* go, uint size)
 		LoadChildrenMeshes(go->vChildren[i], go->vChildren[i]->vChildren.size());
 	}
 }
+
+void ModuleResource::LoadChildrenTextures(std::string path)
+{
+	std::vector<GameObject*> it = App->scene->hierarchy->GetSelectedGOs();
+	C_Material* mat;
+	for (int i = 0; i < it.size(); i++)
+	{
+		mat = static_cast<C_Material*>(it[i]->GetComponentByType(C_TYPE::MATERIAL));
+		if (mat != nullptr && mat->tex != nullptr)
+		{
+			if (path != "")
+			{
+				// Get correct path (Probably from assimp)
+				std::string filePath1, fileName1;
+				App->fs->SplitFilePath(path.c_str(), &filePath1, &fileName1);
+				mat->tex->libraryFile = filePath1 + fileName1;
+			}
+
+			std::string filePath, fileName, fileExt;
+			App->fs->SplitFilePath((mat->tex->libraryFile + TEXTURES_EXT).c_str(), &filePath, &fileName, &fileExt);
+			u32 id = std::stoi(fileName.c_str());
+			
+			auto itr = mResources.find(id);
+			
+			if (itr != mResources.end())
+			{
+				RELEASE(mat->tex);
+				mat->tex = static_cast<R_Texture*>(itr->second);
+				mat->tex->vComponents.push_back(mat);
+				mat->tex->name = it[i]->name;
+			}
+			else
+			{
+				mat->tex = static_cast<R_Texture*>(LoadFromLibrary(mat->tex->libraryFile + TEXTURES_EXT, R_TYPE::TEXTURE));
+				mat->tex->vComponents.push_back(mat);
+				mat->tex->name = fileName;
+			}
+			AddResource(mat->tex);
+		}
+	}
+	mat = nullptr;
+	ClearVec(it);
+}
+
 
 bool ModuleResource::AddResource(Resource* r, bool i)
 {
