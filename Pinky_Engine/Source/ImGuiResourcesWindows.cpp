@@ -39,8 +39,8 @@ void Console::ShowWindow()
 	ImVec2 pos = ImGui::GetMainViewport()->WorkPos;
 	ImVec2 size = ImGui::GetMainViewport()->Size;
 	pos.y += size.y;
-	ImGui::SetNextWindowPos(pos, ImGuiCond_Appearing, ImVec2(-0.01f, 1.0f));
-	ImGui::SetNextWindowSize(ImVec2(size.x - 15, 200), ImGuiCond_Appearing);
+	//ImGui::SetNextWindowPos(pos, ImGuiCond_Appearing, ImVec2(-0.01f, 1.0f));
+	//ImGui::SetNextWindowSize(ImVec2(size.x - 15, 200), ImGuiCond_Appearing);
 
 	if (ImGui::Begin("Console", &consoleWin, ImGuiWindowFlags_MenuBar))
 	{
@@ -113,8 +113,8 @@ void ProjectFiles::ShowWindow()
 	ImVec2 pos = ImGui::GetMainViewport()->WorkPos;
 	ImVec2 size = ImGui::GetMainViewport()->Size;
 	pos.y += size.y;
-	ImGui::SetNextWindowPos(pos, ImGuiCond_Appearing, ImVec2(-0.01f, 1.0f));
-	ImGui::SetNextWindowSize(ImVec2(size.x - 15, 200), ImGuiCond_Appearing);
+	//ImGui::SetNextWindowPos(pos, ImGuiCond_Appearing, ImVec2(-0.01f, 1.0f));
+	//ImGui::SetNextWindowSize(ImVec2(size.x - 15, 200), ImGuiCond_Appearing);
 	if (ImGui::Begin(title.c_str(), &show))
 	{
 		ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
@@ -351,8 +351,8 @@ void ResourcesManager::ShowWindow()
 {
 	// Always center this window when appearing
 	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-	ImGui::SetNextWindowSize(ImVec2(500, 300), ImGuiCond_Appearing);
+	//ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+	//ImGui::SetNextWindowSize(ImVec2(500, 300), ImGuiCond_Appearing);
 	if (ImGui::Begin("Resources", &show))
 	{
 		if (ImGui::BeginTable("Resources", 4, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_Resizable | ImGuiTableFlags_BordersOuter

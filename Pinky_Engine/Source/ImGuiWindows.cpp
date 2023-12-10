@@ -125,8 +125,8 @@ void Hierarchy::ShowWindow()
 	title.append(std::to_string(id));
 
 	ImVec2 pos = ImGui::GetMainViewport()->WorkPos;
-	ImGui::SetNextWindowPos(pos, ImGuiCond_Appearing, ImVec2(-0.05f, -0.05f));
-	ImGui::SetNextWindowSize(ImVec2(200, 490), ImGuiCond_Appearing);
+	//ImGui::SetNextWindowPos(pos, ImGuiCond_Appearing, ImVec2(-0.05f, -0.05f));
+	//ImGui::SetNextWindowSize(ImVec2(200, 490), ImGuiCond_Appearing);
 	if (ImGui::Begin(title.c_str(), &show))
 	{
 		// ---Root node---
@@ -328,8 +328,8 @@ void Inspector::ShowWindow()
 
 	ImVec2 pos = ImGui::GetMainViewport()->WorkPos;
 	pos.x += ImGui::GetMainViewport()->Size.x;
-	ImGui::SetNextWindowPos(pos, ImGuiCond_Appearing, ImVec2(1.05f, -0.05f));
-	ImGui::SetNextWindowSize(ImVec2(260, 490), ImGuiCond_Appearing);
+	//ImGui::SetNextWindowPos(pos, ImGuiCond_Appearing, ImVec2(1.05f, -0.05f));
+	//ImGui::SetNextWindowSize(ImVec2(260, 490), ImGuiCond_Appearing);
 	if (ImGui::Begin(title.c_str(), &show))
 	{
 		if (!GetSelectedGOs().empty())
