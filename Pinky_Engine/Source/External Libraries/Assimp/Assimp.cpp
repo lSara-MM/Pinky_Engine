@@ -184,7 +184,7 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 
 			//---Mesh---
 			obj->AddComponent(C_TYPE::MESH, mesh);
-			obj->mesh->mesh->name = obj->name;
+			//obj->mesh->mesh->name = obj->name;
 			App->resource->vTempM.push_back(mesh);
 			App->resource->vMeshesResources.push_back(mesh);
 			App->resource->AddResource(mesh);
