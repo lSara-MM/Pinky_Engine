@@ -51,11 +51,11 @@ bool ModuleScene::Init()
 	console = new Console(2);
 	App->editor->AddWindow(console);
 
-	project = new ProjectFiles(3);
-	App->editor->AddWindow(project);
-
-	rm = new ResourcesManager(4);
+	rm = new ResourcesManager(3);
 	App->editor->AddWindow(rm);
+
+	project = new ProjectFiles(4);
+	App->editor->AddWindow(project);
 
 	//Main Camera  
 	mainCamera = new GameObject("Main Camera", rootNode);
