@@ -304,6 +304,13 @@ GameObject* ParsingJSON::GOfromMeta(std::string node_name)
 		{
 			Component* comp = ComponentsFromMeta(node_name, i);
 			go->AddComponent(comp);
+
+			if (comp->type == C_TYPE::MATERIAL && static_cast<C_Material*>(comp)->tex->libraryFile != "")
+			{
+				static_cast<C_Material*>(comp)->tex = static_cast<R_Texture*>
+					(App->resource->LoadFromLibrary(static_cast<C_Material*>(comp)->tex->libraryFile + TEXTURES_EXT, R_TYPE::TEXTURE));
+			}
+
 			comp = nullptr;
 		}
 	}
