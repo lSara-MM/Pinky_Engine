@@ -59,8 +59,10 @@ bool ModuleScene::Init()
 
 	//Main Camera  
 	mainCamera = new GameObject("Main Camera", rootNode);
-	float3 posIni = { 0, 2, -5 };
+	float3 posIni = { 47, 25, -55 };
+	float3 rotIni = { 28, -38, 21 };
 	mainCamera->transform->SetTransform(posIni);
+	mainCamera->transform->SetRotation(rotIni);
 	mainCamera->AddComponent(C_TYPE::CAM);
 
 	return ret;
