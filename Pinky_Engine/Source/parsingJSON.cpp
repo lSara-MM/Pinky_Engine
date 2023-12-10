@@ -504,6 +504,7 @@ void ParsingJSON::LoadScene(std::string path)
 
 		for (auto it = vTemp.begin(); it != vTemp.end(); it++)
 		{
+			(*it)->selected = false;
 			(*it)->SetUID(App->randomLCG->Int());
 			(*it) = nullptr;
 		}

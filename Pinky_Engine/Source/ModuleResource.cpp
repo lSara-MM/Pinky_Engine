@@ -42,6 +42,7 @@ update_status ModuleResource::FinishUpdate(float dt)
 		RELEASE(App->scene->rootNode);
 		App->parson->LoadScene(sceneFileName);
 		LoadChildrenMeshes(App->scene->rootNode, App->scene->rootNode->vChildren.size());
+		ClearVec(App->scene->hierarchy->GetSelectedGOs());
 
 		pendingToLoadScene = false;
 	}
@@ -254,6 +255,7 @@ int ModuleResource::ImportToScene(std::string path, std::string dir, GameObject*
 	}
 
 	LOG("%s imported", normFileName.c_str());
+	ClearVec(App->scene->hierarchy->GetSelectedGOs());
 
 	go = nullptr;
 	return 0;

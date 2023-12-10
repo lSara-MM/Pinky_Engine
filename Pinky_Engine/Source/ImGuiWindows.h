@@ -36,9 +36,7 @@ public:
 	bool show;
 	int id;
 	W_TYPE type;
-
-private:
-	std::vector<GameObject*> vSelectedGOs;
+	std::vector<GameObject*> vSelectedGOs;//TODO: should be private
 };
 
 class Hierarchy : public ImGuiWindows
