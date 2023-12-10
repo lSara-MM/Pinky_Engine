@@ -47,6 +47,10 @@ GameObject* ai::ImportMesh(const char* meshfileDir, GameObject* go, bool compone
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
+		// --- Get file name ---
+		std::string filePath, fileName, fileExt, tempName, finalPath;
+		App->fs->SplitFilePath(meshfileDir, &filePath, &fileName, &fileExt);
+
 		if (go != nullptr)
 		{
 			(MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, go, component) != nullptr) ?
@@ -57,12 +61,6 @@ GameObject* ai::ImportMesh(const char* meshfileDir, GameObject* go, bool compone
 		// file name as a parent to group them all
 		else if (scene->mRootNode->mNumChildren > 1)
 		{
-			// --- Get file name ---
-			std::string filePath, fileName, fileExt, tempName, finalPath;
-			App->fs->SplitFilePath(meshfileDir, &filePath, &fileName, &fileExt);
-
-			// ---------------------------------------------
-
 			GameObject* obj = new GameObject(fileName);
 			MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, obj);
 			ret = obj;
@@ -71,6 +69,7 @@ GameObject* ai::ImportMesh(const char* meshfileDir, GameObject* go, bool compone
 		else
 		{
 			ret = MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, App->scene->rootNode);
+			ret->name = fileName;
 		}
 
 		if (ret != nullptr)

@@ -407,7 +407,10 @@ void ModuleResource::LoadChildrenMeshes(GameObject* go, uint size)
 			go->mesh->mesh->name = go->name;
 		}
 
-		AddResource(go->mesh->mesh);
+		if (go->mesh->mesh != nullptr)
+		{
+			AddResource(go->mesh->mesh);
+		}
 	}
 
 	for (int i = 0; i < size; i++)

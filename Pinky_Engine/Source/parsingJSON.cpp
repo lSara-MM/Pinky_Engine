@@ -224,8 +224,28 @@ void ParsingJSON::ComponentsJSON(Component* comp, std::string node_name, int i)
 		if (static_cast<C_Material*>(comp)->tex != nullptr)
 		{
 			json_object_dotset_number(root_object, (comp_name + ".Resource UID").c_str(), static_cast<C_Material*>(comp)->tex->GetUID());
-			json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), (TEXTURES_PATH +
-				std::to_string(static_cast<C_Material*>(comp)->tex->GetUID())).c_str());
+			
+			if ((static_cast<C_Material*>(comp)->tex->assetsFile) != "")
+			{
+				json_object_dotset_boolean(root_object, (comp_name + ".Has Assets").c_str(), true);
+				json_object_dotset_string(root_object, (comp_name + ".Assets dir").c_str(),
+					(static_cast<C_Material*>(comp)->tex->assetsFile).c_str());
+			}
+			else
+			{
+				json_object_dotset_boolean(root_object, (comp_name + ".Has Assets").c_str(), false);
+			}
+
+			if ((static_cast<C_Material*>(comp)->tex->libraryFile) != "")
+			{
+				json_object_dotset_boolean(root_object, (comp_name + ".Has Library").c_str(), true);
+				json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), (TEXTURES_PATH +
+					std::to_string(static_cast<C_Material*>(comp)->tex->GetUID())).c_str());
+			}
+			else
+			{
+				json_object_dotset_boolean(root_object, (comp_name + ".Has Library").c_str(), false);
+			}
 
 			json_object_dotset_number(root_object, (comp_name + ".Color.R").c_str(), static_cast<C_Material*>(comp)->color.r);
 			json_object_dotset_number(root_object, (comp_name + ".Color.G").c_str(), static_cast<C_Material*>(comp)->color.g);
@@ -400,7 +420,19 @@ Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
 		id = json_object_dotget_number(root_object, (comp_name + ".Resource UID").c_str());
 		static_cast<C_Material*>(comp)->tex->SetUID(id);
 
-		static_cast<C_Material*>(comp)->tex->libraryFile = json_object_dotget_string(root_object, (comp_name + ".Library dir").c_str());
+		if (true)
+		{
+			bool hasAssets = json_object_dotset_boolean(root_object, (comp_name + ".Has Assets").c_str(), false);
+			bool hasLib = json_object_dotset_boolean(root_object, (comp_name + ".Has Library").c_str(), false);
+			if (hasAssets)
+			{
+				static_cast<C_Material*>(comp)->tex->libraryFile = json_object_dotget_string(root_object, (comp_name + ".Assets dir").c_str());
+			}
+			if (hasLib)
+			{
+				static_cast<C_Material*>(comp)->tex->libraryFile = json_object_dotget_string(root_object, (comp_name + ".Library dir").c_str());
+			}
+		}
 
 		static_cast<C_Material*>(comp)->color.r = json_object_dotget_number(root_object, (comp_name + ".Color.R").c_str());
 		static_cast<C_Material*>(comp)->color.g = json_object_dotget_number(root_object, (comp_name + ".Color.G").c_str());
