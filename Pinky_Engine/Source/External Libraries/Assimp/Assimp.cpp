@@ -137,7 +137,7 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 					}
 					tempParent = tempParent->pParent;
 				}
-				if (tempAux->name.find_first_of("$") != std::string::npos)
+				if (tempAux != nullptr && tempAux->name.find_first_of("$") != std::string::npos)
 				{
 					obj->ReParent(tempParent);
 					tempParent->DeleteChild(tempAux);
