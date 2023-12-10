@@ -48,11 +48,11 @@ bool ModuleScene::Init()
 	inspector = new Inspector(1);
 	App->editor->AddWindow(inspector);
 
-	console = new Console(2);
-	App->editor->AddWindow(console);
-
-	rm = new ResourcesManager(3);
+	rm = new ResourcesManager(2);
 	App->editor->AddWindow(rm);
+
+	console = new Console(3);
+	App->editor->AddWindow(console);
 
 	project = new ProjectFiles(4);
 	App->editor->AddWindow(project);
