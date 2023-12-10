@@ -39,6 +39,8 @@ bool I_Texture::Import(const char* path, R_Texture* ourTexture)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 		glTexImage2D(GL_TEXTURE_2D, 0, ourTexture->tex_format, ourTexture->tex_width, ourTexture->tex_height, 0, ourTexture->tex_format, GL_UNSIGNED_BYTE, ilGetData());
+
+		LOG("Successfully loaded %s", path);
 	}
 	else
 	{

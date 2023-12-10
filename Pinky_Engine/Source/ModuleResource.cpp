@@ -216,7 +216,7 @@ int ModuleResource::ImportToScene(std::string path, std::string dir, GameObject*
 		}
 	}
 
-	LOG("%s imported", normFileName);
+	LOG("%s imported", normFileName.c_str());
 
 	go = nullptr;
 	return 0;
@@ -343,8 +343,8 @@ Resource* ModuleResource::LoadFromLibrary(std::string path, R_TYPE type)
 
 R_TYPE ModuleResource::CheckExtensionType(const char* fileDir)
 {
-	std::vector<std::string> obj_ext = { "fbx", "FBX", "obj", };
-	std::vector<std::string> tex_ext = { "png", "PNG", "jpg", "JPG", "dds", "DDS" };
+	std::vector<std::string> obj_ext = { "fbx", "FBX", "obj", "OBJ", "DAE", "dae"};
+	std::vector<std::string> tex_ext = { "png", "PNG", "jpg", "JPG", "dds", "DDS", "tga", "TGA"};
 
 	if (App->fs->HasExtension(fileDir, obj_ext))
 	{
@@ -424,7 +424,8 @@ void ModuleResource::LoadChildrenTextures(std::string path)
 				//RELEASE(mat->tex);
 				mat->tex = static_cast<R_Texture*>(itr->second);
 				mat->tex->vComponents.push_back(mat);
-				mat->tex->name = it[i]->name;
+				mat->tex->name = fileName;
+				//mat->tex->name = it[i]->name;
 			}
 			else
 			{
@@ -434,6 +435,7 @@ void ModuleResource::LoadChildrenTextures(std::string path)
 				{
 					mat->tex->vComponents.push_back(mat);
 					mat->tex->name = fileName;
+					//mat->tex->name = it[i]->name;
 				}
 			}
 			AddResource(mat->tex);

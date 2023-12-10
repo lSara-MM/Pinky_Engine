@@ -287,14 +287,14 @@ void ProjectFiles::DirsMouseEvents(std::string current, std::vector<std::string>
 	{
 		ImGui::MenuItem(current.c_str(), NULL, false, false);
 		ImGui::Separator();
-		if (ImGui::MenuItem("Create Folder"))
-		{
+		//if (ImGui::MenuItem("Create Folder"))
+		//{
 
-		}
-		if (ImGui::MenuItem("Delete Folder"))
-		{
-			//App->fs->Remove((selectedFileFullPath + "/" + current).c_str());
-		}
+		//}
+		//if (ImGui::MenuItem("Delete Folder"))
+		//{
+		//	//App->fs->Remove((selectedFileFullPath + "/" + current).c_str());
+		//}
 
 		selectedDir = current;
 		ClearVec(vSelectedDirFiles);
@@ -323,10 +323,10 @@ void ProjectFiles::FilesMouseEvents(std::string currentFile, std::string current
 		{
 			App->resource->ImportToScene(currentFile, selectedFileFullPath + "/");
 		}
-		if (ImGui::MenuItem("Create File (WIP)", NULL, false, false))	// TODO:
-		{
+		//if (ImGui::MenuItem("Create File (WIP)", NULL, false, false))	// TODO:
+		//{
 
-		}
+		//}
 		if (ImGui::MenuItem("Delete File"))
 		{
 			App->fs->Remove((selectedFileFullPath + "/" + currentFile).c_str());
@@ -355,14 +355,17 @@ void ResourcesManager::ShowWindow()
 	//ImGui::SetNextWindowSize(ImVec2(500, 300), ImGuiCond_Appearing);
 	if (ImGui::Begin("Resources", &show))
 	{
-		if (ImGui::BeginTable("Resources", 4, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_Resizable | ImGuiTableFlags_BordersOuter
+		if (ImGui::BeginTable("Resources", 5, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_Resizable | ImGuiTableFlags_BordersOuter
 			| ImGuiTableFlags_BordersV | ImGuiTableFlags_ContextMenuInBody | ImGuiTableFlags_NoHostExtendX))
 		{
-			ImGui::TableSetupColumn("UID");
-			ImGui::TableSetupColumn("Name");
-			ImGui::TableSetupColumn("Count");
+			ImGui::TableSetupColumn("UID", ImGuiTableFlags_SizingFixedFit);
+			ImGui::TableSetupColumn("Name", ImGuiTableFlags_SizingFixedFit);
+			ImGui::TableSetupColumn("Type", ImGuiTableFlags_SizingFixedFit);
+			ImGui::TableSetupColumn("Count", ImGuiTableFlags_SizingFixedFit);
+			ImGui::TableSetupColumn(" ", ImGuiTableFlags_SizingFixedFit);
 			ImGui::TableHeadersRow();
 
+			std::array<std::string, 2> resTypes = { "Mesh", "Texture" };
 			std::map<u32, Resource*>::iterator it = App->resource->mResources.begin();
 			int i = 0;
 			while (it != App->resource->mResources.end())
@@ -378,7 +381,9 @@ void ResourcesManager::ShowWindow()
 				ImGui::Text(std::to_string(it->second->count).c_str());
 
 				ImGui::TableSetColumnIndex(3);
-				
+				ImGui::Text((resTypes[(int)it->second->GetType()]).c_str());
+
+				ImGui::TableSetColumnIndex(4);
 				std::string deleteButton = "Delete##" + std::to_string(i);
 				if (ImGui::Button(deleteButton.c_str()))
 				{
