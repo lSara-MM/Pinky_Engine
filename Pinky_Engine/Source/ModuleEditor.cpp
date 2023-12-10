@@ -917,6 +917,14 @@ void ModuleEditor::AboutWindow()
 				if (ImGui::Button("ImGui")) { OsOpenInShell("https://github.com/ocornut/imgui"); } ImGui::SameLine();
 				ImGui::TextWrapped("Omar Cornut Copyright (c) 2014-2023");
 
+				//---ImGuizmo---
+				if (ImGui::Button("ImGuizmo")) { OsOpenInShell("https://github.com/CedricGuillemet/ImGuizmo"); } ImGui::SameLine();
+				ImGui::TextWrapped("Copyright (c) 2016 Cedric Guillemet");
+
+				//---PhysFS---
+				if (ImGui::Button("PhysFS")) { OsOpenInShell("https://icculus.org/physfs/"); } ImGui::SameLine();
+				ImGui::TextWrapped("Copyright (c) 2001-2012 Ryan C. Gordon and others.");
+
 				//---OpenGL---
 				if (ImGui::Button("OpenGL")) { OsOpenInShell("https://glew.sourceforge.net/"); } ImGui::SameLine();
 				if (ImGui::Button("OpenGL License")) { OsOpenInShell("https://github.com/nigels-com/glew#copyright-and-licensing"); }
