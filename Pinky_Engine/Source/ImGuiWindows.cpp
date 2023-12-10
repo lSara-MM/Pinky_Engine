@@ -94,16 +94,20 @@ void ImGuiWindows::SetSelected(GameObject* go)
 void ImGuiWindows::SetSelectedState(GameObject* go, bool selected)
 {
 	// Must change go value manually. In "active" not necessary since it changes from the toggle
-	go->selected = selected;
-	for (auto i = 0; i < go->vChildren.size(); i++)
-	{
-		if (!go->vChildren.empty())
-		{
-			SetSelectedState(go->vChildren[i], selected);
-		}
 
-		go->vChildren[i]->selected = selected;
-	}
+	if (go != nullptr)
+	{
+		go->selected = selected;
+		for (auto i = 0; i < go->vChildren.size(); i++)
+		{
+			if (!go->vChildren.empty())
+			{
+				SetSelectedState(go->vChildren[i], selected);
+			}
+
+			go->vChildren[i]->selected = selected;
+		}
+	}	
 }
 //------
 
@@ -343,87 +347,88 @@ void Inspector::ShowWindow()
 		if (!GetSelectedGOs().empty())
 		{
 			GameObject* go = GetSelectedGOs().back();
-
-			// --- Set ImGui ids ---
-			std::string name = go->name;
-			name.insert(name.begin(), 2, '#');
-			name.append(std::to_string(go->GetUID()));
-
-			std::string toggle = "##Toggle ";
-			toggle.append(go->name + std::to_string(go->GetUID()));
-			//------
-
-			if (ImGuiCustom::ToggleButton(toggle.c_str(), &go->isActive))
+			if (go != nullptr)
 			{
-				SetActiveState(go, go->isActive);
-			}
-			ImGui::SameLine();
+				// --- Set ImGui ids ---
+				std::string name = go->name;
+				name.insert(name.begin(), 2, '#');
+				name.append(std::to_string(go->GetUID()));
 
-			if (!go->isActive) { ImGui::BeginDisabled(); }
+				std::string toggle = "##Toggle ";
+				toggle.append(go->name + std::to_string(go->GetUID()));
+				//------
 
-			std::string temp = go->name;
-			if (ImGui::InputText(name.c_str(), &temp, ImGuiInputTextFlags_EnterReturnsTrue)) { go->name = temp; }
-			ImGui::Dummy(ImVec2(0, 10));
-
-			for (auto i = 0; i < go->vComponents.size(); i++)
-			{
-				go->vComponents[i]->ShowInInspector();
-				ImGui::Dummy(ImVec2(0, 10));
-			}
-
-			// --- Add components button ---
-			ImGui::Separator();
-			ImGui::Dummy(ImVec2(0, 10));
-			std::array<std::string, 4> components = { "Transform", "Mesh", "Material", "Camera"};
-
-			if (ImGui::Button("Add Component", ImVec2(110, 30)))
-			{
-				ImGui::OpenPopup("AddComponents");
+				if (ImGuiCustom::ToggleButton(toggle.c_str(), &go->isActive))
+				{
+					SetActiveState(go, go->isActive);
+				}
 				ImGui::SameLine();
-				//ImGui::TextUnformatted(selected_fish == -1 ? "<None>" : components[selected_fish].c_str());
+
+				if (!go->isActive) { ImGui::BeginDisabled(); }
+
+				std::string temp = go->name;
+				if (ImGui::InputText(name.c_str(), &temp, ImGuiInputTextFlags_EnterReturnsTrue)) { go->name = temp; }
+				ImGui::Dummy(ImVec2(0, 10));
+
+				for (auto i = 0; i < go->vComponents.size(); i++)
+				{
+					go->vComponents[i]->ShowInInspector();
+					ImGui::Dummy(ImVec2(0, 10));
+				}
+
+				// --- Add components button ---
+				ImGui::Separator();
+				ImGui::Dummy(ImVec2(0, 10));
+				std::array<std::string, 4> components = { "Transform", "Mesh", "Material", "Camera" };
+
+				if (ImGui::Button("Add Component", ImVec2(110, 30)))
+				{
+					ImGui::OpenPopup("AddComponents");
+					ImGui::SameLine();
+					//ImGui::TextUnformatted(selected_fish == -1 ? "<None>" : components[selected_fish].c_str());
+				}
+
+				if (ImGui::BeginPopup("AddComponents"))
+				{
+					ImGui::SeparatorText("Components");
+
+					// Skip transform
+					// --- Add component Mesh ---
+					if (go->mesh == nullptr)
+					{
+						if (ImGui::BeginMenu("Mesh"))
+						{
+							App->editor->PrimitivesMenu(go, true);
+							ImGui::EndMenu();
+						}
+					}
+
+					// --- Add component Material ---
+					if (go->numMaterials == 0)
+					{
+						if (ImGui::MenuItem("Material"))
+						{
+							go->AddComponent(C_TYPE::MATERIAL);
+						}
+					}
+
+					// --- Add component Camera ---
+					if (go->camera == nullptr)
+					{
+						if (ImGui::MenuItem("Camera"))
+						{
+							go->AddComponent(C_TYPE::CAM);
+						}
+					}
+
+					ImGui::EndPopup();
+				}
+
+				if (!go->isActive) { ImGui::EndDisabled(); }
+
+				go = nullptr;
 			}
-
-			if (ImGui::BeginPopup("AddComponents"))
-			{
-				ImGui::SeparatorText("Components");
-
-				// Skip transform
-				// --- Add component Mesh ---
-				if (go->mesh == nullptr)
-				{
-					if (ImGui::BeginMenu("Mesh"))
-					{
-						App->editor->PrimitivesMenu(go, true);
-						ImGui::EndMenu();
-					}
-				}
-
-				// --- Add component Material ---
-				if (go->numMaterials == 0)
-				{
-					if (ImGui::MenuItem("Material"))
-					{
-						go->AddComponent(C_TYPE::MATERIAL);
-					}
-				}
-
-				// --- Add component Camera ---
-				if (go->camera == nullptr)
-				{
-					if (ImGui::MenuItem("Camera"))
-					{
-						go->AddComponent(C_TYPE::CAM);
-					}
-				}
-
-				ImGui::EndPopup();
-			}
-
-			if (!go->isActive) { ImGui::EndDisabled(); }
-
-			go = nullptr;
 		}
-
 
 	} ImGui::End();
 }

@@ -10,6 +10,8 @@
 #include "I_Mesh.h"
 #include "I_Texture.h"
 
+#include "ImGuiWindows.h"
+
 ModuleResource::ModuleResource(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 
@@ -42,6 +44,12 @@ update_status ModuleResource::FinishUpdate(float dt)
 		RELEASE(App->scene->rootNode);
 		App->parson->LoadScene(sceneFileName);
 		LoadChildrenMeshes(App->scene->rootNode, App->scene->rootNode->vChildren.size());
+
+		for (int i = 0; i < App->scene->hierarchy->vSelectedGOs.size(); i++)
+		{
+			App->scene->hierarchy->vSelectedGOs[i] = nullptr;
+		}
+
 		ClearVec(App->scene->hierarchy->GetSelectedGOs());
 
 		pendingToLoadScene = false;
