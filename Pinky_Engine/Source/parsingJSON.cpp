@@ -104,14 +104,13 @@ void ParsingJSON::CreateResourceMetaFile(std::vector<Resource*> resources, const
 	json_value_free(root_value);
 }
 
-std::string ParsingJSON::GetResourceMetaFile(const char* path)
+std::string ParsingJSON::GetResourceMetaFile(const char* path, int i)
 {
 	root_value = json_parse_file(path);
 	root_object = json_value_get_object(root_value);
+	std::string libPath = json_object_dotget_string(root_object, ("Resource" + std::to_string(i) + ".Library Path").c_str());
 
-	//go->isActive = json_object_dotget_boolean(root_object, (node_name + ".Active").c_str());
-
-	return std::string();
+	return libPath;
 }
 
 //---Create and write GameObject structure information---
@@ -244,7 +243,7 @@ GameObject* ParsingJSON::CreateGOfromMeta(std::string path, std::string subInfo)
 	root_value = json_parse_file(path.c_str());
 	root_object = json_value_get_object(root_value);
 
-	GameObject* go, * temp;
+	GameObject* go = nullptr, * temp = nullptr;
 
 	if (root_value != nullptr)
 	{
@@ -268,12 +267,13 @@ GameObject* ParsingJSON::CreateGOfromMeta(std::string path, std::string subInfo)
 		}
 
 		ClearVec(vTemp);
+		temp = nullptr;
 
-		LOG("Successfully created [%s]", path);
+		LOG("Successfully created [%s]", go->name.c_str());
 	}
 	else
 	{
-		LOG("Could not create meta file of [%s]", path);
+		LOG("Could not create game object of [%s]", path);
 	}
 
 	return go;

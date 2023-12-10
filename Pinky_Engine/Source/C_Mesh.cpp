@@ -21,10 +21,15 @@
 #include "ModuleRenderer3D.h"	
 
 
-C_Mesh::C_Mesh() : Component(C_TYPE::MESH, "Mesh")
+C_Mesh::C_Mesh(GameObject* g, bool a) : Component(C_TYPE::MESH, "Mesh", g)
 {
 	mesh = new R_Mesh();
 	mesh->vComponents.push_back(this);
+
+	if (g != nullptr)
+	{
+		g->AddComponent(this);
+	}
 
 	showVertexNormals = false;
 	showFacesNormals = false;
@@ -87,26 +92,27 @@ void C_Mesh::ShowInInspector()
 	{
 		if (!isActive) { ImGui::BeginDisabled(); }
  
-		if (ImGui::BeginCombo("##Mesh", mesh->name.c_str()))
-		{
-			for (int i = 0; i < App->resource->vMeshesResources.size(); i++)
-			{
-				const bool is_selected = (App->resource->vMeshesResources[i] == mesh);
-				if (ImGui::Selectable(App->resource->vMeshesResources[i]->name.c_str(), is_selected))
-				{
-					gameObject->ChangeComponentResource(mesh, App->resource->vMeshesResources[i]);
-				}
+		ImGui::Text(mesh->name.c_str());
+		//if (ImGui::BeginCombo("##Mesh", mesh->name.c_str()))
+		//{
+		//	for (int i = 0; i < App->resource->vMeshesResources.size(); i++)
+		//	{
+		//		const bool is_selected = (App->resource->vMeshesResources[i] == mesh);
+		//		if (ImGui::Selectable(App->resource->vMeshesResources[i]->name.c_str(), is_selected))
+		//		{
+		//			gameObject->ChangeComponentResource(mesh, App->resource->vMeshesResources[i]);
+		//		}
 
-				// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-				if (is_selected)
-				{
-					ImGui::SetItemDefaultFocus();
-				}
-			}
-			ImGui::EndCombo();
-		}
-		ImGui::SameLine();
-		ImGuiCustom::HelpMarker("If the current mesh has only one instance you will not be able to change it back unless a game object with that mesh is imported to scene");
+		//		// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+		//		if (is_selected)
+		//		{
+		//			ImGui::SetItemDefaultFocus();
+		//		}
+		//	}
+		//	ImGui::EndCombo();
+		//}
+		//ImGui::SameLine();
+		//ImGuiCustom::HelpMarker("If the current mesh has only one instance you will not be able to change it back unless a game object with that mesh is imported to scene");
 
 		if (mesh != nullptr)
 		{

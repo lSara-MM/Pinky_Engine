@@ -147,7 +147,6 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 					tempParent->DeleteChild(tempAux);
 				}
 				tempParent = nullptr;
-
 				foundParent = true;
 			}
 		}
@@ -224,10 +223,10 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 						std::string filePath, fileName, fileExt;
 						App->fs->SplitFilePath(path.c_str(), &filePath, &fileName, &fileExt);
 
-						if (!App->fs->Exists((assimpDirectory + fileName + "." + fileExt).c_str()))
-						{
-							App->fs->DuplicateFile(path.c_str(), assimpDirectory, finalPath);
-						}
+						//if (!App->fs->Exists((assimpDirectory + fileName + "." + fileExt).c_str()))
+						//{
+						//	App->fs->DuplicateFile(path.c_str(), assimpDirectory, finalPath);
+						//}
 
 						t->assetsFile = path.c_str();
 

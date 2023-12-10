@@ -12,7 +12,8 @@
 class C_Mesh : public Component
 {
 public:
-	C_Mesh();
+	// TODO: Clean this mess
+	C_Mesh(GameObject* g = nullptr, bool a = true);
 	C_Mesh(GameObject* g, R_Mesh* m = nullptr, bool start_enabled = true);
 	C_Mesh(GameObject* g, C_Mesh* toCopy, bool start_enabled = true);
 	~C_Mesh();

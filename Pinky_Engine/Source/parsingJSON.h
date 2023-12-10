@@ -22,7 +22,7 @@ public:
 	//------
 
 	void CreateResourceMetaFile(std::vector<Resource*> resources, const char* path);
-	std::string GetResourceMetaFile(const char* path);
+	std::string GetResourceMetaFile(const char* path, int i = 0);
 
 	//---Prefabs---
 	void CreatePrefabFromGO(GameObject* go);

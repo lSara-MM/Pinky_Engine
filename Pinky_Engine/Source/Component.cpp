@@ -7,10 +7,9 @@
 #include "C_Material.h"
 #include "C_Camera.h"
 
-Component::Component(C_TYPE t, std::string n) : type(t), name(n)
+Component::Component(C_TYPE t, std::string n, GameObject* g) : type(t), name(n), gameObject(g)
 {
 	uid = App->randomLCG->Int();
-	gameObject = nullptr;
 }
 
 Component::Component(C_TYPE t, GameObject* g, bool start_enabled, std::string n) : type(t), gameObject(g), isActive(start_enabled), name(n)
