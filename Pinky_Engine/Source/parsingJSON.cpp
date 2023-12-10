@@ -578,21 +578,24 @@ void ParsingJSON::LoadScene(std::string path)
 			std::string filePath, fileName, fileExt;
 			App->fs->SplitFilePath(vMeshesCheck[i].c_str(), &filePath, &fileName, &fileExt);
 
-			std::string libPath = App->parson->HasToReImport((vMeshesCheck[i] + ".meta").c_str(), R_TYPE::MESH);
-			if (libPath == "")
+			if (App->resource->CheckExtensionType(vMeshesCheck[i].c_str()) == R_TYPE::MESH)
 			{
-				GameObject* goAux;
-				goAux = ai::ImportMesh(vMeshesCheck[i].c_str(), vGOCheck[i], true);
-				if (go != nullptr)
+				std::string libPath = App->parson->HasToReImport((vMeshesCheck[i] + ".meta").c_str(), R_TYPE::MESH);
+				if (libPath == "")
 				{
-					// Creates "Assets/name.ext.meta"
-					App->parson->CreateResourceMetaFile(App->resource->vTempM, vMeshesCheck[i].c_str());
-					goAux->ReSetUID();
+					GameObject* goAux;
+					goAux = ai::ImportMesh((vMeshesCheck[i]).c_str(), vGOCheck[i], true);
+					if (go != nullptr)
+					{
+						// Creates "Assets/name.ext.meta"
+						App->parson->CreateResourceMetaFile(App->resource->vTempM, vMeshesCheck[i].c_str());
+						goAux->ReSetUID();
 
-					ClearVec(App->resource->vTempM);
+						ClearVec(App->resource->vTempM);
+					}
+					loadMeshes = false;
 				}
-				loadMeshes = false;
-			}
+			}			
 		}
 		for (auto it = vTemp.begin(); it != vTemp.end(); it++)
 		{

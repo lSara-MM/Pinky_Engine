@@ -28,7 +28,7 @@ public:
 
 	R_TYPE CheckExtensionType(const char* fileDir);
 
-	void LoadChildrenMeshes(GameObject* go, uint size);
+	void LoadChildrenMeshes(GameObject* go, uint size, std::string assets = "");
 	void LoadChildrenTextures(std::string path = "");
 
 	// Return false if pending to delete
@@ -46,6 +46,7 @@ public:
 	std::vector<Resource*> vTexturesResources;
 
 	// Scene management
+	std::string assetsPathAux;
 	std::string sceneFileName;
 	bool pendingToLoadScene;
 private:

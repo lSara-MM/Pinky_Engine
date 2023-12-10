@@ -46,7 +46,7 @@ update_status ModuleResource::FinishUpdate(float dt)
 		
 		//if (App->parson->loadMeshes)
 		{
-			LoadChildrenMeshes(App->scene->rootNode, App->scene->rootNode->vChildren.size());
+			LoadChildrenMeshes(App->scene->rootNode, App->scene->rootNode->vChildren.size(), assetsPathAux);
 		}
 		
 		for (int i = 0; i < App->scene->hierarchy->vSelectedGOs.size(); i++)
@@ -66,6 +66,12 @@ update_status ModuleResource::FinishUpdate(float dt)
 			{
 				(*it)->vComponents[i]->gameObject->RemoveComponent((*it)->vComponents[i]);
 			}
+
+			if ((*it)->vComponents.empty())
+			{
+				AddResource((*it), false);
+			}
+
 			//RELEASE((*it));
 			/*for (int i = 0; i < (*it)->vComponents.size(); i++)
 			{
@@ -132,6 +138,10 @@ int ModuleResource::ImportToScene(std::string path, std::string dir, GameObject*
 	std::string normFileName = App->fs->NormalizePath((dir + path).c_str());
 	std::string libPath;
 
+	std::string filePath, fileName, fileExt;
+	App->fs->SplitFilePath(normFileName.c_str(), &filePath, &fileName, &fileExt);
+	assetsPathAux = normFileName;
+
 	//const char* realPath = App->parson->GetRealDirFF((ASSETS_AUX + path).c_str());	
 	if (App->fs->Exists((normFileName + ".meta").c_str()))
 	{
@@ -158,7 +168,7 @@ int ModuleResource::ImportToScene(std::string path, std::string dir, GameObject*
 					go = App->parson->CreateGOfromMeta(PREFABS_PATH + App->fs->GetFileName(path.c_str()) + PREFABS_EXT);
 					if (go != nullptr)
 					{
-						LoadChildrenMeshes(go, go->vChildren.size());
+						LoadChildrenMeshes(go, go->vChildren.size(), assetsPathAux);
 					}
 				}
 				else
@@ -170,7 +180,7 @@ int ModuleResource::ImportToScene(std::string path, std::string dir, GameObject*
 						goParent->mesh->mesh = static_cast<R_Mesh*>(itr->second);
 						goParent->mesh->mesh->vComponents.push_back(goParent->mesh);
 						goParent->mesh->mesh->name = App->fs->GetFileName(normFileName.c_str());
-						//goParent->mesh->mesh->name = goParent->name;
+						goParent->mesh->mesh->name = assetsPathAux;
 					}
 					else
 					{
@@ -181,11 +191,10 @@ int ModuleResource::ImportToScene(std::string path, std::string dir, GameObject*
 							goParent->mesh->mesh = static_cast<R_Mesh*>(LoadFromLibrary(lib + MESHES_EXT, R_TYPE::MESH));
 							goParent->mesh->mesh->vComponents.push_back(goParent->mesh);
 							goParent->mesh->mesh->name = App->fs->GetFileName(normFileName.c_str());
+							goParent->mesh->mesh->name = assetsPathAux;
 
 							vMeshesResources.push_back(goParent->mesh->mesh);
 						}
-
-						//goParent->mesh->mesh->name = goParent->name;
 					}
 				}
 			}
@@ -383,7 +392,7 @@ R_TYPE ModuleResource::CheckExtensionType(const char* fileDir)
 	return R_TYPE::NONE;
 }
 
-void ModuleResource::LoadChildrenMeshes(GameObject* go, uint size)
+void ModuleResource::LoadChildrenMeshes(GameObject* go, uint size, std::string assets)
 {
 	if (go->mesh != nullptr)
 	{
@@ -405,6 +414,7 @@ void ModuleResource::LoadChildrenMeshes(GameObject* go, uint size)
 			go->mesh->mesh = static_cast<R_Mesh*>(LoadFromLibrary(go->mesh->mesh->libraryFile + MESHES_EXT, R_TYPE::MESH));
 			go->mesh->mesh->vComponents.push_back(go->mesh);
 			go->mesh->mesh->name = go->name;
+			go->mesh->mesh->assetsFile = assets;
 		}
 
 		if (go->mesh->mesh != nullptr)
@@ -415,7 +425,7 @@ void ModuleResource::LoadChildrenMeshes(GameObject* go, uint size)
 
 	for (int i = 0; i < size; i++)
 	{
-		LoadChildrenMeshes(go->vChildren[i], go->vChildren[i]->vChildren.size());
+		LoadChildrenMeshes(go->vChildren[i], go->vChildren[i]->vChildren.size(), assets);
 	}
 }
 
@@ -509,7 +519,7 @@ bool ModuleResource::AddResource(Resource* r, bool i)
 
 			if (r->count == 0)
 			{
-				R_TYPE t = r->GetType();
+				Resource* temp = r;
 				/*for (int i = 0; i < r->vComponents.size(); i++)
 				{
 					r->vComponents[i]->gameObject->RemoveComponent(r->vComponents[i]);
@@ -517,13 +527,15 @@ bool ModuleResource::AddResource(Resource* r, bool i)
 				mResources.erase(r->GetUID());
 				RELEASE(r);
 
-				switch (t)
+				switch (temp->GetType())
 				{
 				case R_TYPE::MESH:
-					ClearVec(vMeshesResources);
+					vMeshesResources.erase(std::remove(vMeshesResources.begin(), vMeshesResources.end(), temp), vMeshesResources.end());
+					//ClearVec(vMeshesResources);
 					break;
 				case R_TYPE::TEXTURE:
-					ClearVec(vTexturesResources);
+					vTexturesResources.erase(std::remove(vTexturesResources.begin(), vTexturesResources.end(), temp), vTexturesResources.end());
+					//ClearVec(vTexturesResources);
 					break;
 				case R_TYPE::PREFAB:
 					break;
@@ -534,6 +546,8 @@ bool ModuleResource::AddResource(Resource* r, bool i)
 				default:
 					break;
 				}
+
+				temp = nullptr;
 				return false;
 			}
 		}

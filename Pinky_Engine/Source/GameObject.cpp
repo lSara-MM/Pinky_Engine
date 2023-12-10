@@ -393,7 +393,16 @@ bool GameObject::ChangeComponentResource(Resource* oldResource, Resource* newRes
 {
 	if (oldResource->GetType() == newResource->GetType())
 	{
-		App->resource->AddResource(oldResource, false);
+		if (oldResource->count == 1)
+		{
+			ClearVec(oldResource->vComponents);
+			App->resource->vPendingToDelete.push_back(oldResource);
+		}
+		else
+		{
+			App->resource->AddResource(oldResource, false);
+		}
+
 		App->resource->AddResource(newResource);
 
 		switch (newResource->GetType())
