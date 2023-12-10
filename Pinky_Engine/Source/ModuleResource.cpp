@@ -496,67 +496,70 @@ void ModuleResource::LoadChildrenTextures(std::string path)
 bool ModuleResource::AddResource(Resource* r, bool i)
 {
 	// If i == true --> add, else substract resource
-	if (i)
+	if (r != nullptr)
 	{
-		auto itr = mResources.find(r->GetUID());
-		r->count++;
-
-		// Only add it to the vector if it hasn't been added
-		if (itr == mResources.end())
+		if (i)
 		{
-			switch (r->GetType())
+			auto itr = mResources.find(r->GetUID());
+			r->count++;
+
+			// Only add it to the vector if it hasn't been added
+			if (itr == mResources.end())
 			{
-			case R_TYPE::MESH:
-				vMeshesResources.push_back(r);
-				break;
-			case R_TYPE::TEXTURE:
-				vTexturesResources.push_back(r);
-				break;
-			case R_TYPE::PREFAB:
-				break;
-			case R_TYPE::SCENE:
-				break;
-			case R_TYPE::NONE:
-				break;
-			default:
-				break;
+				switch (r->GetType())
+				{
+				case R_TYPE::MESH:
+					vMeshesResources.push_back(r);
+					break;
+				case R_TYPE::TEXTURE:
+					vTexturesResources.push_back(r);
+					break;
+				case R_TYPE::PREFAB:
+					break;
+				case R_TYPE::SCENE:
+					break;
+				case R_TYPE::NONE:
+					break;
+				default:
+					break;
+				}
 			}
+
+			mResources.insert(std::pair<uint, Resource*>(r->GetUID(), r));
 		}
-
-		mResources.insert(std::pair<uint, Resource*>(r->GetUID(), r));
-	}
-	else
-	{
-		r->count--;
-
-		if (r->count == 0)
+		else
 		{
-			R_TYPE t = r->GetType();
-			/*for (int i = 0; i < r->vComponents.size(); i++)
-			{
-				r->vComponents[i]->gameObject->RemoveComponent(r->vComponents[i]);
-			}*/
-			mResources.erase(r->GetUID());
-			RELEASE(r);
+			r->count--;
 
-			switch (t)
+			if (r->count == 0)
 			{
-			case R_TYPE::MESH:
-				ClearVec(vMeshesResources);
-				break;
-			case R_TYPE::TEXTURE:
-				ClearVec(vTexturesResources);
-				break;
-			case R_TYPE::PREFAB:
-				break;
-			case R_TYPE::SCENE:
-				break;
-			case R_TYPE::NONE:
-				break;
-			default:
-				break;
+				R_TYPE t = r->GetType();
+				/*for (int i = 0; i < r->vComponents.size(); i++)
+				{
+					r->vComponents[i]->gameObject->RemoveComponent(r->vComponents[i]);
+				}*/
+				mResources.erase(r->GetUID());
+				RELEASE(r);
+
+				switch (t)
+				{
+				case R_TYPE::MESH:
+					ClearVec(vMeshesResources);
+					break;
+				case R_TYPE::TEXTURE:
+					ClearVec(vTexturesResources);
+					break;
+				case R_TYPE::PREFAB:
+					break;
+				case R_TYPE::SCENE:
+					break;
+				case R_TYPE::NONE:
+					break;
+				default:
+					break;
+				}
+				return false;
 			}
-			return false;
 		}
 	}
 

@@ -168,8 +168,13 @@ void C_Mesh::Draw(bool checkered, Color color)
 	glActiveTexture(GL_TEXTURE0);
 
 	//glBindTexture(GL_TEXTURE_2D, mesh->tex.tex_id);
-	(!checkered) ? glBindTexture(GL_TEXTURE_2D, static_cast<C_Material*>(gameObject->GetComponentByType(C_TYPE::MATERIAL))->tex->tex_id) : glBindTexture(GL_TEXTURE_2D, App->renderer3D->texture_checker);
 
+	if (static_cast<C_Material*>(gameObject->GetComponentByType(C_TYPE::MATERIAL))->tex != nullptr)
+	{
+		(!checkered) ? glBindTexture(GL_TEXTURE_2D, static_cast<C_Material*>(gameObject->GetComponentByType(C_TYPE::MATERIAL))->tex->tex_id)
+			: glBindTexture(GL_TEXTURE_2D, App->renderer3D->texture_checker);
+	}
+	
 	// ---------------------------------------------
 
 	// Draw mesh
