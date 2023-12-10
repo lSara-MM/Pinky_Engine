@@ -348,9 +348,8 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
-
-*.pnk
 *.duk
 *.pgo
 *.dds
 *.meta
+Pinky_Engine/Pinky_Engine/Library/Scenes_Temp/Scene_Temp.pnk
