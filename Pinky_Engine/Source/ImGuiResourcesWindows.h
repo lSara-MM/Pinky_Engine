@@ -7,20 +7,6 @@
 
 #include "ImGuiWindows.h"
 
-class Console : public ImGuiWindows
-{
-public:
-	Console(int i);
-	~Console();
-
-	void ShowWindow();
-
-public:
-	//Log vector
-	std::vector<std::string> vLog;
-	bool consoleWin;
-};
-
 class ProjectFiles : public ImGuiWindows
 {
 public:

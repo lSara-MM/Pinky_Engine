@@ -446,3 +446,74 @@ void Inspector::SetActiveState(GameObject* go, bool isActive)
 	}
 }
 //------
+
+Console::Console(int i) : ImGuiWindows(i)
+{
+	vLog = {};
+	consoleWin = true;
+}
+
+Console::~Console()
+{
+}
+
+void Console::ShowWindow()
+{
+	// Console window
+	ImVec2 pos = ImGui::GetMainViewport()->WorkPos;
+	ImVec2 size = ImGui::GetMainViewport()->Size;
+	pos.y += size.y;
+	//ImGui::SetNextWindowPos(pos, ImGuiCond_Appearing, ImVec2(-0.01f, 1.0f));
+	//ImGui::SetNextWindowSize(ImVec2(size.x - 15, 200), ImGuiCond_Appearing);
+
+	if (ImGui::Begin("Console", &consoleWin, ImGuiWindowFlags_MenuBar))
+	{
+		ImGui::BeginMenuBar();
+		if (ImGui::Button("Clear"))
+		{
+			ClearVec(vLog);
+		}
+		if (ImGui::Button("Show Error"))
+		{
+			vLog.push_back("[ERROR] debug error message");
+		}
+		if (ImGui::Button("Show Warning"))
+		{
+			vLog.push_back("[WARNING] debug warning message");
+		}
+		if (ImGui::Button("Add Error"))
+		{
+			vLog.push_back("[ERROR] debug error message");
+		}
+		if (ImGui::Button("Add Warning"))
+		{
+			vLog.push_back("[WARNING] debug warning message");
+		}
+
+		ImGui::Dummy(ImVec2(size.x / 4, 0));
+		static ImGuiTextFilter filter;
+		filter.Draw("Search", ImGui::GetFontSize() * 15);
+		ImGui::EndMenuBar();
+
+
+		//const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
+		ImGui::BeginChild("##output", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
+
+		for (int n = 0; n < vLog.size(); n++)
+		{
+			if (filter.PassFilter(vLog[n].c_str()))
+			{
+				if (strstr(vLog[n].c_str(), "[ERROR")) { ImGui::TextColored(ImVec4(0.9f, 0.0f, 0.0f, 1.0f), vLog[n].c_str()); }
+				else if (strstr(vLog[n].c_str(), "[WARNING")) { ImGui::TextColored(ImVec4(1.0f, 0.7f, 0.0f, 1.0f), vLog[n].c_str()); }
+				else { ImGui::Text(vLog[n].c_str(), n); }
+			}
+		}
+
+		// Keep up at the bottom of the scroll region if we were already at the bottom at the beginning of the frame.
+		// Using a scrollbar or mouse-wheel will take away from the bottom edge.
+		if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY()) { ImGui::SetScrollHereY(1.0f); }
+
+		ImGui::EndChild();
+	} ImGui::End();
+}
+//------

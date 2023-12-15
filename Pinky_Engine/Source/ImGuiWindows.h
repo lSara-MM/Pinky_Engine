@@ -5,6 +5,8 @@
 #include "External Libraries/ImGui/backends/imgui_impl_sdl2.h"
 #include "External Libraries/ImGui/backends/imgui_impl_opengl3.h"
 
+#include <string>
+
 class GameObject;
 
 enum class W_TYPE
@@ -72,4 +74,18 @@ public:
 
 public:
 	int selected_fish = -1;
+};
+
+class Console : public ImGuiWindows
+{
+public:
+	Console(int i);
+	~Console();
+
+	void ShowWindow();
+
+public:
+	//Log vector
+	std::vector<std::string> vLog;
+	bool consoleWin;
 };
