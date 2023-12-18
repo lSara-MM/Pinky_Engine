@@ -279,6 +279,21 @@ int ModuleResource::ImportToScene(std::string path, std::string dir, GameObject*
 	return 0;
 }
 
+
+int ModuleResource::ImportToSceneV(std::string path, std::string dir, GameObject* goParent, bool component)
+{
+	GameObject* go = nullptr;
+	std::string::size_type i = 0;
+	std::string normFileName = App->fs->NormalizePath((dir + path).c_str());
+	std::string libPath;
+
+	std::string filePath, fileName, fileExt;
+	App->fs->SplitFilePath(normFileName.c_str(), &filePath, &fileName, &fileExt);
+	assetsPathAux = normFileName;
+
+	return 0;
+}
+
 //
 void ModuleResource::ImportModel(const char* meshPath, std::vector<const char*> texPaths)
 {
