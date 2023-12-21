@@ -47,10 +47,8 @@ const char* ParsingJSON::GetRealDirFF(const char* dir)
 //---Create and write in .meta---
 void ParsingJSON::CreateResourceMetaFile(std::vector<Resource*> resources, const char* path)
 {
-	std::string filePath, fileName, fileExt;
-	App->fs->SplitFilePath(path, &filePath, &fileName, &fileExt);
-
-	std::string file_name = filePath + fileName + "." + fileExt + ".meta";
+	std::string filePath = path;
+	std::string file_name = filePath + ".meta";
 
 	root_value = json_value_init_object();
 	root_object = json_value_get_object(root_value);
@@ -87,6 +85,7 @@ void ParsingJSON::CreateResourceMetaFile(std::vector<Resource*> resources, const
 		for (int i = 0; i < resources.size(); i++)
 		{
 			json_object_dotset_number(root_object, (node_name + std::to_string(i) + ".UID").c_str(), resources.at(i)->GetUID());
+			json_object_dotset_string(root_object, (node_name + std::to_string(i) + ".Name").c_str(), resources.at(i)->name.c_str());
 			json_object_dotset_string(root_object, (node_name + std::to_string(i) + ".Library Path").c_str(), (node_path +
 				std::to_string(resources.at(i)->GetUID())).c_str());
 		}
@@ -215,8 +214,8 @@ void ParsingJSON::ComponentsJSON(Component* comp, std::string node_name, int i)
 		break;
 	case C_TYPE::MESH:
 		json_object_dotset_number(root_object, (comp_name + ".Resource UID").c_str(), static_cast<C_Mesh*>(comp)->mesh->GetUID());
-		json_object_dotset_string(root_object, (comp_name + ".Assets dir").c_str(), 
-			(static_cast<C_Mesh*>(comp)->mesh->assetsFile).c_str());		
+		json_object_dotset_string(root_object, (comp_name + ".Assets dir").c_str(),
+			(static_cast<C_Mesh*>(comp)->mesh->assetsFile).c_str());
 		json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), (MESHES_PATH +
 			std::to_string(static_cast<C_Mesh*>(comp)->mesh->GetUID())).c_str());
 		break;
@@ -224,7 +223,7 @@ void ParsingJSON::ComponentsJSON(Component* comp, std::string node_name, int i)
 		if (static_cast<C_Material*>(comp)->tex != nullptr)
 		{
 			json_object_dotset_number(root_object, (comp_name + ".Resource UID").c_str(), static_cast<C_Material*>(comp)->tex->GetUID());
-			
+
 			if ((static_cast<C_Material*>(comp)->tex->assetsFile) != "")
 			{
 				json_object_dotset_boolean(root_object, (comp_name + ".Has Assets").c_str(), true);
@@ -256,7 +255,7 @@ void ParsingJSON::ComponentsJSON(Component* comp, std::string node_name, int i)
 		{
 			LOG("[ERROR] Could not save material");
 		}
-		
+
 		break;
 	case C_TYPE::CAM:
 		json_object_dotset_number(root_object, (comp_name + ".Near Plane").c_str(), static_cast<C_Camera*>(comp)->frustum.nearPlaneDistance);
@@ -343,7 +342,7 @@ GameObject* ParsingJSON::GOfromMeta(std::string node_name)
 		{
 			Component* comp = ComponentsFromMeta(node_name, i);
 			go->AddComponent(comp);
-			
+
 			if (comp->type == C_TYPE::MESH)
 			{
 				vMeshesCheck.push_back(static_cast<C_Mesh*>(comp)->mesh->assetsFile);
@@ -459,7 +458,247 @@ Component* ParsingJSON::ComponentsFromMeta(std::string node_name, int i)
 	return comp;
 }
 
+
+GameObject* ParsingJSON::CreateGOfromMetaV(std::string& path, std::string subInfo)
+{
+	root_value = json_parse_file(path.c_str());
+	root_object = json_value_get_object(root_value);
+
+	GameObject* go = nullptr, * temp = nullptr;
+
+	if (root_value != nullptr)
+	{
+		std::vector<GameObject*> vTemp;
+
+		go = GOfromMetaV(subInfo + ".Parent");
+		vTemp.push_back(go);
+
+		int vChildrensize = json_object_dotget_number(root_object, (subInfo + ".Info.Children number").c_str());
+
+		for (int i = 0; i < vChildrensize; i++)
+		{
+			temp = GOfromMetaV(subInfo + ".Child " + std::to_string(i + 1));
+			vTemp.push_back(temp);
+		}
+
+		for (auto it = vTemp.begin(); it != vTemp.end(); it++)
+		{
+			(*it)->SetUID(App->randomLCG->Int());
+			(*it) = nullptr;
+		}
+
+		ClearVec(vTemp);
+		temp = nullptr;
+		ClearVec(vMeshesCheck);
+		ClearVec(vGOCheck);
+
+		LOG("Successfully created [%s]", go->name.c_str());
+	}
+	else
+	{
+		LOG("Could not create game object of [%s]", path);
+	}
+
+	return go;
+}
+
+GameObject* ParsingJSON::GOfromMetaV(std::string& node_name)
+{
+	GameObject* go = new GameObject();
+	go->name = json_object_dotget_string(root_object, (node_name + ".Name").c_str());
+	u32 id = json_object_dotget_number(root_object, (node_name + ".UID").c_str());
+	go->SetUID(id);
+	id = json_object_dotget_number(root_object, (node_name + ".Parent UID").c_str());
+
+	go->isActive = json_object_dotget_boolean(root_object, (node_name + ".Active").c_str());
+
+	if (id > 0)	// Root node has no parent nor components
+	{
+		if (id > 1)	// If parent == root node --> don't reparent
+		{
+			go->ReParent(App->scene->rootNode->FindChild(id));
+		}
+
+		go->isStatic = json_object_dotget_boolean(root_object, (node_name + ".Static").c_str());
+
+		int comp_num = json_object_dotget_number(root_object, (node_name + ".Components num").c_str());
+
+		for (int i = 0; i < comp_num; i++)
+		{
+			ComponentsFromMetaV(node_name, i, *go);
+		}
+	}
+
+	return go;
+}
+
+void ParsingJSON::ComponentsFromMetaV(std::string& node_name, int i, GameObject& go)
+{
+	std::string comp_name = node_name + ".Components.Component " + std::to_string(i);
+	Component* comp;
+	u32 id;
+	float* f = nullptr;
+
+	// TODO: Components uid should be unique right?
+	// TO ASK: porque me pilla mal el tipo del material de la baker house
+	int type = json_object_dotget_number(root_object, (comp_name + ".Type").c_str());
+	C_TYPE comp_type = (C_TYPE)json_object_dotget_number(root_object, (comp_name + ".Type").c_str());
+	id = json_object_dotget_number(root_object, (comp_name + ".Component UID").c_str());
+
+	switch (comp_type)
+	{
+	case C_TYPE::TRANSFORM:
+		comp = new C_Transform();
+
+		//---Position---
+		f = C_json_object_dotget_array(static_cast<C_Transform*>(comp)->position.Size, comp_name + ".Position");
+
+		static_cast<C_Transform*>(comp)->position.x = f[0];
+		static_cast<C_Transform*>(comp)->position.y = f[1];
+		static_cast<C_Transform*>(comp)->position.z = f[2];
+		RELEASE_ARRAY(f);
+
+		//---Rotation---
+		f = C_json_object_dotget_array(4, comp_name + ".Rotation");
+
+		static_cast<C_Transform*>(comp)->rotation.x = f[0];
+		static_cast<C_Transform*>(comp)->rotation.y = f[1];
+		static_cast<C_Transform*>(comp)->rotation.z = f[2];
+		static_cast<C_Transform*>(comp)->rotation.w = f[3];
+		RELEASE_ARRAY(f);
+
+		//---Scale---
+		f = C_json_object_dotget_array(static_cast<C_Transform*>(comp)->scale.Size, comp_name + ".Scale");
+
+		static_cast<C_Transform*>(comp)->scale.x = f[0];
+		static_cast<C_Transform*>(comp)->scale.y = f[1];
+		static_cast<C_Transform*>(comp)->scale.z = f[2];
+		RELEASE_ARRAY(f);
+
+		go.AddComponent(comp);
+		break;
+	case C_TYPE::MESH:
+		if (true)
+		{
+			comp = new C_Mesh();
+			go.AddComponent(comp);
+
+			id = json_object_dotget_number(root_object, (comp_name + ".Resource UID").c_str());
+
+			static_cast<C_Mesh*>(comp)->mesh->assetsFile = json_object_dotget_string(root_object, (comp_name + ".Assets dir").c_str());
+			static_cast<C_Mesh*>(comp)->mesh->libraryFile = json_object_dotget_string(root_object, (comp_name + ".Library dir").c_str());
+
+			std::string filePath, fileName, fileExt;
+			App->fs->SplitFilePath(static_cast<C_Mesh*>(comp)->mesh->assetsFile.c_str(), &filePath, &fileName, &fileExt);
+
+			if (HasToReImportV((static_cast<C_Mesh*>(comp)->mesh->assetsFile + ".meta").c_str(), R_TYPE::MESH) == "")
+			{
+				ai::tempMeshToImport = json_object_dotget_string(root_object, (comp_name + ".Name").c_str());
+				App->resource->ImportToSceneV(fileName + "." + fileExt, filePath, &go, true);
+				ai::tempMeshToImport = "";
+			}
+			else
+			{
+				App->resource->ImportToSceneV(fileName + "." + fileExt, filePath, &go, true, true);
+			}
+
+			//	comp = new C_Mesh();
+			//	id = json_object_dotget_number(root_object, (comp_name + ".Resource UID").c_str());
+
+			//	// When create the component, add the resource already existing;
+			//	static_cast<C_Mesh*>(comp)->mesh->SetUID(id);
+
+			//	static_cast<C_Mesh*>(comp)->mesh->assetsFile = json_object_dotget_string(root_object, (comp_name + ".Assets dir").c_str());
+			//	static_cast<C_Mesh*>(comp)->mesh->libraryFile = json_object_dotget_string(root_object, (comp_name + ".Library dir").c_str());
+		}
+		break;
+	case C_TYPE::MATERIAL:
+		comp = new C_Material();
+		go.AddComponent(comp);
+
+		id = json_object_dotget_number(root_object, (comp_name + ".Resource UID").c_str());
+		static_cast<C_Material*>(comp)->tex->SetUID(id);
+
+		if (true)
+		{
+			bool hasAssets = json_object_dotset_boolean(root_object, (comp_name + ".Has Assets").c_str(), false);
+			bool hasLib = json_object_dotset_boolean(root_object, (comp_name + ".Has Library").c_str(), false);
+			if (hasAssets)
+			{
+				static_cast<C_Material*>(comp)->tex->libraryFile = json_object_dotget_string(root_object, (comp_name + ".Assets dir").c_str());
+			}
+			if (hasLib)
+			{
+				static_cast<C_Material*>(comp)->tex->libraryFile = json_object_dotget_string(root_object, (comp_name + ".Library dir").c_str());
+			}
+		}
+
+		static_cast<C_Material*>(comp)->color.r = json_object_dotget_number(root_object, (comp_name + ".Color.R").c_str());
+		static_cast<C_Material*>(comp)->color.g = json_object_dotget_number(root_object, (comp_name + ".Color.G").c_str());
+		static_cast<C_Material*>(comp)->color.b = json_object_dotget_number(root_object, (comp_name + ".Color.B").c_str());
+		static_cast<C_Material*>(comp)->color.a = json_object_dotget_number(root_object, (comp_name + ".Color.A").c_str());
+		break;
+	case C_TYPE::CAM:
+		comp = new C_Camera();
+		go.AddComponent(comp);
+
+		static_cast<C_Camera*>(comp)->frustum.nearPlaneDistance = json_object_dotget_number(root_object, (comp_name + ".Near Plane").c_str());
+		static_cast<C_Camera*>(comp)->frustum.farPlaneDistance = json_object_dotget_number(root_object, (comp_name + ".Far Plane").c_str());
+		static_cast<C_Camera*>(comp)->fov = json_object_dotget_number(root_object, (comp_name + ".FOV").c_str());
+		static_cast<C_Camera*>(comp)->isGameCam = json_object_dotget_boolean(root_object, (comp_name + ".Game Camera").c_str());
+		static_cast<C_Camera*>(comp)->isCullEnabled = json_object_dotget_boolean(root_object, (comp_name + ".Culling").c_str());
+		break;
+	case C_TYPE::NONE:
+		break;
+	default:
+		break;
+	}
+
+	comp->SetUID(id);
+	comp->type = comp_type;
+}
+
 // Check if it has to be reimported (file doesn't exist in library)
+std::string ParsingJSON::HasToReImportV(const char* path, R_TYPE type)
+{
+	root_value = json_parse_file(path);
+	root_object = json_value_get_object(root_value);
+
+	std::string node_name = "Resource";
+	int size = json_object_dotget_number(root_object, (node_name + ".Info.Children number").c_str());
+
+	std::string libPath;
+	for (int i = 0; i < size; i++)
+	{
+		libPath = json_object_dotget_string(root_object, (node_name + std::to_string(i) + ".Library Path").c_str());
+
+		switch (type)
+		{
+		case R_TYPE::MESH:
+			libPath += MESHES_EXT;
+			break;
+		case R_TYPE::TEXTURE:
+			libPath += TEXTURES_EXT;
+			break;
+		case R_TYPE::PREFAB:
+			break;
+		case R_TYPE::SCENE:
+			break;
+		case R_TYPE::NONE:
+			break;
+		default:
+			break;
+		}
+
+		if (!App->fs->Exists(libPath.c_str()))
+		{
+			return "";
+		}
+	}
+
+	return libPath;
+}
+
 std::string ParsingJSON::HasToReImport(const char* path, R_TYPE type)
 {
 	root_value = json_parse_file(path);
@@ -467,7 +706,7 @@ std::string ParsingJSON::HasToReImport(const char* path, R_TYPE type)
 
 	std::string node_name = "Resource";
 	int size = json_object_dotget_number(root_object, (node_name + ".Info.Children number").c_str());
-	
+
 	std::string libPath;
 	for (int i = 0; i < size; i++)
 	{
@@ -550,7 +789,7 @@ void ParsingJSON::LoadScene(std::string path)
 
 	App->scene->rootNode = new GameObject("Scene", nullptr);
 
-	GameObject* go, *temp;
+	GameObject* go, * temp;
 	if (root_value != nullptr)
 	{
 		std::vector<GameObject*> vTemp;
@@ -572,31 +811,6 @@ void ParsingJSON::LoadScene(std::string path)
 			temp = nullptr;
 		}
 
-		loadMeshes = true;
-		for (int i = 0; i < vMeshesCheck.size(); i++)
-		{
-			std::string filePath, fileName, fileExt;
-			App->fs->SplitFilePath(vMeshesCheck[i].c_str(), &filePath, &fileName, &fileExt);
-
-			if (App->resource->CheckExtensionType(vMeshesCheck[i].c_str()) == R_TYPE::MESH)
-			{
-				std::string libPath = App->parson->HasToReImport((vMeshesCheck[i] + ".meta").c_str(), R_TYPE::MESH);
-				if (libPath == "")
-				{
-					GameObject* goAux;
-					goAux = ai::ImportMesh((vMeshesCheck[i]).c_str(), vGOCheck[i], true);
-					if (go != nullptr)
-					{
-						// Creates "Assets/name.ext.meta"
-						App->parson->CreateResourceMetaFile(App->resource->vTempM, vMeshesCheck[i].c_str());
-						goAux->ReSetUID();
-
-						ClearVec(App->resource->vTempM);
-					}
-					loadMeshes = false;
-				}
-			}			
-		}
 		for (auto it = vTemp.begin(); it != vTemp.end(); it++)
 		{
 			(*it)->selected = false;
@@ -617,7 +831,7 @@ void ParsingJSON::LoadScene(std::string path)
 }
 
 //---Custom functions---
-void ParsingJSON::json_object_dotset_array(float* num, int size, std::string name)
+void ParsingJSON::json_object_dotset_array(float* num, int size, std::string& name)
 {
 	JSON_Value* value = json_value_init_array();
 	JSON_Array* jArray = json_value_get_array(value);
@@ -630,7 +844,7 @@ void ParsingJSON::json_object_dotset_array(float* num, int size, std::string nam
 	}
 }
 
-float* ParsingJSON::C_json_object_dotget_array(int size, string name)
+float* ParsingJSON::C_json_object_dotget_array(int size, string& name)
 {
 	JSON_Array* jArray = json_object_dotget_array(root_object, name.c_str());
 

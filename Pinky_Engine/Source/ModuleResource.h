@@ -20,17 +20,17 @@ public:
 
 	std::string ImportFileToEngine(const char* path);
 	int ImportToScene(std::string path, std::string dir, GameObject* goParent = nullptr, bool component = false);
-	int ImportToSceneV(std::string path, std::string dir, GameObject* goParent = nullptr, bool component = false);
+	int ImportToSceneV(std::string& file, std::string& dir, GameObject* goParent = nullptr, bool component = false, bool scene = false);
 
 	void ImportModel(const char* meshPath, std::vector<const char*> texPaths);
 
 	std::string SaveToLibrary(Resource* r);
-	Resource* LoadFromLibrary(std::string path, R_TYPE type = R_TYPE::NONE);
+	Resource* LoadFromLibrary(std::string& path, R_TYPE type = R_TYPE::NONE);
 
 	R_TYPE CheckExtensionType(const char* fileDir);
 
-	void LoadChildrenMeshes(GameObject* go, uint size, std::string assets = "");
-	void LoadChildrenTextures(std::string path = "");
+	void LoadChildrenMeshes(GameObject* go, uint size, std::string assets = "", bool component = false);
+	void LoadChildrenTextures(std::string path = "", bool component = false);
 
 	// Return false if pending to delete
 	bool AddResource(Resource* r, bool i = true);

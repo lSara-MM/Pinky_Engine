@@ -57,6 +57,7 @@ namespace ai
 	// Textures
 	void LoadCheckers(GLuint& buffer);
 
+	static std::string tempMeshToImport;
 	//
 	static const char* assimpDirectory;
 	static const char* assimpFullDir;

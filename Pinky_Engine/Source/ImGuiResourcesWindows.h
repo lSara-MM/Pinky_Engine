@@ -15,12 +15,12 @@ public:
 
 	void ShowWindow();
 	void ShowDir(std::string directory);
-	void ShowDirectories(std::string directory);
+	void ShowDirectories(std::string& directory);
 
-	bool TreeNode(std::string currentDir, ImGuiTreeNodeFlags node_flags, bool finalDir);
-	void DirsMouseEvents(std::string current, std::vector<std::string> files);
+	bool TreeNode(std::string& currentDir, ImGuiTreeNodeFlags node_flags, bool finalDir);
+	void DirsMouseEvents(std::string& current, std::vector<std::string> files);
 
-	void FilesMouseEvents(std::string currentFile, std::string currentDir);
+	void FilesMouseEvents(std::string& currentFile, std::string& currentDir);
 
 public:
 	std::string selectedDir;

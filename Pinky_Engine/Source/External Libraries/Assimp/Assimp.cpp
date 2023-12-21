@@ -75,7 +75,7 @@ GameObject* ai::ImportMesh(const char* meshfileDir, GameObject* go, bool compone
 		if (ret != nullptr)
 		{
 			LOG("%d meshes loaded.", scene->mNumMeshes);
-			App->parson->CreatePrefabFromGO(ret);
+			//App->parson->CreatePrefabFromGO(ret);
 		}
 		else { LOG("[ERROR] Couldn't load mesh.", scene->mNumMeshes); }
 
@@ -87,6 +87,7 @@ GameObject* ai::ImportMesh(const char* meshfileDir, GameObject* go, bool compone
 		return nullptr;
 	}
 
+	//tempMeshToImport = "";
 	return ret;
 }
 
@@ -165,6 +166,10 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 
 		if (children[i]->mNumMeshes > 0)
 		{
+			obj->transform->globalMatrix = math::float4x4::FromTRS(obj->transform->position,
+				obj->transform->rotation, obj->transform->scale);
+
+			//---Mesh---
 			const aiMesh* m = s->mMeshes[children[i]->mMeshes[0]];
 
 			R_Mesh* mesh = new R_Mesh();
@@ -175,16 +180,13 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 				obj = nullptr;
 				return nullptr;
 			}
+
 			mesh->assetsFile = assimpFullDir;
 			App->resource->SaveToLibrary(mesh);
 
-			obj->transform->globalMatrix = math::float4x4::FromTRS(obj->transform->position,
-				obj->transform->rotation, obj->transform->scale);
-
-
-			//---Mesh---
 			obj->AddComponent(C_TYPE::MESH, mesh);
-			//obj->mesh->mesh->name = obj->name;
+			obj->mesh->mesh->name = obj->name;
+			obj->mesh->name = obj->name;
 			App->resource->vTempM.push_back(mesh);
 			App->resource->vMeshesResources.push_back(mesh);
 			App->resource->AddResource(mesh);

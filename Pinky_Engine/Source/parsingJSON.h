@@ -35,6 +35,12 @@ public:
 	GameObject* GOfromMeta(std::string node_name);
 	Component* ComponentsFromMeta(std::string node_name, int i);
 
+	GameObject* CreateGOfromMetaV(std::string& path, std::string subInfo = "GameObject");
+	GameObject* GOfromMetaV(std::string& node_name);
+	void ComponentsFromMetaV(std::string& node_name, int i, GameObject& go);
+
+	std::string HasToReImportV(const char* path, R_TYPE type);
+
 	std::string HasToReImport(const char* path, R_TYPE type);
 
 	//---Scene---
@@ -42,9 +48,9 @@ public:
 	void LoadScene(std::string path);
 
 private:
-	
-	void json_object_dotset_array(float* num, int size, string name);
-	float* C_json_object_dotget_array(int size, string name);
+
+	void json_object_dotset_array(float* num, int size, string& name);
+	float* C_json_object_dotget_array(int size, string& name);
 
 public:
 	bool loadMeshes;

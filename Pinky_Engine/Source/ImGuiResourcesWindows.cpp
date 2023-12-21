@@ -105,7 +105,7 @@ void ProjectFiles::ShowDir(std::string directory)
 	}
 }
 
-void ProjectFiles::ShowDirectories(std::string directory)
+void ProjectFiles::ShowDirectories(std::string& directory)
 {
 	std::vector<std::string> vDirs, vFiles;
 	std::vector<std::string> vChildrenDirs, vChildrenFiles;
@@ -175,7 +175,7 @@ void ProjectFiles::ShowDirectories(std::string directory)
 	}
 }
 
-bool ProjectFiles::TreeNode(std::string currentDir, ImGuiTreeNodeFlags node_flags, bool finalDir)
+bool ProjectFiles::TreeNode(std::string& currentDir, ImGuiTreeNodeFlags node_flags, bool finalDir)
 {
 	bool ret = false;
 
@@ -200,7 +200,7 @@ bool ProjectFiles::TreeNode(std::string currentDir, ImGuiTreeNodeFlags node_flag
 	return ret;
 }
 
-void ProjectFiles::DirsMouseEvents(std::string current, std::vector<std::string> files)
+void ProjectFiles::DirsMouseEvents(std::string& current, std::vector<std::string> files)
 {
 	// ---Click event---
 	if (ImGui::IsItemClicked())
@@ -232,7 +232,7 @@ void ProjectFiles::DirsMouseEvents(std::string current, std::vector<std::string>
 	}
 }
 
-void ProjectFiles::FilesMouseEvents(std::string currentFile, std::string currentDir)
+void ProjectFiles::FilesMouseEvents(std::string& currentFile, std::string& currentDir)
 {
 	// ---Click event---
 	if (ImGui::IsItemClicked())
@@ -250,10 +250,8 @@ void ProjectFiles::FilesMouseEvents(std::string currentFile, std::string current
 		//App->resource->CheckExtensionType(currentFile.c_str());
 		if (ImGui::MenuItem("Import to Scene"))
 		{
-
-			App->resource->pendingToLoadScene = true;
 			App->resource->sceneFileName = currentFile;
-			App->resource->ImportToScene(currentFile, selectedFileFullPath + "/");
+			App->resource->ImportToSceneV(currentFile, selectedFileFullPath + "/");
 		}
 		//if (ImGui::MenuItem("Create File (WIP)", NULL, false, false))	// TODO:
 		//{
