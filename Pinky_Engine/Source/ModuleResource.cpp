@@ -279,7 +279,7 @@ int ModuleResource::ImportToScene(std::string path, std::string dir, GameObject*
 	return 0;
 }
 
-int ModuleResource::ImportToSceneV(std::string& file, std::string& dir, GameObject* goParent, bool component, bool scene)
+int ModuleResource::ImportToSceneV(std::string file, std::string dir, GameObject* goParent, bool component, bool scene)
 {
 	std::string::size_type i = 0;
 	std::string normFileName = App->fs->NormalizePath((dir + file).c_str());

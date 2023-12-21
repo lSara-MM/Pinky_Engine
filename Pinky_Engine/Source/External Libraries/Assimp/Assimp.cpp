@@ -251,16 +251,16 @@ void ai::CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go, bool compo
 	switch (obj)
 	{
 	case ai::POLY_PRIMITIVE_TYPE::CUBE:
-		App->resource->ImportToScene("cube.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);
+		App->resource->ImportToSceneV("cube.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::SPHERE:
-		App->resource->ImportToScene("sphere.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);
+		App->resource->ImportToSceneV("sphere.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::CYLINDER:
-		App->resource->ImportToScene("cylinder.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);
+		App->resource->ImportToSceneV("cylinder.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::PLANE:
-		App->resource->ImportToScene("plane.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);
+		App->resource->ImportToSceneV("plane.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);
 		break;
 	default:
 		break;
