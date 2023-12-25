@@ -90,6 +90,7 @@
     <ClInclude Include="Source\C_Material.h" />
     <ClInclude Include="Source\C_Mesh.h" />
     <ClInclude Include="Source\C_Transform.h" />
+    <ClInclude Include="Source\C_TransformUI.h" />
     <ClInclude Include="Source\External Libraries\Assimp\Assimp.h" />
     <ClInclude Include="Source\External Libraries\Deviceld\DeviceId.h" />
     <ClInclude Include="Source\External Libraries\DevIL\include\devil_internal_exports.h" />
@@ -204,6 +205,11 @@
     <ClInclude Include="Source\R_Texture.h" />
     <ClInclude Include="Source\TimeManager.h" />
     <ClInclude Include="Source\Timer.h" />
+    <ClInclude Include="Source\UIButton.h" />
+    <ClInclude Include="Source\UIControl.h" />
+    <ClInclude Include="Source\UIImage.h" />
+    <ClInclude Include="Source\UICheckBox.h" />
+    <ClInclude Include="Source\UIInputBox.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
@@ -213,6 +219,7 @@
     <ClCompile Include="Source\C_Material.cpp" />
     <ClCompile Include="Source\C_Mesh.cpp" />
     <ClCompile Include="Source\C_Transform.cpp" />
+    <ClCompile Include="Source\C_TransformUI.cpp" />
     <ClCompile Include="Source\External Libraries\Assimp\Assimp.cpp" />
     <ClCompile Include="Source\External Libraries\Deviceld\DeviceId.cpp" />
     <ClCompile Include="Source\External Libraries\ImGuizmo\ImCurveEdit.cpp" />
@@ -287,6 +294,11 @@
     <ClCompile Include="Source\R_Texture.cpp" />
     <ClCompile Include="Source\TimeManager.cpp" />
     <ClCompile Include="Source\Timer.cpp" />
+    <ClCompile Include="Source\UIButton.cpp" />
+    <ClCompile Include="Source\UIControl.cpp" />
+    <ClCompile Include="Source\UIImage.cpp" />
+    <ClCompile Include="Source\UICheckBox.cpp" />
+    <ClCompile Include="Source\UIInputBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\External Libraries\DevIL\include\config.h.win" />
