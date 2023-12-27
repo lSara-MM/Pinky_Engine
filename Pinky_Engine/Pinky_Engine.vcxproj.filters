@@ -451,7 +451,7 @@
     <ClInclude Include="Source\TimeManager.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="Source\UIControl.h">
+    <ClInclude Include="Source\C_UI.h">
       <Filter>Sources\Cosos\GameObject\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\C_TransformUI.h">
@@ -714,7 +714,7 @@
     <ClCompile Include="Source\TimeManager.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Source\UIControl.cpp">
+    <ClCompile Include="Source\C_UI.cpp">
       <Filter>Sources\Cosos\GameObject\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\C_TransformUI.cpp">
