@@ -7,12 +7,12 @@
 #include "GameObject.h"
 #include "Component.h"
 
-C_Transform::C_Transform() : Component(C_TYPE::TRANSFORM, "Transform")
+C_Transform::C_Transform(C_TYPE type) : Component(type, "Transform")
 {
 	dirty_ = true;
 }
 
-C_Transform::C_Transform(GameObject* g, float3 pos, Quat rot, float3 sc, bool start_enabled) : Component(C_TYPE::TRANSFORM, g, start_enabled, "Transform")
+C_Transform::C_Transform(GameObject* g, float3 pos, Quat rot, float3 sc, C_TYPE type, bool start_enabled) : Component(type, g, start_enabled, "Transform")
 {
 	position = pos;
 	rotation = rot;
@@ -24,7 +24,7 @@ C_Transform::C_Transform(GameObject* g, float3 pos, Quat rot, float3 sc, bool st
 	dirty_ = true;
 }
 
-C_Transform::C_Transform(GameObject* g, C_Transform* toCopy) : Component(C_TYPE::TRANSFORM, g, toCopy->isActive, "Transform")
+C_Transform::C_Transform(GameObject* g, C_Transform* toCopy, C_TYPE type) : Component(type, g, toCopy->isActive, "Transform")
 {
 	position = toCopy->position;
 	rotation = toCopy->rotation;

@@ -1,9 +1,8 @@
 #pragma once
 #include "C_TransformUI.h"
 
-C_TransformUI::C_TransformUI() : C_Transform()
+C_TransformUI::C_TransformUI() : C_Transform(C_TYPE::TRANSFORM_UI)
 {
-	type = C_TYPE::TRANSFORM;//TODO: millorable? o no necessari?
 	anchor1 = float3(1.0f, 1.0f, 1.0f);
 	anchor2 = float3(1.0f, 1.0f, 1.0f);
 	anchor3 = float3(1.0f, 1.0f, 1.0f);
@@ -13,9 +12,8 @@ C_TransformUI::C_TransformUI() : C_Transform()
 	size = float2(1.0f, 1.0f);
 }
 
-C_TransformUI::C_TransformUI(GameObject* g, float3 pos, Quat rot, float3 sc, bool start_enabled) : C_Transform(g, pos, rot, sc, start_enabled)
+C_TransformUI::C_TransformUI(GameObject* g, float3 pos, Quat rot, float3 sc, bool start_enabled) : C_Transform(g, pos, rot, sc, C_TYPE::TRANSFORM_UI, start_enabled)
 {
-	type = C_TYPE::TRANSFORM_UI;
 	anchor1 = float3(1.0f, 1.0f, 1.0f);
 	anchor2 = float3(1.0f, 1.0f, 1.0f);
 	anchor3 = float3(1.0f, 1.0f, 1.0f);
@@ -25,9 +23,8 @@ C_TransformUI::C_TransformUI(GameObject* g, float3 pos, Quat rot, float3 sc, boo
 	size = float2(1.0f, 1.0f);
 }
 
-C_TransformUI::C_TransformUI(GameObject* g, C_Transform* toCopy) : C_Transform(g, toCopy)
+C_TransformUI::C_TransformUI(GameObject* g, C_Transform* toCopy) : C_Transform(g, toCopy, C_TYPE::TRANSFORM_UI)
 {
-	type = C_TYPE::TRANSFORM_UI;
 	anchor1 = float3(1.0f, 1.0f, 1.0f);
 	anchor2 = float3(1.0f, 1.0f, 1.0f);
 	anchor3 = float3(1.0f, 1.0f, 1.0f);
