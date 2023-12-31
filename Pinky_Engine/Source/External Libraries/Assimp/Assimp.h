@@ -27,6 +27,7 @@
 
 class GameObject;
 class Resource;
+class R_Mesh;
 
 namespace ai
 {
@@ -50,6 +51,8 @@ namespace ai
 
 	GameObject* ImportMesh(const char* meshfileDir, GameObject* go = nullptr, bool component = false);
 	GameObject* MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component = false, bool foundParent = false);
+
+	R_Mesh* ImportOneMesh(const char* meshfileDir, GameObject* go = nullptr);
 
 	void CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go = nullptr, bool component = false);
 	void CreateCustomMehses(CUSTOM_MESH obj);

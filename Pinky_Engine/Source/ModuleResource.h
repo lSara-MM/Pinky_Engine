@@ -30,7 +30,9 @@ public:
 	R_TYPE CheckExtensionType(const char* fileDir);
 
 	void LoadChildrenMeshes(GameObject* go, uint size, std::string assets = "");
-	void LoadChildrenTextures(std::string path = "");
+	void LoadChildrenTextures(std::string& path, std::string libPath = "");
+
+	void LoadMesh(GameObject& go);
 
 	// Return false if pending to delete
 	bool AddResource(Resource* r, bool i = true);
@@ -50,8 +52,4 @@ public:
 	std::string assetsPathAux;
 	std::string sceneFileName;
 	bool pendingToLoadScene;
-private:
-	GameObject* temp;
-
-	std::string normMetaPath;
 };

@@ -48,8 +48,8 @@ GameObject* ai::ImportMesh(const char* meshfileDir, GameObject* go, bool compone
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		// --- Get file name ---
-		std::string filePath, fileName, fileExt, tempName, finalPath;
-		App->fs->SplitFilePath(meshfileDir, &filePath, &fileName, &fileExt);
+		std::string filePath, fileName;
+		App->fs->SplitFilePath(meshfileDir, &filePath, &fileName);
 
 		if (go != nullptr)
 		{
@@ -215,24 +215,27 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 					{
 						aiString aiPath;
 						mat->GetTexture(aiTextureType_DIFFUSE, i, &aiPath);
-
 						std::string path = aiPath.C_Str();
-						std::string finalPath;
+
 
 						R_Texture* t = static_cast<C_Material*>(obj->GetComponentByType(C_TYPE::MATERIAL))->tex;
 						std::string filePath, fileName, fileExt;
 						App->fs->SplitFilePath(path.c_str(), &filePath, &fileName, &fileExt);
+
+						std::string finalPath = assimpDirectory + fileName + "." + fileExt;
+
+						if (App->fs->Exists(finalPath.c_str()))
+						{
+							App->scene->hierarchy->SetSelected(obj);
+
+							App->resource->ImportToSceneV((fileName + "." + fileExt).c_str(), assimpDirectory);
+						}
 
 						//if (!App->fs->Exists((assimpDirectory + fileName + "." + fileExt).c_str()))
 						//{
 						//	App->fs->DuplicateFile(path.c_str(), assimpDirectory, finalPath);
 						//}
 
-						t->assetsFile = path.c_str();
-
-						App->scene->hierarchy->SetSelected(obj);
-
-						App->resource->ImportToScene((fileName + "." + fileExt).c_str(), assimpDirectory);
 						t = nullptr;
 					}
 				}
@@ -242,6 +245,58 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 	}
 
 	return obj;
+}
+
+R_Mesh* ai::ImportOneMesh(const char* meshfileDir, GameObject* go)
+{
+	const aiScene* scene = aiImportFile(meshfileDir, aiProcessPreset_TargetRealtime_MaxQuality);
+	std::string auxPath;
+	App->fs->SplitFilePath(meshfileDir, &auxPath);
+	assimpDirectory = auxPath.c_str();
+	assimpFullDir = meshfileDir;
+
+	GameObject* ret = nullptr;
+
+	if (scene != nullptr && scene->HasMeshes())
+	{
+		// --- Get file name ---
+		std::string filePath, fileName, fileExt, tempName, finalPath;
+		App->fs->SplitFilePath(meshfileDir, &filePath, &fileName, &fileExt);
+
+		if (go != nullptr)
+		{
+
+		}
+
+		// If the imported 3D model has many meshes at the same level, create a new GameObject with the
+		// file name as a parent to group them all
+		else if (scene->mRootNode->mNumChildren > 1)
+		{
+			GameObject* obj = new GameObject(fileName);
+			MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, obj);
+			ret = obj;
+			obj = nullptr;
+		}
+		else
+		{
+			ret = MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, App->scene->rootNode);
+			ret->name = fileName;
+		}
+
+		if (ret != nullptr)
+		{
+			LOG("%d meshes loaded.", scene->mNumMeshes);
+			App->parson->CreatePrefabFromGO(ret);
+		}
+		else { LOG("[ERROR] Couldn't load mesh.", scene->mNumMeshes); }
+
+		aiReleaseImport(scene);
+	}
+	else
+	{
+		LOG("[ERROR] loading scene % s", meshfileDir);
+		return nullptr;
+	}
 }
 
 void ai::CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go, bool component)

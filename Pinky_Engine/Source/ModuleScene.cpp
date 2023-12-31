@@ -71,7 +71,7 @@ bool ModuleScene::Init()
 bool ModuleScene::Start()
 {
 	LOG("Starting scene");
-	App->resource->ImportToScene("street2.fbx", PINKY_ASSETS_AUX "3dObject\\street\\");
+	App->resource->ImportToSceneV("street2.fbx", PINKY_ASSETS_AUX "3dObject\\street\\");
 	//App->resource->ImportToScene("Baker_house.dds", PINKY_ASSETS_AUX "3dObject\\baker_house\\");
 	return true;
 }

@@ -32,8 +32,8 @@ public:
 	void ComponentsJSON(Component* comp, std::string node_name, int i);
 
 	GameObject* CreateGOfromMeta(std::string path, std::string subInfo = "GameObject");
-	GameObject* GOfromMeta(std::string node_name);
-	Component* ComponentsFromMeta(std::string node_name, int i);
+	GameObject* GOfromMeta(std::string node_name, bool scene = false);
+	void ComponentsFromMeta(std::string node_name, GameObject &go, int i, bool scene);
 
 	std::string HasToReImport(const char* path, R_TYPE type);
 
@@ -51,7 +51,4 @@ public:
 private:
 	JSON_Value* root_value;
 	JSON_Object* root_object;
-
-	std::vector<std::string> vMeshesCheck;
-	std::vector<GameObject*> vGOCheck;
 };
