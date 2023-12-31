@@ -284,7 +284,7 @@ int ModuleResource::ImportToSceneV(std::string file, std::string dir, GameObject
 	switch (CheckExtensionType(file.c_str()))
 	{
 	case R_TYPE::MESH:
-		if (!App->fs->Exists((auxPath + ".meta").c_str()))
+		if (!App->fs->Exists((auxPath + ".meta").c_str()) || App->parson->HasToReImport((auxPath + ".meta").c_str(), R_TYPE::MESH) == "")
 		{
 			GameObject* go = ai::ImportMesh(auxPath.c_str(), goParent, component);
 
@@ -308,7 +308,7 @@ int ModuleResource::ImportToSceneV(std::string file, std::string dir, GameObject
 		}
 		break;
 	case R_TYPE::TEXTURE:
-		if (!App->fs->Exists((auxPath + ".meta").c_str()))
+		if (!App->fs->Exists((auxPath + ".meta").c_str()) || App->parson->HasToReImport((auxPath + ".meta").c_str(), R_TYPE::TEXTURE) == "")
 		{
 			R_Texture* t = new R_Texture();
 			if (I_Texture::Import(auxPath.c_str(), t))
