@@ -304,16 +304,16 @@ void ai::CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go, bool compo
 	switch (obj)
 	{
 	case ai::POLY_PRIMITIVE_TYPE::CUBE:
-		App->resource->ImportToScene("cube.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);
+		App->resource->ImportToSceneV("cube.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::SPHERE:
-		App->resource->ImportToScene("sphere.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);
+		App->resource->ImportToSceneV("sphere.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::CYLINDER:
-		App->resource->ImportToScene("cylinder.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);
+		App->resource->ImportToSceneV("cylinder.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);
 		break;
 	case ai::POLY_PRIMITIVE_TYPE::PLANE:
-		App->resource->ImportToScene("plane.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);
+		App->resource->ImportToSceneV("plane.fbx", PINKY_ASSETS_AUX "3dObject\\", go, component);
 		break;
 	default:
 		break;
@@ -325,16 +325,16 @@ void ai::CreateCustomMehses(CUSTOM_MESH obj)
 	switch (obj)
 	{
 	case ai::CUSTOM_MESH::LAW:
-		App->resource->ImportToScene("trafalgar-laws-hat.fbx", PINKY_ASSETS_AUX "Custom\\law_hat\\");
-		App->resource->ImportToScene("law_hat_mat_BaseColor.dds", PINKY_ASSETS_AUX "Custom\\law_hat\\");
+		App->resource->ImportToSceneV("trafalgar-laws-hat.fbx", PINKY_ASSETS_AUX "Custom\\law_hat\\");
+		App->resource->ImportToSceneV("law_hat_mat_BaseColor.dds", PINKY_ASSETS_AUX "Custom\\law_hat\\");
 		break;
 	case ai::CUSTOM_MESH::KURO:
-		App->resource->ImportToScene("kuro.fbx", PINKY_ASSETS_AUX "Custom\\kuro\\");
-		App->resource->ImportToScene("BODYKURO.dds", PINKY_ASSETS_AUX "Custom\\kuro\\");
+		App->resource->ImportToSceneV("kuro.fbx", PINKY_ASSETS_AUX "Custom\\kuro\\");
+		App->resource->ImportToSceneV("BODYKURO.dds", PINKY_ASSETS_AUX "Custom\\kuro\\");
 		break;
 	case ai::CUSTOM_MESH::SHARK:
-		App->resource->ImportToScene("kingsharksketch.fbx", PINKY_ASSETS_AUX "Custom\\king_shark\\");
-		App->resource->ImportToScene("king_shark_tex.dds", PINKY_ASSETS_AUX "Custom\\king_shark\\");
+		App->resource->ImportToSceneV("kingsharksketch.fbx", PINKY_ASSETS_AUX "Custom\\king_shark\\");
+		App->resource->ImportToSceneV("king_shark_tex.dds", PINKY_ASSETS_AUX "Custom\\king_shark\\");
 		break;
 	default:
 		break;

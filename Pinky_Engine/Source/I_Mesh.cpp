@@ -135,7 +135,7 @@ void I_Mesh::Load(R_Mesh* ourMesh, const char* buffer)
 
 	ourMesh->InitBuffers();
 
-	LOG("Mesh Loaded");
+	LOG("%s Loaded", ourMesh->name.c_str());
 	//RELEASE_ARRAY(cursor);
 	cursor = nullptr;
 }

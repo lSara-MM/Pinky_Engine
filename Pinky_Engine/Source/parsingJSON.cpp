@@ -86,8 +86,8 @@ void ParsingJSON::CreateResourceMetaFile(std::vector<Resource*> resources, const
 
 		for (int i = 0; i < resources.size(); i++)
 		{
-			json_object_dotset_number(root_object, (node_name + std::to_string(i) + ".UID").c_str(), resources.at(i)->GetUID());
-			json_object_dotset_string(root_object, (node_name + std::to_string(i) + ".Library Path").c_str(), (node_path +
+			json_object_dotset_number(root_object, (node_name + " " + std::to_string(i) + ".UID").c_str(), resources.at(i)->GetUID());
+			json_object_dotset_string(root_object, (node_name + " " + std::to_string(i) + ".Library Path").c_str(), (node_path +
 				std::to_string(resources.at(i)->GetUID())).c_str());
 		}
 
@@ -110,7 +110,7 @@ std::string ParsingJSON::GetResourceMetaFile(const char* path, int i)
 {
 	root_value = json_parse_file(path);
 	root_object = json_value_get_object(root_value);
-	std::string libPath = json_object_dotget_string(root_object, ("Resource" + std::to_string(i) + ".Library Path").c_str());
+	std::string libPath = json_object_dotget_string(root_object, ("Resource " + std::to_string(i) + ".Library Path").c_str());
 
 	return libPath;
 }
@@ -218,7 +218,7 @@ void ParsingJSON::ComponentsJSON(Component* comp, std::string node_name, int i)
 		json_object_dotset_string(root_object, (comp_name + ".Assets dir").c_str(),
 			(static_cast<C_Mesh*>(comp)->mesh->assetsFile).c_str());
 		json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), (MESHES_PATH +
-			std::to_string(static_cast<C_Mesh*>(comp)->mesh->GetUID())).c_str());
+			std::to_string(static_cast<C_Mesh*>(comp)->mesh->GetUID()) + MESHES_EXT).c_str());
 		break;
 	case C_TYPE::MATERIAL:
 		if (static_cast<C_Material*>(comp)->tex != nullptr)
@@ -230,21 +230,14 @@ void ParsingJSON::ComponentsJSON(Component* comp, std::string node_name, int i)
 				json_object_dotset_boolean(root_object, (comp_name + ".Has Assets").c_str(), true);
 				json_object_dotset_string(root_object, (comp_name + ".Assets dir").c_str(),
 					(static_cast<C_Material*>(comp)->tex->assetsFile).c_str());
+
+
+				json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), (TEXTURES_PATH +
+					std::to_string(static_cast<C_Material*>(comp)->tex->GetUID()) + TEXTURES_EXT).c_str());
 			}
 			else
 			{
 				json_object_dotset_boolean(root_object, (comp_name + ".Has Assets").c_str(), false);
-			}
-
-			if ((static_cast<C_Material*>(comp)->tex->libraryFile) != "")
-			{
-				json_object_dotset_boolean(root_object, (comp_name + ".Has Library").c_str(), true);
-				json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), (TEXTURES_PATH +
-					std::to_string(static_cast<C_Material*>(comp)->tex->GetUID())).c_str());
-			}
-			else
-			{
-				json_object_dotset_boolean(root_object, (comp_name + ".Has Library").c_str(), false);
 			}
 
 			json_object_dotset_number(root_object, (comp_name + ".Color.R").c_str(), static_cast<C_Material*>(comp)->color.r);
@@ -408,7 +401,7 @@ void ParsingJSON::ComponentsFromMeta(std::string node_name, GameObject& go, int 
 
 		if (scene)
 		{
-			App->resource->ImportToScene(fileName, filePath, &go, true);
+			App->resource->ImportToSceneV(fileName, filePath, &go, true);
 		}
 		else
 		{
@@ -422,27 +415,24 @@ void ParsingJSON::ComponentsFromMeta(std::string node_name, GameObject& go, int 
 		comp = new C_Material();
 		id = json_object_dotget_number(root_object, (comp_name + ".Resource UID").c_str());
 		static_cast<C_Material*>(comp)->tex->SetUID(id);
-		
+
+		if (json_object_dotget_boolean(root_object, (comp_name + ".Has Assets").c_str()))
 		{
-			bool hasAssets = json_object_dotset_boolean(root_object, (comp_name + ".Has Assets").c_str(), false);
-			bool hasLib = json_object_dotset_boolean(root_object, (comp_name + ".Has Library").c_str(), false);
-			
-			if (hasLib)
+			static_cast<C_Material*>(comp)->tex->assetsFile = json_object_dotget_string(root_object, (comp_name + ".Assets dir").c_str());
+			static_cast<C_Material*>(comp)->tex->libraryFile = json_object_dotget_string(root_object, (comp_name + ".Library dir").c_str());
+
+			std::string filePath, fileName;
+			App->fs->SplitFilePath(static_cast<C_Material*>(comp)->tex->assetsFile.c_str(), &filePath, &fileName);
+
+			if (scene)
 			{
-				static_cast<C_Material*>(comp)->tex->libraryFile = json_object_dotget_string(root_object, (comp_name + ".Library dir").c_str());
+				App->resource->ImportToSceneV(fileName, filePath, &go, true);
 			}
-
-			if (hasAssets)
+			else
 			{
-				static_cast<C_Material*>(comp)->tex->libraryFile = json_object_dotget_string(root_object, (comp_name + ".Assets dir").c_str());
-				if (scene)
-				{
-
-				}
-				else
-				{
-
-				}
+				go.AddComponent(comp);
+				App->scene->hierarchy->SetSelected(&go);
+				App->resource->LoadChildrenTextures(static_cast<C_Material*>(comp)->tex->assetsFile, static_cast<C_Material*>(comp)->tex->libraryFile);
 			}
 		}
 
@@ -488,7 +478,7 @@ std::string ParsingJSON::HasToReImport(const char* path, R_TYPE type)
 	std::string libPath;
 	for (int i = 0; i < size; i++)
 	{
-		libPath = json_object_dotget_string(root_object, (node_name + std::to_string(i) + ".Library Path").c_str());
+		libPath = json_object_dotget_string(root_object, (node_name + " " + std::to_string(i) + ".Library Path").c_str());
 
 		switch (type)
 		{

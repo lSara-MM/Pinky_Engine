@@ -127,165 +127,166 @@ std::string ModuleResource::ImportFileToEngine(const char* fileDir)
 /// <param name="path"> file name </param>
 /// <param name="dir"> file path without name </param>
 /// <returns></returns>
-int ModuleResource::ImportToScene(std::string path, std::string dir, GameObject* goParent, bool component)
-{
-	GameObject* go = nullptr;
-	std::string::size_type i = 0;
-	std::string normFileName = App->fs->NormalizePath((dir + path).c_str());
-	std::string libPath;
-
-	std::string filePath;
-	App->fs->SplitFilePath(normFileName.c_str(), &filePath);
-	assetsPathAux = normFileName;
-
-	//const char* realPath = App->parson->GetRealDirFF((ASSETS_AUX + path).c_str());	
-	if (App->fs->Exists((normFileName + ".meta").c_str()))
-	{
-		switch (CheckExtensionType(path.c_str()))
-		{
-		case R_TYPE::MESH:
-			libPath = App->parson->HasToReImport((normFileName + ".meta").c_str(), R_TYPE::MESH);
-			if (libPath == "")
-			{
-				go = ai::ImportMesh(normFileName.c_str(), goParent, component);
-				if (go != nullptr)
-				{
-					// Creates "Assets/name.ext.meta"
-					App->parson->CreateResourceMetaFile(vTempM, normFileName.c_str());
-					go->ReSetUID();
-
-					ClearVec(vTempM);
-				}
-			}
-			else
-			{
-				if (!component)
-				{
-					go = App->parson->CreateGOfromMeta(PREFABS_PATH + App->fs->GetFileName(path.c_str()) + PREFABS_EXT);
-					if (go != nullptr)
-					{
-						LoadChildrenMeshes(go, go->vChildren.size(), assetsPathAux);
-					}
-				}
-				else
-				{
-					auto itr = mResources.find(i);
-					if (itr != mResources.end())
-					{
-						goParent->mesh = new C_Mesh(goParent, true);
-						goParent->mesh->mesh = static_cast<R_Mesh*>(itr->second);
-						goParent->mesh->mesh->vComponents.push_back(goParent->mesh);
-						goParent->mesh->mesh->name = App->fs->GetFileName(normFileName.c_str());
-						goParent->mesh->mesh->name = assetsPathAux;
-					}
-					else
-					{
-						goParent->mesh = new C_Mesh(goParent, true);
-						std::string lib = App->parson->GetResourceMetaFile((normFileName + ".meta").c_str());
-						if (lib != "")
-						{
-							goParent->mesh->mesh = static_cast<R_Mesh*>(LoadFromLibrary(lib + MESHES_EXT, R_TYPE::MESH));
-							goParent->mesh->mesh->vComponents.push_back(goParent->mesh);
-							goParent->mesh->mesh->name = App->fs->GetFileName(normFileName.c_str());
-							goParent->mesh->mesh->name = assetsPathAux;
-
-							vMeshesResources.push_back(goParent->mesh->mesh);
-						}
-					}
-				}
-			}
-			break;
-		case R_TYPE::TEXTURE:
-			libPath = App->parson->HasToReImport((normFileName + ".meta").c_str(), R_TYPE::TEXTURE);
-			if (libPath == "")
-			{
-				R_Texture* t = new R_Texture();
-				if (I_Texture::Import(normFileName.c_str(), t))
-				{
-					std::string texturePath = SaveToLibrary(t);
-					vTempT.push_back(t);
-
-					// Creates "Assets/name.ext.meta"
-					App->parson->CreateResourceMetaFile(vTempT, normFileName.c_str());
-
-					LoadChildrenTextures(texturePath);
-				}
-				RELEASE(t);
-				ClearVec(vTempT);
-			}
-			else
-			{
-				LoadChildrenTextures(libPath);
-			}
-			break;
-		case R_TYPE::SCENE:
-			// This will never happen as scenes don't create meta
-			break;
-		case R_TYPE::NONE:
-			break;
-		default:
-			break;
-		}
-	}
-	else
-	{
-		switch (CheckExtensionType(path.c_str()))
-		{
-		case R_TYPE::MESH:
-			go = ai::ImportMesh(normFileName.c_str(), goParent, component);
-			if (go != nullptr)
-			{
-				// Creates "Assets/name.ext.meta"
-				App->parson->CreateResourceMetaFile(vTempM, normFileName.c_str());
-				go->ReSetUID();
-
-				ClearVec(vTempM);
-			}
-			break;
-		case R_TYPE::TEXTURE:
-			if (true)
-			{
-				R_Texture* t = new R_Texture();
-				if (I_Texture::Import(normFileName.c_str(), t))
-				{
-					std::string texturePath = SaveToLibrary(t);
-					vTempT.push_back(t);
-
-					// Creates "Assets/name.ext.meta"
-					App->parson->CreateResourceMetaFile(vTempT, normFileName.c_str());
-
-					LoadChildrenTextures(texturePath);
-				}
-				RELEASE(t);
-				ClearVec(vTempT);
-			}
-			break;
-		case R_TYPE::SCENE:
-			pendingToLoadScene = true;
-			sceneFileName = normFileName;
-			break;
-		case R_TYPE::NONE:
-			break;
-		default:
-			break;
-		}
-	}
-
-	go = nullptr;
-	return 0;
-}
+//int ModuleResource::ImportToScene(std::string path, std::string dir, GameObject* goParent, bool component)
+//{
+//	GameObject* go = nullptr;
+//	std::string::size_type i = 0;
+//	std::string normFileName = App->fs->NormalizePath((dir + path).c_str());
+//	std::string libPath;
+//
+//	std::string filePath;
+//	App->fs->SplitFilePath(normFileName.c_str(), &filePath);
+//	assetsPathAux = normFileName;
+//
+//	//const char* realPath = App->parson->GetRealDirFF((ASSETS_AUX + path).c_str());	
+//	if (App->fs->Exists((normFileName + ".meta").c_str()))
+//	{
+//		switch (CheckExtensionType(path.c_str()))
+//		{
+//		case R_TYPE::MESH:
+//			libPath = App->parson->HasToReImport((normFileName + ".meta").c_str(), R_TYPE::MESH);
+//			if (libPath == "")
+//			{
+//				go = ai::ImportMesh(normFileName.c_str(), goParent, component);
+//				if (go != nullptr)
+//				{
+//					// Creates "Assets/name.ext.meta"
+//					App->parson->CreateResourceMetaFile(vTempM, normFileName.c_str());
+//					go->ReSetUID();
+//
+//					ClearVec(vTempM);
+//				}
+//			}
+//			else
+//			{
+//				if (!component)
+//				{
+//					go = App->parson->CreateGOfromMeta(PREFABS_PATH + App->fs->GetFileName(path.c_str()) + PREFABS_EXT);
+//					if (go != nullptr)
+//					{
+//						LoadChildrenMeshes(go, go->vChildren.size(), assetsPathAux);
+//					}
+//				}
+//				else
+//				{
+//					auto itr = mResources.find(i);
+//					if (itr != mResources.end())
+//					{
+//						goParent->mesh = new C_Mesh(goParent, true);
+//						goParent->mesh->mesh = static_cast<R_Mesh*>(itr->second);
+//						goParent->mesh->mesh->vComponents.push_back(goParent->mesh);
+//						goParent->mesh->mesh->name = App->fs->GetFileName(normFileName.c_str());
+//						goParent->mesh->mesh->name = assetsPathAux;
+//					}
+//					else
+//					{
+//						goParent->mesh = new C_Mesh(goParent, true);
+//						std::string lib = App->parson->GetResourceMetaFile((normFileName + ".meta").c_str());
+//						if (lib != "")
+//						{
+//							goParent->mesh->mesh = static_cast<R_Mesh*>(LoadFromLibrary(lib, R_TYPE::MESH));
+//							goParent->mesh->mesh->vComponents.push_back(goParent->mesh);
+//							goParent->mesh->mesh->name = App->fs->GetFileName(normFileName.c_str());
+//							goParent->mesh->mesh->name = assetsPathAux;
+//
+//							vMeshesResources.push_back(goParent->mesh->mesh);
+//						}
+//					}
+//				}
+//			}
+//			break;
+//		case R_TYPE::TEXTURE:
+//			libPath = App->parson->HasToReImport((normFileName + ".meta").c_str(), R_TYPE::TEXTURE);
+//			if (libPath == "")
+//			{
+//				R_Texture* t = new R_Texture();
+//				if (I_Texture::Import(normFileName.c_str(), t))
+//				{
+//					std::string texturePath = SaveToLibrary(t);
+//					vTempT.push_back(t);
+//
+//					// Creates "Assets/name.ext.meta"
+//					App->parson->CreateResourceMetaFile(vTempT, normFileName.c_str());
+//
+//					LoadChildrenTextures(texturePath);
+//				}
+//				RELEASE(t);
+//				ClearVec(vTempT);
+//			}
+//			else
+//			{
+//				LoadChildrenTextures(libPath);
+//			}
+//			break;
+//		case R_TYPE::SCENE:
+//			// This will never happen as scenes don't create meta
+//			break;
+//		case R_TYPE::NONE:
+//			break;
+//		default:
+//			break;
+//		}
+//	}
+//	else
+//	{
+//		switch (CheckExtensionType(path.c_str()))
+//		{
+//		case R_TYPE::MESH:
+//			go = ai::ImportMesh(normFileName.c_str(), goParent, component);
+//			if (go != nullptr)
+//			{
+//				// Creates "Assets/name.ext.meta"
+//				App->parson->CreateResourceMetaFile(vTempM, normFileName.c_str());
+//				go->ReSetUID();
+//
+//				ClearVec(vTempM);
+//			}
+//			break;
+//		case R_TYPE::TEXTURE:
+//			if (true)
+//			{
+//				R_Texture* t = new R_Texture();
+//				if (I_Texture::Import(normFileName.c_str(), t))
+//				{
+//					std::string texturePath = SaveToLibrary(t);
+//					vTempT.push_back(t);
+//
+//					// Creates "Assets/name.ext.meta"
+//					App->parson->CreateResourceMetaFile(vTempT, normFileName.c_str());
+//
+//					LoadChildrenTextures(texturePath);
+//				}
+//				RELEASE(t);
+//				ClearVec(vTempT);
+//			}
+//			break;
+//		case R_TYPE::SCENE:
+//			pendingToLoadScene = true;
+//			sceneFileName = normFileName;
+//			break;
+//		case R_TYPE::NONE:
+//			break;
+//		default:
+//			break;
+//		}
+//	}
+//
+//	go = nullptr;
+//	return 0;
+//}
 
 
 int ModuleResource::ImportToSceneV(std::string file, std::string dir, GameObject* goParent, bool component)
 {
-	assetsPathAux = App->fs->NormalizePath((dir + file).c_str());
+	std::string auxPath = App->fs->NormalizePath((dir + file).c_str());
+	assetsPathAux = auxPath;
 
 	switch (CheckExtensionType(file.c_str()))
 	{
 	case R_TYPE::MESH:
-		if (!App->fs->Exists((assetsPathAux + ".meta").c_str()))
+		if (!App->fs->Exists((auxPath + ".meta").c_str()))
 		{
-			GameObject* go = ai::ImportMesh(assetsPathAux.c_str(), goParent, component);
+			GameObject* go = ai::ImportMesh(auxPath.c_str(), goParent, component);
 
 			if (go != nullptr)
 			{
@@ -293,7 +294,7 @@ int ModuleResource::ImportToSceneV(std::string file, std::string dir, GameObject
 				App->parson->CreatePrefabFromGO(go);
 
 				// Creates "Assets/name.ext.meta"
-				App->parson->CreateResourceMetaFile(vTempM, assetsPathAux.c_str());
+				App->parson->CreateResourceMetaFile(vTempM, auxPath.c_str());
 				go->ReSetUID();
 
 				ClearVec(vTempM);
@@ -307,46 +308,44 @@ int ModuleResource::ImportToSceneV(std::string file, std::string dir, GameObject
 		}
 		break;
 	case R_TYPE::TEXTURE:
-		if (!App->fs->Exists((assetsPathAux + ".meta").c_str()))
+		if (!App->fs->Exists((auxPath + ".meta").c_str()))
 		{
 			R_Texture* t = new R_Texture();
-			if (I_Texture::Import(assetsPathAux.c_str(), t))
+			if (I_Texture::Import(auxPath.c_str(), t))
 			{
 				std::string texturePath = SaveToLibrary(t);
 				vTempT.push_back(t);
 
-				// Creates "Assets/name.ext.meta"
-				App->parson->CreateResourceMetaFile(vTempT, assetsPathAux.c_str());
+				LoadChildrenTextures(auxPath, texturePath);
 
-				LoadChildrenTextures(assetsPathAux, texturePath);
+				// Creates "Assets/name.ext.meta"
+				App->parson->CreateResourceMetaFile(vTempT, auxPath.c_str());
 			}
 			RELEASE(t);
 			ClearVec(vTempT);
 		}
 		else
 		{
+			std::string libPath = App->parson->HasToReImport((auxPath + ".meta").c_str(), R_TYPE::TEXTURE);
+			if (libPath == "")
 			{
-				std::string libPath = App->parson->HasToReImport((assetsPathAux + ".meta").c_str(), R_TYPE::TEXTURE);
-				if (libPath == "")
+				R_Texture* t = new R_Texture();
+				if (I_Texture::Import(auxPath.c_str(), t))
 				{
-					R_Texture* t = new R_Texture();
-					if (I_Texture::Import(assetsPathAux.c_str(), t))
-					{
-						std::string texturePath = SaveToLibrary(t);
-						vTempT.push_back(t);
+					std::string texturePath = SaveToLibrary(t);
+					vTempT.push_back(t);
 
-						// Creates "Assets/name.ext.meta"
-						App->parson->CreateResourceMetaFile(vTempT, assetsPathAux.c_str());
+					LoadChildrenTextures(auxPath, texturePath);
 
-						LoadChildrenTextures(assetsPathAux, texturePath);
-					}
-					RELEASE(t);
-					ClearVec(vTempT);
+					// Creates "Assets/name.ext.meta"
+					App->parson->CreateResourceMetaFile(vTempT, auxPath.c_str());
 				}
-				else
-				{
-					LoadChildrenTextures(assetsPathAux, libPath);
-				}
+				RELEASE(t);
+				ClearVec(vTempT);
+			}
+			else
+			{
+				LoadChildrenTextures(auxPath, libPath);
 			}
 		}
 		break;
@@ -478,49 +477,12 @@ R_TYPE ModuleResource::CheckExtensionType(const char* fileDir)
 	return R_TYPE::NONE;
 }
 
-void ModuleResource::LoadChildrenMeshes(GameObject* go, uint size, std::string assets)
-{
-	if (go->mesh != nullptr)
-	{
-		std::string filePath, fileName, fileExt;
-		App->fs->SplitFilePath((go->mesh->mesh->libraryFile + MESHES_EXT).c_str(), &filePath, &fileName, &fileExt);
-
-		u32 i = std::stoi(fileName.c_str());
-
-		auto itr = mResources.find(i);
-		if (itr != mResources.end())
-		{
-			RELEASE(go->mesh->mesh);
-			go->mesh->mesh = static_cast<R_Mesh*>(itr->second);
-			go->mesh->mesh->vComponents.push_back(go->mesh);
-			go->mesh->mesh->name = go->name;
-		}
-		else
-		{
-			go->mesh->mesh = static_cast<R_Mesh*>(LoadFromLibrary(go->mesh->mesh->libraryFile + MESHES_EXT, R_TYPE::MESH));
-			go->mesh->mesh->vComponents.push_back(go->mesh);
-			go->mesh->mesh->name = go->name;
-			go->mesh->mesh->assetsFile = assets;
-		}
-
-		if (go->mesh->mesh != nullptr)
-		{
-			AddResource(go->mesh->mesh);
-		}
-	}
-
-	for (int i = 0; i < size; i++)
-	{
-		LoadChildrenMeshes(go->vChildren[i], go->vChildren[i]->vChildren.size(), assets);
-	}
-}
-
 void ModuleResource::LoadMesh(GameObject& go)
 {
 	if (go.mesh != nullptr)
 	{
 		std::string filePath;
-		App->fs->SplitFilePath((go.mesh->mesh->libraryFile + MESHES_EXT).c_str(), &filePath);
+		App->fs->SplitFilePath(go.mesh->mesh->libraryFile.c_str(), &filePath);
 
 		auto itr = mResources.find(go.mesh->mesh->GetUID());
 		if (itr != mResources.end())
@@ -532,7 +494,7 @@ void ModuleResource::LoadMesh(GameObject& go)
 		}
 		else
 		{
-			go.mesh->mesh = static_cast<R_Mesh*>(LoadFromLibrary(go.mesh->mesh->libraryFile + MESHES_EXT, R_TYPE::MESH));
+			go.mesh->mesh = static_cast<R_Mesh*>(LoadFromLibrary(go.mesh->mesh->libraryFile, R_TYPE::MESH));
 			go.mesh->mesh->vComponents.push_back(go.mesh);
 			go.mesh->mesh->name = go.name;
 		}
@@ -544,7 +506,7 @@ void ModuleResource::LoadMesh(GameObject& go)
 	}
 }
 
-void ModuleResource::LoadChildrenTextures(std::string& path, std::string libPath)
+void ModuleResource::LoadChildrenTextures(std::string path, std::string libPath)
 {
 	std::vector<GameObject*> it = App->scene->hierarchy->GetSelectedGOs();
 	C_Material* mat;
@@ -553,23 +515,15 @@ void ModuleResource::LoadChildrenTextures(std::string& path, std::string libPath
 		mat = static_cast<C_Material*>(it[i]->GetComponentByType(C_TYPE::MATERIAL));
 		if (mat != nullptr && mat->tex != nullptr)
 		{
-			if (libPath != "")
-			{
-				// Get correct path (Probably from assimp)
-				std::string filePath1, fileName1;
-				App->fs->SplitFilePath(libPath.c_str(), &filePath1, &fileName1);
-				mat->tex->libraryFile = filePath1 + fileName1;
-			}
-
-			std::string filePath, fileName, fileExt;
-			App->fs->SplitFilePath((mat->tex->libraryFile + TEXTURES_EXT).c_str(), &filePath, &fileName, &fileExt);
+			std::string filePath, fileName;
+			App->fs->SplitFilePath((libPath).c_str(), &filePath, &fileName);
 			u32 id = std::stoi(fileName.c_str());
 
 			auto itr = mResources.find(id);
 
 			if (itr != mResources.end())
 			{
-				//RELEASE(mat->tex);
+				RELEASE(mat->tex);
 				mat->tex = static_cast<R_Texture*>(itr->second);
 				mat->tex->vComponents.push_back(mat);
 				mat->tex->name = fileName;
@@ -577,7 +531,7 @@ void ModuleResource::LoadChildrenTextures(std::string& path, std::string libPath
 			}
 			else
 			{
-				mat->tex = static_cast<R_Texture*>(LoadFromLibrary(mat->tex->libraryFile + TEXTURES_EXT, R_TYPE::TEXTURE));
+				mat->tex = static_cast<R_Texture*>(LoadFromLibrary(libPath, R_TYPE::TEXTURE));
 
 				if (mat->tex != nullptr)
 				{
@@ -588,6 +542,7 @@ void ModuleResource::LoadChildrenTextures(std::string& path, std::string libPath
 			}
 
 			mat->tex->assetsFile = path;
+			mat->tex->libraryFile = libPath;
 			AddResource(mat->tex);
 		}
 	}

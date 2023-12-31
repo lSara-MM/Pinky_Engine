@@ -19,7 +19,7 @@ public:
 	bool CleanUp();
 
 	std::string ImportFileToEngine(const char* path);
-	int ImportToScene(std::string path, std::string dir, GameObject* goParent = nullptr, bool component = false);
+	//int ImportToScene(std::string path, std::string dir, GameObject* goParent = nullptr, bool component = false);
 	int ImportToSceneV(std::string path, std::string dir, GameObject* goParent = nullptr, bool component = false);
 
 	void ImportModel(const char* meshPath, std::vector<const char*> texPaths);
@@ -29,10 +29,8 @@ public:
 
 	R_TYPE CheckExtensionType(const char* fileDir);
 
-	void LoadChildrenMeshes(GameObject* go, uint size, std::string assets = "");
-	void LoadChildrenTextures(std::string& path, std::string libPath = "");
-
 	void LoadMesh(GameObject& go);
+	void LoadChildrenTextures(std::string path, std::string libPath = "");
 
 	// Return false if pending to delete
 	bool AddResource(Resource* r, bool i = true);

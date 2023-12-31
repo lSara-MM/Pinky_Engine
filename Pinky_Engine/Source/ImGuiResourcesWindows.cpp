@@ -250,10 +250,9 @@ void ProjectFiles::FilesMouseEvents(std::string currentFile, std::string current
 		//App->resource->CheckExtensionType(currentFile.c_str());
 		if (ImGui::MenuItem("Import to Scene"))
 		{
-
-			App->resource->pendingToLoadScene = true;
+			//App->resource->pendingToLoadScene = true;
 			App->resource->sceneFileName = currentFile;
-			App->resource->ImportToScene(currentFile, selectedFileFullPath + "/");
+			App->resource->ImportToSceneV(currentFile, selectedFileFullPath + "/");
 		}
 		//if (ImGui::MenuItem("Create File (WIP)", NULL, false, false))	// TODO:
 		//{
