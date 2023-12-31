@@ -526,7 +526,7 @@ void ModuleResource::LoadChildrenTextures(std::string path, std::string libPath)
 				RELEASE(mat->tex);
 				mat->tex = static_cast<R_Texture*>(itr->second);
 				mat->tex->vComponents.push_back(mat);
-				mat->tex->name = fileName;
+				mat->tex->name = App->fs->GetFileName(path.c_str());
 				//mat->tex->name = it[i]->name;
 			}
 			else
@@ -536,7 +536,7 @@ void ModuleResource::LoadChildrenTextures(std::string path, std::string libPath)
 				if (mat->tex != nullptr)
 				{
 					mat->tex->vComponents.push_back(mat);
-					mat->tex->name = fileName;
+					mat->tex->name = App->fs->GetFileName(path.c_str());
 					//mat->tex->name = it[i]->name;
 				}
 			}
