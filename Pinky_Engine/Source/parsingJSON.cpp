@@ -416,6 +416,11 @@ void ParsingJSON::ComponentsFromMeta(std::string node_name, GameObject& go, int 
 		id = json_object_dotget_number(root_object, (comp_name + ".Resource UID").c_str());
 		static_cast<C_Material*>(comp)->tex->SetUID(id);
 
+		static_cast<C_Material*>(comp)->color.r = json_object_dotget_number(root_object, (comp_name + ".Color.R").c_str());
+		static_cast<C_Material*>(comp)->color.g = json_object_dotget_number(root_object, (comp_name + ".Color.G").c_str());
+		static_cast<C_Material*>(comp)->color.b = json_object_dotget_number(root_object, (comp_name + ".Color.B").c_str());
+		static_cast<C_Material*>(comp)->color.a = json_object_dotget_number(root_object, (comp_name + ".Color.A").c_str());
+
 		if (json_object_dotget_boolean(root_object, (comp_name + ".Has Assets").c_str()))
 		{
 			static_cast<C_Material*>(comp)->tex->assetsFile = json_object_dotget_string(root_object, (comp_name + ".Assets dir").c_str());
@@ -427,6 +432,7 @@ void ParsingJSON::ComponentsFromMeta(std::string node_name, GameObject& go, int 
 			if (scene)
 			{
 				App->resource->ImportToSceneV(fileName, filePath, &go, true);
+				go.AddComponent(comp);
 			}
 			else
 			{
@@ -435,13 +441,10 @@ void ParsingJSON::ComponentsFromMeta(std::string node_name, GameObject& go, int 
 				App->resource->LoadChildrenTextures(static_cast<C_Material*>(comp)->tex->assetsFile, static_cast<C_Material*>(comp)->tex->libraryFile);
 			}
 		}
-
-		static_cast<C_Material*>(comp)->color.r = json_object_dotget_number(root_object, (comp_name + ".Color.R").c_str());
-		static_cast<C_Material*>(comp)->color.g = json_object_dotget_number(root_object, (comp_name + ".Color.G").c_str());
-		static_cast<C_Material*>(comp)->color.b = json_object_dotget_number(root_object, (comp_name + ".Color.B").c_str());
-		static_cast<C_Material*>(comp)->color.a = json_object_dotget_number(root_object, (comp_name + ".Color.A").c_str());
-
-		go.AddComponent(comp);
+		else
+		{
+			go.AddComponent(comp);
+		}
 	}
 	break;
 	case C_TYPE::CAM:

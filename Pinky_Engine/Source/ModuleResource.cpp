@@ -516,7 +516,7 @@ void ModuleResource::LoadChildrenTextures(std::string path, std::string libPath)
 		if (mat != nullptr && mat->tex != nullptr)
 		{
 			std::string filePath, fileName;
-			App->fs->SplitFilePath((libPath).c_str(), &filePath, &fileName);
+			App->fs->SplitFilePath(libPath.c_str(), &filePath, &fileName);
 			u32 id = std::stoi(fileName.c_str());
 
 			auto itr = mResources.find(id);
@@ -541,9 +541,16 @@ void ModuleResource::LoadChildrenTextures(std::string path, std::string libPath)
 				}
 			}
 
-			mat->tex->assetsFile = path;
-			mat->tex->libraryFile = libPath;
-			AddResource(mat->tex);
+			if (mat->tex != nullptr)
+			{
+				mat->tex->assetsFile = path;
+				mat->tex->libraryFile = libPath;
+				AddResource(mat->tex);
+			}
+			else
+			{
+				LOG("[ERROR] Could not load texture %s", path.c_str());
+			}
 		}
 	}
 	mat = nullptr;

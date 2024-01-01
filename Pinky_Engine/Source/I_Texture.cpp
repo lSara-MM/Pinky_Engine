@@ -50,7 +50,7 @@ bool I_Texture::Import(const char* path, R_Texture* ourTexture)
 
 	//ilBindImage(0);
 	ilDeleteImages(1, &textureID);
-	ourTexture->path = path;
+	ourTexture->assetsFile = path;
 	ourTexture->tex_id = textureID;
 
 	return true;
@@ -65,7 +65,7 @@ uint64 I_Texture::Save(const R_Texture* ourTexture, char** fileBuffer)
 	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5); // To pick a specific DXT compression use
 	size = ilSaveL(IL_DDS, nullptr, 0); // Get the size of the data buffer
 
-	if (ilLoadImage(ourTexture->path))
+	if (ilLoadImage(ourTexture->assetsFile.c_str()))
 	{
 		if (size > 0)
 		{
@@ -137,6 +137,5 @@ void I_Texture::Load(R_Texture* ourTex, const char* path)
 
 	ilBindImage(0);
 	ilDeleteImages(1, &textureID);
-	ourTex->path = path;
 	ourTex->tex_id = textureID;
 }

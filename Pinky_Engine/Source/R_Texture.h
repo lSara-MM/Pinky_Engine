@@ -15,8 +15,6 @@ public:
 	bool InitBuffers();
 	void DeleteBuffers();
 
-	void ImportTexture(const char* texturefileDir);
-
 public:
 
 	uint tex_id;
@@ -24,8 +22,4 @@ public:
 	uint tex_height;
 	uint tex_type;
 	uint tex_format;
-
-	const char* path;
-
-private:
 };

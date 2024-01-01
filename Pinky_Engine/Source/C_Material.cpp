@@ -65,7 +65,7 @@ void C_Material::ShowInInspector()
 
 		if (tex != nullptr)
 		{
-			if (tex->path != "")
+			if (tex->assetsFile != "")
 			{
 				ImGui::Text("Texture Width: %d", tex->tex_width);
 				ImGui::Text("Texture Height: %d", tex->tex_height);
