@@ -257,8 +257,6 @@ void ParsingJSON::ComponentsJSON(Component* comp, std::string node_name, int i)
 		json_object_dotset_number(root_object, (comp_name + ".FOV").c_str(), static_cast<C_Camera*>(comp)->fov);
 		json_object_dotset_boolean(root_object, (comp_name + ".Game Camera").c_str(), static_cast<C_Camera*>(comp)->isGameCam);
 		json_object_dotset_boolean(root_object, (comp_name + ".Culling").c_str(), static_cast<C_Camera*>(comp)->isCullEnabled);
-		json_object_dotset_string(root_object, (comp_name + ".Library dir").c_str(), (TEXTURES_PATH +
-			std::to_string(static_cast<C_Camera*>(comp)->GetUID())).c_str());
 		break;
 	case C_TYPE::NONE:
 		break;
@@ -396,12 +394,12 @@ void ParsingJSON::ComponentsFromMeta(std::string node_name, GameObject& go, int 
 		static_cast<C_Mesh*>(comp)->mesh->assetsFile = json_object_dotget_string(root_object, (comp_name + ".Assets dir").c_str());
 		static_cast<C_Mesh*>(comp)->mesh->libraryFile = json_object_dotget_string(root_object, (comp_name + ".Library dir").c_str());
 
-		std::string filePath, fileName;
-		App->fs->SplitFilePath(static_cast<C_Mesh*>(comp)->mesh->assetsFile.c_str(), &filePath, &fileName);
+		std::string filePath, fileName, fileExt;
+		App->fs->SplitFilePath(static_cast<C_Mesh*>(comp)->mesh->assetsFile.c_str(), &filePath, &fileName, &fileExt);
 
 		if (scene)
 		{
-			App->resource->ImportToSceneV(fileName, filePath, &go, true);
+			App->resource->ImportToSceneV(fileName + "." + fileExt, filePath, &go, true);
 		}
 		else
 		{
@@ -568,7 +566,7 @@ void ParsingJSON::LoadScene(std::string path)
 		go = GOfromMeta("Scene.Parent");
 		go->RemoveComponent(go->transform);
 		ClearVec(App->scene->rootNode->vChildren);
-		RELEASE(App->scene->rootNode);
+		//RELEASE(App->scene->rootNode);
 		App->scene->rootNode = go;
 		go->pParent = nullptr;
 
