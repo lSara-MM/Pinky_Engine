@@ -33,7 +33,7 @@ namespace ai
 {
 	enum class POLY_PRIMITIVE_TYPE
 	{
-		CUBE,	
+		CUBE,
 		SPHERE,
 		CYLINDER,
 		PLANE
@@ -52,11 +52,11 @@ namespace ai
 	GameObject* ImportMesh(const char* meshfileDir, GameObject* go = nullptr, bool component = false);
 	GameObject* MeshHierarchy(const aiScene* s, aiNode** children, int num, GameObject* parent, bool component = false, bool foundParent = false);
 
-	R_Mesh* ImportOneMesh(const char* meshfileDir, GameObject* go = nullptr);
+	void ImportOneMesh(const char* meshfileDir, GameObject& go, R_Mesh& rMesh, std::string& modelName);
 
 	void CreatePolyPrimitive(POLY_PRIMITIVE_TYPE obj, GameObject* go = nullptr, bool component = false);
 	void CreateCustomMehses(CUSTOM_MESH obj);
-	
+
 	// Textures
 	void LoadCheckers(GLuint& buffer);
 

@@ -29,7 +29,7 @@ public:
 
 	R_TYPE CheckExtensionType(const char* fileDir);
 
-	void LoadMesh(GameObject& go);
+	void LoadMesh(GameObject& go, std::string meshName);
 	void LoadChildrenTextures(std::string path, std::string libPath = "");
 
 	// Return false if pending to delete

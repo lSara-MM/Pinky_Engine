@@ -10,6 +10,8 @@ enum class R_TYPE
 	PREFAB,
 	SCENE,
 
+	O_META,
+
 	NONE
 };
 

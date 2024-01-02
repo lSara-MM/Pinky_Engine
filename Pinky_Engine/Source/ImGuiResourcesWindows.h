@@ -22,6 +22,8 @@ public:
 
 	void FilesMouseEvents(std::string currentFile, std::string currentDir);
 
+	void DeleteFileAndRefs(const char* filePath);
+
 public:
 	std::string selectedDir;
 	std::vector<std::string> vSelectedDirFiles;

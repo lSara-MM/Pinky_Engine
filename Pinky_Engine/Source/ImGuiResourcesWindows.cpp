@@ -62,7 +62,7 @@ void ProjectFiles::ShowWindow()
 
 		ImGui::BeginChild("ProjectFiles");
 		for (int i = 0; i < vSelectedDirFiles.size(); i++)
-		{			
+		{
 			if (selectedFile == vSelectedDirFiles[i])
 			{
 				node_flags |= ImGuiTreeNodeFlags_Selected;
@@ -111,7 +111,7 @@ void ProjectFiles::ShowDirectories(std::string directory)
 	std::vector<std::string> vChildrenDirs, vChildrenFiles;
 
 	App->fs->DiscoverFiles(directory.c_str(), vFiles, vDirs);
-	
+
 	// Update info shown
 	for (int i = 0; i < vFiles.size(); i++)
 	{
@@ -132,7 +132,7 @@ void ProjectFiles::ShowDirectories(std::string directory)
 	for (int i = 0; i < vDirs.size(); i++)
 	{
 		App->fs->DiscoverFiles((directory + "/" + vDirs[i]).c_str(), vChildrenFiles, vChildrenDirs);
-		
+
 		// Update info shown
 		if (vDirs[i] == selectedDir)
 		{
@@ -260,12 +260,46 @@ void ProjectFiles::FilesMouseEvents(std::string currentFile, std::string current
 		//}
 		if (ImGui::MenuItem("Delete File"))
 		{
-			App->fs->Remove((selectedFileFullPath + "/" + currentFile).c_str());
+			DeleteFileAndRefs((selectedFileFullPath + "/" + currentFile).c_str());
 		}
 
 		selectedFile = currentFile;
 		ImGui::EndPopup();
 	}
+}
+
+void ProjectFiles::DeleteFileAndRefs(const char* filePath)
+{
+	std::string path = filePath;
+	switch (App->resource->CheckExtensionType(filePath))
+	{
+	case R_TYPE::MESH:
+		if (App->fs->Exists((path + ".meta").c_str()))
+		{
+			App->parson->DeleteLibDirs((path + ".meta").c_str(), R_TYPE::MESH);
+			App->fs->Remove((path + ".meta").c_str());
+		}
+		break;
+	case R_TYPE::TEXTURE:
+		if (App->fs->Exists((path + ".meta").c_str()))
+		{
+			App->parson->DeleteLibDirs((path + ".meta").c_str(), R_TYPE::TEXTURE);
+			App->fs->Remove((path + ".meta").c_str());
+		}
+		break;
+	case R_TYPE::O_META:
+	{
+		std::string::size_type pos = path.find_last_of('.');
+		App->parson->DeleteLibDirs(path.c_str(), App->resource->CheckExtensionType(path.substr(0, pos).c_str()));
+	}
+	break;
+	case R_TYPE::NONE:
+		break;
+	default:
+		break;
+	}
+
+	App->fs->Remove(filePath);
 }
 //------
 
@@ -321,7 +355,7 @@ void ResourcesManager::ShowWindow()
 					App->resource->vPendingToDelete.push_back(it->second);
 				}
 				++it; ++i;
-			}			
+			}
 			ImGui::EndTable();
 		}
 

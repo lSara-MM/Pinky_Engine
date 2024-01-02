@@ -460,6 +460,16 @@ R_TYPE ModuleResource::CheckExtensionType(const char* fileDir)
 	std::vector<std::string> obj_ext = { "fbx", "FBX", "obj", "OBJ", "DAE", "dae" };
 	std::vector<std::string> tex_ext = { "png", "PNG", "jpg", "JPG", "dds", "DDS", "tga", "TGA" };
 
+	if (App->fs->HasExtension(fileDir, "pnk"))
+	{
+		return R_TYPE::SCENE;
+	}
+
+	if (App->fs->HasExtension(fileDir, "meta"))
+	{
+		return R_TYPE::O_META;
+	}
+
 	if (App->fs->HasExtension(fileDir, obj_ext))
 	{
 		return R_TYPE::MESH;
@@ -469,15 +479,11 @@ R_TYPE ModuleResource::CheckExtensionType(const char* fileDir)
 	{
 		return R_TYPE::TEXTURE;
 	}
-
-	if (App->fs->HasExtension(fileDir, "pnk"))
-	{
-		return R_TYPE::SCENE;
-	}
+	
 	return R_TYPE::NONE;
 }
 
-void ModuleResource::LoadMesh(GameObject& go)
+void ModuleResource::LoadMesh(GameObject& go, std::string meshName)
 {
 	if (go.mesh != nullptr)
 	{
@@ -490,13 +496,15 @@ void ModuleResource::LoadMesh(GameObject& go)
 			RELEASE(go.mesh->mesh);
 			go.mesh->mesh = static_cast<R_Mesh*>(itr->second);
 			go.mesh->mesh->vComponents.push_back(go.mesh);
-			go.mesh->mesh->name = go.name;
+			
+			go.mesh->mesh->name = meshName;
 		}
 		else
 		{
 			go.mesh->mesh = static_cast<R_Mesh*>(LoadFromLibrary(go.mesh->mesh->libraryFile, R_TYPE::MESH));
 			go.mesh->mesh->vComponents.push_back(go.mesh);
-			go.mesh->mesh->name = go.name;
+
+			go.mesh->mesh->name = meshName;
 		}
 
 		if (go.mesh->mesh != nullptr)

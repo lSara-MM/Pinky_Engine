@@ -75,7 +75,7 @@ GameObject* ai::ImportMesh(const char* meshfileDir, GameObject* go, bool compone
 		if (ret != nullptr)
 		{
 			LOG("%d meshes loaded.", scene->mNumMeshes);
-			App->parson->CreatePrefabFromGO(ret);
+			//App->parson->CreatePrefabFromGO(ret);
 		}
 		else { LOG("[ERROR] Couldn't load mesh.", scene->mNumMeshes); }
 
@@ -83,7 +83,7 @@ GameObject* ai::ImportMesh(const char* meshfileDir, GameObject* go, bool compone
 	}
 	else
 	{
-		LOG("[ERROR] loading scene % s", meshfileDir);
+		LOG("[ERROR] loading assimp scene % s", meshfileDir);
 		return nullptr;
 	}
 
@@ -100,6 +100,7 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 		if (component)
 		{
 			obj = parent;
+			foundParent = true;
 		}
 		else
 		{
@@ -184,7 +185,7 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 
 			//---Mesh---
 			obj->AddComponent(C_TYPE::MESH, mesh);
-			//obj->mesh->mesh->name = obj->name;
+			obj->mesh->mesh->name = obj->name;
 			App->resource->vTempM.push_back(mesh);
 			App->resource->vMeshesResources.push_back(mesh);
 			App->resource->AddResource(mesh);
@@ -247,7 +248,7 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 	return obj;
 }
 
-R_Mesh* ai::ImportOneMesh(const char* meshfileDir, GameObject* go)
+void ai::ImportOneMesh(const char* meshfileDir, GameObject& go, R_Mesh& rMesh, std::string& modelName)
 {
 	const aiScene* scene = aiImportFile(meshfileDir, aiProcessPreset_TargetRealtime_MaxQuality);
 	std::string auxPath;
@@ -255,47 +256,50 @@ R_Mesh* ai::ImportOneMesh(const char* meshfileDir, GameObject* go)
 	assimpDirectory = auxPath.c_str();
 	assimpFullDir = meshfileDir;
 
-	GameObject* ret = nullptr;
-
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		// --- Get file name ---
 		std::string filePath, fileName, fileExt, tempName, finalPath;
 		App->fs->SplitFilePath(meshfileDir, &filePath, &fileName, &fileExt);
 
-		if (go != nullptr)
+		if (scene != nullptr && scene->HasMeshes())
 		{
+			// Use scene->mNumMeshes to iterate on scene->mMeshes array
+			for (auto i = 0; i < scene->mNumMeshes; i++)
+			{
+				if (scene->mRootNode->mChildren[i]->mName.C_Str() == modelName.c_str())
+				{
+					const aiMesh* m = scene->mMeshes[i];
 
-		}
+					if (!I_Mesh::Import(m, &rMesh))
+					{
+						//obj->~GameObject();
+						return;
+					}
+					rMesh.assetsFile = assimpFullDir;
+					App->resource->SaveToLibrary(&rMesh);
 
-		// If the imported 3D model has many meshes at the same level, create a new GameObject with the
-		// file name as a parent to group them all
-		else if (scene->mRootNode->mNumChildren > 1)
-		{
-			GameObject* obj = new GameObject(fileName);
-			MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, obj);
-			ret = obj;
-			obj = nullptr;
-		}
-		else
-		{
-			ret = MeshHierarchy(scene, scene->mRootNode->mChildren, scene->mRootNode->mNumChildren, App->scene->rootNode);
-			ret->name = fileName;
-		}
+					//---Mesh---
+					go.AddComponent(C_TYPE::MESH, &rMesh);
+					go.mesh->mesh->name = go.name;
+					App->resource->vTempM.push_back(&rMesh);
+					App->resource->vMeshesResources.push_back(&rMesh);
+					App->resource->AddResource(&rMesh);
 
-		if (ret != nullptr)
-		{
-			LOG("%d meshes loaded.", scene->mNumMeshes);
-			App->parson->CreatePrefabFromGO(ret);
-		}
-		else { LOG("[ERROR] Couldn't load mesh.", scene->mNumMeshes); }
+					m = nullptr;
 
-		aiReleaseImport(scene);
+					LOG("%d meshes loaded.", scene->mNumMeshes);
+					break;
+				}
+			}
+
+			aiReleaseImport(scene);
+		}
 	}
 	else
 	{
-		LOG("[ERROR] loading scene % s", meshfileDir);
-		return nullptr;
+		LOG("[ERROR] loading assimp scene % s", meshfileDir);
+		return;
 	}
 }
 
