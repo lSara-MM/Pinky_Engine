@@ -16,7 +16,7 @@ ParsingJSON::~ParsingJSON()
 	json_value_free(root_value);
 }
 
-void ParsingJSON::DeleteLibDirs(const char* dir, R_TYPE type)
+void ParsingJSON::DeleteLibDirs(const char* dir)
 {
 	std::vector<std::string> libPaths;
 
@@ -31,23 +31,8 @@ void ParsingJSON::DeleteLibDirs(const char* dir, R_TYPE type)
 	std::string libPath;
 	for (int i = 0; i < size; i++)
 	{
-		libPath = json_object_dotget_string(root_object_aux, (node_name + " " + std::to_string(i) + ".Library Path").c_str());
-
-		switch (type)
-		{
-		case R_TYPE::MESH:
-		{
-			libPath += MESHES_EXT;
-		}
-		break;
-		case R_TYPE::TEXTURE:
-		{
-			libPath += TEXTURES_EXT;
-		}
-		break;
-		default:
-			break;
-		}
+		libPath = json_object_dotget_string(root_object_aux, (node_name + " " + std::to_string(i) + ".UID").c_str());
+		int resID = json_object_dotget_number(root_object_aux, (node_name + " " + std::to_string(i) + ".Library Path").c_str());
 
 		if (App->fs->Exists(libPath.c_str()))
 		{
@@ -74,37 +59,17 @@ void ParsingJSON::CreateResourceMetaFile(std::vector<Resource*> resources, const
 		char* serialized_string = NULL;
 
 		std::string node_name = "Resource";
-		std::string node_path;
 		json_object_dotset_string(root_object, (node_name + ".Info.Local Directory").c_str(), file_name.c_str());
 		json_object_dotset_string(root_object, (node_name + ".Info.Origin").c_str(), path);
 
 		json_object_dotset_number(root_object, (node_name + ".Info.Children number").c_str(), resources.size());
-
-		switch (App->resource->CheckExtensionType(path))
-		{
-		case R_TYPE::MESH:
-			//node_name += ".Mesh ";
-			node_path = MESHES_PATH;
-			break;
-		case R_TYPE::TEXTURE:
-			//node_name += ".Texture ";
-			node_path = TEXTURES_PATH;
-			break;
-		case R_TYPE::SCENE:
-			break;
-		case R_TYPE::NONE:
-			break;
-		default:
-			break;
-		}
 
 		node_name = node_name + ".Resource";
 
 		for (int i = 0; i < resources.size(); i++)
 		{
 			json_object_dotset_number(root_object, (node_name + " " + std::to_string(i) + ".UID").c_str(), resources.at(i)->GetUID());
-			json_object_dotset_string(root_object, (node_name + " " + std::to_string(i) + ".Library Path").c_str(), (node_path +
-				std::to_string(resources.at(i)->GetUID())).c_str());
+			json_object_dotset_string(root_object, (node_name + " " + std::to_string(i) + ".Library Path").c_str(), resources.at(i)->libraryFile.c_str());
 		}
 
 		serialized_string = json_serialize_to_string_pretty(root_value);
@@ -407,7 +372,7 @@ void ParsingJSON::ComponentsFromMeta(std::string node_name, GameObject& go, int 
 		comp = new C_Mesh();
 		static_cast<C_Mesh*>(comp)->mesh->SetUID(json_object_dotget_number(root_object, (comp_name + ".Resource UID").c_str()));
 
-		if (scene && (!App->fs->Exists((assetsPath + ".meta").c_str()) || App->parson->HasToReImport((assetsPath + ".meta").c_str(), R_TYPE::MESH) == ""))
+		if (scene && (!App->fs->Exists((assetsPath + ".meta").c_str()) || App->parson->HasToReImport((assetsPath + ".meta").c_str()) == ""))
 		{
 			ai::ImportOneMesh(assetsPath.c_str(), go, *static_cast<C_Mesh*>(comp)->mesh, resourceName);
 		}
@@ -436,13 +401,14 @@ void ParsingJSON::ComponentsFromMeta(std::string node_name, GameObject& go, int 
 			static_cast<C_Material*>(comp)->tex->assetsFile = json_object_dotget_string(root_object, (comp_name + ".Assets dir").c_str());
 			static_cast<C_Material*>(comp)->tex->libraryFile = json_object_dotget_string(root_object, (comp_name + ".Library dir").c_str());
 
-			std::string filePath, fileName;
-			App->fs->SplitFilePath(static_cast<C_Material*>(comp)->tex->assetsFile.c_str(), &filePath, &fileName);
+			std::string filePath, fileName, fileExt;
+			App->fs->SplitFilePath(static_cast<C_Material*>(comp)->tex->assetsFile.c_str(), &filePath, &fileName, &fileExt);
 
 			if (scene)
 			{
-				App->resource->ImportToSceneV(fileName, filePath, &go, true);
+				App->scene->hierarchy->SetSelected(&go);
 				go.AddComponent(comp);
+				App->resource->ImportToSceneV(fileName + "." + fileExt, filePath, &go, true);
 			}
 			else
 			{
@@ -479,8 +445,8 @@ void ParsingJSON::ComponentsFromMeta(std::string node_name, GameObject& go, int 
 	comp->type = comp_type;
 }
 
-// Check if it has to be reimported (file doesn't exist in library)
-std::string ParsingJSON::HasToReImport(const char* path, R_TYPE type)
+// Check if it has to be reimported (file doesn't exist in library or meta doesn't exist itself)
+std::string ParsingJSON::HasToReImport(const char* path)
 {
 	JSON_Value* root_value_aux = json_parse_file(path);
 	JSON_Object* root_object_aux = json_value_get_object(root_value_aux);
@@ -494,24 +460,6 @@ std::string ParsingJSON::HasToReImport(const char* path, R_TYPE type)
 	for (int i = 0; i < size; i++)
 	{
 		libPath = json_object_dotget_string(root_object_aux, (node_name + " " + std::to_string(i) + ".Library Path").c_str());
-
-		switch (type)
-		{
-		case R_TYPE::MESH:
-			libPath += MESHES_EXT;
-			break;
-		case R_TYPE::TEXTURE:
-			libPath += TEXTURES_EXT;
-			break;
-		case R_TYPE::PREFAB:
-			break;
-		case R_TYPE::SCENE:
-			break;
-		case R_TYPE::NONE:
-			break;
-		default:
-			break;
-		}
 
 		if (!App->fs->Exists(libPath.c_str()))
 		{

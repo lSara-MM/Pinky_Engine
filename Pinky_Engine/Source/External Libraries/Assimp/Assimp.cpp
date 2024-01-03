@@ -177,7 +177,8 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 				return nullptr;
 			}
 			mesh->assetsFile = assimpFullDir;
-			App->resource->SaveToLibrary(mesh);
+			mesh->libraryFile = App->resource->SaveToLibrary(mesh);
+			mesh->name = obj->name;
 
 			obj->transform->globalMatrix = math::float4x4::FromTRS(obj->transform->position,
 				obj->transform->rotation, obj->transform->scale);
@@ -185,7 +186,6 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 
 			//---Mesh---
 			obj->AddComponent(C_TYPE::MESH, mesh);
-			obj->mesh->mesh->name = obj->name;
 			App->resource->vTempM.push_back(mesh);
 			App->resource->vMeshesResources.push_back(mesh);
 			App->resource->AddResource(mesh);

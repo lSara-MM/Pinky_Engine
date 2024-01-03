@@ -16,7 +16,7 @@ public:
 	ParsingJSON();
 	~ParsingJSON();
 
-	void DeleteLibDirs(const char* dir, R_TYPE type);
+	void DeleteLibDirs(const char* dir);
 	//------
 
 	void CreateResourceMetaFile(std::vector<Resource*> resources, const char* path);
@@ -33,7 +33,7 @@ public:
 	GameObject* GOfromMeta(std::string node_name, bool scene = false);
 	void ComponentsFromMeta(std::string node_name, GameObject &go, int i, bool scene);
 
-	std::string HasToReImport(const char* path, R_TYPE type);
+	std::string HasToReImport(const char* path);
 
 	//---Scene---
 	void SaveScene(std::string name, std::string dir = ASSETS_AUX);

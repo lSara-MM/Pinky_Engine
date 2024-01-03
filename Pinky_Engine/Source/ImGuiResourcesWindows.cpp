@@ -271,26 +271,26 @@ void ProjectFiles::FilesMouseEvents(std::string currentFile, std::string current
 void ProjectFiles::DeleteFileAndRefs(const char* filePath)
 {
 	std::string path = filePath;
+
 	switch (App->resource->CheckExtensionType(filePath))
 	{
 	case R_TYPE::MESH:
 		if (App->fs->Exists((path + ".meta").c_str()))
 		{
-			App->parson->DeleteLibDirs((path + ".meta").c_str(), R_TYPE::MESH);
+			App->parson->DeleteLibDirs((path + ".meta").c_str());
 			App->fs->Remove((path + ".meta").c_str());
 		}
 		break;
 	case R_TYPE::TEXTURE:
 		if (App->fs->Exists((path + ".meta").c_str()))
 		{
-			App->parson->DeleteLibDirs((path + ".meta").c_str(), R_TYPE::TEXTURE);
+			App->parson->DeleteLibDirs((path + ".meta").c_str());
 			App->fs->Remove((path + ".meta").c_str());
 		}
 		break;
 	case R_TYPE::O_META:
 	{
-		std::string::size_type pos = path.find_last_of('.');
-		App->parson->DeleteLibDirs(path.c_str(), App->resource->CheckExtensionType(path.substr(0, pos).c_str()));
+		App->parson->DeleteLibDirs(path.c_str());
 	}
 	break;
 	case R_TYPE::NONE:
