@@ -485,7 +485,18 @@ void ModuleResource::LoadMesh(GameObject& go, std::string meshName)
 		}
 		else
 		{
-			go.mesh->mesh = static_cast<R_Mesh*>(LoadFromLibrary(go.mesh->mesh->libraryFile, R_TYPE::MESH));
+			// TODO: Do this cleaner?
+			std::string assetsPath = go.mesh->mesh->assetsFile;
+			std::string libPath = go.mesh->mesh->libraryFile;
+			u32 id = go.mesh->mesh->GetUID();
+
+			RELEASE(go.mesh->mesh);
+
+			go.mesh->mesh = static_cast<R_Mesh*>(LoadFromLibrary(libPath, R_TYPE::MESH));
+			go.mesh->mesh->assetsFile = assetsPath;
+			go.mesh->mesh->libraryFile = libPath;
+			go.mesh->mesh->SetUID(id);
+
 			go.mesh->mesh->vComponents.push_back(go.mesh);
 
 			go.mesh->mesh->name = meshName;

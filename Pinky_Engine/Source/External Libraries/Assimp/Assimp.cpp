@@ -277,11 +277,11 @@ void ai::ImportOneMesh(const char* meshfileDir, GameObject& go, R_Mesh& rMesh, s
 						return;
 					}
 					rMesh.assetsFile = assimpFullDir;
-					App->resource->SaveToLibrary(&rMesh);
+					rMesh.libraryFile = App->resource->SaveToLibrary(&rMesh);
+					rMesh.name = go.name;
 
 					//---Mesh---
 					go.AddComponent(C_TYPE::MESH, &rMesh);
-					go.mesh->mesh->name = go.name;
 					App->resource->vTempM.push_back(&rMesh);
 					App->resource->vMeshesResources.push_back(&rMesh);
 					App->resource->AddResource(&rMesh);
