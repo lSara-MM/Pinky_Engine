@@ -1005,7 +1005,7 @@ void ModuleEditor::EditorWindow()
 
 	for (auto i = 0; i < selectedList.size(); i++)
 	{
-		if (selectedList[i] != nullptr)
+		if (selectedList[i] != nullptr && selectedList[i]->transform != nullptr)
 		{
 			ImGuizmo::SetDrawlist();
 			ImGuizmo::SetRect(viewPos.x, viewPos.y, viewSize.x, viewSize.y);

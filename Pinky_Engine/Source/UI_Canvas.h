@@ -1,21 +1,20 @@
-#ifndef __UI_H__
-#define __UI_H__
-
-#pragma once
+#ifndef __UI_CANVAS_H__
+#define __UI_CANVAS_H__
 
 #include "Globals.h"
-#include "Component.h"
+#include "G_UI.h"
 
-class C_UI : public Component
+class UI_Canvas : public G_UI
 {
 public:
-	C_UI(C_TYPE t, GameObject* g, std::string n = "UI");
-	~C_UI();
 	
+	UI_Canvas();
+	~UI_Canvas();
 
 public:
+
 	//SDL_Rect bounds;        // Position and size
 	//SDL_Texture* texture;   // Texture atlas reference
 	//SDL_Rect section;       // Texture atlas base section
 };
-#endif // __UI_H__
+#endif // __UI_CANVAS_H__

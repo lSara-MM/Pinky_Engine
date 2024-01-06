@@ -19,6 +19,7 @@
 #include "External Libraries/ImGui/backends/imgui_impl_opengl3.h"
 
 #include "GameObject.h"
+#include "UI_Canvas.h"
 
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -64,6 +65,8 @@ bool ModuleScene::Init()
 	mainCamera->transform->SetTransform(posIni);
 	mainCamera->transform->SetRotation(rotIni);
 	mainCamera->AddComponent(C_TYPE::CAM);
+
+	UI_Canvas* prueba = new UI_Canvas();
 
 	return ret;
 }

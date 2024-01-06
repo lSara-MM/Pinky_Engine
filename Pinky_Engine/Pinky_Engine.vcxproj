@@ -183,6 +183,8 @@
     <ClInclude Include="Source\GameObject.h" />
     <ClInclude Include="Source\glmath.h" />
     <ClInclude Include="Source\Globals.h" />
+    <ClInclude Include="Source\G_UI.h" />
+    <ClInclude Include="Source\UI_Canvas.h" />
     <ClInclude Include="Source\ImGuiResourcesWindows.h" />
     <ClInclude Include="Source\ImGuiWindows.h" />
     <ClInclude Include="Source\I_Texture.h" />
@@ -205,11 +207,11 @@
     <ClInclude Include="Source\R_Texture.h" />
     <ClInclude Include="Source\TimeManager.h" />
     <ClInclude Include="Source\Timer.h" />
-    <ClInclude Include="Source\UIButton.h" />
+    <ClInclude Include="Source\UI_Button.h" />
     <ClInclude Include="Source\C_UI.h" />
-    <ClInclude Include="Source\UIImage.h" />
-    <ClInclude Include="Source\UICheckBox.h" />
-    <ClInclude Include="Source\UIInputBox.h" />
+    <ClInclude Include="Source\UI_Image.h" />
+    <ClInclude Include="Source\UI_CheckBox.h" />
+    <ClInclude Include="Source\UI_InputBox.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
@@ -271,6 +273,8 @@
     <ClCompile Include="Source\External Libraries\parson\parson.c" />
     <ClCompile Include="Source\GameObject.cpp" />
     <ClCompile Include="Source\glmath.cpp" />
+    <ClCompile Include="Source\G_UI.cpp" />
+    <ClCompile Include="Source\UI_Canvas.cpp" />
     <ClCompile Include="Source\ImGuiResourcesWindows.cpp" />
     <ClCompile Include="Source\ImGuiWindows.cpp" />
     <ClCompile Include="Source\I_Texture.cpp" />
@@ -294,11 +298,11 @@
     <ClCompile Include="Source\R_Texture.cpp" />
     <ClCompile Include="Source\TimeManager.cpp" />
     <ClCompile Include="Source\Timer.cpp" />
-    <ClCompile Include="Source\UIButton.cpp" />
+    <ClCompile Include="Source\UI_Button.cpp" />
     <ClCompile Include="Source\C_UI.cpp" />
-    <ClCompile Include="Source\UIImage.cpp" />
-    <ClCompile Include="Source\UICheckBox.cpp" />
-    <ClCompile Include="Source\UIInputBox.cpp" />
+    <ClCompile Include="Source\UI_Image.cpp" />
+    <ClCompile Include="Source\UI_CheckBox.cpp" />
+    <ClCompile Include="Source\UI_InputBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\External Libraries\DevIL\include\config.h.win" />

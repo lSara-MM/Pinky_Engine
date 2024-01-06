@@ -20,7 +20,7 @@ public:
 	//GameObject();
 	GameObject(std::string n = "Empty GameObject", GameObject* parent = App->scene->rootNode, bool start_enabled = true);
 	GameObject(GameObject* go, int size, GameObject* parent);
-	~GameObject();
+	virtual ~GameObject();
 
 	//
 	u32 GetUID();
