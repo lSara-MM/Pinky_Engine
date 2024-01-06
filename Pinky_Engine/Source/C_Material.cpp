@@ -57,6 +57,28 @@ void C_Material::ShowInInspector()
 	{
 		if (!isActive) { ImGui::BeginDisabled(); }
 
+		// Change Texture
+		if (ImGui::BeginCombo("##Texture", tex->name.c_str()))
+		{
+			for (int i = 0; i < App->resource->vTexturesResources.size(); i++)
+			{
+				const bool is_selected = (App->resource->vTexturesResources[i] == tex);
+				if (ImGui::Selectable(App->resource->vTexturesResources[i]->name.c_str(), is_selected))
+				{
+					gameObject->ChangeComponentResource(tex, App->resource->vTexturesResources[i]);
+				}
+
+				// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+				if (is_selected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+			ImGui::EndCombo();
+		}
+		ImGui::SameLine();
+		ImGuiCustom::HelpMarker("If the current texture has only one instance you will not be able to change it back unless a that texture is imported to scene");
+
 		if (ImGuiCustom::ToggleButton(toogle.c_str(), &checkered))
 		{
 

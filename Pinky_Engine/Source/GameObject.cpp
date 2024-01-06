@@ -414,8 +414,8 @@ bool GameObject::ChangeComponentResource(Resource* oldResource, Resource* newRes
 			break;
 		case R_TYPE::TEXTURE:
 			// TODO: WIP
-			/*mesh->mesh = static_cast<R_Mesh*>(newResource);
-			newResource->vComponents.push_back(mesh);*/
+			static_cast<C_Material*>(GetComponentByType(C_TYPE::MATERIAL))->tex = static_cast<R_Texture*>(newResource);
+			newResource->vComponents.push_back(static_cast<C_Material*>(GetComponentByType(C_TYPE::MATERIAL)));
 			break;
 		case R_TYPE::PREFAB:
 			break;
@@ -426,9 +426,12 @@ bool GameObject::ChangeComponentResource(Resource* oldResource, Resource* newRes
 		default:
 			break;
 		}
+
+		LOG("%s changed for %s", oldResource->name.c_str(), newResource->name.c_str());
 	}
 	else
 	{
+		LOG("[ERROR] Could not change resource: different resource type");
 		return false;
 	}
 	return true;

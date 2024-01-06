@@ -92,7 +92,7 @@ void C_Mesh::ShowInInspector()
 	{
 		if (!isActive) { ImGui::BeginDisabled(); }
  
-		ImGui::Text(mesh->name.c_str());
+		// Change Mesh
 		if (ImGui::BeginCombo("##Mesh", mesh->name.c_str()))
 		{
 			for (int i = 0; i < App->resource->vMeshesResources.size(); i++)
