@@ -6,16 +6,26 @@
 #include "Globals.h"
 #include "Component.h"
 
+enum class UI_TYPE
+{
+	CANVAS,
+	IMAGE,
+	TEXT,
+	BUTTON,
+	INPUTBOX,
+
+	CHECKBOX,
+
+	NONE
+};
+
 class C_UI : public Component
 {
 public:
 	C_UI(C_TYPE t, GameObject* g, std::string n = "UI");
 	~C_UI();
 	
-
 public:
-	//SDL_Rect bounds;        // Position and size
-	//SDL_Texture* texture;   // Texture atlas reference
-	//SDL_Rect section;       // Texture atlas base section
+	UI_TYPE type;
 };
 #endif // __UI_H__

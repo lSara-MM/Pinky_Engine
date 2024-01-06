@@ -85,12 +85,6 @@
     <Filter Include="Sources\Cosos\GameObject\UI">
       <UniqueIdentifier>{57135f67-8a31-4149-a6de-0a33aa97d408}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Cosos\GameObject\UI\UI_GameObjects">
-      <UniqueIdentifier>{be25890c-1694-424e-b5c7-e103f2b762ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Cosos\GameObject\UI\UI_Components">
-      <UniqueIdentifier>{579113fa-6577-46c3-b809-4556a2bbfb00}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Module.h">
@@ -457,29 +451,29 @@
     <ClInclude Include="Source\TimeManager.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="Source\G_UI.h">
-      <Filter>Sources\Cosos\GameObject\UI\UI_GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI_Canvas.h">
-      <Filter>Sources\Cosos\GameObject\UI\UI_GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI_Button.h">
-      <Filter>Sources\Cosos\GameObject\UI\UI_GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI_CheckBox.h">
-      <Filter>Sources\Cosos\GameObject\UI\UI_GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI_Image.h">
-      <Filter>Sources\Cosos\GameObject\UI\UI_GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI_InputBox.h">
-      <Filter>Sources\Cosos\GameObject\UI\UI_GameObjects</Filter>
-    </ClInclude>
     <ClInclude Include="Source\C_TransformUI.h">
-      <Filter>Sources\Cosos\GameObject\UI\UI_Components</Filter>
+      <Filter>Sources\Cosos\GameObject\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\C_UI.h">
-      <Filter>Sources\Cosos\GameObject\UI\UI_Components</Filter>
+      <Filter>Sources\Cosos\GameObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\G_UI.h">
+      <Filter>Sources\Cosos\GameObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI_Button.h">
+      <Filter>Sources\Cosos\GameObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI_Canvas.h">
+      <Filter>Sources\Cosos\GameObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI_CheckBox.h">
+      <Filter>Sources\Cosos\GameObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI_Image.h">
+      <Filter>Sources\Cosos\GameObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI_InputBox.h">
+      <Filter>Sources\Cosos\GameObject\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -726,29 +720,29 @@
     <ClCompile Include="Source\TimeManager.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Source\G_UI.cpp">
-      <Filter>Sources\Cosos\GameObject\UI\UI_GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI_Canvas.cpp">
-      <Filter>Sources\Cosos\GameObject\UI\UI_GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI_Button.cpp">
-      <Filter>Sources\Cosos\GameObject\UI\UI_GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI_CheckBox.cpp">
-      <Filter>Sources\Cosos\GameObject\UI\UI_GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI_Image.cpp">
-      <Filter>Sources\Cosos\GameObject\UI\UI_GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI_InputBox.cpp">
-      <Filter>Sources\Cosos\GameObject\UI\UI_GameObjects</Filter>
-    </ClCompile>
     <ClCompile Include="Source\C_TransformUI.cpp">
-      <Filter>Sources\Cosos\GameObject\UI\UI_Components</Filter>
+      <Filter>Sources\Cosos\GameObject\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\C_UI.cpp">
-      <Filter>Sources\Cosos\GameObject\UI\UI_Components</Filter>
+      <Filter>Sources\Cosos\GameObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\G_UI.cpp">
+      <Filter>Sources\Cosos\GameObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI_Button.cpp">
+      <Filter>Sources\Cosos\GameObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI_Canvas.cpp">
+      <Filter>Sources\Cosos\GameObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI_CheckBox.cpp">
+      <Filter>Sources\Cosos\GameObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI_Image.cpp">
+      <Filter>Sources\Cosos\GameObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI_InputBox.cpp">
+      <Filter>Sources\Cosos\GameObject\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

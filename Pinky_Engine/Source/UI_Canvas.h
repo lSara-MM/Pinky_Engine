@@ -4,11 +4,11 @@
 #include "Globals.h"
 #include "G_UI.h"
 
-class UI_Canvas : public G_UI
+class UI_Canvas : public C_UI
 {
 public:
 	
-	UI_Canvas();
+	UI_Canvas(GameObject* g);
 	~UI_Canvas();
 
 public:

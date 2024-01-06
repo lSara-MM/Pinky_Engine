@@ -118,6 +118,7 @@ void GameObject::ReSetUID()
 //
 update_status GameObject::Update(float dt)
 {
+	update_status ret = UPDATE_CONTINUE;
 	if (isActive)
 	{
 		if (!vChildren.empty())
@@ -191,7 +192,7 @@ update_status GameObject::Update(float dt)
 		}
 	}
 
-	return UPDATE_CONTINUE;
+	return ret;
 }
 
 //---Components---

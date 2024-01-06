@@ -66,7 +66,7 @@ bool ModuleScene::Init()
 	mainCamera->transform->SetRotation(rotIni);
 	mainCamera->AddComponent(C_TYPE::CAM);
 
-	UI_Canvas* prueba = new UI_Canvas();
+	G_UI* prueba = new G_UI(UI_TYPE::CANVAS);
 
 	return ret;
 }
