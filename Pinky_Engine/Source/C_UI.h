@@ -24,7 +24,8 @@ class C_UI : public Component
 public:
 	C_UI(C_TYPE t, GameObject* g, std::string n = "UI");
 	~C_UI();
-	
+
+	virtual void ShowInInspector() {};
 public:
 	UI_TYPE type;
 };

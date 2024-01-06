@@ -11,6 +11,8 @@ public:
 	UI_Canvas(GameObject* g);
 	~UI_Canvas();
 
+	void ShowInInspector();
+
 public:
 
 	//SDL_Rect bounds;        // Position and size

@@ -13,6 +13,8 @@ public:
 	UI_Image(GameObject* g);
 	~UI_Image();
 
+	void ShowInInspector();
+
 public:
 	// TODO: que te una img? no es com una textura tal cual?
 	C_Material* mat;

@@ -603,22 +603,19 @@ bool ModuleResource::AddResource(Resource* r, bool i)
 
 			if (r->count == 0)
 			{
-				Resource* temp = r;
 				/*for (int i = 0; i < r->vComponents.size(); i++)
 				{
 					r->vComponents[i]->gameObject->RemoveComponent(r->vComponents[i]);
 				}*/
-				mResources.erase(r->GetUID());
-				RELEASE(r);
 
-				switch (temp->GetType())
+				switch (r->GetType())
 				{
 				case R_TYPE::MESH:
-					vMeshesResources.erase(std::remove(vMeshesResources.begin(), vMeshesResources.end(), temp), vMeshesResources.end());
+					vMeshesResources.erase(std::remove(vMeshesResources.begin(), vMeshesResources.end(), r), vMeshesResources.end());
 					//ClearVec(vMeshesResources);
 					break;
 				case R_TYPE::TEXTURE:
-					vTexturesResources.erase(std::remove(vTexturesResources.begin(), vTexturesResources.end(), temp), vTexturesResources.end());
+					vTexturesResources.erase(std::remove(vTexturesResources.begin(), vTexturesResources.end(), r), vTexturesResources.end());
 					//ClearVec(vTexturesResources);
 					break;
 				case R_TYPE::PREFAB:
@@ -631,7 +628,9 @@ bool ModuleResource::AddResource(Resource* r, bool i)
 					break;
 				}
 
-				temp = nullptr;
+				mResources.erase(r->GetUID());
+				RELEASE(r);
+
 				return false;
 			}
 		}
