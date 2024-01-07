@@ -10,7 +10,7 @@
 G_UI::G_UI(UI_TYPE t) : GameObject()
 {
 	//RemoveComponent(transform);//TODO: fer amb altre transform
-
+	canvas = nullptr;
 	AddUIComponent(t);
 }
 
@@ -41,38 +41,48 @@ update_status G_UI::Update(float dt)
 
 		if (vComponents.size() > 1)
 		{
-			
+			if (canvas != nullptr)
+			{
+				canvas->Draw();
+			}
 		}
 	}
 
 	return ret;
 }
 
-//std::vector<UI_TYPE*> G_UI::GetComponents(UI_TYPE type)
-//{
-//	//std::vector<type> vec = {};
-//	//for (auto i = 0; i < vComponents.size(); i++)
-//	//{
-//	//	if (vComponents[i]->type == C_TYPE::MATERIAL)
-//	//	{
-//	//		vec.push_back((C_Material*)vComponents[i]);
-//	//	}
-//	//}
-//	return vec;
-//}
+C_UI* G_UI::GetComponentUI(UI_TYPE type)
+{
+	C_UI* can = nullptr;
+
+	for (auto i = 0; i < vComponents.size(); i++)
+	{
+		if (static_cast<C_UI*>(vComponents[i])->type == type)
+		{
+			can = static_cast<C_UI*>(vComponents[i]);
+		}
+	}
+
+	return can;
+}
 
 bool G_UI::AddUIComponent(UI_TYPE type)
 {
+	bool ret = true;
+
 	switch (type)
 	{
 	case UI_TYPE::CANVAS:
 	{
-		UI_Canvas* comp = new UI_Canvas(this);
-		vComponents.push_back(comp);
-
-		name = "Canvas";
-
-		App->scene->SetCanvas(*this);
+		if (canvas == nullptr)
+		{
+			UI_Canvas* comp = new UI_Canvas(this);
+			canvas = comp;
+			vComponents.push_back(canvas);
+			name = "Canvas";
+			App->scene->SetCanvas(*this);
+		}
+		else { ret = false; }
 	}
 	break;
 	case UI_TYPE::IMAGE:
@@ -150,5 +160,5 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 		break;
 	}
 
-	return true;
+	return ret;
 }

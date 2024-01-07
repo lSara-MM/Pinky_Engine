@@ -28,7 +28,7 @@ public:
 	void ReSetUID();
 
 	//
-	update_status Update(float dt);
+	virtual update_status Update(float dt);
 
 	//---Components---
 	bool AddComponent(C_TYPE type, void* var = nullptr, ai::POLY_PRIMITIVE_TYPE poly = ai::POLY_PRIMITIVE_TYPE::SPHERE);

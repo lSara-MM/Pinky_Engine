@@ -13,11 +13,12 @@ public:
 	~G_UI();
 
 	update_status Update(float dt);
-	//std::vector<UI_TYPE*> GetComponents(UI_TYPE type);
+	C_UI* GetComponentUI(UI_TYPE type);
 
 	bool AddUIComponent(UI_TYPE type);
 
 public:
 	C_TransformUI rectTransform;
+	C_UI* canvas;
 };
 #endif // __G_UI_H__

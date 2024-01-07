@@ -38,7 +38,7 @@ void UI_Canvas::ShowInInspector()
 	if (!exists) { gameObject->RemoveComponent(this); }
 }
 
-void UI_Canvas::canvasDraw()
+void UI_Canvas::Draw()
 {
 	glBegin(GL_LINE_LOOP);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);

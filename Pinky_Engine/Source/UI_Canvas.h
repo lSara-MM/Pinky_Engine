@@ -8,11 +8,11 @@ class UI_Canvas : public C_UI
 {
 public:
 	
-	UI_Canvas(GameObject* g, int w = 500, int h = 500);
+	UI_Canvas(GameObject* g, int w = 100, int h = 100);
 	~UI_Canvas();
 
 	void ShowInInspector();
-	void canvasDraw();
+	void Draw();
 
 public:
 

@@ -26,6 +26,7 @@ public:
 	~C_UI();
 
 	virtual void ShowInInspector() {};
+	virtual void Draw() {};
 public:
 	UI_TYPE type;
 };
