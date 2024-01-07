@@ -6,6 +6,8 @@
 #include "C_UI.h"
 #include "C_TransformUI.h"
 
+class UI_Canvas;
+
 class G_UI : public GameObject
 {
 public:
@@ -19,6 +21,6 @@ public:
 
 public:
 	C_TransformUI rectTransform;
-	C_UI* canvas;
+	UI_Canvas* canvas;
 };
 #endif // __G_UI_H__
