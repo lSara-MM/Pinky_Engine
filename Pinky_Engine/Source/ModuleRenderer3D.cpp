@@ -233,9 +233,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		for (uint i = 0; i < MAX_LIGHTS; ++i)
 			lights[i].Render();
 
-		App->scene->rootNode->Update(dt);//TODO: guarrada important?
-
-
+		App->scene->rootNode->Update(dt); 
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 		Grid.Render();

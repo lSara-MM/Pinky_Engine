@@ -12,8 +12,9 @@ public:
 	G_UI(UI_TYPE t);
 	~G_UI();
 
-	update_status Update();
-	
+	update_status Update(float dt);
+	//std::vector<UI_TYPE*> GetComponents(UI_TYPE type);
+
 	bool AddUIComponent(UI_TYPE type);
 
 public:
