@@ -18,8 +18,9 @@
 #include "External Libraries/ImGui/backends/imgui_impl_sdl2.h"
 #include "External Libraries/ImGui/backends/imgui_impl_opengl3.h"
 
-#include "GameObject.h"
+#include "G_UI.h"
 #include "UI_Canvas.h"
+#include "GameObject.h"
 
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -28,6 +29,8 @@ ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, sta
 	console = nullptr;
 	project = nullptr;
 	rm = nullptr;
+
+	canvas = nullptr;
 }
 
 // Destructor
@@ -66,7 +69,9 @@ bool ModuleScene::Init()
 	mainCamera->transform->SetRotation(rotIni);
 	mainCamera->AddComponent(C_TYPE::CAM);
 
-	G_UI* prueba = new G_UI(UI_TYPE::CANVAS);
+	//G_UI* prueba = new G_UI(UI_TYPE::CANVAS);
+	G_UI* prueba2 = new G_UI(UI_TYPE::IMAGE);
+	prueba2 = nullptr;
 
 	return ret;
 }
@@ -140,4 +145,14 @@ bool ModuleScene::CleanUp()
 
 	RELEASE(rootNode);
 	return true;
+}
+
+G_UI* ModuleScene::GetCanvas()
+{
+	return canvas;
+}
+
+void ModuleScene::SetCanvas(G_UI& newCanvas)
+{
+	canvas = &newCanvas;
 }

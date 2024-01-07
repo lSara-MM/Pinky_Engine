@@ -5,6 +5,7 @@
 #include "UI_Button.h"
 #include "UI_InputBox.h"
 
+#include "ModuleScene.h"
 
 G_UI::G_UI(UI_TYPE t) : GameObject()
 {
@@ -46,7 +47,7 @@ update_status G_UI::Update(float dt)
 
 	return ret;
 }
-//
+
 //std::vector<UI_TYPE*> G_UI::GetComponents(UI_TYPE type)
 //{
 //	//std::vector<type> vec = {};
@@ -70,6 +71,8 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 		vComponents.push_back(comp);
 
 		name = "Canvas";
+
+		App->scene->SetCanvas(*this);
 	}
 	break;
 	case UI_TYPE::IMAGE:
@@ -78,6 +81,12 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 		vComponents.push_back(comp);
 
 		name = "Image";
+
+		if (App->scene->GetCanvas() == nullptr)
+		{
+			App->scene->SetCanvas(*(new G_UI(UI_TYPE::CANVAS)));
+		}
+		ReParent(App->scene->GetCanvas());
 	}
 	break;
 	case UI_TYPE::TEXT:
@@ -85,6 +94,12 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 
 
 		name = "Text";
+
+		if (App->scene->GetCanvas() == nullptr)
+		{
+			App->scene->SetCanvas(*(new G_UI(UI_TYPE::CANVAS)));
+		}
+		ReParent(App->scene->GetCanvas());
 	}
 		break;
 	case UI_TYPE::BUTTON:
@@ -93,6 +108,12 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 		vComponents.push_back(comp);
 
 		name = "Button";
+
+		if (App->scene->GetCanvas() == nullptr)
+		{
+			App->scene->SetCanvas(*(new G_UI(UI_TYPE::CANVAS)));
+		}
+		ReParent(App->scene->GetCanvas());
 	}
 		break;
 	case UI_TYPE::INPUTBOX:
@@ -101,6 +122,12 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 		vComponents.push_back(comp);
 
 		name = "Input Box";
+
+		if (App->scene->GetCanvas() == nullptr)
+		{
+			App->scene->SetCanvas(*(new G_UI(UI_TYPE::CANVAS)));
+		}
+		ReParent(App->scene->GetCanvas());
 	}
 		break;
 	case UI_TYPE::CHECKBOX:
@@ -109,6 +136,12 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 		vComponents.push_back(comp);
 
 		name = "Checkbox";
+
+		if (App->scene->GetCanvas() == nullptr)
+		{
+			App->scene->SetCanvas(*(new G_UI(UI_TYPE::CANVAS)));
+		}
+		ReParent(App->scene->GetCanvas());
 	}
 		break;
 	case UI_TYPE::NONE:

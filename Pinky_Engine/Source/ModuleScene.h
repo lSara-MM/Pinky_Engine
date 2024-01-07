@@ -11,6 +11,7 @@
 #include "ImGuiResourcesWindows.h"
 
 class GameObject;
+class G_UI;
 
 class ModuleScene : public Module
 {
@@ -25,6 +26,8 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	G_UI* GetCanvas();
+	void SetCanvas(G_UI& newCanvas);
 public:
 	GameObject* rootNode;
 
@@ -35,6 +38,8 @@ public:
 	ResourcesManager* rm;
 
 	GameObject* mainCamera;
+
 private:
+	G_UI* canvas;
 
 };
