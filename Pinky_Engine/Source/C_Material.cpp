@@ -101,7 +101,7 @@ void C_Material::ShowInInspector()
 			ImGui::Image((void*)(intptr_t)tex->tex_id, ImVec2(100, 100));
 		}
 
-		ImGui::ColorEdit3("Color", (float*)&color, ImGuiColorEditFlags_NoInputs);
+		ImGui::ColorEdit4("Color", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 
 		if (!isActive) { ImGui::EndDisabled(); }
 	}

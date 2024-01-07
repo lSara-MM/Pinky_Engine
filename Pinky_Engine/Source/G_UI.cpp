@@ -67,12 +67,16 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 	{
 	case UI_TYPE::CANVAS:
 	{
-		UI_Canvas* comp = new UI_Canvas(this);
-		vComponents.push_back(comp);
+		if (canvas == nullptr)
+		{
+			UI_Canvas* comp = new UI_Canvas(this);
+			vComponents.push_back(comp);
+
+			canvas = comp;
+			App->scene->SetCanvas(*this);
+		}
 
 		name = "Canvas";
-
-		App->scene->SetCanvas(*this);
 	}
 	break;
 	case UI_TYPE::IMAGE:
@@ -87,6 +91,7 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 			App->scene->SetCanvas(*(new G_UI(UI_TYPE::CANVAS)));
 		}
 		ReParent(App->scene->GetCanvas());
+		canvas = static_cast<G_UI*>(pParent)->canvas;
 	}
 	break;
 	case UI_TYPE::TEXT:
@@ -100,6 +105,7 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 			App->scene->SetCanvas(*(new G_UI(UI_TYPE::CANVAS)));
 		}
 		ReParent(App->scene->GetCanvas());
+		canvas = static_cast<G_UI*>(pParent)->canvas;
 	}
 		break;
 	case UI_TYPE::BUTTON:
@@ -114,6 +120,7 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 			App->scene->SetCanvas(*(new G_UI(UI_TYPE::CANVAS)));
 		}
 		ReParent(App->scene->GetCanvas());
+		canvas = static_cast<G_UI*>(pParent)->canvas;
 	}
 		break;
 	case UI_TYPE::INPUTBOX:
@@ -128,6 +135,7 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 			App->scene->SetCanvas(*(new G_UI(UI_TYPE::CANVAS)));
 		}
 		ReParent(App->scene->GetCanvas());
+		canvas = static_cast<G_UI*>(pParent)->canvas;
 	}
 		break;
 	case UI_TYPE::CHECKBOX:
@@ -142,6 +150,7 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 			App->scene->SetCanvas(*(new G_UI(UI_TYPE::CANVAS)));
 		}
 		ReParent(App->scene->GetCanvas());
+		canvas = static_cast<G_UI*>(pParent)->canvas;
 	}
 		break;
 	case UI_TYPE::NONE:
