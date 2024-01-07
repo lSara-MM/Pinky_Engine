@@ -46,19 +46,19 @@ update_status G_UI::Update(float dt)
 
 	return ret;
 }
-
-std::vector<UI_TYPE*> G_UI::GetComponents(UI_TYPE type)
-{
-	//std::vector<type> vec = {};
-	//for (auto i = 0; i < vComponents.size(); i++)
-	//{
-	//	if (vComponents[i]->type == C_TYPE::MATERIAL)
-	//	{
-	//		vec.push_back((C_Material*)vComponents[i]);
-	//	}
-	//}
-	//return vec;
-}
+//
+//std::vector<UI_TYPE*> G_UI::GetComponents(UI_TYPE type)
+//{
+//	//std::vector<type> vec = {};
+//	//for (auto i = 0; i < vComponents.size(); i++)
+//	//{
+//	//	if (vComponents[i]->type == C_TYPE::MATERIAL)
+//	//	{
+//	//		vec.push_back((C_Material*)vComponents[i]);
+//	//	}
+//	//}
+//	return vec;
+//}
 
 bool G_UI::AddUIComponent(UI_TYPE type)
 {
