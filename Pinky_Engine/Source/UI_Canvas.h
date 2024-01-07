@@ -12,7 +12,7 @@ public:
 	~UI_Canvas();
 
 	void ShowInInspector();
-	void Draw();
+	void DebugDraw();
 
 public:
 

@@ -4,6 +4,21 @@ UI_Canvas::UI_Canvas(GameObject* g, int w, int h) : C_UI(C_TYPE::UI, g, "Canvas"
 {
 	canvasWidth = w;
 	canvasHeight = h;
+
+	float3 position = gameObject->transform->position;
+	float3 v1 = float3(position.x, position.y, position.z);
+	float3 v2 = float3(position.x + canvasWidth, position.y, position.z);
+	float3 v3 = float3(position.x, position.y + canvasHeight, position.z);
+	float3 v4 = float3(position.x + canvasWidth, position.y + canvasHeight, position.z);
+
+	////---Local AABB---
+	//local_aabb.SetNegativeInfinity();
+	//local_aabb.Enclose((float3*)vertex, 4);
+
+	//obb = local_aabb;
+	//obb.Transform(gameObject->transform->GetGlobalTransform());
+	//global_aabb.SetNegativeInfinity();
+	//global_aabb.Enclose(obb);
 }
 
 UI_Canvas::~UI_Canvas()
@@ -38,7 +53,7 @@ void UI_Canvas::ShowInInspector()
 	if (!exists) { gameObject->RemoveComponent(this); }
 }
 
-void UI_Canvas::Draw()
+void UI_Canvas::DebugDraw()
 {
 	glBegin(GL_LINE_LOOP);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);

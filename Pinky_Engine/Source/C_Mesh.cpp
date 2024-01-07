@@ -47,7 +47,6 @@ C_Mesh::C_Mesh(GameObject* g, R_Mesh* m, bool start_enabled) : Component(C_TYPE:
 	showAABB = false;
 	showOBB = false;
 
-	//TODO: does it go here?
 	obb = mesh->local_aabb;
 	obb.Transform(gameObject->transform->GetGlobalTransform());
 	global_aabb.SetNegativeInfinity();

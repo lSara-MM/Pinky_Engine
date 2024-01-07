@@ -43,7 +43,7 @@ update_status G_UI::Update(float dt)
 		{
 			if (canvas != nullptr)
 			{
-				canvas->Draw();
+				canvas->DebugDraw();
 			}
 		}
 	}
@@ -103,8 +103,6 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 	break;
 	case UI_TYPE::TEXT:
 	{
-
-
 		name = "Text";
 
 		if (App->scene->GetCanvas() == nullptr)

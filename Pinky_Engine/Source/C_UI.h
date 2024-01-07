@@ -6,6 +6,23 @@
 #include "Globals.h"
 #include "Component.h"
 
+struct UIBounds
+{
+	float3 vertex[4];
+	float2 uvs[4];
+
+	GLuint VBO; //vertex buffer object
+	GLuint EBO; //element buffer object
+	GLuint id_tex_uvs; //texture UVs
+
+	GLuint textureID;
+	AABB local_aabb;//local AABB
+
+	bool InitBuffers();
+	void RgenerateVAO();
+	void DeleteBuffers();
+};
+
 enum class UI_TYPE
 {
 	CANVAS,
@@ -22,12 +39,29 @@ enum class UI_TYPE
 class C_UI : public Component
 {
 public:
-	C_UI(C_TYPE t, GameObject* g, std::string n = "UI");
+	C_UI(C_TYPE t, GameObject* g, std::string n = "UI", Color c = {1,1,1,1}, int w = 20, int h = 20, int x = 0, int y = 0);
 	~C_UI();
 
 	virtual void ShowInInspector() {};
-	virtual void Draw() {};
+	virtual void Draw();
+	virtual void DebugDraw();
+
+
 public:
 	UI_TYPE type;
+
+	// Transform info
+	int posX, posY, width, height;
+	
+	//color
+	Color color;
+
+	//Mouse pick
+	AABB local_aabb;//local AABB
+	AABB global_aabb;//global OB
+	OBB obb;//global AABB
+	float3 v1, v2, v3, v4;
+	UIBounds* bounds;
+
 };
 #endif // __UI_H__
