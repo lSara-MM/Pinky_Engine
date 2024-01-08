@@ -46,7 +46,7 @@ void C_Transform::ShowInInspector()
 	{
 		if (ImGui::DragFloat3("Position", &position[0], 0.1f))
 		{
-			SetTransform(position);
+			SetPosition(position);
 		}
 
 		if (ImGui::DragFloat3("Rotation", &eulerRot[0], 0.1f))
@@ -61,7 +61,21 @@ void C_Transform::ShowInInspector()
 	}
 }
 
-void C_Transform::SetTransform(float3 vec)
+void C_Transform::SetTransform(float3 pos, float3 rot, float3 scale)
+{
+	SetPosition(pos);
+	SetRotation(rot);
+	SetScale(scale);
+}
+
+void C_Transform::SetTransform(C_Transform& t)
+{
+	SetPosition(t.position);
+	SetRotation(t.eulerRot);
+	SetScale(t.scale);
+}
+
+void C_Transform::SetPosition(float3 vec)
 {
 	position = float3(vec);
 	dirty_ = true;

@@ -65,7 +65,7 @@ bool ModuleScene::Init()
 	mainCamera = new GameObject("Main Camera", rootNode);
 	float3 posIni = { 47, 25, -55 };
 	float3 rotIni = { 28, -38, 21 };
-	mainCamera->transform->SetTransform(posIni);
+	mainCamera->transform->SetPosition(posIni);
 	mainCamera->transform->SetRotation(rotIni);
 	mainCamera->AddComponent(C_TYPE::CAM);
 
@@ -75,13 +75,25 @@ bool ModuleScene::Init()
 bool ModuleScene::Start()
 {
 	LOG("Starting scene");
+
+	std::array<std::string, 4> components = { "Cube", "Sphere", "Cylinder", "Plane" };
+	for (int i = 0; i < components.size(); i++)
+	{
+		ai::CreatePolyPrimitive(ai::POLY_PRIMITIVE_TYPE(i));
+	}
+
+	RELEASE(rootNode);
+	rootNode = new GameObject("Scene", nullptr);
+
 	App->resource->ImportToSceneV("street2.fbx", PINKY_ASSETS_AUX "3dObject\\street\\");
 	//App->resource->ImportToScene("Baker_house.dds", PINKY_ASSETS_AUX "3dObject\\baker_house\\");
-	
+
+
 
 	//G_UI* prueba = new G_UI(UI_TYPE::CANVAS);
-	G_UI* prueba2 = new G_UI(UI_TYPE::IMAGE);
-	prueba2 = nullptr;
+	//G_UI* prueba2 = new G_UI(UI_TYPE::IMAGE);
+	//prueba2 = nullptr;
+
 	return true;
 }
 

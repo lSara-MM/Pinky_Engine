@@ -44,7 +44,7 @@ void C_TransformUI::ShowInInspector()
 	{
 		if (ImGui::DragFloat3("Position", &position[0], 0.1f))
 		{
-			SetTransform(position);
+			SetPosition(position);
 		}
 
 		if (ImGui::DragFloat3("Rotation", &eulerRot[0], 0.1f))

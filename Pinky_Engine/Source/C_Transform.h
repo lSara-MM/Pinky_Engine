@@ -20,22 +20,27 @@ public:
 
 	void ShowInInspector();
 
-	void SetTransform(float3 vec);
-	void SetRotation(float3 vec);
-	void SetScale(float3 vec);
+	void SetTransform(float3 pos = float3(0, 0, 0), float3 rot = float3(0, 0, 0), float3 scale = float3(0, 0, 0));
+	void SetTransform(C_Transform& t);
+	
+	void SetPosition(float3 vec = float3(0, 0, 0));
+	void SetRotation(float3 vec = float3(0, 0, 0));
+	void SetScale(float3 vec = float3(0, 0, 0));
+
 	void ReparentTransform(float4x4 matrix);
+	
 	float4x4 GetGlobalTransform() const;
 	float4x4 GetLocalTransform() const;
 	GLfloat* GetGLTransform() const;
 	float3 GetGlobalPosition() const;
 	Quat GetLocalRotation() const;
+
 	void UpdateTransformsChilds();
 	void UpdateGlobalMatrix();
 	void UpdateLocalMatrix();
 	//update global AABB and OBB when updating transform
 	void UpdateBoundingBoxes();
 	void UpdateTransformGuizmo(float4x4 matrix);
-
 
 public:
 	//local

@@ -302,9 +302,13 @@ int ModuleResource::ImportToSceneV(std::string file, std::string dir, GameObject
 
 			go = nullptr;
 		}
-		else
+		else if (!component)
 		{
 			App->parson->CreateGOfromMeta(PREFABS_PATH + App->fs->GetFileName(file.c_str()) + PREFABS_EXT);
+		}
+		else
+		{
+			App->parson->CreateComponentFromMeta(PREFABS_PATH + App->fs->GetFileName(file.c_str()) + PREFABS_EXT, *goParent);
 		}
 		break;
 	case R_TYPE::TEXTURE:

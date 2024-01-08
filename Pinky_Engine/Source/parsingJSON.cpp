@@ -102,7 +102,9 @@ void ParsingJSON::CreatePrefabFromGO(GameObject* go)
 {
 	int resource_count = 0;
 
-	std::string file_name = PREFABS_PATH + go->name + ".pgo";	// Pinky Game Object
+	std::string aux = go->name;
+	//std::string aux = (go->mesh == nullptr) ? go->name : go->mesh->mesh->name;
+	std::string file_name = PREFABS_PATH + aux + ".pgo";	// Pinky Game Object
 	root_value = json_value_init_object();
 	root_object = json_value_get_object(root_value);
 	if (root_value != nullptr)
@@ -286,6 +288,26 @@ GameObject* ParsingJSON::CreateGOfromMeta(std::string path, std::string subInfo)
 	}
 
 	return go;
+}
+
+void ParsingJSON::CreateComponentFromMeta(std::string path, GameObject& go)
+{
+	root_value = json_parse_file(path.c_str());
+	root_object = json_value_get_object(root_value);
+
+	if (root_value != nullptr)
+	{
+		C_Transform* aux = go.transform;
+		go.transform->SetTransform();
+		ComponentsFromMeta("GameObject.Parent", go, 1, false);
+		go.transform->SetTransform(*aux);
+
+		LOG("Successfully created [%s]", go.name.c_str());
+	}
+	else
+	{
+		LOG("Could not create component of [%s]", path.c_str());
+	}
 }
 
 GameObject* ParsingJSON::GOfromMeta(std::string node_name, bool scene)

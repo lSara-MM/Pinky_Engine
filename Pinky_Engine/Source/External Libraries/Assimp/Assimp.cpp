@@ -117,7 +117,7 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 
 
 			float3 temp = { pos.x , pos.y, pos.z };
-			obj->transform->SetTransform(temp);
+			obj->transform->SetPosition(temp);
 
 			float temp1[4] = { rot.x , rot.y, rot.z, rot.w };
 			float3 euler = Quat(temp1).ToEulerXYZ();
@@ -180,7 +180,12 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 			mesh->assetsFile = assimpFullDir;
 			mesh->libraryFile = App->resource->SaveToLibrary(mesh);
 			//mesh->name = children[i]->mName.C_Str();
-			mesh->name = obj->name;
+
+
+			// --- Get file name ---
+			std::string filePath, fileName;
+			App->fs->SplitFilePath(assimpFullDir, &filePath, &fileName);
+			mesh->name = fileName;
 
 			obj->transform->globalMatrix = math::float4x4::FromTRS(obj->transform->position,
 				obj->transform->rotation, obj->transform->scale);
@@ -212,6 +217,7 @@ GameObject* ai::MeshHierarchy(const aiScene* s, aiNode** children, int num, Game
 
 			if (!component)
 			{
+				mesh->name = obj->name;
 				if (numTex != 0)
 				{
 					for (int i = 0; i < numTex; i++)

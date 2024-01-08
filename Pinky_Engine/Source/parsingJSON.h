@@ -30,6 +30,7 @@ public:
 	void ComponentsJSON(Component* comp, std::string node_name, int i);
 
 	GameObject* CreateGOfromMeta(std::string path, std::string subInfo = "GameObject");
+	void CreateComponentFromMeta(std::string path, GameObject& go);
 	GameObject* GOfromMeta(std::string node_name, bool scene = false);
 	void ComponentsFromMeta(std::string node_name, GameObject &go, int i, bool scene);
 
