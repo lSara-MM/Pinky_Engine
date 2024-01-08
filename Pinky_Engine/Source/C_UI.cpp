@@ -45,7 +45,7 @@ C_UI::C_UI(C_TYPE t, GameObject* g, std::string n, Color c, int w, int h, int x,
 
 C_UI::~C_UI()
 {
-	RELEASE(bounds);
+	//RELEASE(bounds);
 }
 
 void C_UI::Draw()

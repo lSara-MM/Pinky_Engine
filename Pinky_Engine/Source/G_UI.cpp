@@ -12,6 +12,9 @@ G_UI::G_UI(UI_TYPE t) : GameObject()
 	//RemoveComponent(transform);//TODO: fer amb altre transform
 	canvas = nullptr;
 	AddUIComponent(t);
+
+	AddComponent(C_TYPE::MESH, nullptr, ai::POLY_PRIMITIVE_TYPE::PLANE);
+	mesh = nullptr;
 }
 
 G_UI::~G_UI()

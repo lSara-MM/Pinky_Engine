@@ -216,10 +216,9 @@ bool GameObject::AddComponent(C_TYPE type, void* var, ai::POLY_PRIMITIVE_TYPE po
 		// A gameObject can't have more than one mesh
 		if (mesh == nullptr)
 		{
-			R_Mesh* m = static_cast<R_Mesh*>(var);
-			if (m != nullptr)
+			if (var != nullptr)
 			{
-				temp = new C_Mesh(this, m);
+				temp = new C_Mesh(this, static_cast<R_Mesh*>(var));
 				mesh = (C_Mesh*)temp;
 				vComponents.push_back(temp);
 			}
@@ -235,10 +234,9 @@ bool GameObject::AddComponent(C_TYPE type, void* var, ai::POLY_PRIMITIVE_TYPE po
 		// In unity there can be more than one if embeded (?) see snowman for reference 
 		if (numMaterials == 0)
 		{
-			R_Texture* t = static_cast<R_Texture*>(var);
-			if (t != nullptr)
+			if (var != nullptr)
 			{
-				temp = new C_Material(this, t);
+				temp = new C_Material(this, static_cast<R_Texture*>(var));
 				vComponents.push_back(temp);
 			}
 			else

@@ -282,7 +282,7 @@ GameObject* ParsingJSON::CreateGOfromMeta(std::string path, std::string subInfo)
 	}
 	else
 	{
-		LOG("Could not create game object of [%s]", path);
+		LOG("Could not create game object of [%s]", path.c_str());
 	}
 
 	return go;

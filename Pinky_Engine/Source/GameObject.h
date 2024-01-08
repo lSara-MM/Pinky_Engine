@@ -12,8 +12,6 @@
 #include "C_Material.h"
 #include "C_Camera.h"
 
-#include "R_Mesh.h"
-
 class GameObject
 {
 public:

@@ -20,7 +20,7 @@ public:
 	bool AddUIComponent(UI_TYPE type);
 
 public:
-	C_TransformUI rectTransform;
 	UI_Canvas* canvas;
+	C_TransformUI rectTransform;
 };
 #endif // __G_UI_H__

@@ -35,11 +35,6 @@ R_Mesh::~R_Mesh()
 	DeleteBuffers();
 }
 
-//void R_Mesh::CleanUp()
-//{
-//	App->resource->AddResource(this, false);
-//}
-
 bool R_Mesh::InitBuffers()
 {
 	VBO = 0;
