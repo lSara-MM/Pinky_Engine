@@ -137,6 +137,7 @@ update_status GameObject::Update(float dt)
 			}
 		}
 
+		// > 1 because if its 1 --> transform
 		if (vComponents.size() > 1)
 		{
 			std::vector<C_Material*> vMaterials = GetComponentsMaterial();
