@@ -61,13 +61,6 @@ bool ModuleScene::Init()
 	project = new ProjectFiles(4);
 	App->editor->AddWindow(project);
 
-	//Main Camera  
-	mainCamera = new GameObject("Main Camera", rootNode);
-	float3 posIni = { 47, 25, -55 };
-	float3 rotIni = { 28, -38, 21 };
-	mainCamera->transform->SetPosition(posIni);
-	mainCamera->transform->SetRotation(rotIni);
-	mainCamera->AddComponent(C_TYPE::CAM);
 
 	return ret;
 }
@@ -85,9 +78,16 @@ bool ModuleScene::Start()
 	RELEASE(rootNode);
 	rootNode = new GameObject("Scene", nullptr);
 
+	//Main Camera  
+	mainCamera = new GameObject("Main Camera", rootNode);
+	float3 posIni = { 47, 25, -55 };
+	float3 rotIni = { 28, -38, 21 };
+	mainCamera->transform->SetPosition(posIni);
+	mainCamera->transform->SetRotation(rotIni);
+	mainCamera->AddComponent(C_TYPE::CAM);
+
 	App->resource->ImportToSceneV("street2.fbx", PINKY_ASSETS_AUX "3dObject\\street\\");
 	//App->resource->ImportToScene("Baker_house.dds", PINKY_ASSETS_AUX "3dObject\\baker_house\\");
-
 
 
 	//G_UI* prueba = new G_UI(UI_TYPE::CANVAS);

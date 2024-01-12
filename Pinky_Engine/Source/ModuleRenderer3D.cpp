@@ -157,12 +157,6 @@ bool ModuleRenderer3D::Init()
 		ai::EnableDebug();
 	}
 
-	// Projection matrix for
-	editorCam->OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
-	C_Camera* Cam = (C_Camera*)App->scene->mainCamera->GetComponentByType(C_TYPE::CAM);
-	Cam->isGameCam = true;
-	Cam->SetAsMain(Cam->isGameCam);
-
 	Grid.axis = true;
 	wireframe = false;
 	VertexNormals = false;
@@ -172,6 +166,16 @@ bool ModuleRenderer3D::Init()
 	ai::LoadCheckers(texture_checker);
 	meshes = {};
 	return ret;
+}
+
+bool ModuleRenderer3D::Start()
+{
+	// Projection matrix for
+	editorCam->OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	C_Camera* cam = (C_Camera*)App->scene->mainCamera->GetComponentByType(C_TYPE::CAM);
+	cam->isGameCam = true;
+	cam->SetAsMain(cam->isGameCam);
+	return true;
 }
 
 // PreUpdate: clear buffer
