@@ -9,6 +9,7 @@
 #include "GameObject.h"
 
 
+
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	MainCamera = new C_Camera();
@@ -210,6 +211,92 @@ bool ModuleCamera3D::CheckTriangleIntersection()
 					return ret;
 				}
 			}
+		}
+	}
+
+	return ret;
+}
+
+void ModuleCamera3D::MousePickUI(LineSegment ray)
+{
+	intersectsUI.clear();
+
+	rayCam = ray;
+	entryDist = 0.0f;
+	exitDist = rayCam.Length();
+
+	CheckUICompIntersection(App->scene->rootNode);
+
+	if (intersectsUI.size() > 0)
+	{
+		CheckTriangleIntersectionUI();
+	}
+}
+
+void ModuleCamera3D::CheckUICompIntersection(GameObject* go)
+{
+	if (go->GetComponentByType(C_TYPE::UI) != nullptr)
+	{
+		CheckIntersectionUI(go);
+	}
+
+	if (!go->vChildren.empty())
+	{
+		for (auto i = 0; i < go->vChildren.size(); i++)
+		{
+			CheckUICompIntersection(go->vChildren[i]);
+		}
+	}
+}
+
+void ModuleCamera3D::CheckIntersectionUI(GameObject* go)
+{
+	C_UI* ui = static_cast<C_UI*>(go->GetComponentByType(C_TYPE::UI));
+
+	if (ui->isActive)
+	{
+		if (rayCam.Intersects(ui->global_aabb, entryDist, exitDist))
+		{
+			intersectsUI[entryDist] = ui;
+		}
+	}
+}
+
+bool ModuleCamera3D::CheckTriangleIntersectionUI()
+{
+	bool ret = false;
+	float3 hit_point = float3::zero;
+	localrayCam = rayCam;
+	C_UI* closest = nullptr;
+	std::map<float, C_UI*>::iterator iterator;
+
+	for (iterator = intersectsUI.begin(); iterator != intersectsUI.end(); ++iterator)
+	{
+		if (iterator->second->gameObject->transform != nullptr)
+		{
+			float4x4 object_transform = iterator->second->gameObject->transform->GetGlobalTransform();
+			localrayCam.Transform(object_transform.Inverted());
+
+			float3 vec1 = iterator->second->bounds->vertex[0];
+			float3 vec2 = iterator->second->bounds->vertex[1];
+			float3 vec3 = iterator->second->bounds->vertex[2];
+
+			float3 vec4 = iterator->second->bounds->vertex[2];
+			float3 vec5 = iterator->second->bounds->vertex[3];
+			float3 vec6 = iterator->second->bounds->vertex[1];
+
+			Triangle tri1(vec1, vec2, vec3);
+			Triangle tri2(vec4, vec5, vec6);
+
+			if (localrayCam.Intersects(tri1, nullptr, nullptr) || localrayCam.Intersects(tri2, nullptr, nullptr))
+			{
+				closest = iterator->second;
+				App->scene->hierarchy->SetSelected(closest->gameObject);
+				App->camera->objectReference = closest->global_aabb.CenterPoint();
+				ret = true;
+				return ret;
+			}
+			
 		}
 	}
 

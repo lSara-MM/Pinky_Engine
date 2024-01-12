@@ -1076,11 +1076,10 @@ void ModuleEditor::EditorWindow()
 			{
 				pickingRay = App->camera->MainCamera->frustum.UnProjectLineSegment(origin.x, origin.y + 0.05);//TODO: fix this, why the hell do i need an offset for this to work
 				App->camera->MousePick(pickingRay);
+				App->camera->MousePickUI(pickingRay);
 			}
 		}
-
 		App->camera->CameraInput();
-
 	}
 
 	ImGui::End();
@@ -1136,7 +1135,7 @@ void ModuleEditor::GameWindow()
 
 			if (origin.x >= -1 && origin.x <= 1 && origin.y >= -1 && origin.y <= 1)
 			{
-				pickingRay = App->camera->MainCamera->frustum.UnProjectLineSegment(origin.x, origin.y + 0.05);//TODO: fix this, why the hell do i need an offset for this to work
+				pickingRay = App->camera->MainCamera->frustum.UnProjectLineSegment(origin.x, origin.y + 0.05);
 				App->camera->MousePick(pickingRay);
 			}
 		}

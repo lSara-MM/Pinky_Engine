@@ -48,11 +48,6 @@ public:
 	virtual void DebugDraw();
 	void DrawABB();
 	void DrawOBB();
-	void MousePick(LineSegment ray);
-	void CheckGameObjectsIntersection(GameObject* go);
-	void CheckIntersection(GameObject* go);
-	bool CheckTriangleIntersection();
-
 
 public:
 	UI_TYPE type;

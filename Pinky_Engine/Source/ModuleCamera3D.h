@@ -4,7 +4,7 @@
 #include "External Libraries/MathGeoLib/include/Math/float3.h"
 #include "External Libraries/MathGeoLib/include/Math/float4x4.h"
 #include "C_Camera.h"
-
+#include "C_UI.h"
 
 class ModuleCamera3D : public Module
 {
@@ -28,6 +28,11 @@ public:
 	void CheckGameObjectsIntersection(GameObject* go);
 	bool CheckTriangleIntersection();
 	void DebugRaycast();
+	//UI mouse picking
+	void MousePickUI(LineSegment ray);
+	void CheckUICompIntersection(GameObject* go);
+	void CheckIntersectionUI(GameObject* go);
+	bool CheckTriangleIntersectionUI();
 
 	//Handle all camera input, used in editor (isHovered)
 	void CameraInput();
@@ -44,5 +49,6 @@ private:
 	float exitDist;
 	LineSegment rayCam;
 	std::map<float, GameObject*> intersects;
+	std::map<float, C_UI*> intersectsUI;
 
 };
