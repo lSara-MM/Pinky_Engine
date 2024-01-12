@@ -13,7 +13,7 @@ G_UI::G_UI(UI_TYPE t) : GameObject()
 	canvas = nullptr;
 	AddUIComponent(t);
 
-	AddComponent(C_TYPE::MESH, nullptr, ai::POLY_PRIMITIVE_TYPE::PLANE);
+	//AddComponent(C_TYPE::MESH, nullptr, ai::POLY_PRIMITIVE_TYPE::PLANE);
 	mesh = nullptr;
 }
 
@@ -46,7 +46,8 @@ update_status G_UI::Update(float dt)
 		{
 			if (canvas != nullptr)
 			{
-				canvas->DebugDraw();
+				canvas->Draw();
+				//canvas->DebugDraw();
 			}
 		}
 	}

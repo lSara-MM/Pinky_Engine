@@ -18,7 +18,7 @@ C_UI::C_UI(C_TYPE t, GameObject* g, std::string n, Color c, int w, int h, int x,
 
 	gameObject->transform->localMatrix.Decompose(localPos, rot, scale);
 
-	/*bounds = new UIBounds;
+	bounds = new UIBounds;
 
 	bounds->vertex[0] = float3(position.x, position.y + height, localPos.z);
 	bounds->vertex[1] = float3(position.x + width, position.y + height, localPos.z);
@@ -40,7 +40,12 @@ C_UI::C_UI(C_TYPE t, GameObject* g, std::string n, Color c, int w, int h, int x,
 	bounds->uvs[1] = float2(1, 0);
 	bounds->uvs[0] = float2(0, 0);
 
-	bounds->InitBuffers();*/
+	bounds->InitBuffers();
+
+	obb = local_aabb;
+	obb.Transform(gameObject->transform->GetGlobalTransform());
+	global_aabb.SetNegativeInfinity();
+	global_aabb.Enclose(obb);
 }
 
 C_UI::~C_UI()
@@ -122,6 +127,38 @@ void C_UI::DebugDraw()
 	glEnd();
 }
 
+void C_UI::DrawABB()
+{
+	glBegin(GL_LINES);
+	glLineWidth(3.0f);
+	glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+
+	for (uint i = 0; i < 12; i++)
+	{
+		glVertex3f(global_aabb.Edge(i).a.x, global_aabb.Edge(i).a.y, global_aabb.Edge(i).a.z);
+		glVertex3f(global_aabb.Edge(i).b.x, global_aabb.Edge(i).b.y, global_aabb.Edge(i).b.z);
+	}
+
+	glEnd();
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+}
+
+void C_UI::DrawOBB()
+{
+	glBegin(GL_LINES);
+	glLineWidth(3.0f);
+	glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+
+	for (uint i = 0; i < 12; i++)
+	{
+		glVertex3f(obb.Edge(i).a.x, obb.Edge(i).a.y, obb.Edge(i).a.z);
+		glVertex3f(obb.Edge(i).b.x, obb.Edge(i).b.y, obb.Edge(i).b.z);
+	}
+
+	glEnd();
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+}
+
 bool UIBounds::InitBuffers()
 {
 	uint* index = new uint[6];
@@ -156,8 +193,8 @@ bool UIBounds::InitBuffers()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float2) * 4, uvs, GL_STATIC_DRAW);
 
 	////---Local AABB---
-	//local_aabb.SetNegativeInfinity();
-	//local_aabb.Enclose((float3*)vertex, 4);
+	local_aabb.SetNegativeInfinity();
+	local_aabb.Enclose((float3*)vertex, 4);
 
 	return true;
 }

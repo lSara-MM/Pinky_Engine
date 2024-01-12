@@ -45,6 +45,8 @@ public:
 	virtual void ShowInInspector() {};
 	virtual void Draw();
 	virtual void DebugDraw();
+	void DrawABB();
+	void DrawOBB();
 
 
 public:
@@ -58,8 +60,8 @@ public:
 
 	//Mouse pick
 	AABB local_aabb;//local AABB
-	AABB global_aabb;//global OB
-	OBB obb;//global AABB
+	AABB global_aabb;//global AABB
+	OBB obb;//global OB
 	float3 v1, v2, v3, v4;
 	UIBounds* bounds;
 

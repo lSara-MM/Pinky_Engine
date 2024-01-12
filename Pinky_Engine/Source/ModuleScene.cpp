@@ -90,7 +90,8 @@ bool ModuleScene::Start()
 	//App->resource->ImportToScene("Baker_house.dds", PINKY_ASSETS_AUX "3dObject\\baker_house\\");
 
 
-	//G_UI* prueba = new G_UI(UI_TYPE::CANVAS);
+
+	G_UI* prueba = new G_UI(UI_TYPE::CANVAS);
 	//G_UI* prueba2 = new G_UI(UI_TYPE::IMAGE);
 	//prueba2 = nullptr;
 
