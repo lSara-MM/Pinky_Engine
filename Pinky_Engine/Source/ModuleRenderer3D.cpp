@@ -175,13 +175,13 @@ bool ModuleRenderer3D::Start()
 	C_Camera* cam = (C_Camera*)App->scene->mainCamera->GetComponentByType(C_TYPE::CAM);
 	cam->isGameCam = true;
 	cam->SetAsMain(cam->isGameCam);
+	cam = nullptr;
 	return true;
 }
 
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
-
 	editorCam->Draw();
 	// light 0 on cam pos
 	lights[0].SetPos(editorCam->frustum.pos.x, editorCam->frustum.pos.y, editorCam->frustum.pos.z);

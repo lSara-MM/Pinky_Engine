@@ -30,7 +30,6 @@ enum class UI_TYPE
 	TEXT,
 	BUTTON,
 	INPUTBOX,
-
 	CHECKBOX,
 
 	NONE

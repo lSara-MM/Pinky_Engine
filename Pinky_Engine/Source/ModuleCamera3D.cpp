@@ -28,12 +28,12 @@ ModuleCamera3D::~ModuleCamera3D()
 // -----------------------------------------------------------------
 bool ModuleCamera3D::Start()
 {
+	bool ret = true;
 	LOG("Setting up the camera");
+
 	mouseX = 0.0f;
 	mouseY = 0.0f;
 	speed = 0;
-
-	bool ret = true;
 
 	return ret;
 }
@@ -49,7 +49,6 @@ bool ModuleCamera3D::CleanUp()
 // -----------------------------------------------------------------
 update_status ModuleCamera3D::Update(float dt)
 {
-
 	float3 newPos(0, 0, 0);
 	speed = 10.0f * dt;
 

@@ -10,4 +10,5 @@ UI_Image::~UI_Image()
 
 void UI_Image::ShowInInspector()
 {
+
 }

@@ -31,6 +31,7 @@
 #include "ModuleScene.h"
 #include "GameObject.h"
 #include "ImGuiResourcesWindows.h"
+#include "G_UI.h"
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -237,6 +238,7 @@ void ModuleEditor::PrimitivesMenu(GameObject* go, bool component)
 		if (ImGui::MenuItem(components[i].c_str()))
 		{
 			ai::CreatePolyPrimitive(ai::POLY_PRIMITIVE_TYPE(i), go, component);
+			break;
 		}
 	}
 }
@@ -382,10 +384,27 @@ update_status ModuleEditor::Toolbar()
 					if (ImGui::MenuItem(components[i].c_str()))
 					{
 						ai::CreateCustomMehses(ai::CUSTOM_MESH(i));
+						break;
 					}
 				}
 				ImGui::EndMenu();
 			}
+
+			if (ImGui::BeginMenu("UI"))
+			{
+				std::array<std::string, 6> ui = { "Canvas", "Image", "Text", "Button", "Input Box", "Checkbox"};
+
+				for (int i = 0; i < ui.size(); i++)
+				{
+					if (ImGui::MenuItem(ui[i].c_str()))
+					{
+						new G_UI((UI_TYPE)i);
+						break;
+					}
+				}
+				ImGui::EndMenu();
+			}
+
 			ImGui::EndMenu();
 		}
 
