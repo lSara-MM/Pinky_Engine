@@ -23,7 +23,6 @@
 #include "C_Camera.h"
 #include "GameObject.h"
 #include "ModuleScene.h"
-
 #ifdef _DEBUG
 #pragma comment (lib, "Source/External Libraries/MathGeoLib/libx86/libDebug/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
 #else
@@ -49,12 +48,12 @@ bool ModuleRenderer3D::Init()
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
 
-	if(context == NULL)
+	if (context == NULL)
 	{
 		LOG("[ERROR] OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
-	
+
 	if (ret == true)
 	{
 		//Use Vsync
@@ -143,8 +142,8 @@ bool ModuleRenderer3D::Init()
 		}
 
 		if (ilGetInteger(IL_VERSION_NUM) < IL_VERSION ||
-			iluGetInteger(ILU_VERSION_NUM) < ILU_VERSION || 
-			ilutGetInteger(ILUT_VERSION_NUM) < ILUT_VERSION) 
+			iluGetInteger(ILU_VERSION_NUM) < ILU_VERSION ||
+			ilutGetInteger(ILUT_VERSION_NUM) < ILUT_VERSION)
 		{
 			printf("DevIL version is different...exiting!\n");
 		}
@@ -186,7 +185,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	// light 0 on cam pos
 	lights[0].SetPos(editorCam->frustum.pos.x, editorCam->frustum.pos.y, editorCam->frustum.pos.z);
 
-	for(uint i = 0; i < MAX_LIGHTS; ++i)
+	for (uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
 
 	return UPDATE_CONTINUE;
@@ -196,6 +195,14 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	update_status ret = UPDATE_CONTINUE;
+
+	//Get UI elements to draw
+	std::vector<C_UI*> listUI;
+	GetUIGOs(App->scene->rootNode, listUI);
+	for (auto i = 0; i < listUI.size(); i++)
+	{
+		listUI[i]->Draw();
+	}
 
 	if (App->editor->raycast)
 	{
@@ -237,10 +244,14 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		for (uint i = 0; i < MAX_LIGHTS; ++i)
 			lights[i].Render();
 
-		App->scene->rootNode->Update(dt); 
+		App->scene->rootNode->Update(dt);
+
+		for (auto i = 0; i < listUI.size(); i++)
+		{
+			listUI[i]->DrawGame();
+		}
 
 		glBindTexture(GL_TEXTURE_2D, 0);
-		Grid.Render();
 
 		(wireframe) ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
@@ -257,7 +268,7 @@ bool ModuleRenderer3D::CleanUp()
 
 	ai::DisableDebug();
 	ClearVec(meshes);
-	
+
 	SDL_GL_DeleteContext(context);
 	return true;
 }
@@ -336,5 +347,38 @@ void ModuleRenderer3D::SetGameCamera(C_Camera* cam)
 	{
 		cam->OnResize(SDL_GetWindowSurface(App->window->window)->w, SDL_GetWindowSurface(App->window->window)->h);
 		gameCam = cam;
+	}
+}
+
+void ModuleRenderer3D::GetUIGOs(GameObject* go, std::vector<C_UI*>& listgo)
+{
+	if (go->GetComponentByType(C_TYPE::UI) != nullptr)
+	{
+		C_UI* ui = static_cast<C_UI*>(go->GetComponentByType(C_TYPE::UI));
+		listgo.push_back(ui);
+	}
+
+	if (!go->vChildren.empty())
+	{
+		for (auto i = 0; i < go->vChildren.size(); i++)
+		{
+			GetUIGOs(go->vChildren[i], listgo);
+		}
+	}
+}
+
+void ModuleRenderer3D::GetSceneGOs(GameObject* go, std::vector<GameObject*>& listgo)//TODO: eliminar si no s'utilitza
+{
+	if (go->GetComponentByType(C_TYPE::UI) == nullptr)
+	{
+		listgo.push_back(go);
+	}
+
+	if (!go->vChildren.empty())
+	{
+		for (auto i = 0; i < go->vChildren.size(); i++)
+		{
+			GetSceneGOs(go->vChildren[i], listgo);
+		}
 	}
 }

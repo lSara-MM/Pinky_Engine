@@ -40,11 +40,12 @@ enum class UI_TYPE
 class C_UI : public Component
 {
 public:
-	C_UI(C_TYPE t, GameObject* g, std::string n = "UI", Color c = {1,1,1,1}, int w = 20, int h = 20, int x = 0, int y = 0);
+	C_UI(C_TYPE t, GameObject* g, std::string n = "UI", Color c = {1,1,1,1}, int w = 200, int h = 100, int x = 0, int y = 0);
 	~C_UI();
 
 	virtual void ShowInInspector() {};
 	virtual void Draw();
+	virtual void DrawGame();
 	virtual void DebugDraw();
 	void DrawABB();
 	void DrawOBB();
@@ -63,13 +64,7 @@ public:
 	AABB local_aabb;//local AABB
 	AABB global_aabb;//global AABB
 	OBB obb;//global OB
-	float entryDist;
-	float exitDist;
-	LineSegment rayCam;
-	std::map<float, C_UI*> intersects;
-	LineSegment localrayCam;
 
 	UIBounds* bounds;
-
 };
 #endif // __UI_H__

@@ -4,22 +4,7 @@
 UI_Canvas::UI_Canvas(GameObject* g, int w, int h) : C_UI(C_TYPE::UI, g, "Canvas")
 {
 	canvasWidth = w;
-	canvasHeight = h;
-
-	float3 position = gameObject->transform->position;
-	float3 v1 = float3(position.x, position.y, position.z);
-	float3 v2 = float3(position.x + canvasWidth, position.y, position.z);
-	float3 v3 = float3(position.x, position.y + canvasHeight, position.z);
-	float3 v4 = float3(position.x + canvasWidth, position.y + canvasHeight, position.z);
-
-	////---Local AABB---
-	//local_aabb.SetNegativeInfinity();
-	//local_aabb.Enclose((float3*)vertex, 4);
-
-	//obb = local_aabb;
-	//obb.Transform(gameObject->transform->GetGlobalTransform());
-	//global_aabb.SetNegativeInfinity();
-	//global_aabb.Enclose(obb);
+	canvasHeight = h;//TODO: eliminar?
 }
 
 UI_Canvas::~UI_Canvas()
@@ -66,9 +51,9 @@ void UI_Canvas::DebugDraw()
 	float3 position = gameObject->transform->position;
 
 	float3 v1 = float3(position.x, position.y, position.z);
-	float3 v2 = float3(position.x + canvasWidth, position.y, position.z);
-	float3 v3 = float3(position.x, position.y + canvasHeight, position.z);
-	float3 v4 = float3(position.x + canvasWidth, position.y + canvasHeight, position.z);
+	float3 v2 = float3(position.x + width, position.y, position.z);
+	float3 v3 = float3(position.x, position.y + height, position.z);
+	float3 v4 = float3(position.x + width, position.y + height, position.z);
 
 	glVertex3f(v1.x, v1.y, v1.z);
 	glVertex3f(v2.x, v2.y, v2.z);

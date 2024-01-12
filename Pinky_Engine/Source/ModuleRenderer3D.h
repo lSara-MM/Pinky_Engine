@@ -19,6 +19,7 @@
 #include "C_Camera.h"
 
 #include "R_Mesh.h"
+#include "C_UI.h"
 
 #define MAX_LIGHTS 8
 #define CHECKERS_HEIGHT 256
@@ -39,6 +40,8 @@ public:
 	void DrawBox();
 	void SetVsync(bool enable);
 	void SetGameCamera(C_Camera* cam);
+	void GetUIGOs(GameObject* go, std::vector<C_UI*>& listgo);
+	void GetSceneGOs(GameObject* go, std::vector<GameObject*>& listgo);
 
 public:
 
