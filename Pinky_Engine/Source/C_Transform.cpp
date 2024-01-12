@@ -199,26 +199,5 @@ void C_Transform::UpdateTransformGuizmo(float4x4 matrix)
 	eulerRot = rotation.ToEulerXYZ();
 	eulerRot *= RADTODEG;
 
-	//manera original
-	//float3 pos, sc;
-	//Quat rot;
-	//matrix.Decompose(pos, rot, sc);
-	//if (App->editor->transformOperation == ImGuizmo::OPERATION::SCALE) {
-	//	scale = sc;
-	//}
-	//else if (App->editor->transformOperation == ImGuizmo::OPERATION::ROTATE) {
-	//	rotation = rot.Normalized();
-	//	eulerRot = rotation.ToEulerXYZ();
-	//	eulerRot.x = RadToDeg(eulerRot.x);
-	//	eulerRot.y = RadToDeg(eulerRot.y);
-	//	eulerRot.z = RadToDeg(eulerRot.z);
-	//}
-	//else
-	//{
-	//	position = pos;
-	//}
-	//globalMatrix = matrix;
-	//localMatrix = gameObject->pParent->transform->globalMatrix.Inverted() * globalMatrix;
-
 	dirty_ = true;
 }

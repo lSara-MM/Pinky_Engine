@@ -47,6 +47,7 @@ public:
 	virtual void Draw();
 	virtual void DrawGame();
 	virtual void DebugDraw();
+	void UpdateUITransform();
 	void DrawABB();
 	void DrawOBB();
 	void UpdateBoundingBoxes();

@@ -33,15 +33,10 @@ C_UI::C_UI(C_TYPE t, GameObject* g, std::string n, Color c, int w, int h, int x,
 	bounds->vertex[3] = float3(position.x + width, position.y, localPos.z);
 	bounds->vertex[2] = float3(position.x, position.y, localPos.z);
 
-	bounds->vertex[0] = float3(posX, posY + height, localPos.z);
-	bounds->vertex[1] = float3(posX + width, posY + height, localPos.z);
-	bounds->vertex[3] = float3(posX + width, posY, localPos.z);
-	bounds->vertex[2] = float3(posX, posY, localPos.z);
-
-	bounds->uvs[2] = float2(0, 1);
-	bounds->uvs[3] = float2(1, 1);
-	bounds->uvs[1] = float2(1, 0);
-	bounds->uvs[0] = float2(0, 0);
+	//bounds->vertex[0] = float3(posX, posY + height, localPos.z);
+	//bounds->vertex[1] = float3(posX + width, posY + height, localPos.z);//TODO: necesario?
+	//bounds->vertex[3] = float3(posX + width, posY, localPos.z);
+	//bounds->vertex[2] = float3(posX, posY, localPos.z);
 
 	bounds->uvs[2] = float2(0, 1);
 	bounds->uvs[3] = float2(1, 1);
@@ -113,7 +108,7 @@ void C_UI::DrawGame()
 {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0.0, App->editor->GameViewSize.x, App->editor->GameViewSize.y, 0.0, 0.0, -1.0);
+	glOrtho(0.0, App->editor->GameViewSize.x, App->editor->GameViewSize.y, 0.0, 1.0, -1.0);
 
 	//Initialize Modelview Matrix
 	glMatrixMode(GL_MODELVIEW);
@@ -176,6 +171,34 @@ void C_UI::DebugDraw()
 	glEnd();
 }
 
+void C_UI::UpdateUITransform()
+{
+	float3 position = gameObject->transform->position;
+	float4x4 localTransform = gameObject->transform->GetLocalTransform();
+	float3 localPos;
+	Quat rot;
+	float3 scale;
+
+	gameObject->transform->localMatrix.Decompose(localPos, rot, scale);
+
+	bounds->vertex[0] = float3(position.x, position.y + (height * scale.y), localPos.z);
+	bounds->vertex[1] = float3(position.x + (width * scale.x), position.y + (height * scale.y), localPos.z);
+	bounds->vertex[3] = float3(position.x + (width * scale.x), position.y, localPos.z);
+	bounds->vertex[2] = float3(position.x, position.y, localPos.z);
+
+	/*bounds->vertex[0] = float3(posX, posY + height, localPos.z);
+	bounds->vertex[1] = float3(posX + width, posY + height, localPos.z);//TODO: necesario?
+	bounds->vertex[3] = float3(posX + width, posY, localPos.z);
+	bounds->vertex[2] = float3(posX, posY, localPos.z);*/
+
+	bounds->uvs[2] = float2(0, 1);
+	bounds->uvs[3] = float2(1, 1);
+	bounds->uvs[1] = float2(1, 0);
+	bounds->uvs[0] = float2(0, 0);
+
+	bounds->InitBuffers();
+}
+
 void C_UI::DrawABB()
 {
 	glBegin(GL_LINES);
@@ -209,7 +232,7 @@ void C_UI::DrawOBB()
 }
 
 void C_UI::UpdateBoundingBoxes()
-{	
+{
 	obb = local_aabb;
 	obb.Transform(gameObject->transform->GetGlobalTransform());
 	global_aabb.SetNegativeInfinity();
