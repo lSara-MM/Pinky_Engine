@@ -39,6 +39,7 @@ update_status G_UI::Update(float dt)
 			if (transform->dirty_)
 			{
 				transform->UpdateTransformsChilds();
+				canvas->UpdateBoundingBoxes();
 			}
 		}
 
@@ -47,6 +48,9 @@ update_status G_UI::Update(float dt)
 			if (canvas != nullptr)
 			{
 				canvas->Draw();
+				canvas->DrawABB();
+				canvas->DrawOBB();
+
 				//canvas->DebugDraw();
 			}
 		}

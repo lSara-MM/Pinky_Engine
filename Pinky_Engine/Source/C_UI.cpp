@@ -170,10 +170,16 @@ void C_UI::DrawOBB()
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
+void C_UI::UpdateBoundingBoxes()
+{	
+	obb = local_aabb;
+	obb.Transform(gameObject->transform->GetGlobalTransform());
+	global_aabb.SetNegativeInfinity();
+	global_aabb.Enclose(obb);
+}
+
 bool UIBounds::InitBuffers()
 {
-	
-
 	VBO = 0;
 	EBO = 0;
 	id_tex_uvs = 0;

@@ -48,6 +48,7 @@ public:
 	virtual void DebugDraw();
 	void DrawABB();
 	void DrawOBB();
+	void UpdateBoundingBoxes();
 
 public:
 	UI_TYPE type;

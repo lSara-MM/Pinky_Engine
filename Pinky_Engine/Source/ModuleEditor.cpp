@@ -1135,8 +1135,11 @@ void ModuleEditor::GameWindow()
 
 			if (origin.x >= -1 && origin.x <= 1 && origin.y >= -1 && origin.y <= 1)
 			{
-				pickingRay = App->camera->MainCamera->frustum.UnProjectLineSegment(origin.x, origin.y + 0.05);
-				App->camera->MousePick(pickingRay);
+				if (App->renderer3D->gameCam != nullptr)
+				{
+					pickingRay = App->renderer3D->gameCam->frustum.UnProjectLineSegment(origin.x, origin.y + 0.05);//TODO: no acaba d'anar fino
+					App->camera->MousePickUI(pickingRay);
+				}
 			}
 		}
 
