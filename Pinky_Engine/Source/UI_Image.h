@@ -14,9 +14,9 @@ public:
 	~UI_Image();
 
 	void ShowInInspector();
+	void DrawGame();
 
 public:
-	// TODO: que te una img? no es com una textura tal cual?
 	C_Material* mat;
 };
 #endif // __UI_IMAGE_H__

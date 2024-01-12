@@ -383,11 +383,11 @@ Component* GameObject::GetComponentByType(C_TYPE type)
 	return nullptr;
 }
 
-bool GameObject::ChangeComponentResource(Resource* oldResource, Resource* newResource)
+bool GameObject::ChangeComponentResource(Resource* oldResource, Resource* newResource, Component& comp)
 {
 	if (oldResource->GetType() == newResource->GetType())
 	{
-		if (oldResource->count == 1)
+		if (oldResource->count <= 1)
 		{
 			ClearVec(oldResource->vComponents);
 			App->resource->vPendingToDelete.push_back(oldResource);
@@ -406,9 +406,12 @@ bool GameObject::ChangeComponentResource(Resource* oldResource, Resource* newRes
 			newResource->vComponents.push_back(mesh);
 			break;
 		case R_TYPE::TEXTURE:
-			// TODO: WIP
-			static_cast<C_Material*>(GetComponentByType(C_TYPE::MATERIAL))->tex = static_cast<R_Texture*>(newResource);
-			newResource->vComponents.push_back(static_cast<C_Material*>(GetComponentByType(C_TYPE::MATERIAL)));
+			//static_cast<C_Material*>(GetComponentByType(C_TYPE::MATERIAL))->tex = static_cast<R_Texture*>(newResource);
+			//newResource->vComponents.push_back(static_cast<C_Material*>(GetComponentByType(C_TYPE::MATERIAL)));
+			
+			static_cast<C_Material*>(&comp)->tex = static_cast<R_Texture*>(newResource);
+			newResource->vComponents.push_back(&comp);
+			
 			break;
 		case R_TYPE::PREFAB:
 			break;

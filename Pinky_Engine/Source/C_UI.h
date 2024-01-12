@@ -43,7 +43,7 @@ public:
 	~C_UI();
 
 	virtual void ShowInInspector() {};
-	virtual void Draw();
+	virtual void DrawEditor();
 	virtual void DrawGame();
 	virtual void DebugDraw();
 	void UpdateUITransform();

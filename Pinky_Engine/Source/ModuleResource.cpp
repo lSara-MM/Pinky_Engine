@@ -5,6 +5,7 @@
 
 #include "FileSystemManager.h"
 #include "GameObject.h"
+#include "G_UI.h"
 
 #include "Resource.h"
 #include "I_Mesh.h"
@@ -275,7 +276,6 @@ std::string ModuleResource::ImportFileToEngine(const char* fileDir)
 //	return 0;
 //}
 
-
 int ModuleResource::ImportToSceneV(std::string file, std::string dir, GameObject* goParent, bool component)
 {
 	std::string auxPath = App->fs->NormalizePath((dir + file).c_str());
@@ -519,6 +519,11 @@ void ModuleResource::LoadChildrenTextures(std::string path, std::string libPath)
 	C_Material* mat;
 	for (int i = 0; i < it.size(); i++)
 	{
+		//if (it[i]->GetComponentsMaterial().empty())
+		//{
+			//static_cast<G_UI*>(it[i])->GetComponentUI(UI_TYPE::)
+		//}
+
 		mat = static_cast<C_Material*>(it[i]->GetComponentByType(C_TYPE::MATERIAL));
 
 		if (mat != nullptr && mat->tex != nullptr)

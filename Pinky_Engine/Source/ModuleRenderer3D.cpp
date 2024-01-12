@@ -16,10 +16,13 @@
 #include "External Libraries/ImGui/imgui.h"
 #include "External Libraries/ImGui/backends/imgui_impl_sdl2.h"
 #include "External Libraries/ImGui/backends/imgui_impl_opengl3.h"
+
 #include "External Libraries/DevIL/include/il.h"
 #include "External Libraries/DevIL/include/ilu.h"
 #include "External Libraries/DevIL/include/ilut.h"
+
 #include "External Libraries/mmgr/mmgr.h"
+
 #include "C_Camera.h"
 #include "GameObject.h"
 #include "ModuleScene.h"
@@ -201,7 +204,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	GetUIGOs(App->scene->rootNode, listUI);
 	for (auto i = 0; i < listUI.size(); i++)
 	{
-		listUI[i]->Draw();
+		listUI[i]->DrawEditor();
 		listUI[i]->DrawABB();
 		listUI[i]->DrawOBB();
 	}

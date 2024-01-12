@@ -73,6 +73,19 @@ C_UI* G_UI::GetComponentUI(UI_TYPE type)
 	}
 }
 
+std::vector<C_UI*> G_UI::GetComponentsUI_ByType(UI_TYPE type)
+{
+	std::vector<C_UI*> vec = {};
+	for (auto i = 0; i < vComponents.size(); i++)
+	{
+		if (vComponents[i]->type == C_TYPE::UI && static_cast<C_UI*>(vComponents[i])->UI_type == type)
+		{
+			vec.push_back((C_UI*)vComponents[i]);
+		}
+	}
+	return vec;
+}
+
 bool G_UI::AddUIComponent(UI_TYPE type)
 {
 	bool ret = true;

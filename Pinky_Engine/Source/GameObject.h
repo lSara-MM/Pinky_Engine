@@ -41,7 +41,7 @@ public:
 	Component* GetComponentByType(C_TYPE type);
 
 	//---Resources---
-	bool ChangeComponentResource(Resource* oldResource, Resource* newResource);
+	bool ChangeComponentResource(Resource* oldResource, Resource* newResource, Component& comp);
 
 	//---Parent/Child---
 	void ReParent(GameObject* newParent);

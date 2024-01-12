@@ -62,7 +62,7 @@ C_UI::~C_UI()
 	RELEASE(bounds);
 }
 
-void C_UI::Draw()
+void C_UI::DrawEditor()
 {
 	glPushMatrix();
 	glMultMatrixf(gameObject->transform->GetGLTransform());

@@ -99,7 +99,7 @@ void C_Mesh::ShowInInspector()
 				const bool is_selected = (App->resource->vMeshesResources[i] == mesh);
 				if (ImGui::Selectable(App->resource->vMeshesResources[i]->name.c_str(), is_selected))
 				{
-					gameObject->ChangeComponentResource(mesh, App->resource->vMeshesResources[i]);
+					gameObject->ChangeComponentResource(mesh, App->resource->vMeshesResources[i], *this);
 				}
 
 				// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)

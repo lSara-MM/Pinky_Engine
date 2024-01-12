@@ -65,7 +65,7 @@ void C_Material::ShowInInspector()
 				const bool is_selected = (App->resource->vTexturesResources[i] == tex);
 				if (ImGui::Selectable(App->resource->vTexturesResources[i]->name.c_str(), is_selected))
 				{
-					gameObject->ChangeComponentResource(tex, App->resource->vTexturesResources[i]);
+					gameObject->ChangeComponentResource(tex, App->resource->vTexturesResources[i], *this);
 				}
 
 				// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)

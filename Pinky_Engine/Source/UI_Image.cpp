@@ -47,7 +47,7 @@ void UI_Image::ShowInInspector()
 				const bool is_selected = (App->resource->vTexturesResources[i] == mat->tex);
 				if (ImGui::Selectable(App->resource->vTexturesResources[i]->name.c_str(), is_selected))
 				{
-					gameObject->ChangeComponentResource(mat->tex, App->resource->vTexturesResources[i]);
+					gameObject->ChangeComponentResource(mat->tex, App->resource->vTexturesResources[i], *mat);
 				}
 
 				// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
@@ -90,4 +90,60 @@ void UI_Image::ShowInInspector()
 	ImGui::SameLine();
 
 	if (!exists) { gameObject->RemoveComponent(this); }
+}
+
+void UI_Image::DrawGame()
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	//glOrtho(0.0, App->editor->GameViewSize.x, App->editor->GameViewSize.y, 0.0, 1.0, -1.0);//TODO: orginal con 0,0 bien en pantalla pero mueve al revés
+	glOrtho(App->editor->GameViewSize.x, 0.0, 0.0, App->editor->GameViewSize.y, 1.0, -1.0);
+
+	//Initialize Modelview Matrix
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+
+	//
+	glColor4f(color.r, color.g, color.b, color.a);
+
+	//
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glBindTexture(GL_TEXTURE_2D, bounds->textureID);
+
+	glBindBuffer(GL_ARRAY_BUFFER, bounds->VBO);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, bounds->id_tex_uvs);
+	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
+	glActiveTexture(GL_TEXTURE0);
+	if (static_cast<C_Material*>(gameObject->GetComponentByType(C_TYPE::MATERIAL)) != nullptr &&
+		static_cast<C_Material*>(gameObject->GetComponentByType(C_TYPE::MATERIAL))->tex != nullptr)
+	{
+		(!mat->checkered) ? glBindTexture(GL_TEXTURE_2D, static_cast<C_Material*>(gameObject->GetComponentByType(C_TYPE::MATERIAL))->tex->tex_id)
+			: glBindTexture(GL_TEXTURE_2D, App->renderer3D->texture_checker);
+	}
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bounds->EBO);
+
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_ALPHA_TEST);
 }
