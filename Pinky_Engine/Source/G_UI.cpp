@@ -1,7 +1,7 @@
 #include "G_UI.h"
 #include "UI_Canvas.h"
 #include "UI_Image.h"
-//#include "UI_Text.h"
+#include "UI_Text.h"
 #include "UI_Button.h"
 #include "UI_InputBox.h"
 
@@ -107,6 +107,8 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 	break;
 	case UI_TYPE::TEXT:
 	{
+		UI_Text* comp = new UI_Text(this);
+		vComponents.push_back(comp);
 		name = "Text";
 
 		if (App->scene->GetCanvas() == nullptr)

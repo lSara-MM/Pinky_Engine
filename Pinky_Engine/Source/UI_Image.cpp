@@ -3,7 +3,12 @@
 
 #include "GameObject.h"
 
-//#include "External Libraries/ImGui/imgui_custom.cpp"
+#include "External Libraries/ImGui/imgui.h"
+#include "External Libraries/ImGui/backends/imgui_impl_sdl2.h"
+#include "External Libraries/ImGui/backends/imgui_impl_opengl3.h"
+#include "External Libraries/ImGui/misc/cpp/imgui_stdlib.h"
+//
+#include "External Libraries/ImGui/imgui_custom.h"
 
 UI_Image::UI_Image(GameObject* g) : C_UI(C_TYPE::UI, g, "Image")
 {
@@ -53,14 +58,14 @@ void UI_Image::ShowInInspector()
 			}
 			ImGui::EndCombo();
 		}
-		//ImGui::SameLine();
-		//ImGuiCustom::HelpMarker("If the current texture has only one instance you will not be able to change it back unless a that texture is imported to scene");
+		ImGui::SameLine();
+		ImGuiCustom::HelpMarker("If the current texture has only one instance you will not be able to change it back unless a that texture is imported to scene");
 
-		//if (ImGuiCustom::ToggleButton(toogle.c_str(), &mat->checkered))
-		//{
+		if (ImGuiCustom::ToggleButton(toogle.c_str(), &mat->checkered))
+		{
 
-		//}
-		//ImGui::SetItemTooltip("Use checkered texture");
+		}
+		ImGui::SetItemTooltip("Use checkered texture");
 
 		if (mat->tex != nullptr)
 		{

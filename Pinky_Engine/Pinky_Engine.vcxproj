@@ -212,6 +212,7 @@
     <ClInclude Include="Source\UI_Image.h" />
     <ClInclude Include="Source\UI_CheckBox.h" />
     <ClInclude Include="Source\UI_InputBox.h" />
+    <ClInclude Include="Source\UI_Text.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
@@ -303,6 +304,7 @@
     <ClCompile Include="Source\UI_Image.cpp" />
     <ClCompile Include="Source\UI_CheckBox.cpp" />
     <ClCompile Include="Source\UI_InputBox.cpp" />
+    <ClCompile Include="Source\UI_Text.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\External Libraries\DevIL\include\config.h.win" />

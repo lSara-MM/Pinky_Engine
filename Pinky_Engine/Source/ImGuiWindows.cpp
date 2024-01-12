@@ -6,7 +6,6 @@
 #include "ModuleWindow.h"
 #include "GameObject.h"
 
-
 #include "External Libraries/SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>

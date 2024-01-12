@@ -475,6 +475,9 @@
     <ClInclude Include="Source\UI_InputBox.h">
       <Filter>Sources\Cosos\GameObject\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Source\UI_Text.h">
+      <Filter>Sources\Cosos\GameObject\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ModuleCamera3D.cpp">
@@ -742,6 +745,9 @@
       <Filter>Sources\Cosos\GameObject\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI_InputBox.cpp">
+      <Filter>Sources\Cosos\GameObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI_Text.cpp">
       <Filter>Sources\Cosos\GameObject\UI</Filter>
     </ClCompile>
   </ItemGroup>
