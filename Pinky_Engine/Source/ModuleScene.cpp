@@ -164,7 +164,7 @@ G_UI* ModuleScene::GetCanvas()
 	return canvas;
 }
 
-void ModuleScene::SetCanvas(G_UI& newCanvas)
+void ModuleScene::SetCanvas(G_UI* newCanvas)
 {
-	canvas = &newCanvas;
+	canvas = newCanvas;
 }

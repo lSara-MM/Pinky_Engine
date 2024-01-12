@@ -84,7 +84,7 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 			vComponents.push_back(comp);
 
 			canvas = comp;
-			App->scene->SetCanvas(*this);
+			App->scene->SetCanvas(this);
 		}
 
 		name = "Canvas";
@@ -99,7 +99,7 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 
 		if (App->scene->GetCanvas() == nullptr)
 		{
-			App->scene->SetCanvas(*(new G_UI(UI_TYPE::CANVAS)));
+			App->scene->SetCanvas(new G_UI(UI_TYPE::CANVAS));
 		}
 		ReParent(App->scene->GetCanvas());
 		canvas = static_cast<G_UI*>(pParent)->canvas;
@@ -113,7 +113,7 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 
 		if (App->scene->GetCanvas() == nullptr)
 		{
-			App->scene->SetCanvas(*(new G_UI(UI_TYPE::CANVAS)));
+			App->scene->SetCanvas(new G_UI(UI_TYPE::CANVAS));
 		}
 		ReParent(App->scene->GetCanvas());
 		canvas = static_cast<G_UI*>(pParent)->canvas;
@@ -128,7 +128,7 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 
 		if (App->scene->GetCanvas() == nullptr)
 		{
-			App->scene->SetCanvas(*(new G_UI(UI_TYPE::CANVAS)));
+			App->scene->SetCanvas(new G_UI(UI_TYPE::CANVAS));
 		}
 		ReParent(App->scene->GetCanvas());
 		canvas = static_cast<G_UI*>(pParent)->canvas;
@@ -143,7 +143,7 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 
 		if (App->scene->GetCanvas() == nullptr)
 		{
-			App->scene->SetCanvas(*(new G_UI(UI_TYPE::CANVAS)));
+			App->scene->SetCanvas(new G_UI(UI_TYPE::CANVAS));
 		}
 		ReParent(App->scene->GetCanvas());
 		canvas = static_cast<G_UI*>(pParent)->canvas;
@@ -158,7 +158,7 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 
 		if (App->scene->GetCanvas() == nullptr)
 		{
-			App->scene->SetCanvas(*(new G_UI(UI_TYPE::CANVAS)));
+			App->scene->SetCanvas(new G_UI(UI_TYPE::CANVAS));
 		}
 		ReParent(App->scene->GetCanvas());
 		canvas = static_cast<G_UI*>(pParent)->canvas;

@@ -27,7 +27,7 @@ public:
 	bool CleanUp();
 
 	G_UI* GetCanvas();
-	void SetCanvas(G_UI& newCanvas);
+	void SetCanvas(G_UI* newCanvas = nullptr);
 public:
 	GameObject* rootNode;
 
