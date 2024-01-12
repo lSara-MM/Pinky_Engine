@@ -6,12 +6,14 @@
 #include "C_UI.h"
 #include "C_TransformUI.h"
 
+#include "ModuleScene.h"
+
 class UI_Canvas;
 
 class G_UI : public GameObject
 {
 public:
-	G_UI(UI_TYPE t);
+	G_UI(UI_TYPE t, GameObject* pParent = App->scene->rootNode);
 	~G_UI();
 
 	update_status Update(float dt);

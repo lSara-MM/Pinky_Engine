@@ -7,7 +7,7 @@
 
 #include "ModuleScene.h"
 
-G_UI::G_UI(UI_TYPE t) : GameObject()
+G_UI::G_UI(UI_TYPE t, GameObject* pParent) : GameObject("", pParent)
 {
 	//RemoveComponent(transform);//TODO: fer amb altre transform
 	canvas = nullptr;
@@ -24,6 +24,7 @@ G_UI::~G_UI()
 update_status G_UI::Update(float dt)
 {
 	update_status ret = UPDATE_CONTINUE;
+
 	if (isActive)
 	{
 		if (!vChildren.empty())
@@ -61,17 +62,15 @@ update_status G_UI::Update(float dt)
 
 C_UI* G_UI::GetComponentUI(UI_TYPE type)
 {
-	C_UI* can = nullptr;
+	C_UI* comp = nullptr;
 
 	for (auto i = 0; i < vComponents.size(); i++)
 	{
-		if (static_cast<C_UI*>(vComponents[i])->type == type)
+		if (vComponents[i]->type == C_TYPE::UI && static_cast<C_UI*>(vComponents[i])->UI_type == type)
 		{
-			can = static_cast<C_UI*>(vComponents[i]);
+			return comp = static_cast<C_UI*>(vComponents[i]);
 		}
 	}
-
-	return can;
 }
 
 bool G_UI::AddUIComponent(UI_TYPE type)
@@ -140,8 +139,19 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 		break;
 	case UI_TYPE::INPUTBOX:
 	{
-		UI_Canvas* comp = new UI_Canvas(this);
+		// Unity-like
+		AddUIComponent(UI_TYPE::IMAGE);
+		G_UI* aux = new G_UI(UI_TYPE::TEXT, this);
+		aux->ReParent(this);
+
+		//new G_UI(UI_TYPE::IMAGE, this);
+
+		//AddUIComponent(UI_TYPE::IMAGE);
+		//AddUIComponent(UI_TYPE::TEXT);
+
+		UI_InputBox* comp = new UI_InputBox(this);
 		vComponents.push_back(comp);
+		comp->displayText = static_cast<UI_Text*>(aux->GetComponentUI(UI_TYPE::TEXT));
 
 		name = "Input Box";
 

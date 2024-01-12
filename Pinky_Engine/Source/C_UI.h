@@ -39,7 +39,7 @@ enum class UI_TYPE
 class C_UI : public Component
 {
 public:
-	C_UI(C_TYPE t, GameObject* g, std::string n = "UI", Color c = {1,1,1,1}, int w = 200, int h = 100, int x = 0, int y = 0);
+	C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n = "UI", Color c = {1,1,1,1}, int w = 200, int h = 100, int x = 0, int y = 0);
 	~C_UI();
 
 	virtual void ShowInInspector() {};
@@ -52,7 +52,7 @@ public:
 	void UpdateBoundingBoxes();
 
 public:
-	UI_TYPE type;
+	UI_TYPE UI_type;
 
 	// Transform info
 	int posX, posY, width, height;

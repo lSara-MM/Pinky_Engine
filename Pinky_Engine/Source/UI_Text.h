@@ -15,6 +15,8 @@ public:
 
 	void ShowInInspector();
 
+	void DrawGame() override;
+
 public:
 	std::string text;
 	float fontSize;

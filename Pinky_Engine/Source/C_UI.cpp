@@ -1,8 +1,10 @@
 #include "C_UI.h"
 #include "GameObject.h"
 
-C_UI::C_UI(C_TYPE t, GameObject* g, std::string n, Color c, int w, int h, int x, int y) : Component(t, n, g)
+C_UI::C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n, Color c, int w, int h, int x, int y) : Component(t, n, g)
 {
+	UI_type = ui_t;
+
 	width = w;
 	height = h;
 	posX = x;

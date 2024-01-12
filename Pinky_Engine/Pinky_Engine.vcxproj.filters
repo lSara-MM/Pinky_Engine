@@ -85,6 +85,12 @@
     <Filter Include="Sources\Cosos\GameObject\UI">
       <UniqueIdentifier>{57135f67-8a31-4149-a6de-0a33aa97d408}</UniqueIdentifier>
     </Filter>
+    <Filter Include="External Libraries\STB_TrueType">
+      <UniqueIdentifier>{8ef5ae3d-d68d-4947-b982-b8c37f1e4ad3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Cosos\GameObject\UI\Text">
+      <UniqueIdentifier>{847d521c-8cc9-4e1c-bd9d-64a0c1da4c17}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Module.h">
@@ -478,6 +484,15 @@
     <ClInclude Include="Source\UI_Text.h">
       <Filter>Sources\Cosos\GameObject\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Source\External Libraries\STB_TrueType\stb_textedit.h">
+      <Filter>External Libraries\STB_TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\External Libraries\STB_TrueType\stb_truetype.h">
+      <Filter>External Libraries\STB_TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\STB_Text.h">
+      <Filter>Sources\Cosos\GameObject\UI\Text</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ModuleCamera3D.cpp">
@@ -749,6 +764,9 @@
     </ClCompile>
     <ClCompile Include="Source\UI_Text.cpp">
       <Filter>Sources\Cosos\GameObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\STB_Text.cpp">
+      <Filter>Sources\Cosos\GameObject\UI\Text</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

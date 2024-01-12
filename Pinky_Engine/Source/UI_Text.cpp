@@ -10,7 +10,9 @@
 //
 #include "External Libraries/ImGui/imgui_custom.h"
 
-UI_Text::UI_Text(GameObject* g) : C_UI(C_TYPE::UI, g, "Text")
+//#include "STB_Text.h"
+
+UI_Text::UI_Text(GameObject* g) : C_UI(UI_TYPE::TEXT, C_TYPE::UI, g, "Text")
 {
 	text = "Hello World";
 	fontSize = 36;
@@ -50,4 +52,9 @@ void UI_Text::ShowInInspector()
 	ImGui::SameLine();
 
 	if (!exists) { gameObject->RemoveComponent(this); }
+}
+
+void UI_Text::DrawGame()
+{
+	//App->renderer3D->stb_text->Draw(text, 150, 150);
 }

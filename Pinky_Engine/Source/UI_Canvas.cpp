@@ -1,7 +1,7 @@
 #include "UI_Canvas.h"
 #include "ModuleScene.h"
 
-UI_Canvas::UI_Canvas(GameObject* g, int w, int h) : C_UI(C_TYPE::UI, g, "Canvas")
+UI_Canvas::UI_Canvas(GameObject* g, int w, int h) : C_UI(UI_TYPE::CANVAS, C_TYPE::UI, g, "Canvas")
 {
 	canvasWidth = w;
 	canvasHeight = h;//TODO: eliminar?

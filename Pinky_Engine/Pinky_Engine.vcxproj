@@ -180,10 +180,13 @@
     <ClInclude Include="Source\External Libraries\mmgr\nommgr.h" />
     <ClInclude Include="Source\External Libraries\parson\parson.h" />
     <ClInclude Include="Source\External Libraries\PhysFS\include\physfs.h" />
+    <ClInclude Include="Source\External Libraries\STB_TrueType\stb_textedit.h" />
+    <ClInclude Include="Source\External Libraries\STB_TrueType\stb_truetype.h" />
     <ClInclude Include="Source\GameObject.h" />
     <ClInclude Include="Source\glmath.h" />
     <ClInclude Include="Source\Globals.h" />
     <ClInclude Include="Source\G_UI.h" />
+    <ClInclude Include="Source\STB_Text.h" />
     <ClInclude Include="Source\UI_Canvas.h" />
     <ClInclude Include="Source\ImGuiResourcesWindows.h" />
     <ClInclude Include="Source\ImGuiWindows.h" />
@@ -275,6 +278,7 @@
     <ClCompile Include="Source\GameObject.cpp" />
     <ClCompile Include="Source\glmath.cpp" />
     <ClCompile Include="Source\G_UI.cpp" />
+    <ClCompile Include="Source\STB_Text.cpp" />
     <ClCompile Include="Source\UI_Canvas.cpp" />
     <ClCompile Include="Source\ImGuiResourcesWindows.cpp" />
     <ClCompile Include="Source\ImGuiWindows.cpp" />

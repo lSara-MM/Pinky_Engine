@@ -10,7 +10,7 @@
 //
 #include "External Libraries/ImGui/imgui_custom.h"
 
-UI_Image::UI_Image(GameObject* g) : C_UI(C_TYPE::UI, g, "Image")
+UI_Image::UI_Image(GameObject* g) : C_UI(UI_TYPE::IMAGE, C_TYPE::UI, g, "Image")
 {
 	mat = new C_Material();
 }
