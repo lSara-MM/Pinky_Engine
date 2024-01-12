@@ -3,6 +3,8 @@
 
 R_Texture::R_Texture() : Resource(R_TYPE::TEXTURE)
 {
+	name = "None";
+
 	tex_id = 0;
 	tex_width = 0;
 	tex_height = 0;
