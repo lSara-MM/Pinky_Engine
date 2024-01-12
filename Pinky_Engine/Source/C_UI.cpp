@@ -56,13 +56,14 @@ C_UI::C_UI(C_TYPE t, GameObject* g, std::string n, Color c, int w, int h, int x,
 
 C_UI::~C_UI()
 {
-	//RELEASE(bounds);
+	bounds->DeleteBuffers();
+	RELEASE(bounds);
 }
 
 void C_UI::Draw()
 {
 	glPushMatrix();
-	glMultMatrixf(gameObject->transform->GetGLTransform());
+	//glMultMatrixf(gameObject->transform->GetGLTransform());//TODO: comentat fa que es vegi la rotació en editor
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -101,7 +102,6 @@ void C_UI::Draw()
 	glDisable(GL_ALPHA_TEST);
 
 	glPopMatrix();
-
 }
 
 void C_UI::DrawGame()
@@ -180,11 +180,10 @@ void C_UI::UpdateUITransform()
 	float3 scale;
 
 	gameObject->transform->localMatrix.Decompose(localPos, rot, scale);
-
-	bounds->vertex[0] = float3(position.x, position.y + (height * scale.y), localPos.z);
-	bounds->vertex[1] = float3(position.x + (width * scale.x), position.y + (height * scale.y), localPos.z);
-	bounds->vertex[3] = float3(position.x + (width * scale.x), position.y, localPos.z);
-	bounds->vertex[2] = float3(position.x, position.y, localPos.z);
+	bounds->vertex[0] = float3(position.x, position.y + (height * scale.y), localPos.z) * localTransform.RotatePart();
+	bounds->vertex[1] = float3(position.x + (width * scale.x), position.y + (height * scale.y), localPos.z) * localTransform.RotatePart();
+	bounds->vertex[3] = float3(position.x + (width * scale.x), position.y, localPos.z) * localTransform.RotatePart();
+	bounds->vertex[2] = float3(position.x, position.y, localPos.z) * localTransform.RotatePart();
 
 	/*bounds->vertex[0] = float3(posX, posY + height, localPos.z);
 	bounds->vertex[1] = float3(posX + width, posY + height, localPos.z);//TODO: necesario?
@@ -265,12 +264,6 @@ bool UIBounds::InitBuffers()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float2) * 4, uvs, GL_STATIC_DRAW);
 
 	return true;
-}
-
-void UIBounds::RgenerateVAO()
-{
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * 4, vertex, GL_STATIC_DRAW);
 }
 
 void UIBounds::DeleteBuffers()
