@@ -11,6 +11,8 @@ struct UIBounds
 	float3 vertex[4];
 	float2 uvs[4];
 
+	uint* index;
+
 	GLuint VBO; //vertex buffer object
 	GLuint EBO; //element buffer object
 	GLuint id_tex_uvs; //texture UVs
@@ -46,6 +48,10 @@ public:
 	virtual void DebugDraw();
 	void DrawABB();
 	void DrawOBB();
+	void MousePick(LineSegment ray);
+	void CheckGameObjectsIntersection(GameObject* go);
+	void CheckIntersection(GameObject* go);
+	bool CheckTriangleIntersection();
 
 
 public:
@@ -61,7 +67,12 @@ public:
 	AABB local_aabb;//local AABB
 	AABB global_aabb;//global AABB
 	OBB obb;//global OB
-	float3 v1, v2, v3, v4;
+	float entryDist;
+	float exitDist;
+	LineSegment rayCam;
+	std::map<float, C_UI*> intersects;
+	LineSegment localrayCam;
+
 	UIBounds* bounds;
 
 };

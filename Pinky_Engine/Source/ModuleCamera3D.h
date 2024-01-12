@@ -33,11 +33,11 @@ public:
 	void CameraInput();
 	LineSegment localrayCam;
 	C_Camera* MainCamera;//TODO: eliminat = nullptr
+	float3 objectReference;
 
 private:
 	float mouseX, mouseY, speed, zoomPos;
 	float3 Reference;
-	float3 objectReference;
 
 	//Mouse Picking
 	float entryDist;

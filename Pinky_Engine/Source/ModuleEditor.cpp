@@ -1112,6 +1112,8 @@ void ModuleEditor::GameWindow()
 
 	ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 	GameViewSize = { viewportSize.x,viewportSize.y };
+	ImVec2 viewPos = ImGui::GetWindowPos();
+	ViewportPos = { viewPos.x,viewPos.y };
 
 	if (App->renderer3D->gameCam != nullptr)
 	{
@@ -1121,6 +1123,24 @@ void ModuleEditor::GameWindow()
 		{
 			ImGui::Image((ImTextureID)App->renderer3D->gameCam->textureColourBuffer, GameViewSize, ImVec2(0, 1), ImVec2(1, 0));
 		}
+	}
+
+	if (ImGui::IsWindowHovered())
+	{
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && !ImGuizmo::IsUsing() && App->input->GetKey(SDL_SCANCODE_LALT) != KEY_REPEAT)
+		{
+			origin.x = (ImGui::GetMousePos().x - viewPos.x) / GameViewSize.x;
+			origin.y = (ImGui::GetMousePos().y - viewPos.y) / GameViewSize.y;
+			origin.x = (origin.x - 0.5f) * 2;
+			origin.y = -((origin.y - 0.5f) * 2);
+
+			if (origin.x >= -1 && origin.x <= 1 && origin.y >= -1 && origin.y <= 1)
+			{
+				pickingRay = App->camera->MainCamera->frustum.UnProjectLineSegment(origin.x, origin.y + 0.05);//TODO: fix this, why the hell do i need an offset for this to work
+				App->camera->MousePick(pickingRay);
+			}
+		}
+
 	}
 
 	ImGui::End();
