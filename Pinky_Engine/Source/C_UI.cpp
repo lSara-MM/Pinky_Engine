@@ -233,6 +233,8 @@ void C_UI::DrawOBB()
 
 void C_UI::UpdateBoundingBoxes()
 {
+	local_aabb.SetNegativeInfinity();
+	local_aabb.Enclose((float3*)bounds->vertex, 4);
 	obb = local_aabb;
 	obb.Transform(gameObject->transform->GetGlobalTransform());
 	global_aabb.SetNegativeInfinity();
