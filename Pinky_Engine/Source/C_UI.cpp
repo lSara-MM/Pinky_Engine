@@ -63,7 +63,7 @@ C_UI::~C_UI()
 void C_UI::Draw()
 {
 	glPushMatrix();
-	//glMultMatrixf(gameObject->transform->GetGLTransform());//TODO: comentat fa que es vegi la rotació en editor
+	glMultMatrixf(gameObject->transform->GetGLTransform());//TODO: comentat fa que es vegi la rotació en editor
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -180,10 +180,10 @@ void C_UI::UpdateUITransform()
 	float3 scale;
 
 	gameObject->transform->localMatrix.Decompose(localPos, rot, scale);
-	bounds->vertex[0] = float3(position.x, position.y + (height * scale.y), localPos.z) * localTransform.RotatePart();
-	bounds->vertex[1] = float3(position.x + (width * scale.x), position.y + (height * scale.y), localPos.z) * localTransform.RotatePart();
-	bounds->vertex[3] = float3(position.x + (width * scale.x), position.y, localPos.z) * localTransform.RotatePart();
-	bounds->vertex[2] = float3(position.x, position.y, localPos.z) * localTransform.RotatePart();
+	bounds->vertex[0] = float3(position.x, position.y + (height * scale.y), localPos.z) ;
+	bounds->vertex[1] = float3(position.x + (width * scale.x), position.y + (height * scale.y), localPos.z) ;
+	bounds->vertex[3] = float3(position.x + (width * scale.x), position.y, localPos.z) ;
+	bounds->vertex[2] = float3(position.x, position.y, localPos.z) ;
 
 	/*bounds->vertex[0] = float3(posX, posY + height, localPos.z);
 	bounds->vertex[1] = float3(posX + width, posY + height, localPos.z);//TODO: necesario?
