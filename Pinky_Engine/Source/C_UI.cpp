@@ -63,7 +63,7 @@ C_UI::~C_UI()
 void C_UI::Draw()
 {
 	glPushMatrix();
-	glMultMatrixf(gameObject->transform->GetGLTransform());//TODO: comentat fa que es vegi la rotació en editor
+	glMultMatrixf(gameObject->transform->GetGLTransform());
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -108,7 +108,8 @@ void C_UI::DrawGame()
 {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0.0, App->editor->GameViewSize.x, App->editor->GameViewSize.y, 0.0, 1.0, -1.0);
+	//glOrtho(0.0, App->editor->GameViewSize.x, App->editor->GameViewSize.y, 0.0, 1.0, -1.0);//TODO: orginal con 0,0 bien en pantalla pero mueve al revés
+	glOrtho(App->editor->GameViewSize.x, 0.0, 0.0, App->editor->GameViewSize.y, 1.0, -1.0);
 
 	//Initialize Modelview Matrix
 	glMatrixMode(GL_MODELVIEW);
