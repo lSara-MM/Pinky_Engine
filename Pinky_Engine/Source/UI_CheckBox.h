@@ -15,5 +15,6 @@ public:
 	void ShowInInspector();
 
 public:
+	bool isChecked;
 };
 #endif // __UI_CHECKBOX_H__

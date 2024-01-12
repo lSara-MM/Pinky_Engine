@@ -4,6 +4,7 @@
 #include "UI_Text.h"
 #include "UI_Button.h"
 #include "UI_InputBox.h"
+#include "UI_CheckBox.h"
 
 #include "ModuleScene.h"
 
@@ -19,6 +20,8 @@ G_UI::G_UI(UI_TYPE t, GameObject* pParent) : GameObject("", pParent)
 
 G_UI::~G_UI()
 {
+	canvas = nullptr;
+	//RELEASE(canvas);
 }
 
 update_status G_UI::Update(float dt)
@@ -137,6 +140,12 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 		break;
 	case UI_TYPE::BUTTON:
 	{
+		// Unity-like
+		AddUIComponent(UI_TYPE::IMAGE);
+		G_UI* aux = new G_UI(UI_TYPE::TEXT, this);
+		aux->ReParent(this);
+
+
 		UI_Button* comp = new UI_Button(this);
 		vComponents.push_back(comp);
 
@@ -178,7 +187,19 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 		break;
 	case UI_TYPE::CHECKBOX:
 	{
-		UI_Canvas* comp = new UI_Canvas(this);
+		// Unity-like
+		// Toggle background
+		G_UI* aux = new G_UI(UI_TYPE::IMAGE, this);
+		aux->ReParent(this);
+		// Checkmark
+		aux = new G_UI(UI_TYPE::IMAGE, this);
+		aux->ReParent(this);
+		// Label
+		aux = new G_UI(UI_TYPE::TEXT, this);
+		aux->ReParent(this);
+
+
+		UI_Checkbox* comp = new UI_Checkbox(this);
 		vComponents.push_back(comp);
 
 		name = "Checkbox";

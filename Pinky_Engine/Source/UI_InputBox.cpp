@@ -12,10 +12,13 @@
 
 UI_InputBox::UI_InputBox(GameObject* g) : C_UI(UI_TYPE::INPUTBOX, C_TYPE::UI, g, "Input Box")
 {
+	displayText = nullptr;
+	fontSize = 21;
 }
 
 UI_InputBox::~UI_InputBox()
 {
+	displayText = nullptr;
 }
 
 void UI_InputBox::ShowInInspector()

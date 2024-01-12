@@ -6,9 +6,9 @@ UI_Button::UI_Button(GameObject* g) : C_UI(UI_TYPE::BUTTON, C_TYPE::UI, g, "Butt
 
 UI_Button::~UI_Button()
 {
+	RELEASE(mat);
 }
 
 void UI_Button::ShowInInspector()
 {
-
 }

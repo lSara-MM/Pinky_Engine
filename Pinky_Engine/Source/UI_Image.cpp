@@ -17,6 +17,7 @@ UI_Image::UI_Image(GameObject* g) : C_UI(UI_TYPE::IMAGE, C_TYPE::UI, g, "Image")
 
 UI_Image::~UI_Image()
 {
+	RELEASE(mat);
 }
 
 void UI_Image::ShowInInspector()
@@ -90,6 +91,10 @@ void UI_Image::ShowInInspector()
 	ImGui::SameLine();
 
 	if (!exists) { gameObject->RemoveComponent(this); }
+}
+
+void UI_Image::DrawEditor()
+{
 }
 
 void UI_Image::DrawGame()

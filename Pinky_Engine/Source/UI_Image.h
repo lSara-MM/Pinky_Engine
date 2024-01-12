@@ -14,7 +14,8 @@ public:
 	~UI_Image();
 
 	void ShowInInspector();
-	void DrawGame();
+	void DrawEditor();
+	void DrawGame() override;
 
 public:
 	C_Material* mat;

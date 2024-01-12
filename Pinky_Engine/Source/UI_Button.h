@@ -16,7 +16,6 @@ public:
 	void ShowInInspector();
 
 public:
-	// TODO: que te una img? no es com una textura tal cual?
 	C_Material* mat;
 };
 #endif // __UI_BUTTON_H__
