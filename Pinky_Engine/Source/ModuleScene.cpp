@@ -43,8 +43,6 @@ bool ModuleScene::Init()
 	LOG("Creating scene");
 	bool ret = true;
 
-	rootNode = new GameObject("Scene", nullptr);
-
 	// Windows
 	hierarchy = new Hierarchy(0);
 	App->editor->AddWindow(hierarchy);
@@ -61,13 +59,13 @@ bool ModuleScene::Init()
 	project = new ProjectFiles(4);
 	App->editor->AddWindow(project);
 
-
 	return ret;
 }
 
 bool ModuleScene::Start()
 {
 	LOG("Starting scene");
+	rootNode = new GameObject("Scene", nullptr);
 
 	std::array<std::string, 4> components = { "Cube", "Sphere", "Cylinder", "Plane" };
 	for (int i = 0; i < components.size(); i++)

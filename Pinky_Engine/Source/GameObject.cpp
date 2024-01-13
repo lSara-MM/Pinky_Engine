@@ -40,6 +40,8 @@ GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 	numMaterials = 0;
 
 	vChildren = {};
+
+	App->scene->hierarchy->SetSelected(this);
 }
 
 // ---Copy Constructor---
