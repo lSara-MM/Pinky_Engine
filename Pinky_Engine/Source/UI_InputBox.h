@@ -19,6 +19,12 @@ public:
 	std::string text;
 	float fontSize;
 
+	int maxChars;
+
 	UI_Text* displayText;
+
+private:
+	//color
+	Color disabledColor;
 };
 #endif // __UI_INPUTBOX_H__
