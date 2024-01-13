@@ -2,6 +2,8 @@
 #include "Module.h"
 #include "Globals.h"
 
+#include <string>
+
 #define MAX_MOUSE_BUTTONS 5
 
 enum KEY_STATE
@@ -23,6 +25,13 @@ public:
 	update_status PreUpdate(float dt);
 	bool CleanUp();
 
+	void HandleInput(SDL_Event event);
+
+	//
+	void GetInputActive(std::string& strToStore, bool getInput = true);
+	void SetMaxChars(int limit);
+
+	//
 	KEY_STATE GetKey(int id) const
 	{
 		return keyboard[id];
@@ -58,6 +67,10 @@ public:
 		return mouse_y_motion;
 	}
 
+public:
+	std::string* strToChange;
+	std::string strBU;
+
 private:
 	KEY_STATE* keyboard;
 	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
@@ -69,4 +82,7 @@ private:
 	//int mouse_z_motion;
 
 	char* dropped_filedir; // Pointer for directory of dropped file
+
+	int maxChars;
+	bool getInput_B;
 };

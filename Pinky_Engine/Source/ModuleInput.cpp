@@ -28,11 +28,16 @@ bool ModuleInput::Init()
 	bool ret = true;
 	SDL_Init(0);
 
-	if(SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
+	if (SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
 	{
 		LOG("[ERROR] SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
+
+	maxChars = 10;
+	getInput_B = false;
+	strBU = "";
+	strToChange = nullptr;
 
 	return ret;
 }
@@ -43,19 +48,19 @@ update_status ModuleInput::PreUpdate(float dt)
 	SDL_PumpEvents();
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
-	
-	for(int i = 0; i < MAX_KEYS; ++i)
+
+	for (int i = 0; i < MAX_KEYS; ++i)
 	{
-		if(keys[i] == 1)
+		if (keys[i] == 1)
 		{
-			if(keyboard[i] == KEY_IDLE)
+			if (keyboard[i] == KEY_IDLE)
 				keyboard[i] = KEY_DOWN;
 			else
 				keyboard[i] = KEY_REPEAT;
 		}
 		else
 		{
-			if(keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
+			if (keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
 				keyboard[i] = KEY_UP;
 			else
 				keyboard[i] = KEY_IDLE;
@@ -68,18 +73,18 @@ update_status ModuleInput::PreUpdate(float dt)
 	mouse_y /= SCREEN_SIZE;
 	mouse_z = 0;
 
-	for(int i = 0; i < 5; ++i)
+	for (int i = 0; i < 5; ++i)
 	{
-		if(buttons & SDL_BUTTON(i))
+		if (buttons & SDL_BUTTON(i))
 		{
-			if(mouse_buttons[i] == KEY_IDLE)
+			if (mouse_buttons[i] == KEY_IDLE)
 				mouse_buttons[i] = KEY_DOWN;
 			else
 				mouse_buttons[i] = KEY_REPEAT;
 		}
 		else
 		{
-			if(mouse_buttons[i] == KEY_REPEAT || mouse_buttons[i] == KEY_DOWN)
+			if (mouse_buttons[i] == KEY_REPEAT || mouse_buttons[i] == KEY_DOWN)
 				mouse_buttons[i] = KEY_UP;
 			else
 				mouse_buttons[i] = KEY_IDLE;
@@ -90,57 +95,67 @@ update_status ModuleInput::PreUpdate(float dt)
 
 	bool quit = false;
 	SDL_Event e;
-	while(SDL_PollEvent(&e))
+	while (SDL_PollEvent(&e))
 	{
 		//GUI input event
 		ImGui_ImplSDL2_ProcessEvent(&e);
 
-		switch(e.type)
+		switch (e.type)
 		{
-			case SDL_MOUSEWHEEL:
+		case SDL_MOUSEWHEEL:
 			mouse_z = e.wheel.y;
 			break;
 
-			case SDL_MOUSEMOTION:
+		case SDL_MOUSEMOTION:
+		{
 			mouse_x = e.motion.x / SCREEN_SIZE;
 			mouse_y = e.motion.y / SCREEN_SIZE;
 
 			mouse_x_motion = e.motion.xrel / SCREEN_SIZE;
 			mouse_y_motion = e.motion.yrel / SCREEN_SIZE;
-			break;
+		}
+		break;
 
-			case SDL_QUIT:
+		case SDL_QUIT:
 			quit = true;
 			break;
 
-			case SDL_WINDOWEVENT:
+		case SDL_WINDOWEVENT:
+		{
+			if (e.window.event == SDL_WINDOWEVENT_RESIZED)
 			{
-				if(e.window.event == SDL_WINDOWEVENT_RESIZED)
+				App->renderer3D->editorCam->OnResize(e.window.data1, e.window.data2);
+				if (App->renderer3D->gameCam != nullptr)
 				{
-					App->renderer3D->editorCam->OnResize(e.window.data1, e.window.data2);
-					if (App->renderer3D->gameCam != nullptr)
-					{
-						App->renderer3D->gameCam->OnResize(e.window.data1, e.window.data2);
-					}
+					App->renderer3D->gameCam->OnResize(e.window.data1, e.window.data2);
 				}
-				break;
 			}
-
-			case (SDL_DROPFILE): 
-			{      // In case if dropped file
-				dropped_filedir = e.drop.file;
-				// Shows directory of dropped file
-				/*SDL_ShowSimpleMessageBox(
-					SDL_MESSAGEBOX_INFORMATION,
-					"File dropped on window", dropped_filedir, App->window->window);*/
-
-				LOG("File dropped from: %s", dropped_filedir);
-
-				App->resource->ImportFileToEngine(dropped_filedir);
-
-				SDL_free(dropped_filedir);    // Free dropped_filedir memory
-				break;
+			break;
+		}
+		case SDL_KEYDOWN:
+		{
+			if (getInput_B)
+			{
+				HandleInput(e);
 			}
+		}
+		break;
+
+		case (SDL_DROPFILE):
+		{      // In case if dropped file
+			dropped_filedir = e.drop.file;
+			// Shows directory of dropped file
+			/*SDL_ShowSimpleMessageBox(
+				SDL_MESSAGEBOX_INFORMATION,
+				"File dropped on window", dropped_filedir, App->window->window);*/
+
+			LOG("File dropped from: %s", dropped_filedir);
+
+			App->resource->ImportFileToEngine(dropped_filedir);
+
+			SDL_free(dropped_filedir);    // Free dropped_filedir memory
+			break;
+		}
 		}
 
 		// Close window if viewports enabled
@@ -162,5 +177,66 @@ bool ModuleInput::CleanUp()
 {
 	LOG("Quitting SDL input event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
+
+	strBU = "";
+	strToChange = nullptr;
 	return true;
+}
+
+// Handle user input
+void ModuleInput::HandleInput(SDL_Event event)
+{
+	// If the string less than maximum size
+	if (strToChange->length() <= maxChars)
+	{
+		//Append the character
+		*strToChange += (char)event.key.keysym.sym;
+	}
+
+	// If backspace was pressed and the string isn't blank
+	if ((event.key.keysym.sym == SDLK_BACKSPACE) && !strToChange->empty())
+	{
+		// Remove a character from the end
+		strToChange->erase(strToChange->length() - 1);
+		strToChange->erase(strToChange->length() - 1);
+	}
+
+	// Cancel and reset the string to the original
+	if ((event.key.keysym.sym == SDLK_ESCAPE))
+	{
+		// Change back to previous string;
+		*strToChange = strBU;
+		getInput_B = false;
+	}
+
+	// Submit and change the corresponding string
+	if ((event.key.keysym.sym == SDLK_RETURN) && !strToChange->empty())
+	{
+		strToChange->erase(strToChange->length() - 1);
+		getInput_B = false;
+	}
+
+	// Ignore shift
+	if (event.key.keysym.sym == SDLK_LSHIFT || event.key.keysym.sym == SDLK_RSHIFT)
+	{
+		// Append the character
+		strToChange->erase(strToChange->length() - 1);
+	}
+}
+
+
+void ModuleInput::GetInputActive(std::string& strToStore, bool getInput)
+{
+	// Keep a copy of the current version of the string
+	strBU = strToStore;
+
+	// Activate getting input
+	getInput_B = getInput;
+
+	strToChange = &strToStore;
+}
+
+void ModuleInput::SetMaxChars(int limit)
+{
+	maxChars = limit;
 }

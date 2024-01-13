@@ -14,6 +14,8 @@ UI_InputBox::UI_InputBox(GameObject* g) : C_UI(UI_TYPE::INPUTBOX, C_TYPE::UI, g,
 {
 	displayText = nullptr;
 	fontSize = 21;
+
+	maxChars = 10;
 }
 
 UI_InputBox::~UI_InputBox()
@@ -23,6 +25,16 @@ UI_InputBox::~UI_InputBox()
 
 void UI_InputBox::ShowInInspector()
 {
+	// TODO: delete after, just a test
+	{
+		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN && !ImGui::GetIO().WantTextInput)
+		{
+			LOG("Input");
+			App->input->GetInputActive(text);
+		}
+	}
+	//
+
 	// --- Set ImGui ids ---
 	std::string checkbox = name.c_str();
 	std::string header = name.c_str();
@@ -47,7 +59,13 @@ void UI_InputBox::ShowInInspector()
 
 		ImGui::Dummy(ImVec2(0, 10));
 
-		ImGui::ColorEdit4("Color", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
+		if (ImGui::DragInt("Characters limit", (maxChars < 0) ? &(maxChars = 0) : &maxChars))
+		{
+			App->input->SetMaxChars(maxChars);
+		}
+
+		ImGui::ColorEdit4("Normal color", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
+		ImGui::ColorEdit4("Disabled color", (float*)&disabledColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 
 		if (!isActive) { ImGui::EndDisabled(); }
 	}
