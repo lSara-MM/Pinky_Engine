@@ -60,16 +60,17 @@ public:
 	// FPS graph
 	std::vector<float> mFPSLog;
 	std::vector<float> mSLog;
+
 	//Memory graph
-	std::vector<float> MemLog;
+	std::vector<float> memLog;
 
 	//Frame cap
 	bool frcap;
 
 	//Viewport scene size
-	ImVec2 ViewportSize;
-	ImVec2 ViewportPos;
-	ImVec2 GameViewPos;
+	ImVec2 viewportSize;
+	ImVec2 viewportPos;
+	ImVec2 gameViewPos;
 	ImVec2 origin;
 	float2 mouse;
 	LineSegment pickingRay;

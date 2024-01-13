@@ -159,11 +159,11 @@ bool ModuleRenderer3D::Init()
 		ai::EnableDebug();
 	}
 
-	Grid.axis = true;
+	grid.axis = true;
 	wireframe = false;
-	VertexNormals = false;
-	FaceNormals = true;
-	Vsync = true;
+	vertexNormals = false;
+	faceNormals = true;
+	vsync = true;
 
 	ai::LoadCheckers(texture_checker);
 	meshes = {};
@@ -235,7 +235,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 
 	//glBindTexture(GL_TEXTURE_2D, 0);
-	Grid.Render();
+	grid.Render();
 	(wireframe) ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	editorCam->UnbindFrameBuffer();
 

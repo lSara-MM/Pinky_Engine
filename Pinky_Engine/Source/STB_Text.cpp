@@ -42,7 +42,7 @@ void STB_Text::Print(float x, float y, const char* text)
 
 void STB_Text::Draw(float x, float y, std::string& text)
 {
-    glViewport(0, 0, App->editor->GameViewSize.x, App->editor->GameViewSize.y);
+    glViewport(0, 0, App->editor->gameViewSize.x, App->editor->gameViewSize.y);
     glClearColor(0.45f, 0.45f, 0.75f, 0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDisable(GL_CULL_FACE);
@@ -51,7 +51,7 @@ void STB_Text::Draw(float x, float y, std::string& text)
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0, App->editor->GameViewSize.x, App->editor->GameViewSize.y, 0, -1, 1);
+    glOrtho(0, App->editor->gameViewSize.x, App->editor->gameViewSize.y, 0, -1, 1);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 

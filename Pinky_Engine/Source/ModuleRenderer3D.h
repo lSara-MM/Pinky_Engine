@@ -53,14 +53,12 @@ public:
 
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
-	CPlane Grid;
+	CPlane grid;
 
 	bool wireframe;
-	bool VertexNormals;
-	bool FaceNormals;
-	bool Vsync;
-
-	std::vector<R_Mesh*> meshes;
+	bool vertexNormals;
+	bool faceNormals;
+	bool vsync;
 
 	//init textures
 	GLuint texture_checker;

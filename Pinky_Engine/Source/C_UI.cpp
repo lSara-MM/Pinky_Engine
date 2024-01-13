@@ -78,7 +78,7 @@ void C_UI::Draw(bool game)
 	{
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0.0, App->editor->GameViewSize.x, App->editor->GameViewSize.y, 0.0, 1.0, -1.0);//TODO: orginal con 0,0 bien en pantalla pero mueve al revés
+		glOrtho(0.0, App->editor->gameViewSize.x, App->editor->gameViewSize.y, 0.0, 1.0, -1.0);//TODO: orginal con 0,0 bien en pantalla pero mueve al revés
 		//glOrtho(App->editor->GameViewSize.x, 0.0, 0.0, App->editor->GameViewSize.y, 1.0, -1.0);
 
 		glMatrixMode(GL_MODELVIEW);
@@ -209,8 +209,8 @@ void C_UI::StateLogic()
 
 bool C_UI::MouseCheck(float2 mouse)
 {
-	return (mouse.x >= posX / App->editor->GameViewSize.x && mouse.x <= (posX + width) / App->editor->GameViewSize.x 
-		&& mouse.y >= (posY + 21.25) / App->editor->GameViewSize.y && mouse.y <= (posY + 21.25 + height) / App->editor->GameViewSize.y);
+	return (mouse.x >= posX / App->editor->gameViewSize.x && mouse.x <= (posX + width) / App->editor->gameViewSize.x 
+		&& mouse.y >= (posY + 21.25) / App->editor->gameViewSize.y && mouse.y <= (posY + 21.25 + height) / App->editor->gameViewSize.y);
 }
 
 void C_UI::UpdateUITransform()

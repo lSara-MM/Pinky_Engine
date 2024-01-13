@@ -66,8 +66,8 @@ void UI_Canvas::UpdateUITransform()
 {
 	gameObject->transform->SetTransform(float3(0, 0, 0), float3(0, 0, 0), float3(1, 1, 1));
 	
-	width = App->editor->GameViewSize.x;
-	height = App->editor->GameViewSize.y;
+	width = App->editor->gameViewSize.x;
+	height = App->editor->gameViewSize.y;
 
 	bounds->vertex[0] = float3(posX, posY, 0);
 	bounds->vertex[1] = float3(posX + width, posY, 0);

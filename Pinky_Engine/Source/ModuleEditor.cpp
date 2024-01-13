@@ -216,7 +216,7 @@ bool ModuleEditor::CleanUp()
 
 	ClearVec(mFPSLog);
 	ClearVec(mSLog);
-	ClearVec(MemLog);
+	ClearVec(memLog);
 
 	ClearVecPtr(vImGuiWindows);
 
@@ -595,9 +595,9 @@ void ModuleEditor::ConfigWindow(ImGuiIO& io)
 				ImGui::SliderInt("FPS cap", &App->fps, 1, 120, "%d");
 				ImGui::Separator();
 
-				if (ImGui::Checkbox("VSync", &App->renderer3D->Vsync))
+				if (ImGui::Checkbox("VSync", &App->renderer3D->vsync))
 				{
-					App->renderer3D->SetVsync(App->renderer3D->Vsync);
+					App->renderer3D->SetVsync(App->renderer3D->vsync);
 				};
 
 				MemWindow();
@@ -728,9 +728,9 @@ void ModuleEditor::FpsWindow(ImGuiIO& io)
 void ModuleEditor::MemWindow()
 {
 	char title[25];
-	AddMem(MemLog, memoryStats.totalReportedMemory);
-	ImGui::Text("Reported Memory % 0.1f", MemLog[MemLog.size() - 1]);
-	ImGui::PlotHistogram("", &MemLog[0], MemLog.size(), 0, "", 0.0f, memoryStats.peakReportedMemory * 2, ImVec2(310, 100.0f));
+	AddMem(memLog, memoryStats.totalReportedMemory);
+	ImGui::Text("Reported Memory % 0.1f", memLog[memLog.size() - 1]);
+	ImGui::PlotHistogram("", &memLog[0], memLog.size(), 0, "", 0.0f, memoryStats.peakReportedMemory * 2, ImVec2(310, 100.0f));
 }
 
 void ModuleEditor::AddFPS(std::vector<float>& vect, const float aFPS)
@@ -1010,11 +1010,11 @@ void ModuleEditor::EditorWindow()
 
 	ImVec2 viewSize = ImGui::GetContentRegionAvail();
 	ImVec2 viewPos = ImGui::GetWindowPos();
-	ViewportPos = { viewPos.x,viewPos.y };
-	ViewportSize = { viewSize.x,viewSize.y };
+	viewportPos = { viewPos.x,viewPos.y };
+	viewportSize = { viewSize.x,viewSize.y };
 
-	App->renderer3D->editorCam->SetAspectRatio(ViewportSize.x, ViewportSize.y);
-	ImGui::Image((ImTextureID)App->renderer3D->editorCam->textureColourBuffer, ViewportSize, ImVec2(0, 1), ImVec2(1, 0));
+	App->renderer3D->editorCam->SetAspectRatio(viewportSize.x, viewportSize.y);
+	ImGui::Image((ImTextureID)App->renderer3D->editorCam->textureColourBuffer, viewportSize, ImVec2(0, 1), ImVec2(1, 0));
 
 	//Guizmos
 	std::vector<GameObject*> selectedList;
@@ -1110,28 +1110,28 @@ void ModuleEditor::GameWindow()
 	ImGui::Begin("Game", NULL);
 
 	ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-	GameViewSize = { viewportSize.x,viewportSize.y };
-	GameViewPos = ImGui::GetWindowPos();
-	ViewportPos = { GameViewPos.x,GameViewPos.y };
+	gameViewSize = { viewportSize.x,viewportSize.y };
+	gameViewPos = ImGui::GetWindowPos();
+	viewportPos = { gameViewPos.x,gameViewPos.y };
 	if (App->renderer3D->gameCam != nullptr)
 	{
-		App->renderer3D->gameCam->SetAspectRatio(GameViewSize.x, GameViewSize.y);
+		App->renderer3D->gameCam->SetAspectRatio(gameViewSize.x, gameViewSize.y);
 
 		if (App->renderer3D->gameCam->isActive)
 		{
-			ImGui::Image((ImTextureID)App->renderer3D->gameCam->textureColourBuffer, GameViewSize, ImVec2(0, 1), ImVec2(1, 0));
+			ImGui::Image((ImTextureID)App->renderer3D->gameCam->textureColourBuffer, gameViewSize, ImVec2(0, 1), ImVec2(1, 0));
 		}
 	}
 
 	if (ImGui::IsWindowHovered())
 	{
-		mouse.x = (ImGui::GetMousePos().x - GameViewPos.x) / GameViewSize.x;
-		mouse.y = (ImGui::GetMousePos().y - GameViewPos.y) / GameViewSize.y;
+		mouse.x = (ImGui::GetMousePos().x - gameViewPos.x) / gameViewSize.x;
+		mouse.y = (ImGui::GetMousePos().y - gameViewPos.y) / gameViewSize.y;
 
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && !ImGuizmo::IsUsing() && App->input->GetKey(SDL_SCANCODE_LALT) != KEY_REPEAT)
 		{
-			origin.x = (ImGui::GetMousePos().x - GameViewPos.x) / GameViewSize.x;
-			origin.y = (ImGui::GetMousePos().y - GameViewPos.y) / GameViewSize.y;
+			origin.x = (ImGui::GetMousePos().x - gameViewPos.x) / gameViewSize.x;
+			origin.y = (ImGui::GetMousePos().y - gameViewPos.y) / gameViewSize.y;
 			origin.x = (origin.x - 0.5f) * 2;
 			origin.y = -((origin.y - 0.5f) * 2);
 
