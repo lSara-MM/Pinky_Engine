@@ -30,7 +30,7 @@ void UI_Button::ShowInInspector()
 
 		ImGui::Dummy(ImVec2(0, 10));
 
-		ImGui::Checkbox((checkbox + "##1").c_str(), &isInteractable);
+		ImGui::Checkbox("Interactable##1", &isInteractable);
 
 		ImGui::ColorEdit4("Normal color", (float*)&normalColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Focused color", (float*)&focusedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
