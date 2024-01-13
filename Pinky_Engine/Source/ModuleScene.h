@@ -28,6 +28,7 @@ public:
 
 	G_UI* GetCanvas();
 	void SetCanvas(G_UI* newCanvas = nullptr);
+
 public:
 	GameObject* rootNode;
 

@@ -91,7 +91,7 @@ bool ModuleScene::Start()
 	G_UI* prueba = new G_UI(UI_TYPE::CANVAS);
 	G_UI* prueba2 = new G_UI(UI_TYPE::IMAGE);
 
-	static_cast<UI_Image*>(prueba2->GetComponentUI(UI_TYPE::IMAGE))->mat->tex;
+	App->resource->ImportModel("Baker_house.png", PINKY_ASSETS_AUX "3dObject\\baker_house\\", *prueba2);
 	prueba = nullptr;
 	prueba2 = nullptr;
 
@@ -141,8 +141,6 @@ update_status ModuleScene::Update(float dt)
 update_status ModuleScene::PostUpdate(float dt)
 {
 	update_status ret = UPDATE_CONTINUE;
-
-
 	return ret;
 }
 
