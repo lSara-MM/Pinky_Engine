@@ -353,7 +353,7 @@ int ModuleResource::ImportToSceneV(std::string file, std::string dir, GameObject
 	return 0;
 }
 
-void ModuleResource::ImportModel(std::string path, std::string dir, GameObject& go)
+void ModuleResource::ImportTextureToModel(std::string path, std::string dir, GameObject& go)
 {
 	App->scene->hierarchy->SetSelected(&go);
 	ImportToSceneV(path, dir);
