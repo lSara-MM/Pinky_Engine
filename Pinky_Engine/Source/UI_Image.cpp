@@ -136,12 +136,9 @@ void UI_Image::Draw(bool game)
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
 	glActiveTexture(GL_TEXTURE0);
-	if (static_cast<C_Material*>(gameObject->GetComponentByType(C_TYPE::MATERIAL)) != nullptr &&
-		static_cast<C_Material*>(gameObject->GetComponentByType(C_TYPE::MATERIAL))->tex != nullptr)
-	{
-		(!mat->checkered) ? glBindTexture(GL_TEXTURE_2D, static_cast<C_Material*>(gameObject->GetComponentByType(C_TYPE::MATERIAL))->tex->tex_id)
-			: glBindTexture(GL_TEXTURE_2D, App->renderer3D->texture_checker);
-	}
+
+	(!mat->checkered) ? glBindTexture(GL_TEXTURE_2D, (mat->tex->tex_id))
+		: glBindTexture(GL_TEXTURE_2D, App->renderer3D->texture_checker);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bounds->EBO);
 
