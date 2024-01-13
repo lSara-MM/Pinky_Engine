@@ -15,6 +15,7 @@ UI_InputBox::UI_InputBox(GameObject* g) : C_UI(UI_TYPE::INPUTBOX, C_TYPE::UI, g,
 	displayText = nullptr;
 	fontSize = 21;
 
+	text = "Hello World";
 	maxChars = 10;
 }
 
@@ -53,10 +54,8 @@ void UI_InputBox::ShowInInspector()
 		if (!isActive) { ImGui::BeginDisabled(); }
 
 		ImGui::Text("Text");
-		if (ImGui::InputTextMultiline("##input", &text, ImVec2(0, 0), ImGuiInputTextFlags_AllowTabInput))
-		{
-			displayText->text = text;
-		}
+		ImGui::InputTextMultiline("##input", &text, ImVec2(0, 0), ImGuiInputTextFlags_AllowTabInput);
+		if (text != displayText->text) { displayText->text = text; }
 
 		ImGui::Dummy(ImVec2(0, 10));
 
