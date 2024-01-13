@@ -22,7 +22,7 @@ public:
 	//int ImportToScene(std::string path, std::string dir, GameObject* goParent = nullptr, bool component = false);
 	int ImportToSceneV(std::string path, std::string dir, GameObject* goParent = nullptr, bool component = false);
 
-	void ImportModel(const char* meshPath, std::vector<const char*> texPaths);
+	void ImportModel(std::string path, std::string dir, GameObject& go);
 
 	std::string SaveToLibrary(Resource* r);
 	Resource* LoadFromLibrary(std::string path, R_TYPE type = R_TYPE::NONE);

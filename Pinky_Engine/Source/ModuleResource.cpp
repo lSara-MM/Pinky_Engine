@@ -353,17 +353,11 @@ int ModuleResource::ImportToSceneV(std::string file, std::string dir, GameObject
 	return 0;
 }
 
-//
-void ModuleResource::ImportModel(const char* meshPath, std::vector<const char*> texPaths)
+void ModuleResource::ImportModel(std::string path, std::string dir, GameObject& go)
 {
-	GameObject* go = nullptr;
-
-	//Get_Set_FilePath(meshPath);
-
-	ImportFileToEngine(meshPath);
-	go = nullptr;
+	App->scene->hierarchy->SetSelected(&go);
+	ImportToSceneV(path, dir);
 }
-//
 
 std::string ModuleResource::SaveToLibrary(Resource* r)
 {

@@ -146,6 +146,7 @@ void UI_Image::Draw(bool game)
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	
 	if (!game)
 	{
 		glPopMatrix();
