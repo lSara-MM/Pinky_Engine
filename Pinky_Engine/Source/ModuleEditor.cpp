@@ -1139,8 +1139,8 @@ void ModuleEditor::GameWindow()
 			{
 				if (App->renderer3D->gameCam != nullptr)
 				{
-					pickingRay = App->renderer3D->gameCam->frustum.UnProjectLineSegment(origin.x, origin.y + 0.05);//TODO: no acaba d'anar fino
-					App->camera->MousePickUI(pickingRay);
+					//pickingRay = App->renderer3D->gameCam->frustum.UnProjectLineSegment(origin.x, origin.y + 0.05);
+					//App->camera->MousePickUI(pickingRay);
 				}
 			}
 		}

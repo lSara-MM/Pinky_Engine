@@ -4,6 +4,7 @@
 
 #include "Globals.h"
 #include "C_UI.h"
+#include "UI_Image.h"
 #include "C_Material.h"
 
 class UI_Button : public C_UI
@@ -17,15 +18,14 @@ public:
 	void OnNormal() override;
 	void OnFocused() override;
 	void OnPressed() override;
-	void OnRelease() override;
 	void OnSelected() override;
 
 public:
 	bool isInteractable;
+	UI_Image* image;
 
 private:
 	//color
-	Color normalColor;
 	Color focusedColor;
 	Color pressedColor;
 	Color selectedColor;

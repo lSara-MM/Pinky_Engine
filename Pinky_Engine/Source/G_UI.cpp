@@ -137,6 +137,7 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 	{
 		UI_Text* comp = new UI_Text(this);
 		vComponents.push_back(comp);
+
 		name = "Text";
 
 		if (App->scene->GetCanvas() == nullptr)
@@ -156,10 +157,10 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 		G_UI* aux = new G_UI(UI_TYPE::TEXT, this);
 		aux->ReParent(this);
 
-
 		UI_Button* comp = new UI_Button(this);
 		vComponents.push_back(comp);
-
+		comp->image = static_cast<UI_Image*>(GetComponentUI(UI_TYPE::IMAGE));
+	
 		name = "Button";
 
 		if (App->scene->GetCanvas() == nullptr)

@@ -4,7 +4,6 @@
 UI_Button::UI_Button(GameObject* g) : C_UI(UI_TYPE::BUTTON, C_TYPE::UI, g, "Button")
 {
 	isInteractable = true;
-	normalColor = { 1,1,0,1 };
 	focusedColor = { 0,1,0,1 };
 	pressedColor = { 1,0,1,1 };
 	selectedColor = { 0,0,1,1 };
@@ -13,6 +12,7 @@ UI_Button::UI_Button(GameObject* g) : C_UI(UI_TYPE::BUTTON, C_TYPE::UI, g, "Butt
 
 UI_Button::~UI_Button()
 {
+	RELEASE(image);
 }
 
 void UI_Button::ShowInInspector()
@@ -37,7 +37,6 @@ void UI_Button::ShowInInspector()
 
 		ImGui::Checkbox("Interactable##1", &isInteractable);
 
-		ImGui::ColorEdit4("Normal color", (float*)&normalColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Focused color", (float*)&focusedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Pressed color", (float*)&pressedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Selected color", (float*)&selectedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
@@ -52,26 +51,21 @@ void UI_Button::ShowInInspector()
 
 void UI_Button::OnNormal()
 {
-	color = normalColor;
+	image->color = color;
 }
 
 void UI_Button::OnFocused()
 {
-	color = focusedColor;
+	image->color = focusedColor;
 }
 
 void UI_Button::OnPressed()
 {
-	color = pressedColor;
-}
-
-void UI_Button::OnRelease()
-{
-	LOG("get released");
+	image->color = pressedColor;
 }
 
 void UI_Button::OnSelected()
 {
-	color = selectedColor;
+	image->color = selectedColor;
 }
 
