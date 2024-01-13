@@ -6,6 +6,7 @@
 #include "FileSystemManager.h"
 #include "GameObject.h"
 #include "G_UI.h"
+#include "UI_Image.h"
 
 #include "Resource.h"
 #include "I_Mesh.h"
@@ -517,14 +518,23 @@ void ModuleResource::LoadChildrenTextures(std::string path, std::string libPath)
 {
 	std::vector<GameObject*> it = App->scene->hierarchy->GetSelectedGOs();
 	C_Material* mat;
-	for (int i = 0; i < it.size(); i++)
+	for (int i = 0; i < it.size(); ++i)
 	{
 		if (it[i]->GetComponentsMaterial().empty())
 		{
-			
+			for (int j = 0; j < it[i]->vComponents.size(); ++j)
+			{
+				// For now only UI_Image has material
+				if (it[i]->vComponents[j]->type == C_TYPE::UI)
+				{
+					mat = static_cast<UI_Image*>(static_cast<G_UI*>(it[i])->GetComponentUI(UI_TYPE::IMAGE))->mat;
+				}
+			}
 		}
-
-		mat = static_cast<C_Material*>(it[i]->GetComponentByType(C_TYPE::MATERIAL));
+		else
+		{
+			mat = static_cast<C_Material*>(it[i]->GetComponentByType(C_TYPE::MATERIAL));
+		}
 
 		if (mat != nullptr && mat->tex != nullptr)
 		{

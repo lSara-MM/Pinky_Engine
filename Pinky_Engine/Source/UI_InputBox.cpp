@@ -52,14 +52,16 @@ void UI_InputBox::ShowInInspector()
 	{
 		if (!isActive) { ImGui::BeginDisabled(); }
 
-		if (ImGui::InputTextMultiline(name.c_str(), &text, ImVec2(0, 0), ImGuiInputTextFlags_AllowTabInput))
+		ImGui::Text("Text");
+		if (ImGui::InputTextMultiline("##input", &text, ImVec2(0, 0), ImGuiInputTextFlags_AllowTabInput))
 		{
 			displayText->text = text;
 		}
 
 		ImGui::Dummy(ImVec2(0, 10));
 
-		if (ImGui::DragInt("Characters limit", (maxChars < 0) ? &(maxChars = 0) : &maxChars))
+		ImGui::Text("Characters limit");
+		if (ImGui::DragInt("##Characters limit", (maxChars < 0) ? &(maxChars = 0) : &maxChars))
 		{
 			App->input->SetMaxChars(maxChars);
 		}
