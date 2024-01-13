@@ -22,7 +22,8 @@ public:
 	//int ImportToScene(std::string path, std::string dir, GameObject* goParent = nullptr, bool component = false);
 	int ImportToSceneV(std::string path, std::string dir, GameObject* goParent = nullptr, bool component = false);
 
-	void ImportModel(std::string path, std::string dir, GameObject& go);
+	//
+	void ImportTextureToModel(std::string path, std::string dir, GameObject& go);
 
 	std::string SaveToLibrary(Resource* r);
 	Resource* LoadFromLibrary(std::string path, R_TYPE type = R_TYPE::NONE);
