@@ -67,10 +67,11 @@ public:
 	virtual void OnSelected() {};
 	bool MouseCheck(float2 mouse);
 
-	virtual void UpdateUITransform();
+	virtual void UpdateUITransform(float dt);
 	void DrawABB();
 	void DrawOBB();
 	void UpdateBoundingBoxes();
+	void Drag(float dt);
 
 public:
 	UI_TYPE UI_type;
@@ -86,6 +87,8 @@ public:
 	AABB local_aabb;//local AABB
 	AABB global_aabb;//global AABB
 	OBB obb;//global OB
+
+	bool draggable;
 
 	UIBounds* bounds;
 };

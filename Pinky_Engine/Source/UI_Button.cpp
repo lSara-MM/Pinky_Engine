@@ -37,6 +37,7 @@ void UI_Button::ShowInInspector()
 
 		ImGui::Checkbox("Interactable##1", &isInteractable);
 
+		ImGui::ColorEdit4("Normal color", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Focused color", (float*)&focusedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Pressed color", (float*)&pressedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Selected color", (float*)&selectedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
@@ -62,10 +63,16 @@ void UI_Button::OnFocused()
 void UI_Button::OnPressed()
 {
 	image->color = pressedColor;
+
 }
 
 void UI_Button::OnSelected()
 {
 	image->color = selectedColor;
+}
+
+void UI_Button::OnRelease() 
+{
+	draggable = !draggable;
 }
 

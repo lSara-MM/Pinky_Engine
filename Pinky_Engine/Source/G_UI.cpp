@@ -54,13 +54,13 @@ update_status G_UI::Update(float dt)
 				if (vComponents[i]->type == C_TYPE::UI)
 				{
 					static_cast<C_UI*>(vComponents[i])->StateLogic();
-					static_cast<C_UI*>(vComponents[i])->UpdateUITransform();
+					static_cast<C_UI*>(vComponents[i])->UpdateUITransform(dt);
 				}
 			}
 
 			if (canvas != nullptr)
 			{
-				canvas->UpdateUITransform();
+				canvas->UpdateUITransform(dt);
 			}
 		}
 	}

@@ -62,7 +62,7 @@ void UI_Canvas::Draw(bool game)
 	glEnd();
 }
 
-void UI_Canvas::UpdateUITransform()
+void UI_Canvas::UpdateUITransform(float dt)
 {
 	gameObject->transform->SetTransform(float3(0, 0, 0), float3(0, 0, 0), float3(1, 1, 1));
 	

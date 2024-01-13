@@ -10,6 +10,8 @@ C_UI::C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n, Color c, int w,
 	height = h;
 	color = c;
 
+	draggable = false;
+
 	float3 position = gameObject->transform->position;
 
 	float4x4 localTransform = gameObject->transform->GetLocalTransform();
@@ -209,11 +211,11 @@ void C_UI::StateLogic()
 
 bool C_UI::MouseCheck(float2 mouse)
 {
-	return (mouse.x >= posX / App->editor->gameViewSize.x && mouse.x <= (posX + width) / App->editor->gameViewSize.x 
+	return (mouse.x >= posX / App->editor->gameViewSize.x && mouse.x <= (posX + width) / App->editor->gameViewSize.x
 		&& mouse.y >= (posY + 21.25) / App->editor->gameViewSize.y && mouse.y <= (posY + 21.25 + height) / App->editor->gameViewSize.y);
 }
 
-void C_UI::UpdateUITransform()
+void C_UI::UpdateUITransform(float dt)
 {
 	float3 position = gameObject->transform->position;
 	float4x4 localTransform = gameObject->transform->GetLocalTransform();
@@ -228,10 +230,18 @@ void C_UI::UpdateUITransform()
 	posX = position.x;//TODO: arreglar
 	posY = position.y;
 
-	bounds->vertex[0] = float3(position.x, position.y + height, localPos.z);
-	bounds->vertex[1] = float3(position.x + width, position.y + height, localPos.z);
-	bounds->vertex[3] = float3(position.x + width, position.y, localPos.z);
-	bounds->vertex[2] = float3(position.x, position.y, localPos.z);
+	float2 movement = float2(0, 0);
+
+	if (draggable)
+	{
+		movement = float2(App->input->GetMouseXMotion() * dt, App->input->GetMouseYMotion() * dt);
+		LOG("%f // %f", App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
+	}
+
+	bounds->vertex[0] = float3(position.x + movement.x, position.y + height + movement.y, localPos.z);
+	bounds->vertex[1] = float3(position.x + width + movement.x, position.y + height + movement.y, localPos.z);
+	bounds->vertex[3] = float3(position.x + width + movement.x, position.y + movement.y, localPos.z);
+	bounds->vertex[2] = float3(position.x + movement.x, position.y + movement.y, localPos.z);
 
 	//bounds->vertex[0] = float3(posX, posY + height, localPos.z);
 	//bounds->vertex[1] = float3(posX + width, posY + height, localPos.z);//TODO: necesario?
@@ -286,6 +296,11 @@ void C_UI::UpdateBoundingBoxes()
 	obb.Transform(gameObject->transform->GetGlobalTransform());
 	global_aabb.SetNegativeInfinity();
 	global_aabb.Enclose(obb);
+}
+
+void C_UI::Drag(float dt)
+{
+	float2 movement = float2(App->input->GetMouseXMotion() * dt, App->input->GetMouseYMotion() * dt);
 }
 
 bool UIBounds::InitBuffers()
