@@ -76,7 +76,7 @@ public:
 	UI_STATE state;
 
 	// Transform info
-	int posX, posY, width, height;
+	float posX, posY, width, height;
 	
 	//color
 	Color color;

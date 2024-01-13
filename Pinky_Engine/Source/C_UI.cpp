@@ -156,8 +156,7 @@ void C_UI::DebugDraw()
 void C_UI::StateLogic()
 {
 	float2 mousePos = float2(App->editor->mouse.x, App->editor->mouse.y);
-	float2 normalizedPos = float2(((posX - App->editor->GameViewPos.x) / App->editor->GameViewSize.x), ((posY - App->editor->GameViewPos.y) / App->editor->GameViewSize.y));
-	LOG("%f %f", mousePos.x, mousePos.y);
+
 	switch (state)
 	{
 	case UI_STATE::NONE:
@@ -215,7 +214,8 @@ void C_UI::StateLogic()
 
 bool C_UI::MouseCheck(float2 mouse)
 {
-	return (mouse.x >= posX / App->editor->GameViewSize.x && mouse.x <= (posX + width) / App->editor->GameViewSize.x && mouse.y >= posY / App->editor->GameViewSize.y && mouse.y <= (posY + height) / App->editor->GameViewSize.y);
+	return (mouse.x >= posX / App->editor->GameViewSize.x && mouse.x <= (posX + width) / App->editor->GameViewSize.x 
+		&& mouse.y >= (posY + 21.25) / App->editor->GameViewSize.y && mouse.y <= (posY + 21.25 + height) / App->editor->GameViewSize.y);
 }
 
 void C_UI::UpdateUITransform()
@@ -229,6 +229,8 @@ void C_UI::UpdateUITransform()
 	gameObject->transform->localMatrix.Decompose(localPos, rot, scale);
 	width *= scale.x;
 	height *= scale.y;
+	posX = position.x;//TODO: arreglar
+	posY = position.y;
 	bounds->vertex[0] = float3(position.x, position.y + height, localPos.z);
 	bounds->vertex[1] = float3(position.x + width, position.y + height, localPos.z);
 	bounds->vertex[3] = float3(position.x + width, position.y, localPos.z);
