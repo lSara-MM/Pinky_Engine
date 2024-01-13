@@ -164,14 +164,12 @@ void C_UI::StateLogic()
 	case UI_STATE::DISABLED:
 		break;
 	case UI_STATE::NORMAL:
-		LOG("NORMAL");
 		if (MouseCheck(mousePos))
 		{
 			state = UI_STATE::FOCUSED;
 		}
 		break;
 	case UI_STATE::FOCUSED:
-		LOG("FOCUSED");
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
 		{
 			state = UI_STATE::PRESSED;
@@ -182,7 +180,6 @@ void C_UI::StateLogic()
 		}
 		break;
 	case UI_STATE::PRESSED:
-		LOG("PRESSED");
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && MouseCheck(mousePos))
 		{
 			state = UI_STATE::RELEASE;
@@ -193,11 +190,9 @@ void C_UI::StateLogic()
 		}
 		break;
 	case UI_STATE::RELEASE:
-		LOG("RELEASE");
 		state = UI_STATE::SELECTED;
 		break;
 	case UI_STATE::SELECTED:
-		LOG("SELECTED");
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && MouseCheck(mousePos))
 		{
 			state = UI_STATE::PRESSED;
