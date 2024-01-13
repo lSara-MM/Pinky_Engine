@@ -19,7 +19,7 @@ public:
 	void OnFocused() override;
 	void OnPressed() override;
 	void OnSelected() override;
-	void OnRelease() override;
+
 
 public:
 	bool isInteractable;

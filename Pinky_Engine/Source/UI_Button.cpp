@@ -56,6 +56,7 @@ void UI_Button::ShowInInspector()
 
 void UI_Button::OnNormal()
 {
+	draggable = false;
 	image->color = color;
 }
 
@@ -72,10 +73,7 @@ void UI_Button::OnPressed()
 
 void UI_Button::OnSelected()
 {
+	draggable = false;
 	image->color = selectedColor;
 }
 
-void UI_Button::OnRelease()
-{
-	draggable = false;
-}

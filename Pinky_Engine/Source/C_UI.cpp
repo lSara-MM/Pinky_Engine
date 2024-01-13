@@ -290,17 +290,33 @@ void C_UI::UpdateBoundingBoxes()
 	global_aabb.Enclose(obb);
 }
 
-void C_UI::Drag()
+void C_UI::Drag(float dt)
 {
-	int movementX = App->input->GetMouseXMotion();
-	int movementY = App->input->GetMouseYMotion();
+	int movementX = App->input->GetMouseXMotion() * dt * 30;
+	int movementY = App->input->GetMouseYMotion() * dt * 30;
 	posX += movementX;
 	posY += movementY;
 
-	bounds->vertex[0] = float3(posX + movementX, posY + height + movementY, 0);
-	bounds->vertex[1] = float3(posX + width + movementX, posY + height + movementY, 0);
-	bounds->vertex[3] = float3(posX + width + movementX, posY + movementY, 0);
-	bounds->vertex[2] = float3(posX + movementX, posY + movementY, 0);
+	
+	float4x4 localTransform = gameObject->transform->GetLocalTransform();
+	float3 localPos;
+	Quat rot;
+	float3 scale;
+	//TODO:MILAGRO
+	gameObject->transform->SetPosition(float3(gameObject->transform->position.x + movementX, gameObject->transform->position.y + movementY, 0));
+	gameObject->transform->localMatrix.Decompose(localPos, rot, scale);
+
+	float3 position = gameObject->transform->position;
+
+	bounds->vertex[0] = float3(position.x + movementX, position.y + height + movementY, localPos.z);
+	bounds->vertex[1] = float3(position.x + width + movementX, position.y + height + movementY, localPos.z);
+	bounds->vertex[3] = float3(position.x + width + movementX, position.y + movementY, localPos.z);
+	bounds->vertex[2] = float3(position.x + movementX, position.y + movementY, localPos.z);
+
+	//bounds->vertex[0] = float3(posX, posY + height, localPos.z);
+	//bounds->vertex[1] = float3(posX + width, posY + height, localPos.z);//TODO: necesario?
+	//bounds->vertex[3] = float3(posX + width, posY, localPos.z);
+	//bounds->vertex[2] = float3(posX, posY, localPos.z);
 
 	bounds->uvs[2] = float2(0, 1);
 	bounds->uvs[3] = float2(1, 1);

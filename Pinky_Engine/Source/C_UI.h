@@ -71,7 +71,7 @@ public:
 	void DrawABB();
 	void DrawOBB();
 	void UpdateBoundingBoxes();
-	void Drag();
+	void Drag(float dt);
 
 public:
 	UI_TYPE UI_type;
