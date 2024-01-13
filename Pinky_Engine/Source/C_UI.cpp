@@ -8,8 +8,6 @@ C_UI::C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n, Color c, int w,
 
 	width = w;
 	height = h;
-	posX = x;
-	posY = y;
 	color = c;
 
 	float3 position = gameObject->transform->position;
@@ -18,8 +16,18 @@ C_UI::C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n, Color c, int w,
 	float3 localPos;
 	Quat rot;
 	float3 scale;
-
 	gameObject->transform->localMatrix.Decompose(localPos, rot, scale);
+
+	if (x != 0 || y != 0)
+	{
+		posX = x;
+		posY = y;
+	}
+	else
+	{
+		posX = localPos.x;
+		posY = localPos.y;
+	}
 
 	bounds = new UIBounds;
 
@@ -60,6 +68,7 @@ C_UI::C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n, Color c, int w,
 C_UI::~C_UI()
 {
 	bounds->DeleteBuffers();
+	//RELEASE(bounds->index);TODO: peta
 	RELEASE(bounds);
 }
 
@@ -71,12 +80,12 @@ void C_UI::Draw(bool game)
 		glLoadIdentity();
 		glOrtho(0.0, App->editor->GameViewSize.x, App->editor->GameViewSize.y, 0.0, 1.0, -1.0);//TODO: orginal con 0,0 bien en pantalla pero mueve al revés
 		//glOrtho(App->editor->GameViewSize.x, 0.0, 0.0, App->editor->GameViewSize.y, 1.0, -1.0);
-		
+
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 	}
 
-	else 
+	else
 	{
 		glPushMatrix();
 		glMultMatrixf(gameObject->transform->GetGLTransform());
@@ -147,6 +156,7 @@ void C_UI::DebugDraw()
 void C_UI::StateLogic()
 {
 	float2 mousePos = float2(App->editor->mouse.x, App->editor->mouse.y);
+	float2 normalizedPos = float2(((posX - App->editor->GameViewPos.x) / App->editor->GameViewSize.x), ((posY - App->editor->GameViewPos.y) / App->editor->GameViewSize.y));
 	LOG("%f %f", mousePos.x, mousePos.y);
 	switch (state)
 	{
@@ -159,11 +169,11 @@ void C_UI::StateLogic()
 		if (MouseCheck(mousePos))
 		{
 			state = UI_STATE::FOCUSED;
-		}	
+		}
 		break;
 	case UI_STATE::FOCUSED:
 		LOG("FOCUSED");
-		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
 		{
 			state = UI_STATE::PRESSED;
 		}
@@ -185,7 +195,18 @@ void C_UI::StateLogic()
 		break;
 	case UI_STATE::RELEASE:
 		LOG("RELEASE");
-		state = UI_STATE::NORMAL;
+		state = UI_STATE::SELECTED;
+		break;
+	case UI_STATE::SELECTED:
+		LOG("SELECTED");
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && MouseCheck(mousePos))
+		{
+			state = UI_STATE::PRESSED;
+		}
+		else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && !MouseCheck(mousePos))
+		{
+			state = UI_STATE::NORMAL;
+		}
 		break;
 	default:
 		break;
@@ -194,7 +215,7 @@ void C_UI::StateLogic()
 
 bool C_UI::MouseCheck(float2 mouse)
 {
-	return (mouse.x >= ((posX - App->editor->GameViewPos.x) / App->editor->GameViewSize.x)) && mouse.x <= ((posX - App->editor->GameViewPos.x + width) / App->editor->GameViewSize.x) && mouse.y >= ((posY - App->editor->GameViewPos.y) / App->editor->GameViewSize.y) && mouse.y <= ((posY - App->editor->GameViewPos.y+height) / App->editor->GameViewSize.y);
+	return (mouse.x >= posX / App->editor->GameViewSize.x && mouse.x <= (posX + width) / App->editor->GameViewSize.x && mouse.y >= posY / App->editor->GameViewSize.y && mouse.y <= (posY + height) / App->editor->GameViewSize.y);
 }
 
 void C_UI::UpdateUITransform()
@@ -213,10 +234,10 @@ void C_UI::UpdateUITransform()
 	bounds->vertex[3] = float3(position.x + width, position.y, localPos.z);
 	bounds->vertex[2] = float3(position.x, position.y, localPos.z);
 
-	/*bounds->vertex[0] = float3(posX, posY + height, localPos.z);
-	bounds->vertex[1] = float3(posX + width, posY + height, localPos.z);//TODO: necesario?
-	bounds->vertex[3] = float3(posX + width, posY, localPos.z);
-	bounds->vertex[2] = float3(posX, posY, localPos.z);*/
+	//bounds->vertex[0] = float3(posX, posY + height, localPos.z);
+	//bounds->vertex[1] = float3(posX + width, posY + height, localPos.z);//TODO: necesario?
+	//bounds->vertex[3] = float3(posX + width, posY, localPos.z);
+	//bounds->vertex[2] = float3(posX, posY, localPos.z);
 
 	bounds->uvs[2] = float2(0, 1);
 	bounds->uvs[3] = float2(1, 1);

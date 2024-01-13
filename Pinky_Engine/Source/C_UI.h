@@ -31,7 +31,8 @@ enum class UI_STATE
 	NORMAL,
 	FOCUSED,
 	PRESSED,
-	RELEASE
+	RELEASE, 
+	SELECTED
 };
 
 enum class UI_TYPE
@@ -55,8 +56,16 @@ public:
 	virtual void ShowInInspector() {};
 	virtual void Draw(bool game);
 	virtual void DebugDraw();
+
+	//UI logic
 	void StateLogic();
+	virtual void OnNormal() {};
+	virtual void OnFocused() {};
+	virtual void OnPressed() {};
+	virtual void OnRelease() {};
+	virtual void OnSelected() {};
 	bool MouseCheck(float2 mouse);
+
 	void UpdateUITransform();
 	void DrawABB();
 	void DrawOBB();
