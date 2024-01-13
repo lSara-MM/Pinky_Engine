@@ -1111,9 +1111,8 @@ void ModuleEditor::GameWindow()
 
 	ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 	GameViewSize = { viewportSize.x,viewportSize.y };
-	ImVec2 viewPos = ImGui::GetWindowPos();
-	ViewportPos = { viewPos.x,viewPos.y };
-
+	GameViewPos = ImGui::GetWindowPos();
+	ViewportPos = { GameViewPos.x,GameViewPos.y };
 	if (App->renderer3D->gameCam != nullptr)
 	{
 		App->renderer3D->gameCam->SetAspectRatio(GameViewSize.x, GameViewSize.y);
@@ -1126,10 +1125,13 @@ void ModuleEditor::GameWindow()
 
 	if (ImGui::IsWindowHovered())
 	{
+		mouse.x = (ImGui::GetMousePos().x - GameViewPos.x) / GameViewSize.x;
+		mouse.y = (ImGui::GetMousePos().y - GameViewPos.y) / GameViewSize.y;
+
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && !ImGuizmo::IsUsing() && App->input->GetKey(SDL_SCANCODE_LALT) != KEY_REPEAT)
 		{
-			origin.x = (ImGui::GetMousePos().x - viewPos.x) / GameViewSize.x;
-			origin.y = (ImGui::GetMousePos().y - viewPos.y) / GameViewSize.y;
+			origin.x = (ImGui::GetMousePos().x - GameViewPos.x) / GameViewSize.x;
+			origin.y = (ImGui::GetMousePos().y - GameViewPos.y) / GameViewSize.y;
 			origin.x = (origin.x - 0.5f) * 2;
 			origin.y = -((origin.y - 0.5f) * 2);
 

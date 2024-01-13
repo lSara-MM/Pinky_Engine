@@ -4,6 +4,7 @@
 C_UI::C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n, Color c, int w, int h, int x, int y) : Component(t, n, g)
 {
 	UI_type = ui_t;
+	state = UI_STATE::NORMAL;
 
 	width = w;
 	height = h;
@@ -62,10 +63,24 @@ C_UI::~C_UI()
 	RELEASE(bounds);
 }
 
-void C_UI::DrawEditor()
+void C_UI::Draw(bool game)
 {
-	glPushMatrix();
-	glMultMatrixf(gameObject->transform->GetGLTransform());
+	if (game)
+	{
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(0.0, App->editor->GameViewSize.x, App->editor->GameViewSize.y, 0.0, 1.0, -1.0);//TODO: orginal con 0,0 bien en pantalla pero mueve al revés
+		//glOrtho(App->editor->GameViewSize.x, 0.0, 0.0, App->editor->GameViewSize.y, 1.0, -1.0);
+		
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+	}
+
+	else 
+	{
+		glPushMatrix();
+		glMultMatrixf(gameObject->transform->GetGLTransform());
+	}
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -103,55 +118,10 @@ void C_UI::DrawEditor()
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_ALPHA_TEST);
 
-	glPopMatrix();
-}
-
-void C_UI::DrawGame()
-{
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	//glOrtho(0.0, App->editor->GameViewSize.x, App->editor->GameViewSize.y, 0.0, 1.0, -1.0);//TODO: orginal con 0,0 bien en pantalla pero mueve al revés
-	glOrtho(App->editor->GameViewSize.x, 0.0, 0.0, App->editor->GameViewSize.y, 1.0, -1.0);
-
-	//Initialize Modelview Matrix
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_ALPHA_TEST);
-	glAlphaFunc(GL_GREATER, 0.0f);
-
-	glColor4f(color.r, color.g, color.b, color.a);
-
-	glEnable(GL_TEXTURE_2D);
-
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-
-	glBindTexture(GL_TEXTURE_2D, bounds->textureID);
-
-	glBindBuffer(GL_ARRAY_BUFFER, bounds->VBO);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, bounds->id_tex_uvs);
-	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bounds->EBO);
-
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	glDisableClientState(GL_VERTEX_ARRAY);
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glDisable(GL_ALPHA_TEST);
+	if (!game)
+	{
+		glPopMatrix();
+	}
 }
 
 void C_UI::DebugDraw()
@@ -174,6 +144,59 @@ void C_UI::DebugDraw()
 	glEnd();
 }
 
+void C_UI::StateLogic()
+{
+	float2 mousePos = float2(App->editor->mouse.x, App->editor->mouse.y);
+	LOG("%f %f", mousePos.x, mousePos.y);
+	switch (state)
+	{
+	case UI_STATE::NONE:
+		break;
+	case UI_STATE::DISABLED:
+		break;
+	case UI_STATE::NORMAL:
+		LOG("NORMAL");
+		if (MouseCheck(mousePos))
+		{
+			state = UI_STATE::FOCUSED;
+		}	
+		break;
+	case UI_STATE::FOCUSED:
+		LOG("FOCUSED");
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
+		{
+			state = UI_STATE::PRESSED;
+		}
+		if (!MouseCheck(mousePos))
+		{
+			state = UI_STATE::NORMAL;
+		}
+		break;
+	case UI_STATE::PRESSED:
+		LOG("PRESSED");
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && MouseCheck(mousePos))
+		{
+			state = UI_STATE::RELEASE;
+		}
+		else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && !MouseCheck(mousePos))
+		{
+			state = UI_STATE::NORMAL;
+		}
+		break;
+	case UI_STATE::RELEASE:
+		LOG("RELEASE");
+		state = UI_STATE::NORMAL;
+		break;
+	default:
+		break;
+	}
+}
+
+bool C_UI::MouseCheck(float2 mouse)
+{
+	return (mouse.x >= ((posX - App->editor->GameViewPos.x) / App->editor->GameViewSize.x)) && mouse.x <= ((posX - App->editor->GameViewPos.x + width) / App->editor->GameViewSize.x) && mouse.y >= ((posY - App->editor->GameViewPos.y) / App->editor->GameViewSize.y) && mouse.y <= ((posY - App->editor->GameViewPos.y+height) / App->editor->GameViewSize.y);
+}
+
 void C_UI::UpdateUITransform()
 {
 	float3 position = gameObject->transform->position;
@@ -183,10 +206,12 @@ void C_UI::UpdateUITransform()
 	float3 scale;
 
 	gameObject->transform->localMatrix.Decompose(localPos, rot, scale);
-	bounds->vertex[0] = float3(position.x, position.y + (height * scale.y), localPos.z) ;
-	bounds->vertex[1] = float3(position.x + (width * scale.x), position.y + (height * scale.y), localPos.z) ;
-	bounds->vertex[3] = float3(position.x + (width * scale.x), position.y, localPos.z) ;
-	bounds->vertex[2] = float3(position.x, position.y, localPos.z) ;
+	width *= scale.x;
+	height *= scale.y;
+	bounds->vertex[0] = float3(position.x, position.y + height, localPos.z);
+	bounds->vertex[1] = float3(position.x + width, position.y + height, localPos.z);
+	bounds->vertex[3] = float3(position.x + width, position.y, localPos.z);
+	bounds->vertex[2] = float3(position.x, position.y, localPos.z);
 
 	/*bounds->vertex[0] = float3(posX, posY + height, localPos.z);
 	bounds->vertex[1] = float3(posX + width, posY + height, localPos.z);//TODO: necesario?

@@ -54,7 +54,7 @@ void UI_Text::ShowInInspector()
 	if (!exists) { gameObject->RemoveComponent(this); }
 }
 
-void UI_Text::DrawGame()
+void UI_Text::Draw(bool game)
 {
 	//App->renderer3D->stb_text->Draw(text, 150, 150);
 }

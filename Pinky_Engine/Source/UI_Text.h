@@ -15,7 +15,7 @@ public:
 
 	void ShowInInspector();
 
-	void DrawGame() override;
+	void Draw(bool game) override;
 
 public:
 	std::string text;

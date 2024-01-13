@@ -24,6 +24,16 @@ struct UIBounds
 	void DeleteBuffers();
 };
 
+enum class UI_STATE
+{
+	NONE,
+	DISABLED,
+	NORMAL,
+	FOCUSED,
+	PRESSED,
+	RELEASE
+};
+
 enum class UI_TYPE
 {
 	CANVAS,
@@ -43,9 +53,10 @@ public:
 	~C_UI();
 
 	virtual void ShowInInspector() {};
-	virtual void DrawEditor();
-	virtual void DrawGame();
+	virtual void Draw(bool game);
 	virtual void DebugDraw();
+	void StateLogic();
+	bool MouseCheck(float2 mouse);
 	void UpdateUITransform();
 	void DrawABB();
 	void DrawOBB();
@@ -53,6 +64,7 @@ public:
 
 public:
 	UI_TYPE UI_type;
+	UI_STATE state;
 
 	// Transform info
 	int posX, posY, width, height;

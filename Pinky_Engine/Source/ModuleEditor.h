@@ -69,7 +69,9 @@ public:
 	//Viewport scene size
 	ImVec2 ViewportSize;
 	ImVec2 ViewportPos;
+	ImVec2 GameViewPos;
 	ImVec2 origin;
+	float2 mouse;
 	LineSegment pickingRay;
 
 	//Game scene size

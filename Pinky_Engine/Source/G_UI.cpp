@@ -52,6 +52,7 @@ update_status G_UI::Update(float dt)
 		{
 			if (canvas != nullptr)
 			{
+				canvas->StateLogic();
 				//canvas->Draw();
 				//canvas->DrawABB();
 				//canvas->DrawOBB();

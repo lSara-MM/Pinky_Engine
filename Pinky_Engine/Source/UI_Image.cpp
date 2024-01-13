@@ -93,20 +93,24 @@ void UI_Image::ShowInInspector()
 	if (!exists) { gameObject->RemoveComponent(this); }
 }
 
-void UI_Image::DrawEditor()
+void UI_Image::Draw(bool game)
 {
-}
+	if (game)
+	{
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(0.0, App->editor->GameViewSize.x, App->editor->GameViewSize.y, 0.0, 1.0, -1.0);//TODO: orginal con 0,0 bien en pantalla pero mueve al revés
+		//glOrtho(App->editor->GameViewSize.x, 0.0, 0.0, App->editor->GameViewSize.y, 1.0, -1.0);
 
-void UI_Image::DrawGame()
-{
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	//glOrtho(0.0, App->editor->GameViewSize.x, App->editor->GameViewSize.y, 0.0, 1.0, -1.0);//TODO: orginal con 0,0 bien en pantalla pero mueve al revés
-	glOrtho(App->editor->GameViewSize.x, 0.0, 0.0, App->editor->GameViewSize.y, 1.0, -1.0);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+	}
 
-	//Initialize Modelview Matrix
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	else
+	{
+		glPushMatrix();
+		glMultMatrixf(gameObject->transform->GetGLTransform());
+	}
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -151,4 +155,9 @@ void UI_Image::DrawGame()
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_ALPHA_TEST);
+
+	if (!game)
+	{
+		glPopMatrix();
+	}
 }

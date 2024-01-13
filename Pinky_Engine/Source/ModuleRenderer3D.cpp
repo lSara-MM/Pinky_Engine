@@ -202,9 +202,10 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//Get UI elements to draw
 	std::vector<C_UI*> listUI;
 	GetUIGOs(App->scene->rootNode, listUI);
+	drawGame = false;
 	for (auto i = 0; i < listUI.size(); i++)
 	{
-		listUI[i]->DrawEditor();
+		listUI[i]->Draw(drawGame);
 		listUI[i]->DrawABB();
 		listUI[i]->DrawOBB();
 	}
@@ -250,10 +251,10 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 			lights[i].Render();
 
 		App->scene->rootNode->Update(dt);
-
+		drawGame = true;
 		for (auto i = 0; i < listUI.size(); i++)
 		{
-			listUI[i]->DrawGame();
+			listUI[i]->Draw(drawGame);
 			listUI[i]->DrawABB();
 			listUI[i]->DrawOBB();
 		}
