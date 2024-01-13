@@ -4,6 +4,11 @@
 UI_Button::UI_Button(GameObject* g) : C_UI(UI_TYPE::BUTTON, C_TYPE::UI, g, "Button")
 {
 	isInteractable = true;
+	normalColor = { 1,1,0,1 };
+	focusedColor = { 0,1,0,1 };
+	pressedColor = { 1,0,1,1 };
+	selectedColor = { 0,0,1,1 };
+	disabledColor = { 1,1,1,1 };
 }
 
 UI_Button::~UI_Button()
@@ -44,3 +49,29 @@ void UI_Button::ShowInInspector()
 
 	if (!exists) { gameObject->RemoveComponent(this); }
 }
+
+void UI_Button::OnNormal()
+{
+	color = normalColor;
+}
+
+void UI_Button::OnFocused()
+{
+	color = focusedColor;
+}
+
+void UI_Button::OnPressed()
+{
+	color = pressedColor;
+}
+
+void UI_Button::OnRelease()
+{
+	LOG("get released");
+}
+
+void UI_Button::OnSelected()
+{
+	color = selectedColor;
+}
+

@@ -91,42 +91,37 @@ void C_UI::Draw(bool game)
 		glMultMatrixf(gameObject->transform->GetGLTransform());
 	}
 
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_ALPHA_TEST);
-	glAlphaFunc(GL_GREATER, 0.0f);
-
-	glColor4f(color.r, color.g, color.b, color.a);
-
-	glEnable(GL_TEXTURE_2D);
-
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
 	glEnableClientState(GL_VERTEX_ARRAY);
 
-	glBindTexture(GL_TEXTURE_2D, bounds->textureID);
+	//normals
+	glEnableClientState(GL_NORMAL_ARRAY);
 
+	//texture
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	// Mesh buffers
 	glBindBuffer(GL_ARRAY_BUFFER, bounds->VBO);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, bounds->id_tex_uvs);
-	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+	glBindVertexArray(0);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bounds->EBO);
 
+	glColor4f(color.r, color.g, color.b, color.a);
+
+	// Textures
+	glBindBuffer(GL_ARRAY_BUFFER, bounds->id_tex_uvs);
+	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+	glActiveTexture(GL_TEXTURE0);
+
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	// Clean textures
+	glBindTexture(GL_TEXTURE_2D, 0); // Cleanning bind buffer;
 	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glDisable(GL_ALPHA_TEST);
-
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	if (!game)
 	{
 		glPopMatrix();
@@ -169,6 +164,7 @@ void C_UI::StateLogic()
 		}
 		break;
 	case UI_STATE::FOCUSED:	// On hover
+		OnFocused();
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
 		{
 			state = UI_STATE::PRESSED;
@@ -179,6 +175,7 @@ void C_UI::StateLogic()
 		}
 		break;
 	case UI_STATE::PRESSED: // On hold
+		OnPressed();
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && MouseCheck(mousePos))
 		{
 			state = UI_STATE::RELEASE;
@@ -225,7 +222,7 @@ void C_UI::UpdateUITransform()
 	float3 scale;
 
 	gameObject->transform->localMatrix.Decompose(localPos, rot, scale);
-	width *= scale.x;
+	width *= scale.x;//TODO: ta mal
 	height *= scale.y;
 
 	posX = position.x;//TODO: arreglar

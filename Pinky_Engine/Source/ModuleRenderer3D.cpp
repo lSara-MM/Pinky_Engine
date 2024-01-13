@@ -202,10 +202,10 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//Get UI elements to draw
 	std::vector<C_UI*> listUI;
 	GetUIGOs(App->scene->rootNode, listUI);
-	drawGame = false;
+	
 	for (auto i = 0; i < listUI.size(); i++)
 	{
-		listUI[i]->Draw(drawGame);
+		listUI[i]->Draw(false);
 	}
 
 	if (App->editor->raycast)
@@ -249,10 +249,10 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 			lights[i].Render();
 
 		App->scene->rootNode->Update(dt);
-		drawGame = true;
+		
 		for (auto i = 0; i < listUI.size(); i++)
 		{
-			listUI[i]->Draw(drawGame);
+			listUI[i]->Draw(true);
 		}
 
 		glBindTexture(GL_TEXTURE_2D, 0);

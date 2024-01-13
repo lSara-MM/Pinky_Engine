@@ -14,6 +14,11 @@ public:
 	~UI_Button();
 
 	void ShowInInspector();
+	void OnNormal() override;
+	void OnFocused() override;
+	void OnPressed() override;
+	void OnRelease() override;
+	void OnSelected() override;
 
 public:
 	bool isInteractable;

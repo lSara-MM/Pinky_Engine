@@ -59,7 +59,6 @@ public:
 	bool VertexNormals;
 	bool FaceNormals;
 	bool Vsync;
-	bool drawGame;
 
 	std::vector<R_Mesh*> meshes;
 

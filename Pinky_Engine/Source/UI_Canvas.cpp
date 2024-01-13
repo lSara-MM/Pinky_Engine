@@ -49,14 +49,10 @@ void UI_Canvas::Draw(bool game)
 	glBegin(GL_LINE_LOOP);
 	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
 
-	float3 position = gameObject->transform->position;
-	width = App->editor->GameViewSize.x;
-	height = App->editor->GameViewSize.y;
-
-	float3 v1 = float3(posX, posY, position.z);
-	float3 v2 = float3(posX + width, posY, position.z);
-	float3 v3 = float3(posX, posY + height, position.z);
-	float3 v4 = float3(posX + width, posY + height, position.z);
+	float3 v1 = float3(posX, posY, 0);
+	float3 v2 = float3(posX + width, posY, 0);
+	float3 v3 = float3(posX, posY + height, 0);
+	float3 v4 = float3(posX + width, posY + height, 0);
 
 	glVertex3f(v1.x, v1.y, v1.z);
 	glVertex3f(v2.x, v2.y, v2.z);

@@ -49,6 +49,15 @@ update_status G_UI::Update(float dt)
 
 		if (vComponents.size() > 1)
 		{
+			for (int i = 0; i < vComponents.size(); i++)
+			{
+				if (vComponents[i]->type == C_TYPE::UI)
+				{
+					static_cast<C_UI*>(vComponents[i])->StateLogic();
+					static_cast<C_UI*>(vComponents[i])->UpdateUITransform();
+				}
+			}
+
 			if (canvas != nullptr)
 			{
 				canvas->UpdateUITransform();
