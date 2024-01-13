@@ -79,5 +79,8 @@ void UI_Checkbox::OnSelected()
 
 void UI_Checkbox::OnRelease()
 {
-	if (isInteractable) { isChecked = !isChecked; }
+	if (isInteractable) 
+	{ 
+		isChecked = !isChecked;
+	}
 }
