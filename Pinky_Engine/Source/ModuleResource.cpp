@@ -519,10 +519,10 @@ void ModuleResource::LoadChildrenTextures(std::string path, std::string libPath)
 	C_Material* mat;
 	for (int i = 0; i < it.size(); i++)
 	{
-		/*if (it[i]->GetComponentsMaterial().empty())
+		if (it[i]->GetComponentsMaterial().empty())
 		{
-			static_cast<G_UI*>(it[i])->GetComponentUI(UI_TYPE::)
-		}*/
+			
+		}
 
 		mat = static_cast<C_Material*>(it[i]->GetComponentByType(C_TYPE::MATERIAL));
 

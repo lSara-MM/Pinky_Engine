@@ -166,7 +166,6 @@ bool ModuleRenderer3D::Init()
 	vsync = true;
 
 	ai::LoadCheckers(texture_checker);
-	meshes = {};
 	return ret;
 }
 
@@ -271,7 +270,6 @@ bool ModuleRenderer3D::CleanUp()
 	LOG("Destroying 3D Renderer");
 
 	ai::DisableDebug();
-	ClearVec(meshes);
 
 	SDL_GL_DeleteContext(context);
 	return true;
