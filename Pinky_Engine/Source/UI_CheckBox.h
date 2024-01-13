@@ -4,6 +4,7 @@
 
 #include "Globals.h"
 #include "C_UI.h"
+#include "UI_Image.h"
 
 class UI_Checkbox : public C_UI
 {
@@ -14,13 +15,20 @@ public:
 
 	void ShowInInspector();
 
+	void OnNormal() override;
+	void OnFocused() override;
+	void OnPressed() override;
+	void OnSelected() override;
+	void OnRelease() override;
+
 public:
 	bool isInteractable;
 	bool isChecked;
 
+	UI_Image* image;
+
 private:
 	//color
-	Color normalColor;
 	Color focusedColor;
 	Color pressedColor;
 	Color selectedColor;

@@ -5,7 +5,6 @@
 #include "Globals.h"
 #include "C_UI.h"
 #include "UI_Image.h"
-#include "C_Material.h"
 
 class UI_Button : public C_UI
 {
@@ -15,6 +14,7 @@ public:
 	~UI_Button();
 
 	void ShowInInspector();
+
 	void OnNormal() override;
 	void OnFocused() override;
 	void OnPressed() override;

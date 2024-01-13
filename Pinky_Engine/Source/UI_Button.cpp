@@ -4,15 +4,19 @@
 UI_Button::UI_Button(GameObject* g) : C_UI(UI_TYPE::BUTTON, C_TYPE::UI, g, "Button")
 {
 	isInteractable = true;
-	focusedColor = { 0,1,0,1 };
-	pressedColor = { 1,0,1,1 };
-	selectedColor = { 0,0,1,1 };
-	disabledColor = { 1,1,1,1 };
+
+	focusedColor = { 0, 1, 0, 1 };
+	pressedColor = { 1, 0, 1, 1 };
+	selectedColor = { 0, 0, 1, 1 };
+	disabledColor = { 1, 1, 1, 1 };
+
+	image = nullptr;
 }
 
 UI_Button::~UI_Button()
 {
-	RELEASE(image);
+	// Image is already another GameObject
+	image = nullptr;
 }
 
 void UI_Button::ShowInInspector()
@@ -63,7 +67,6 @@ void UI_Button::OnFocused()
 void UI_Button::OnPressed()
 {
 	image->color = pressedColor;
-
 }
 
 void UI_Button::OnSelected()
@@ -71,8 +74,7 @@ void UI_Button::OnSelected()
 	image->color = selectedColor;
 }
 
-void UI_Button::OnRelease() 
+void UI_Button::OnRelease()
 {
 	draggable = !draggable;
 }
-

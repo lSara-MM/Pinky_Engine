@@ -154,6 +154,7 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 	{
 		// Unity-like
 		AddUIComponent(UI_TYPE::IMAGE);
+
 		G_UI* aux = new G_UI(UI_TYPE::TEXT, this);
 		aux->ReParent(this);
 
@@ -178,6 +179,7 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 	{
 		// Unity-like
 		AddUIComponent(UI_TYPE::IMAGE);
+
 		G_UI* aux = new G_UI(UI_TYPE::TEXT, this);
 		aux->ReParent(this);
 
@@ -210,16 +212,19 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 		G_UI* aux = new G_UI(UI_TYPE::IMAGE, this);
 		aux->name = "Background";
 		aux->ReParent(this);
+
 		// Checkmark
 		G_UI* aux2 = new G_UI(UI_TYPE::IMAGE, this);
 		aux2->name = "Checkmark";
 		aux2->ReParent(aux);
+
 		// Label
-		aux = new G_UI(UI_TYPE::TEXT, this);
-		aux->ReParent(this);
+		aux2 = new G_UI(UI_TYPE::TEXT, this);
+		aux2->ReParent(this);
 
 		UI_Checkbox* comp = new UI_Checkbox(this);
 		vComponents.push_back(comp);
+		comp->image = static_cast<UI_Image*>(aux->GetComponentUI(UI_TYPE::IMAGE));
 
 		name = "Checkbox";
 

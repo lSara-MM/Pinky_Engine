@@ -91,7 +91,7 @@ bool ModuleScene::Start()
 	G_UI* prueba = new G_UI(UI_TYPE::CANVAS);
 	G_UI* prueba2 = new G_UI(UI_TYPE::IMAGE);
 
-	App->resource->ImportModel("Baker_house.png", PINKY_ASSETS_AUX "3dObject\\baker_house\\", *prueba2);
+	App->resource->ImportTextureToModel("Baker_house.png", PINKY_ASSETS_AUX "3dObject\\baker_house\\", *prueba2);
 	prueba = nullptr;
 	prueba2 = nullptr;
 

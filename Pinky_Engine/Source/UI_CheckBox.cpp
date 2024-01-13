@@ -5,10 +5,19 @@ UI_Checkbox::UI_Checkbox(GameObject* g) : C_UI(UI_TYPE::BUTTON, C_TYPE::UI, g, "
 {
 	isInteractable = true;
 	isChecked = true;
+
+	focusedColor = { 0, 1, 0, 1 };
+	pressedColor = { 1, 0, 1, 1 };
+	selectedColor = { 0, 0, 1, 1 };
+	disabledColor = { 1, 1, 1, 1 };
+
+	image = nullptr;
 }
 
 UI_Checkbox::~UI_Checkbox()
 {
+	// Image is already another GameObject
+	image = nullptr;
 }
 
 void UI_Checkbox::ShowInInspector()
@@ -35,7 +44,7 @@ void UI_Checkbox::ShowInInspector()
 		ImGui::Checkbox("Interactable", &isInteractable);
 		ImGui::Checkbox("Checked", &isChecked);
 
-		ImGui::ColorEdit4("Normal color", (float*)&normalColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
+		ImGui::ColorEdit4("Normal color", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Focused color", (float*)&focusedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Pressed color", (float*)&pressedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Selected color", (float*)&selectedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
@@ -46,4 +55,29 @@ void UI_Checkbox::ShowInInspector()
 	ImGui::SameLine();
 
 	if (!exists) { gameObject->RemoveComponent(this); }
+}
+
+void UI_Checkbox::OnNormal()
+{
+	image->color = color;
+}
+
+void UI_Checkbox::OnFocused()
+{
+	image->color = focusedColor;
+}
+
+void UI_Checkbox::OnPressed()
+{
+	image->color = pressedColor;
+}
+
+void UI_Checkbox::OnSelected()
+{
+	image->color = selectedColor;
+}
+
+void UI_Checkbox::OnRelease()
+{
+	if (isInteractable) { isChecked = !isChecked; }
 }
