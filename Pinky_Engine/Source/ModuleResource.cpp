@@ -519,10 +519,10 @@ void ModuleResource::LoadChildrenTextures(std::string path, std::string libPath)
 	C_Material* mat;
 	for (int i = 0; i < it.size(); i++)
 	{
-		//if (it[i]->GetComponentsMaterial().empty())
-		//{
-			//static_cast<G_UI*>(it[i])->GetComponentUI(UI_TYPE::)
-		//}
+		/*if (it[i]->GetComponentsMaterial().empty())
+		{
+			static_cast<G_UI*>(it[i])->GetComponentUI(UI_TYPE::)
+		}*/
 
 		mat = static_cast<C_Material*>(it[i]->GetComponentByType(C_TYPE::MATERIAL));
 
@@ -536,7 +536,7 @@ void ModuleResource::LoadChildrenTextures(std::string path, std::string libPath)
 
 			if (itr != mResources.end())
 			{
-				RELEASE(mat->tex);
+				//RELEASE(mat->tex);
 				mat->tex = static_cast<R_Texture*>(itr->second);
 				mat->tex->vComponents.push_back(mat);
 				mat->tex->name = App->fs->GetFileName(path.c_str());
