@@ -76,7 +76,7 @@ public:
 	LineSegment pickingRay;
 
 	//Game scene size
-	ImVec2 GameViewSize;
+	ImVec2 gameViewSize;
 
 	//guizmos
 	ImGuizmo::OPERATION transformOperation;
