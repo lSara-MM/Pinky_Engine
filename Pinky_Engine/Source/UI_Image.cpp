@@ -13,6 +13,7 @@
 UI_Image::UI_Image(GameObject* g) : C_UI(UI_TYPE::IMAGE, C_TYPE::UI, g, "Image")
 {
 	mat = new C_Material();
+	//draggable = true;
 }
 
 UI_Image::~UI_Image()

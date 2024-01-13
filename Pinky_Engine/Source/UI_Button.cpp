@@ -67,6 +67,7 @@ void UI_Button::OnFocused()
 void UI_Button::OnPressed()
 {
 	image->color = pressedColor;
+	draggable = true;
 }
 
 void UI_Button::OnSelected()
@@ -76,5 +77,5 @@ void UI_Button::OnSelected()
 
 void UI_Button::OnRelease()
 {
-	draggable = !draggable;
+	draggable = false;
 }

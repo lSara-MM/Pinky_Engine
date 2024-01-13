@@ -13,7 +13,7 @@ public:
 
 	void ShowInInspector();
 	void Draw(bool game) override;
-	void UpdateUITransform(float dt) override;
+	void UpdateUITransform() override;
 
 public:
 
