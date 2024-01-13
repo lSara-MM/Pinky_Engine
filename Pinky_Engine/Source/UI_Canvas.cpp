@@ -5,6 +5,7 @@ UI_Canvas::UI_Canvas(GameObject* g, int w, int h) : C_UI(UI_TYPE::CANVAS, C_TYPE
 {
 	canvasWidth = w;
 	canvasHeight = h;//TODO: eliminar?
+
 }
 
 UI_Canvas::~UI_Canvas()
@@ -43,17 +44,19 @@ void UI_Canvas::ShowInInspector()
 	if (!exists) { gameObject->RemoveComponent(this); }
 }
 
-void UI_Canvas::DebugDraw()
+void UI_Canvas::Draw(bool game)
 {
 	glBegin(GL_LINE_LOOP);
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
 
 	float3 position = gameObject->transform->position;
+	width = App->editor->GameViewSize.x;
+	height = App->editor->GameViewSize.y;
 
-	float3 v1 = float3(position.x, position.y, position.z);
-	float3 v2 = float3(position.x + width, position.y, position.z);
-	float3 v3 = float3(position.x, position.y + height, position.z);
-	float3 v4 = float3(position.x + width, position.y + height, position.z);
+	float3 v1 = float3(posX, posY, position.z);
+	float3 v2 = float3(posX + width, posY, position.z);
+	float3 v3 = float3(posX, posY + height, position.z);
+	float3 v4 = float3(posX + width, posY + height, position.z);
 
 	glVertex3f(v1.x, v1.y, v1.z);
 	glVertex3f(v2.x, v2.y, v2.z);
@@ -62,3 +65,24 @@ void UI_Canvas::DebugDraw()
 
 	glEnd();
 }
+
+void UI_Canvas::UpdateUITransform()
+{
+	gameObject->transform->SetTransform(float3(0, 0, 0), float3(0, 0, 0), float3(1, 1, 1));
+	
+	width = App->editor->GameViewSize.x;
+	height = App->editor->GameViewSize.y;
+
+	bounds->vertex[0] = float3(posX, posY, 0);
+	bounds->vertex[1] = float3(posX + width, posY, 0);
+	bounds->vertex[2] = float3(posX, posY + height, 0);
+	bounds->vertex[3] = float3(posX + width, posY + height, 0);
+
+	bounds->uvs[2] = float2(0, 1);
+	bounds->uvs[3] = float2(1, 1);
+	bounds->uvs[1] = float2(1, 0);
+	bounds->uvs[0] = float2(0, 0);
+
+	bounds->InitBuffers();
+}
+

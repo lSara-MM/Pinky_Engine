@@ -66,7 +66,7 @@ public:
 	virtual void OnSelected() {};
 	bool MouseCheck(float2 mouse);
 
-	void UpdateUITransform();
+	virtual void UpdateUITransform();
 	void DrawABB();
 	void DrawOBB();
 	void UpdateBoundingBoxes();

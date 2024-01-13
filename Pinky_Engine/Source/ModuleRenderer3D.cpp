@@ -206,8 +206,6 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	for (auto i = 0; i < listUI.size(); i++)
 	{
 		listUI[i]->Draw(drawGame);
-		listUI[i]->DrawABB();
-		listUI[i]->DrawOBB();
 	}
 
 	if (App->editor->raycast)
@@ -255,8 +253,6 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		for (auto i = 0; i < listUI.size(); i++)
 		{
 			listUI[i]->Draw(drawGame);
-			listUI[i]->DrawABB();
-			listUI[i]->DrawOBB();
 		}
 
 		glBindTexture(GL_TEXTURE_2D, 0);

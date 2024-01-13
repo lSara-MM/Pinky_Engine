@@ -12,7 +12,8 @@ public:
 	~UI_Canvas();
 
 	void ShowInInspector();
-	void DebugDraw();
+	void Draw(bool game) override;
+	void UpdateUITransform() override;
 
 public:
 

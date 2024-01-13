@@ -136,7 +136,7 @@ void C_UI::Draw(bool game)
 void C_UI::DebugDraw()
 {
 	glBegin(GL_LINE_LOOP);
-	glColor4f(color.r, color.g, color.b, color.a);
+	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
 
 	float3 position = gameObject->transform->position;
 
@@ -164,12 +164,14 @@ void C_UI::StateLogic()
 	case UI_STATE::DISABLED:
 		break;
 	case UI_STATE::NORMAL:
+		OnNormal();
 		if (MouseCheck(mousePos))
 		{
 			state = UI_STATE::FOCUSED;
 		}
 		break;
 	case UI_STATE::FOCUSED:
+		OnFocused();
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
 		{
 			state = UI_STATE::PRESSED;
@@ -180,6 +182,7 @@ void C_UI::StateLogic()
 		}
 		break;
 	case UI_STATE::PRESSED:
+		OnPressed();
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && MouseCheck(mousePos))
 		{
 			state = UI_STATE::RELEASE;
@@ -190,9 +193,11 @@ void C_UI::StateLogic()
 		}
 		break;
 	case UI_STATE::RELEASE:
+		OnRelease();
 		state = UI_STATE::SELECTED;
 		break;
 	case UI_STATE::SELECTED:
+		OnSelected();
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && MouseCheck(mousePos))
 		{
 			state = UI_STATE::PRESSED;
@@ -224,8 +229,10 @@ void C_UI::UpdateUITransform()
 	gameObject->transform->localMatrix.Decompose(localPos, rot, scale);
 	width *= scale.x;
 	height *= scale.y;
+
 	posX = position.x;//TODO: arreglar
 	posY = position.y;
+
 	bounds->vertex[0] = float3(position.x, position.y + height, localPos.z);
 	bounds->vertex[1] = float3(position.x + width, position.y + height, localPos.z);
 	bounds->vertex[3] = float3(position.x + width, position.y, localPos.z);
