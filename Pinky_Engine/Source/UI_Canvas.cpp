@@ -46,20 +46,23 @@ void UI_Canvas::ShowInInspector()
 
 void UI_Canvas::Draw(bool game)
 {
-	glBegin(GL_LINE_LOOP);
-	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
+	if (!game)
+	{
+		glBegin(GL_LINE_LOOP);
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-	float3 v1 = float3(posX, posY, 0);
-	float3 v2 = float3(posX + width, posY, 0);
-	float3 v3 = float3(posX, posY + height, 0);
-	float3 v4 = float3(posX + width, posY + height, 0);
+		float3 v1 = float3(posX, posY, 0);
+		float3 v2 = float3(posX + width, posY, 0);
+		float3 v3 = float3(posX, posY + height, 0);
+		float3 v4 = float3(posX + width, posY + height, 0);
 
-	glVertex3f(v1.x, v1.y, v1.z);
-	glVertex3f(v2.x, v2.y, v2.z);
-	glVertex3f(v4.x, v4.y, v4.z);
-	glVertex3f(v3.x, v3.y, v3.z);
+		glVertex3f(v1.x, v1.y, v1.z);
+		glVertex3f(v2.x, v2.y, v2.z);
+		glVertex3f(v4.x, v4.y, v4.z);
+		glVertex3f(v3.x, v3.y, v3.z);
 
-	glEnd();
+		glEnd();
+	}
 }
 
 void UI_Canvas::UpdateUITransform()
