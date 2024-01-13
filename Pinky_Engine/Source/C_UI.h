@@ -26,13 +26,14 @@ struct UIBounds
 
 enum class UI_STATE
 {
-	NONE,
 	DISABLED,
 	NORMAL,
 	FOCUSED,
 	PRESSED,
 	RELEASE, 
-	SELECTED
+	SELECTED,
+
+	NONE
 };
 
 enum class UI_TYPE

@@ -16,6 +16,14 @@ public:
 	void ShowInInspector();
 
 public:
-	C_Material* mat;
+	bool isInteractable;
+
+private:
+	//color
+	Color normalColor;
+	Color focusedColor;
+	Color pressedColor;
+	Color selectedColor;
+	Color disabledColor;
 };
 #endif // __UI_BUTTON_H__

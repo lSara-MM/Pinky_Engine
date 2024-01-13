@@ -15,6 +15,15 @@ public:
 	void ShowInInspector();
 
 public:
+	bool isInteractable;
 	bool isChecked;
+
+private:
+	//color
+	Color normalColor;
+	Color focusedColor;
+	Color pressedColor;
+	Color selectedColor;
+	Color disabledColor;
 };
 #endif // __UI_CHECKBOX_H__

@@ -18,9 +18,10 @@
 #include "External Libraries/ImGui/backends/imgui_impl_sdl2.h"
 #include "External Libraries/ImGui/backends/imgui_impl_opengl3.h"
 
+#include "GameObject.h"
 #include "G_UI.h"
 #include "UI_Canvas.h"
-#include "GameObject.h"
+#include "UI_Image.h"
 
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -88,8 +89,11 @@ bool ModuleScene::Start()
 	//App->resource->ImportToScene("Baker_house.dds", PINKY_ASSETS_AUX "3dObject\\baker_house\\");
 
 	G_UI* prueba = new G_UI(UI_TYPE::CANVAS);
-	//G_UI* prueba2 = new G_UI(UI_TYPE::IMAGE);
-	//prueba2 = nullptr;
+	G_UI* prueba2 = new G_UI(UI_TYPE::IMAGE);
+
+	static_cast<UI_Image*>(prueba2->GetComponentUI(UI_TYPE::IMAGE))->mat->tex;
+	prueba = nullptr;
+	prueba2 = nullptr;
 
 	return true;
 }

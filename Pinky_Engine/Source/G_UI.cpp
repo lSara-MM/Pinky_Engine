@@ -100,6 +100,8 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 
 			canvas = comp;
 			App->scene->SetCanvas(this);
+
+			comp = nullptr;
 		}
 
 		name = "Canvas";
@@ -118,6 +120,8 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 		}
 		ReParent(App->scene->GetCanvas());
 		canvas = static_cast<G_UI*>(pParent)->canvas;
+
+		comp = nullptr;
 	}
 	break;
 	case UI_TYPE::TEXT:
@@ -132,6 +136,8 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 		}
 		ReParent(App->scene->GetCanvas());
 		canvas = static_cast<G_UI*>(pParent)->canvas;
+
+		comp = nullptr;
 	}
 		break;
 	case UI_TYPE::BUTTON:
@@ -153,6 +159,9 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 		}
 		ReParent(App->scene->GetCanvas());
 		canvas = static_cast<G_UI*>(pParent)->canvas;
+
+		comp = nullptr;
+		aux = nullptr;
 	}
 		break;
 	case UI_TYPE::INPUTBOX:
@@ -179,6 +188,9 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 		}
 		ReParent(App->scene->GetCanvas());
 		canvas = static_cast<G_UI*>(pParent)->canvas;
+
+		comp = nullptr;
+		aux = nullptr;
 	}
 		break;
 	case UI_TYPE::CHECKBOX:
@@ -186,14 +198,15 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 		// Unity-like
 		// Toggle background
 		G_UI* aux = new G_UI(UI_TYPE::IMAGE, this);
+		aux->name = "Background";
 		aux->ReParent(this);
 		// Checkmark
-		aux = new G_UI(UI_TYPE::IMAGE, this);
-		aux->ReParent(this);
+		G_UI* aux2 = new G_UI(UI_TYPE::IMAGE, this);
+		aux2->name = "Checkmark";
+		aux2->ReParent(aux);
 		// Label
 		aux = new G_UI(UI_TYPE::TEXT, this);
 		aux->ReParent(this);
-
 
 		UI_Checkbox* comp = new UI_Checkbox(this);
 		vComponents.push_back(comp);
@@ -206,6 +219,10 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 		}
 		ReParent(App->scene->GetCanvas());
 		canvas = static_cast<G_UI*>(pParent)->canvas;
+
+		comp = nullptr;
+		aux = nullptr;
+		aux2 = nullptr;
 	}
 		break;
 	case UI_TYPE::NONE:

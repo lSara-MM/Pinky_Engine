@@ -159,8 +159,6 @@ void C_UI::StateLogic()
 
 	switch (state)
 	{
-	case UI_STATE::NONE:
-		break;
 	case UI_STATE::DISABLED:
 		break;
 	case UI_STATE::NORMAL:
@@ -170,8 +168,7 @@ void C_UI::StateLogic()
 			state = UI_STATE::FOCUSED;
 		}
 		break;
-	case UI_STATE::FOCUSED:
-		OnFocused();
+	case UI_STATE::FOCUSED:	// On hover
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
 		{
 			state = UI_STATE::PRESSED;
@@ -181,8 +178,7 @@ void C_UI::StateLogic()
 			state = UI_STATE::NORMAL;
 		}
 		break;
-	case UI_STATE::PRESSED:
-		OnPressed();
+	case UI_STATE::PRESSED: // On hold
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && MouseCheck(mousePos))
 		{
 			state = UI_STATE::RELEASE;
@@ -206,6 +202,8 @@ void C_UI::StateLogic()
 		{
 			state = UI_STATE::NORMAL;
 		}
+		break;
+	case UI_STATE::NONE:
 		break;
 	default:
 		break;
