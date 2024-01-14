@@ -21,6 +21,15 @@
 #include "R_Mesh.h"
 #include "C_UI.h"
 
+#include <string>
+
+#include "UI_Text.h"
+
+#include "External Libraries/FreeType/include/ft2build.h"
+#include "External Libraries/FreeType/include/freetype/freetype.h"
+#include "External Libraries/FreeType/include/freetype/ftglyph.h"
+#pragma comment(lib, "Source/External Libraries/FreeType/libx86/freetype.lib")
+
 #define MAX_LIGHTS 8
 #define CHECKERS_HEIGHT 256
 #define CHECKERS_WIDTH 256
@@ -62,4 +71,7 @@ public:
 
 	//init textures
 	GLuint texture_checker;
+
+	//font
+	Font* defaultFont;
 };

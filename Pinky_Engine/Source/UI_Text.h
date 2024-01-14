@@ -5,6 +5,39 @@
 #include "Globals.h"
 #include "C_UI.h"
 #include "C_Material.h"
+#include "External Libraries/FreeType/include/ft2build.h"
+#include "External Libraries/FreeType/include/freetype/freetype.h"
+#include "External Libraries/FreeType/include/freetype/ftglyph.h"
+#pragma comment(lib, "Source/External Libraries/FreeType/libx86/freetype.lib")
+
+struct Character {
+	unsigned int TextureID;  
+	float2  Size;       
+	float2  Bearing;    
+	unsigned int Advance; 
+};
+
+struct Font
+{
+	Font(std::string name, std::string fontPath, int size = 5);
+	FT_Library ft;
+	FT_Face face;
+	float fontSize;
+	std::map<char, Character> Characters;
+	bool InitFont(std::string name, std::string fontPath);
+
+	//buffers
+	float3 vertex[4];
+	float2 uvs[4];
+
+	uint* index;
+
+	GLuint VBO; //vertex buffer object
+	GLuint EBO; //element buffer object
+	GLuint id_tex_uvs; //texture UVs
+
+	GLuint textureID;
+};
 
 class UI_Text : public C_UI
 {
@@ -19,6 +52,7 @@ public:
 
 public:
 	std::string text;
-	float fontSize;
+	Font* font;
+
 };
 #endif // __UI_TEXT_H__
