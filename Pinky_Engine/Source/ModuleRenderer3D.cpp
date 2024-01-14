@@ -167,6 +167,10 @@ bool ModuleRenderer3D::Init()
 	vsync = true;
 
 	ai::LoadCheckers(texture_checker);
+
+
+	defaultFont = new Font("Arial.ttf", "Assets\\Fonts");
+
 	return ret;
 }
 
@@ -202,7 +206,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//Get UI elements to draw
 	std::vector<C_UI*> listUI;
 	GetUIGOs(App->scene->rootNode, listUI);
-	
+
 	for (auto i = 0; i < listUI.size(); i++)
 	{
 		listUI[i]->Draw(false);
@@ -249,7 +253,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 			lights[i].Render();
 
 		App->scene->rootNode->Update(dt);
-		
+
 		for (auto i = 0; i < listUI.size(); i++)
 		{
 			listUI[i]->Draw(true);
