@@ -57,89 +57,62 @@ void UI_Text::ShowInInspector()
 
 void UI_Text::Draw(bool game)
 {
-	int positionX = posX;
+	if (game)
+	{
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(0.0, App->editor->gameViewSize.x, App->editor->gameViewSize.y, 0.0, 1.0, -1.0);//TODO: orginal con 0,0 bien en pantalla pero mueve al revés
+		//glOrtho(App->editor->GameViewSize.x, 0.0, 0.0, App->editor->GameViewSize.y, 1.0, -1.0);
 
-    // iterate through all characters
-    std::string::const_iterator c;
-    for (c = text.begin(); c != text.end(); c++)
-    {
-        Character ch = font->Characters[*c];
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+	}
 
-        float xpos = positionX + ch.Bearing.x * font->fontSize;
-        float ypos = posY - (ch.Size.y - ch.Bearing.y) * font->fontSize;
+	else
+	{
+		glPushMatrix();
+		glMultMatrixf(gameObject->transform->GetGLTransform());
+	}
 
-        float w = ch.Size.x * font->fontSize;
-        float h = ch.Size.y * font->fontSize;
-        // update VBO for each character
-        float vertices[6][4] = {
-            { xpos,     ypos + h,   0.0f, 0.0f },
-            { xpos,     ypos,       0.0f, 1.0f },
-            { xpos + w, ypos,       1.0f, 1.0f },
+	glEnableClientState(GL_VERTEX_ARRAY);
 
-            { xpos,     ypos + h,   0.0f, 0.0f },
-            { xpos + w, ypos,       1.0f, 1.0f },
-            { xpos + w, ypos + h,   1.0f, 0.0f }
-        };
-       
-		//---Render---
-		if (game)
-		{
-			glMatrixMode(GL_PROJECTION);
-			glLoadIdentity();
-			glOrtho(0.0, App->editor->gameViewSize.x, App->editor->gameViewSize.y, 0.0, 1.0, -1.0);
-			glMatrixMode(GL_MODELVIEW);
-			glLoadIdentity();
-		}
+	//normals
+	glEnableClientState(GL_NORMAL_ARRAY);
 
-		else
-		{
-			glPushMatrix();
-			glMultMatrixf(gameObject->transform->GetGLTransform());
-		}
+	//texture
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-		glEnableClientState(GL_VERTEX_ARRAY);
+	// Mesh buffers
+	glBindBuffer(GL_ARRAY_BUFFER, bounds->VBO);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glBindVertexArray(0);
 
-		//normals
-		glEnableClientState(GL_NORMAL_ARRAY);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bounds->EBO);
 
-		//texture
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glColor4f(color.r, color.g, color.b, color.a);
 
-		// Mesh buffers
-		glBindBuffer(GL_ARRAY_BUFFER, font->VBO);
-		glVertexPointer(3, GL_FLOAT, 0, NULL);
-		glBindVertexArray(0);
+	// Textures
+	glBindBuffer(GL_ARRAY_BUFFER, bounds->id_tex_uvs);
+	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+	glActiveTexture(GL_TEXTURE0);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, font->EBO);
+	GLuint a = font->GetCharacterTexID('u');
+	glBindTexture(GL_TEXTURE_2D, a);
 
-		glColor4f(color.r, color.g, color.b, color.a);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
 
-		// Textures
-		glBindBuffer(GL_ARRAY_BUFFER, font->id_tex_uvs);
-		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+	// Clean textures
+	glBindTexture(GL_TEXTURE_2D, 0); // Cleanning bind buffer;
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-		// Clean textures
-		glBindTexture(GL_TEXTURE_2D, 0); // Cleanning bind buffer;
-		glDisableClientState(GL_VERTEX_ARRAY);
-		glDisableClientState(GL_NORMAL_ARRAY);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-
-		if (!game)
-		{
-			glPopMatrix();
-		}
-		//------
-
-        positionX += (ch.Advance >> 6) * font->fontSize; // bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
-    }
-    /*glBindVertexArray(0);
-    glBindTexture(GL_TEXTURE_2D, 0);*/
+	if (!game)
+	{
+		glPopMatrix();
+	}
 }
 
 Font::Font(std::string name, std::string fontPath, int size)
@@ -162,7 +135,7 @@ Font::Font(std::string name, std::string fontPath, int size)
             continue;
         }
         // generate texture
-        unsigned int texture;
+        GLuint texture;
         glGenTextures(1, &texture);
         glBindTexture(GL_TEXTURE_2D, texture);
         glTexImage2D(
@@ -182,54 +155,20 @@ Font::Font(std::string name, std::string fontPath, int size)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         // now store character for later use
-        Character character = {
+        Character* character = new Character{
             texture,
             float2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
             float2(face->glyph->bitmap_left, face->glyph->bitmap_top),
             static_cast<unsigned int>(face->glyph->advance.x)
         };
-        Characters.insert(std::pair<char, Character>(c, character));
+        Characters.insert(std::pair<GLchar, Character*>(c, character));
     }
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
     // destroy FreeType once we're finished
     FT_Done_Face(face);
     FT_Done_FreeType(ft);
-
-	//Init buffers
-	index = new uint[6];
-	index[0] = 0;
-	index[1] = 1;
-	index[2] = 2;
-	index[3] = 2;
-	index[4] = 1;
-	index[5] = 3;
-
-	uvs[2] = float2(0, 1);
-	uvs[3] = float2(1, 1);
-	uvs[1] = float2(1, 0);
-	uvs[0] = float2(0, 0);
-
-	VBO = 0;
-	EBO = 0;
-	id_tex_uvs = 0;
-
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-	glGenBuffers(1, &id_tex_uvs);
-
-	if (VBO == 0 || EBO == 0 || id_tex_uvs == 0)
-	{
-		LOG("[ERROR] buffer not created");
-	}
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * 4 * 6, NULL, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 6, index, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ARRAY_BUFFER, id_tex_uvs);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float2) * 4, uvs, GL_STATIC_DRAW);
 
 }
 
@@ -247,4 +186,18 @@ bool Font::InitFont(std::string name, std::string fontPath)
 		return false;
 	}
 	return true;
+}
+
+GLuint Font::GetCharacterTexID(GLchar character)
+{
+	for (std::map<GLchar, Character*>::const_iterator it = Characters.begin(); it != Characters.end(); it++)
+	{
+		if ((*it).first == character)
+		{
+			GLuint id = (*it).second->TextureID;
+			return id;
+		}
+	}
+
+	return GLuint();
 }

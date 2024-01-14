@@ -11,7 +11,7 @@
 #pragma comment(lib, "Source/External Libraries/FreeType/libx86/freetype.lib")
 
 struct Character {
-	unsigned int TextureID;  
+	GLuint TextureID;
 	float2  Size;       
 	float2  Bearing;    
 	unsigned int Advance; 
@@ -23,8 +23,9 @@ struct Font
 	FT_Library ft;
 	FT_Face face;
 	float fontSize;
-	std::map<char, Character> Characters;
+	std::map<GLchar, Character*> Characters;
 	bool InitFont(std::string name, std::string fontPath);
+	GLuint GetCharacterTexID(GLchar character);
 
 	//buffers
 	float3 vertex[4];
