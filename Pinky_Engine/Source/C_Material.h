@@ -2,8 +2,6 @@
 #include "Globals.h"
 #include "Light.h"
 
-#include "External Libraries/Assimp/Assimp.h"
-
 #include "Component.h"
 #include "Color.h"
 

@@ -5,7 +5,6 @@
 #include <gl/GLU.h>
 
 #include "GameObject.h"
-#include "Component.h"
 #include "External Libraries/ImGui/misc/cpp/imgui_stdlib.h"
 //
 #include "External Libraries/ImGui/imgui_custom.h"

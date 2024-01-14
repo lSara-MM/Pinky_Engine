@@ -2,14 +2,14 @@
 #include "Application.h"
 #include "ModuleEditor.h"
 
-STB_Text::STB_Text()
-{
-    fontPath = "c:/windows/fonts/times.ttf";
-}
-
-STB_Text::~STB_Text()
-{
-}
+//STB_Text::STB_Text()
+//{
+//    fontPath = "c:/windows/fonts/times.ttf";
+//}
+//
+//STB_Text::~STB_Text()
+//{
+//}
 
 void STB_Text::Init()
 {

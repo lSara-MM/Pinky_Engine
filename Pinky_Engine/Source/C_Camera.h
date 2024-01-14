@@ -2,7 +2,6 @@
 #include "Globals.h"
 #include "Light.h"
 
-
 #include "Component.h"
 #include "Color.h"
 

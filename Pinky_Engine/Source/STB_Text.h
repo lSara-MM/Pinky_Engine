@@ -3,25 +3,26 @@
 #pragma once
 
 #include "Globals.h"
-#include <string>
 
 #include "External Libraries/Glew/include/glew.h"
 
 #define STB_TRUETYPE_IMPLEMENTATION
 #include "External Libraries/ImGui/imstb_truetype.h"
 
-class STB_Text
-{
-public:
+#include <string>
 
-	STB_Text();
-	~STB_Text();
+namespace STB_Text
+{
+//public:
+//
+//	STB_Text();
+//	~STB_Text();
 
 	void Init();
 	void Print(float x, float y, const char* text);
 	void Draw(float x, float y, std::string& text);
 
-public:
+//public:
 	std::string fontPath;
 
 	GLuint tex;

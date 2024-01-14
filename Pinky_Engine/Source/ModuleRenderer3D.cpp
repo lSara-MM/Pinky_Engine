@@ -4,6 +4,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+
 #include "External Libraries/SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -26,12 +27,12 @@
 #include "C_Camera.h"
 #include "GameObject.h"
 #include "ModuleScene.h"
+
 #ifdef _DEBUG
 #pragma comment (lib, "Source/External Libraries/MathGeoLib/libx86/libDebug/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
 #else
 #pragma comment (lib, "Source/External Libraries/MathGeoLib/libx86/libRelease/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
 #endif // _DEBUG
-
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {

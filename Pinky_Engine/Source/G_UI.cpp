@@ -83,6 +83,8 @@ C_UI* G_UI::GetComponentUI(UI_TYPE type)
 			return comp = static_cast<C_UI*>(vComponents[i]);
 		}
 	}
+
+	return nullptr;
 }
 
 std::vector<C_UI*> G_UI::GetComponentsUI_ByType(UI_TYPE type)

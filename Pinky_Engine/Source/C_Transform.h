@@ -55,5 +55,4 @@ public:
 
 	//Flag to update game object transform
 	bool dirty_;
-
 };
