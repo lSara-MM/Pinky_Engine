@@ -10,9 +10,6 @@
 #pragma comment (lib, "glu32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "Source/External Libraries/Glew/libx86/glew32.lib")
 
-#include "External Libraries/ImGui/imgui.h"
-#include "External Libraries/ImGui/backends/imgui_impl_sdl2.h"
-#include "External Libraries/ImGui/backends/imgui_impl_opengl3.h"
 #include "External Libraries/ImGui/misc/cpp/imgui_stdlib.h"
 //
 
@@ -39,6 +36,8 @@ ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, s
 	VRAM_usage = 0;
 	VRAM_available = 0;
 	VRAM_reserved = 0;
+
+	g = nullptr;
 }
 
 // Destructor
@@ -53,7 +52,7 @@ bool ModuleEditor::Init()
 
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
+	g = ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
@@ -225,6 +224,7 @@ bool ModuleEditor::CleanUp()
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
 
+	g = nullptr;
 	SDL_GL_DeleteContext(context);
 	return true;
 }
@@ -1107,6 +1107,7 @@ void ModuleEditor::GameWindow()
 {
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 
+	ImGuiContext& g = *GImGui;
 	ImGui::Begin("Game", NULL);
 
 	ImVec2 viewportSize = ImGui::GetContentRegionAvail();

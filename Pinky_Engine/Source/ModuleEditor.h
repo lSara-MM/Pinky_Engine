@@ -3,9 +3,11 @@
 #include "Globals.h"
 #include "Light.h"
 
+#include "External Libraries/ImGui/imgui_internal.h"
 #include "External Libraries/ImGui/imgui.h"
 #include "External Libraries/ImGui/backends/imgui_impl_sdl2.h"
 #include "External Libraries/ImGui/backends/imgui_impl_opengl3.h"
+
 #include "External Libraries/ImGuizmo/ImGuizmo.h"
 
 #include "External Libraries/MathGeoLib/include/Math/float3x3.h"
@@ -54,6 +56,7 @@ public:
 
 public:
 
+	ImGuiContext* g;
 	SDL_GLContext context;
 	CPlane Grid;
 

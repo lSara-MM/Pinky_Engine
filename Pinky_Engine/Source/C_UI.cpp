@@ -1,6 +1,9 @@
 #include "C_UI.h"
 #include "GameObject.h"
 
+#include "Application.h"
+#include "ModuleEditor.h"
+
 C_UI::C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n, Color c, int w, int h, int x, int y) : Component(t, n, g)
 {
 	UI_type = ui_t;
@@ -152,60 +155,67 @@ void C_UI::DebugDraw()
 
 void C_UI::StateLogic()
 {
-	float2 mousePos = float2(App->editor->mouse.x, App->editor->mouse.y);
-
-	switch (state)
+	if (App->editor->g->HoveredWindow != nullptr)
 	{
-	case UI_STATE::DISABLED:
-		break;
-	case UI_STATE::NORMAL:
-		OnNormal();
-		if (MouseCheck(mousePos))
+		std::string name = App->editor->g->HoveredWindow->Name;
+		if (name == "Game")
 		{
-			state = UI_STATE::FOCUSED;
+			float2 mousePos = float2(App->editor->mouse.x, App->editor->mouse.y);
+
+			switch (state)
+			{
+			case UI_STATE::DISABLED:
+				break;
+			case UI_STATE::NORMAL:
+				OnNormal();
+				if (MouseCheck(mousePos))
+				{
+					state = UI_STATE::FOCUSED;
+				}
+				break;
+			case UI_STATE::FOCUSED:	// On hover
+				OnFocused();
+				if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+				{
+					state = UI_STATE::PRESSED;
+				}
+				if (!MouseCheck(mousePos))
+				{
+					state = UI_STATE::NORMAL;
+				}
+				break;
+			case UI_STATE::PRESSED: // On hold
+				OnPressed();
+				if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && MouseCheck(mousePos))
+				{
+					state = UI_STATE::RELEASE;
+				}
+				else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && !MouseCheck(mousePos))
+				{
+					state = UI_STATE::NORMAL;
+				}
+				break;
+			case UI_STATE::RELEASE:
+				OnRelease();
+				state = UI_STATE::SELECTED;
+				break;
+			case UI_STATE::SELECTED:
+				OnSelected();
+				if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && MouseCheck(mousePos))
+				{
+					state = UI_STATE::PRESSED;
+				}
+				else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && !MouseCheck(mousePos))
+				{
+					state = UI_STATE::NORMAL;
+				}
+				break;
+			case UI_STATE::NONE:
+				break;
+			default:
+				break;
+			}
 		}
-		break;
-	case UI_STATE::FOCUSED:	// On hover
-		OnFocused();
-		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
-		{
-			state = UI_STATE::PRESSED;
-		}
-		if (!MouseCheck(mousePos))
-		{
-			state = UI_STATE::NORMAL;
-		}
-		break;
-	case UI_STATE::PRESSED: // On hold
-		OnPressed();
-		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && MouseCheck(mousePos))
-		{
-			state = UI_STATE::RELEASE;
-		}
-		else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && !MouseCheck(mousePos))
-		{
-			state = UI_STATE::NORMAL;
-		}
-		break;
-	case UI_STATE::RELEASE:
-		OnRelease();
-		state = UI_STATE::SELECTED;
-		break;
-	case UI_STATE::SELECTED:
-		OnSelected();
-		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && MouseCheck(mousePos))
-		{
-			state = UI_STATE::PRESSED;
-		}
-		else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && !MouseCheck(mousePos))
-		{
-			state = UI_STATE::NORMAL;
-		}
-		break;
-	case UI_STATE::NONE:
-		break;
-	default:
-		break;
 	}
 }
 
@@ -297,7 +307,7 @@ void C_UI::Drag(float dt)
 	posX += movementX;
 	posY += movementY;
 
-	
+
 	float4x4 localTransform = gameObject->transform->GetLocalTransform();
 	float3 localPos;
 	Quat rot;

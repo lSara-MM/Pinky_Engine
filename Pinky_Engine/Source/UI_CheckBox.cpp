@@ -11,13 +11,14 @@ UI_Checkbox::UI_Checkbox(GameObject* g) : C_UI(UI_TYPE::BUTTON, C_TYPE::UI, g, "
 	selectedColor = { 0, 0, 1, 1 };
 	disabledColor = { 1, 1, 1, 1 };
 
-	image = nullptr;
+	bgImg = nullptr;
 }
 
 UI_Checkbox::~UI_Checkbox()
 {
 	// Image is already another GameObject
-	image = nullptr;
+	bgImg = nullptr;
+	cmImg = nullptr;
 }
 
 void UI_Checkbox::ShowInInspector()
@@ -33,7 +34,7 @@ void UI_Checkbox::ShowInInspector()
 	header.append("##").append(std::to_string(GetUID()));
 	// ---------------------------------------------
 
-	ImGui::Checkbox(checkbox.c_str(), &isActive);		ImGui::SameLine();
+	ImGui::Checkbox(checkbox.c_str(), &isActive);	ImGui::SameLine();
 
 	if (ImGui::CollapsingHeader(header.c_str(), &exists, ImGuiTreeNodeFlags_DefaultOpen))
 	{
@@ -42,7 +43,10 @@ void UI_Checkbox::ShowInInspector()
 		ImGui::Dummy(ImVec2(0, 10));
 
 		ImGui::Checkbox("Interactable", &isInteractable);
-		ImGui::Checkbox("Checked", &isChecked);
+		if(ImGui::Checkbox("Checked", &isChecked))
+		{
+			cmImg->isActive = isChecked;
+		}
 
 		ImGui::ColorEdit4("Normal color", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Focused color", (float*)&focusedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
@@ -59,28 +63,29 @@ void UI_Checkbox::ShowInInspector()
 
 void UI_Checkbox::OnNormal()
 {
-	image->color = color;
+	bgImg->color = color;
 }
 
 void UI_Checkbox::OnFocused()
 {
-	image->color = focusedColor;
+	bgImg->color = focusedColor;
 }
 
 void UI_Checkbox::OnPressed()
 {
-	image->color = pressedColor;
+	bgImg->color = pressedColor;
 }
 
 void UI_Checkbox::OnSelected()
 {
-	image->color = selectedColor;
+	bgImg->color = selectedColor;
 }
 
 void UI_Checkbox::OnRelease()
 {
-	if (isInteractable) 
-	{ 
+	if (isInteractable)
+	{
 		isChecked = !isChecked;
+		cmImg->isActive = isChecked;
 	}
 }

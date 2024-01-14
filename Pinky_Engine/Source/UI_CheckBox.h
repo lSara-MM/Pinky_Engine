@@ -25,7 +25,8 @@ public:
 	bool isInteractable;
 	bool isChecked;
 
-	UI_Image* image;
+	UI_Image* bgImg;
+	UI_Image* cmImg;
 
 private:
 	//color

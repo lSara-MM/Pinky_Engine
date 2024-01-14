@@ -225,12 +225,13 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 		aux2->ReParent(aux);
 
 		// Label
-		aux2 = new G_UI(UI_TYPE::TEXT, this);
-		aux2->ReParent(this);
+		G_UI* aux3 = new G_UI(UI_TYPE::TEXT, this);
+		aux3->ReParent(this);
 
 		UI_Checkbox* comp = new UI_Checkbox(this);
 		vComponents.push_back(comp);
-		comp->image = static_cast<UI_Image*>(aux->GetComponentUI(UI_TYPE::IMAGE));
+		comp->bgImg = static_cast<UI_Image*>(aux->GetComponentUI(UI_TYPE::IMAGE));
+		comp->cmImg = static_cast<UI_Image*>(aux2->GetComponentUI(UI_TYPE::IMAGE));
 
 		name = "Checkbox";
 
@@ -244,6 +245,7 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 		comp = nullptr;
 		aux = nullptr;
 		aux2 = nullptr;
+		aux3 = nullptr;
 	}
 		break;
 	case UI_TYPE::NONE:
