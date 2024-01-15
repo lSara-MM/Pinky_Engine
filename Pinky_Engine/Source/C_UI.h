@@ -97,5 +97,7 @@ public:
 
 	UIBounds* boundsEditor;
 	UIBounds* boundsGame;
+
+	float3 scaleBounds;
 };
 #endif // __UI_H__
