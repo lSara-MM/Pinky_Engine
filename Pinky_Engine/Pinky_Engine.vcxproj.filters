@@ -649,6 +649,9 @@
     <ClInclude Include="Source\External Libraries\FreeType\include\freetype\config\ftstdlib.h">
       <Filter>External Libraries\Freetype\freetype\config</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Lambda.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ModuleCamera3D.cpp">
@@ -923,6 +926,9 @@
     </ClCompile>
     <ClCompile Include="Source\STB_Text.cpp">
       <Filter>Sources\Cosos\GameObject\UI\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Lambda.cpp">
+      <Filter>Sources\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

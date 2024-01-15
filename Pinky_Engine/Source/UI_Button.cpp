@@ -69,6 +69,7 @@ void UI_Button::OnNormal()
 	{
 		image->color = color;
 	}
+	ExecuteFunction(normalFunction);
 }
 
 void UI_Button::OnFocused()
@@ -77,6 +78,7 @@ void UI_Button::OnFocused()
 	{
 		image->color = focusedColor;
 	}
+	ExecuteFunction(focusedFunction);
 }
 
 void UI_Button::OnPressed()
@@ -88,6 +90,7 @@ void UI_Button::OnPressed()
 	{
 		image->color = pressedColor;//TODO: prueba fade
 	}
+	ExecuteFunction(pressedFunction);
 }
 
 void UI_Button::OnSelected()
@@ -98,5 +101,20 @@ void UI_Button::OnSelected()
 	if (!image->fade)
 	{
 		image->color = selectedColor;
+	}
+	ExecuteFunction(selectedFunction);
+}
+
+void UI_Button::OnRelease()
+{
+	//function.ExecuteFunction();
+}
+
+void UI_Button::ExecuteFunction(const FunctionType& func) {
+	if (func) {
+		func();
+	}
+	else {
+		std::cout << "No function set." << std::endl;
 	}
 }

@@ -22,6 +22,7 @@
 #include "G_UI.h"
 #include "UI_Canvas.h"
 #include "UI_Image.h"
+#include "UI_Button.h"
 #include "UI_CheckBox.h"
 
 
@@ -64,7 +65,10 @@ bool ModuleScene::Init()
 
 	return ret;
 }
-
+// Example function with a different signature
+void myExampleFunctionWithArgs(int x) {
+	std::cout << "Hello from my example function with argument: " << x << std::endl;
+}
 bool ModuleScene::Start()
 {
 	LOG("Starting scene");
@@ -101,8 +105,21 @@ bool ModuleScene::Start()
 	App->resource->ImportTextureToModel("checkmark.png", PINKY_ASSETS_AUX "UI\\", *(static_cast<UI_Checkbox*>
 		(prueba3->GetComponentUI(UI_TYPE::CHECKBOX))->cmImg->gameObject));
 
+	G_UI* prueba4 = new G_UI(UI_TYPE::BUTTON, App->scene->rootNode, 100, 100, 300, 300);
+	App->resource->ImportTextureToModel("checkboxBG.png", PINKY_ASSETS_AUX "UI\\", *(static_cast<UI_Button*>
+		(prueba3->GetComponentUI(UI_TYPE::BUTTON))->image->gameObject));
+
+	// Define a lambda function with the same signature
+	auto myLambda = []() {
+		std::cout << "Hello from my lambda function!" << std::endl;
+	};
+
+	static_cast<UI_Button*> (prueba3->GetComponentUI(UI_TYPE::BUTTON))->function = myLambda;
+
 	prueba = nullptr;
 	prueba2 = nullptr;
+	prueba3 = nullptr;
+	prueba4 = nullptr;
 
 	return true;
 }

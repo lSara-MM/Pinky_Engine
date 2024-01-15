@@ -264,6 +264,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 				listUI[i]->Draw(true);
 			}
 
+			// TODO: preguntar porque el out of range este raro
 			if (i == 0) { break; }
 		}
 

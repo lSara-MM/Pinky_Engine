@@ -235,6 +235,7 @@
     <ClInclude Include="Source\glmath.h" />
     <ClInclude Include="Source\Globals.h" />
     <ClInclude Include="Source\G_UI.h" />
+    <ClInclude Include="Source\Lambda.h" />
     <ClInclude Include="Source\STB_Text.h" />
     <ClInclude Include="Source\UI_Canvas.h" />
     <ClInclude Include="Source\ImGuiResourcesWindows.h" />
@@ -327,6 +328,7 @@
     <ClCompile Include="Source\GameObject.cpp" />
     <ClCompile Include="Source\glmath.cpp" />
     <ClCompile Include="Source\G_UI.cpp" />
+    <ClCompile Include="Source\Lambda.cpp" />
     <ClCompile Include="Source\STB_Text.cpp" />
     <ClCompile Include="Source\UI_Canvas.cpp" />
     <ClCompile Include="Source\ImGuiResourcesWindows.cpp" />
