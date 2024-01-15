@@ -21,11 +21,10 @@ C_UI::C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n, int w, int h, i
 
 	float3 position = gameObject->transform->position;
 
-	float4x4 localTransform = gameObject->transform->GetLocalTransform();
-	float3 localPos;
+	float3 globalPos;
 	Quat rot;
 	float3 scale;
-	gameObject->transform->localMatrix.Decompose(localPos, rot, scale);
+	gameObject->transform->globalMatrix.Decompose(globalPos, rot, scale);
 
 	if (x != 0 || y != 0)
 	{
@@ -34,8 +33,8 @@ C_UI::C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n, int w, int h, i
 	}
 	else
 	{
-		posX = localPos.x;
-		posY = localPos.y;
+		posX = globalPos.x;
+		posY = globalPos.y;
 	}
 
 	boundsEditor = new UIBounds;
@@ -268,17 +267,16 @@ bool C_UI::MouseCheck(float2 mouse)
 void C_UI::UpdateUITransform()
 {
 	float3 position = gameObject->transform->position;
-	float4x4 localTransform = gameObject->transform->GetLocalTransform();
-	float3 localPos;
+	float3 globalPos;
 	Quat rot;
 	float3 scale;
 
-	gameObject->transform->localMatrix.Decompose(localPos, rot, scale);
+	gameObject->transform->globalMatrix.Decompose(globalPos, rot, scale);
 	width *= scale.x;//TODO: ta mal
 	height *= scale.y;
 
-	posX = localPos.x;//TODO: arreglar
-	posY = localPos.y;
+	posX = globalPos.x;//TODO: arreglar
+	posY = globalPos.y;
 
 	boundsEditor->vertex[0] = float3(position.x, position.y + height, 0);
 	boundsEditor->vertex[1] = float3(position.x + width, position.y + height, 0);
@@ -304,7 +302,7 @@ void C_UI::UpdateUITransform()
 	boundsEditor->InitBuffers();
 	boundsGame->InitBuffers();
 
-	if (!gameObject->vChildren.empty())
+	/*if (!gameObject->vChildren.empty())
 	{
 		for (auto i = 0; i < gameObject->vChildren.size(); i++)
 		{
@@ -313,7 +311,7 @@ void C_UI::UpdateUITransform()
 				static_cast<C_UI*>(gameObject->vChildren[i]->GetComponentByType(C_TYPE::UI))->UpdateUITransform();
 			}
 		}
-	}
+	}*/
 }
 
 void C_UI::DrawABB()
@@ -365,13 +363,12 @@ void C_UI::Drag(float dt)
 	posX += movementX;
 	posY += movementY;
 
-	float4x4 localTransform = gameObject->transform->GetLocalTransform();
-	float3 localPos;
+	float3 globalPos;
 	Quat rot;
 	float3 scale;
 	//TODO:MILAGRO
 	gameObject->transform->SetPosition(float3(gameObject->transform->position.x + movementX, gameObject->transform->position.y + movementY, 0));
-	gameObject->transform->localMatrix.Decompose(localPos, rot, scale);
+	gameObject->transform->globalMatrix.Decompose(globalPos, rot, scale);
 
 	float3 position = gameObject->transform->position;
 
@@ -398,16 +395,16 @@ void C_UI::Drag(float dt)
 	boundsEditor->InitBuffers();
 	boundsGame->InitBuffers();
 
-	if (!gameObject->vChildren.empty())
-	{
-		for (auto i = 0; i < gameObject->vChildren.size(); i++)
-		{
-			if (gameObject->vChildren[i]->GetComponentByType(C_TYPE::UI) != nullptr)
-			{
-				static_cast<C_UI*>(gameObject->vChildren[i]->GetComponentByType(C_TYPE::UI))->Drag(dt);
-			}
-		}
-	}
+	//if (!gameObject->vChildren.empty())
+	//{
+	//	for (auto i = 0; i < gameObject->vChildren.size(); i++)
+	//	{
+	//		if (gameObject->vChildren[i]->GetComponentByType(C_TYPE::UI) != nullptr)
+	//		{
+	//			static_cast<C_UI*>(gameObject->vChildren[i]->GetComponentByType(C_TYPE::UI))->Drag(dt);
+	//		}
+	//	}
+	//}
 }
 
 void C_UI::FadeUI(float dt)
