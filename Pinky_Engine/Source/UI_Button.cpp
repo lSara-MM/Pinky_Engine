@@ -39,7 +39,13 @@ void UI_Button::ShowInInspector()
 
 		ImGui::Dummy(ImVec2(0, 10));
 
-		ImGui::Checkbox("Interactable##1", &isInteractable);
+		if (ImGui::Checkbox("Interactable", &isInteractable))
+		{
+			if (!isInteractable)
+			{
+				image->color = disabledColor;
+			}
+		}
 
 		ImGui::ColorEdit4("Normal color", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Focused color", (float*)&focusedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);

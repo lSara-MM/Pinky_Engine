@@ -186,23 +186,18 @@ bool ModuleInput::CleanUp()
 // Handle user input
 void ModuleInput::HandleInput(SDL_Event event)
 {
-	// If the string less than maximum size
-	if (strToChange->length() <= maxChars)
-	{
-		//Append the character
-		*strToChange += (char)event.key.keysym.sym;
-	}
-
 	// If backspace was pressed and the string isn't blank
-	if ((event.key.keysym.sym == SDLK_BACKSPACE) && !strToChange->empty())
+	if ((event.key.keysym.sym == SDLK_BACKSPACE))
 	{
-		// Remove a character from the end
-		strToChange->erase(strToChange->length() - 1);
-		strToChange->erase(strToChange->length() - 1);
+		if (!strToChange->empty())	// For logical purposes it can't be in the previous if
+		{
+			// Remove a character from the end
+			strToChange->erase(strToChange->length() - 1);
+		}
 	}
 
 	// Cancel and reset the string to the original
-	if ((event.key.keysym.sym == SDLK_ESCAPE))
+	else if((event.key.keysym.sym == SDLK_ESCAPE))
 	{
 		// Change back to previous string;
 		*strToChange = strBU;
@@ -210,22 +205,31 @@ void ModuleInput::HandleInput(SDL_Event event)
 	}
 
 	// Submit and change the corresponding string
-	if ((event.key.keysym.sym == SDLK_RETURN) && !strToChange->empty())
+	else if((event.key.keysym.sym == SDLK_RETURN) && !strToChange->empty())
 	{
-		strToChange->erase(strToChange->length() - 1);
+		//strToChange->erase(strToChange->length() - 1);
 		getInput_B = false;
 	}
 
 	// Ignore shift
-	if (event.key.keysym.sym == SDLK_LSHIFT || event.key.keysym.sym == SDLK_RSHIFT)
+	else if(event.key.keysym.sym == SDLK_LSHIFT || event.key.keysym.sym == SDLK_RSHIFT)
+	{	}
+	
+	// else ifthe string less than maximum size
+	else if(strToChange->length() <= maxChars)
 	{
-		// Append the character
-		strToChange->erase(strToChange->length() - 1);
+		//Append the character
+		*strToChange += (char)event.key.keysym.sym;
 	}
 }
 
 
-void ModuleInput::GetInputActive(std::string& strToStore, bool getInput)
+bool ModuleInput::GetInputActive()
+{
+	return getInput_B;
+}
+
+void ModuleInput::SetInputActive(std::string& strToStore, bool getInput)
 {
 	// Keep a copy of the current version of the string
 	strBU = strToStore;

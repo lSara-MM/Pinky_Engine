@@ -43,7 +43,14 @@ void UI_Checkbox::ShowInInspector()
 
 		ImGui::Dummy(ImVec2(0, 10));
 
-		ImGui::Checkbox("Interactable", &isInteractable);
+		if (ImGui::Checkbox("Interactable", &isInteractable))
+		{
+			if (!isInteractable)
+			{
+				bgImg->color = disabledColor;
+				cmImg->color = disabledColor;
+			}
+		}
 		if(ImGui::Checkbox("Checked", &isChecked))
 		{
 			cmImg->isActive = isChecked;

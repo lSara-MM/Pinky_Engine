@@ -128,7 +128,7 @@ update_status ModuleScene::Update(float dt)
 
 
 	if ((App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN ||
-		App->input->GetKey(SDL_SCANCODE_BACKSPACE) == KEY_DOWN) && !ImGui::GetIO().WantTextInput)
+		App->input->GetKey(SDL_SCANCODE_BACKSPACE) == KEY_DOWN) && !ImGui::GetIO().WantTextInput && !App->input->GetInputActive())
 	{
 		// Delete all selected go
 		if (!hierarchy->GetSelectedGOs().empty())

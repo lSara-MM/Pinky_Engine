@@ -15,8 +15,10 @@ UI_InputBox::UI_InputBox(GameObject* g) : C_UI(UI_TYPE::INPUTBOX, C_TYPE::UI, g,
 	displayText = nullptr;
 	fontSize = 21;
 
-	text = "Hello World";
+	text = "uwu";
 	maxChars = 10;
+
+	writing = false;
 }
 
 UI_InputBox::~UI_InputBox()
@@ -24,18 +26,19 @@ UI_InputBox::~UI_InputBox()
 	displayText = nullptr;
 }
 
+update_status UI_InputBox::Update(float dt)
+{
+	update_status ret = UPDATE_CONTINUE;
+
+	if (state == UI_STATE::NORMAL)
+	{
+		writing = false;
+	}
+	return ret;
+}
+
 void UI_InputBox::ShowInInspector()
 {
-	// TODO: delete after, just a test
-	{
-		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN && !ImGui::GetIO().WantTextInput)
-		{
-			LOG("Input");
-			App->input->GetInputActive(text);
-		}
-	}
-	//
-
 	// --- Set ImGui ids ---
 	std::string checkbox = name.c_str();
 	std::string header = name.c_str();
@@ -73,4 +76,19 @@ void UI_InputBox::ShowInInspector()
 	ImGui::SameLine();
 
 	if (!exists) { gameObject->RemoveComponent(this); }
+}
+
+void UI_InputBox::OnSelected()
+{
+	if (!writing)
+	{
+		writing = true;
+		App->input->SetInputActive(text);
+		LOG("aaa");
+	}
+	else if (!App->input->GetInputActive())
+	{
+		writing = false;
+		state = UI_STATE::NORMAL;
+	}
 }

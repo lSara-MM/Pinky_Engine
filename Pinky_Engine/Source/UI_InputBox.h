@@ -13,7 +13,11 @@ public:
 	UI_InputBox(GameObject* g);
 	~UI_InputBox();
 
+	update_status Update(float dt) override;
+
 	void ShowInInspector();
+
+	void OnSelected() override;
 
 public:
 	std::string text;
@@ -22,6 +26,7 @@ public:
 	int maxChars;
 
 	UI_Text* displayText;
+	bool writing;
 
 private:
 	//color

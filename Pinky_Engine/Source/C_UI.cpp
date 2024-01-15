@@ -83,6 +83,13 @@ C_UI::~C_UI()
 	RELEASE(bounds);
 }
 
+update_status C_UI::Update(float dt)
+{
+	update_status ret = UPDATE_CONTINUE;
+
+	return ret;
+}
+
 void C_UI::Draw(bool game)
 {
 	if (game)

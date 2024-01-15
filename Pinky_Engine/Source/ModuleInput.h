@@ -27,8 +27,9 @@ public:
 
 	void HandleInput(SDL_Event event);
 
-	//
-	void GetInputActive(std::string& strToStore, bool getInput = true);
+	//	
+	bool GetInputActive();
+	void SetInputActive(std::string& strToStore, bool getInput = true);
 	void SetMaxChars(int limit);
 
 	//

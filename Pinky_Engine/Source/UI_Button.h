@@ -20,7 +20,6 @@ public:
 	void OnPressed() override;
 	void OnSelected() override;
 
-
 public:
 	bool isInteractable;
 	UI_Image* image;
