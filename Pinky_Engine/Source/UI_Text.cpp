@@ -17,12 +17,50 @@ UI_Text::UI_Text(GameObject* g, int w, int h, int x, int y) : C_UI(UI_TYPE::TEXT
 	text = "Hello World";
 	font = App->renderer3D->defaultFont;
 
+	boundsEditor = new UIBounds;
+	boundsGame = new UIBounds;
+
+	boundsEditor->index = new uint[6];
+	boundsEditor->index[0] = 0;
+	boundsEditor->index[1] = 1;
+	boundsEditor->index[2] = 2;
+	boundsEditor->index[3] = 2;
+	boundsEditor->index[4] = 1;
+	boundsEditor->index[5] = 3;
+
+	boundsGame->index = new uint[6];
+	boundsGame->index[0] = 0;
+	boundsGame->index[1] = 1;
+	boundsGame->index[2] = 2;
+	boundsGame->index[3] = 2;
+	boundsGame->index[4] = 1;
+	boundsGame->index[5] = 3;
+
+	boundsGame->uvs[0] = float2(0, 1);
+	boundsGame->uvs[1] = float2(1, 1);
+	boundsGame->uvs[2] = float2(0, 0);
+	boundsGame->uvs[3] = float2(1, 0);
+
+	boundsEditor->uvs[0] = float2(1, 0);
+	boundsEditor->uvs[1] = float2(0, 0);
+	boundsEditor->uvs[2] = float2(1, 1);
+	boundsEditor->uvs[3] = float2(0, 1);
+
+	boundsEditor->InitBuffers();
+	boundsGame->InitBuffers();
+
 	fontSize = 21;
 }
 
 UI_Text::~UI_Text()
 {
 	font = nullptr;
+	boundsEditor->DeleteBuffers();
+	boundsGame->DeleteBuffers();
+	RELEASE_ARRAY(boundsEditor->index);
+	RELEASE_ARRAY(boundsGame->index);
+	RELEASE(boundsEditor);
+	RELEASE(boundsGame);
 }
 
 void UI_Text::ShowInInspector()
@@ -63,28 +101,10 @@ void UI_Text::Draw(bool game)
 {
 	float space = 0;
 
+	UIBounds* boundsDrawn = nullptr;
+
 	for (size_t i = 0; i < text.length(); i++)
 	{
-		//character container
-		UIBounds boundsEditor = UIBounds();
-		UIBounds boundsGame = UIBounds();
-
-		boundsEditor.index = new uint[6];
-		boundsEditor.index[0] = 0;
-		boundsEditor.index[1] = 1;
-		boundsEditor.index[2] = 2;
-		boundsEditor.index[3] = 2;
-		boundsEditor.index[4] = 1;
-		boundsEditor.index[5] = 3;
-
-		boundsGame.index = new uint[6];
-		boundsGame.index[0] = 0;
-		boundsGame.index[1] = 1;
-		boundsGame.index[2] = 2;
-		boundsGame.index[3] = 2;
-		boundsGame.index[4] = 1;
-		boundsGame.index[5] = 3;
-
 		float3 position = gameObject->transform->position;
 
 		auto itr = font->characters.find(text[i]);
@@ -102,30 +122,18 @@ void UI_Text::Draw(bool game)
 				space += fontSize;
 			}
 
-			boundsEditor.vertex[0] = float3(position.x + space, position.y + (fontSize * scaleBounds.y), 0);
-			boundsEditor.vertex[1] = float3(position.x + space + (itr->second->size.x * scaleBounds.x), position.y + (fontSize * scaleBounds.y), 0);
-			boundsEditor.vertex[2] = float3(position.x + space, position.y, 0);
-			boundsEditor.vertex[3] = float3(position.x + space + (itr->second->size.x * scaleBounds.x), position.y, 0);
+			boundsEditor->vertex[0] = float3(position.x + space, position.y + (fontSize * scaleBounds.y), 0);
+			boundsEditor->vertex[1] = float3(position.x + space + (itr->second->size.x * scaleBounds.x), position.y + (fontSize * scaleBounds.y), 0);
+			boundsEditor->vertex[2] = float3(position.x + space, position.y, 0);
+			boundsEditor->vertex[3] = float3(position.x + space + (itr->second->size.x * scaleBounds.x), position.y, 0);
 
-			boundsGame.vertex[0] = float3(posX + space, posY + (fontSize * scaleBounds.y), 0);
-			boundsGame.vertex[1] = float3(posX + space + (itr->second->size.x * scaleBounds.x), posY + (fontSize * scaleBounds.y), 0);
-			boundsGame.vertex[2] = float3(posX + space, posY, 0);
-			boundsGame.vertex[3] = float3(posX + space + (itr->second->size.x * scaleBounds.x), posY, 0);
+			boundsGame->vertex[0] = float3(posX + space, posY + (fontSize * scaleBounds.y), 0);
+			boundsGame->vertex[1] = float3(posX + space + (itr->second->size.x * scaleBounds.x), posY + (fontSize * scaleBounds.y), 0);
+			boundsGame->vertex[2] = float3(posX + space, posY, 0);
+			boundsGame->vertex[3] = float3(posX + space + (itr->second->size.x * scaleBounds.x), posY, 0);
 
-			boundsGame.uvs[0] = float2(0, 1);
-			boundsGame.uvs[1] = float2(1, 1);
-			boundsGame.uvs[2] = float2(0, 0);
-			boundsGame.uvs[3] = float2(1, 0);
-
-			boundsEditor.uvs[0] = float2(1, 0);
-			boundsEditor.uvs[1] = float2(0, 0);
-			boundsEditor.uvs[2] = float2(1, 1);
-			boundsEditor.uvs[3] = float2(0, 1);
-
-			boundsEditor.InitBuffers();
-			boundsGame.InitBuffers();
-
-			UIBounds boundsDrawn = UIBounds();
+			boundsEditor->RegenerateVBO();
+			boundsGame->RegenerateVBO();
 
 			if (game)
 			{
@@ -157,11 +165,11 @@ void UI_Text::Draw(bool game)
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 			// Mesh buffers
-			glBindBuffer(GL_ARRAY_BUFFER, boundsDrawn.VBO);
+			glBindBuffer(GL_ARRAY_BUFFER, boundsDrawn->VBO);
 			glVertexPointer(3, GL_FLOAT, 0, NULL);
 			glBindVertexArray(0);
 
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, boundsDrawn.EBO);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, boundsDrawn->EBO);
 
 			//alpha material
 			glEnable(GL_BLEND);
@@ -172,7 +180,7 @@ void UI_Text::Draw(bool game)
 			glColor4f(color.r, color.g, color.b, color.a);
 
 			// Textures
-			glBindBuffer(GL_ARRAY_BUFFER, boundsDrawn.id_tex_uvs);
+			glBindBuffer(GL_ARRAY_BUFFER, boundsDrawn->id_tex_uvs);
 			glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 			glActiveTexture(GL_TEXTURE0);
 
@@ -192,15 +200,10 @@ void UI_Text::Draw(bool game)
 			{
 				glPopMatrix();
 			}
-
-			boundsEditor.DeleteBuffers();
-			boundsGame.DeleteBuffers();
-			RELEASE_ARRAY(boundsEditor.index);
-			RELEASE_ARRAY(boundsGame.index);
 		}
-
-
 	}
+
+	boundsDrawn = nullptr;
 }
 
 Font::Font(std::string name, std::string fontPath)

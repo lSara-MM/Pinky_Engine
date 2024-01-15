@@ -97,8 +97,8 @@ C_UI::~C_UI()
 {
 	boundsEditor->DeleteBuffers();
 	boundsGame->DeleteBuffers();
-	RELEASE_ARRAY(boundsEditor->index);//TODO: peta
-	RELEASE_ARRAY(boundsGame->index);//TODO: peta
+	RELEASE_ARRAY(boundsEditor->index);
+	RELEASE_ARRAY(boundsGame->index);
 	RELEASE(boundsEditor);
 	RELEASE(boundsGame);
 }

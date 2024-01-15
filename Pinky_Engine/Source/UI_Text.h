@@ -63,5 +63,8 @@ public:
 	Font* font;
 
 	float fontSize;
+
+	UIBounds* boundsEditor;
+	UIBounds* boundsGame;
 };
 #endif // __UI_TEXT_H__
