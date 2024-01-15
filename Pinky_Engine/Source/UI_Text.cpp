@@ -96,7 +96,7 @@ void UI_Text::Draw(bool game)
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 	glActiveTexture(GL_TEXTURE0);
 
-	GLuint a = font->GetCharacterTexID('u');
+	GLuint a = font->GetCharacterTexID('p');
 	glBindTexture(GL_TEXTURE_2D, a);
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
@@ -131,7 +131,7 @@ Font::Font(std::string name, std::string fontPath, int size)
         // Load character glyph 
         if (FT_Load_Char(face, c, FT_LOAD_RENDER))
         {
-            std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+			LOG("[ERROR] Failed to load glyph");
             continue;
         }
         // generate texture
@@ -163,8 +163,6 @@ Font::Font(std::string name, std::string fontPath, int size)
         };
         Characters.insert(std::pair<GLchar, Character*>(c, character));
     }
-
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
     // destroy FreeType once we're finished
     FT_Done_Face(face);

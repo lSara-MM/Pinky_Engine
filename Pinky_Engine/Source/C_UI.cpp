@@ -54,10 +54,15 @@ C_UI::C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n, Color c, int w,
 	//bounds->vertex[3] = float3(posX + width, posY, localPos.z);
 	//bounds->vertex[2] = float3(posX, posY, localPos.z);
 
+	bounds->uvs[0] = float2(0, 0);
+	bounds->uvs[1] = float2(1, 0);
 	bounds->uvs[2] = float2(0, 1);
 	bounds->uvs[3] = float2(1, 1);
-	bounds->uvs[1] = float2(1, 0);
-	bounds->uvs[0] = float2(0, 0);
+
+	bounds->uvs[3] = float2(0, 0);
+	bounds->uvs[2] = float2(1, 0);
+	bounds->uvs[1] = float2(0, 1);
+	bounds->uvs[0] = float2(1, 1);
 
 	bounds->InitBuffers();
 
@@ -81,6 +86,11 @@ void C_UI::Draw(bool game)
 {
 	if (game)
 	{
+		bounds->uvs[0] = float2(0, 0);
+		bounds->uvs[1] = float2(1, 0);
+		bounds->uvs[2] = float2(0, 1);
+		bounds->uvs[3] = float2(1, 1);
+
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glOrtho(0.0, App->editor->gameViewSize.x, App->editor->gameViewSize.y, 0.0, 1.0, -1.0);//TODO: orginal con 0,0 bien en pantalla pero mueve al revés
@@ -92,6 +102,10 @@ void C_UI::Draw(bool game)
 
 	else
 	{
+		bounds->uvs[3] = float2(0, 0);
+		bounds->uvs[2] = float2(1, 0);
+		bounds->uvs[1] = float2(0, 1);
+		bounds->uvs[0] = float2(1, 1);
 		glPushMatrix();
 		glMultMatrixf(gameObject->transform->GetGLTransform());
 	}

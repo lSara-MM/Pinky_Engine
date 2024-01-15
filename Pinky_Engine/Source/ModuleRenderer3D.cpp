@@ -169,7 +169,7 @@ bool ModuleRenderer3D::Init()
 	ai::LoadCheckers(texture_checker);
 
 
-	defaultFont = new Font("Arial.ttf", "Assets\\Fonts");
+	defaultFont = new Font("Arial.ttf", "PinkyAssets\\Fonts");
 
 	return ret;
 }

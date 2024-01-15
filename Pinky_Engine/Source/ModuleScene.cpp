@@ -22,6 +22,8 @@
 #include "G_UI.h"
 #include "UI_Canvas.h"
 #include "UI_Image.h"
+#include "UI_CheckBox.h"
+
 
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -91,7 +93,14 @@ bool ModuleScene::Start()
 	G_UI* prueba = new G_UI(UI_TYPE::CANVAS);
 	G_UI* prueba2 = new G_UI(UI_TYPE::IMAGE);
 
-	App->resource->ImportTextureToModel("Baker_house.png", PINKY_ASSETS_AUX "3dObject\\baker_house\\", *prueba2);
+	App->resource->ImportTextureToModel("intro_bg.png", PINKY_ASSETS_AUX "UI\\", *prueba2);
+
+	G_UI* prueba3 = new G_UI(UI_TYPE::CHECKBOX);
+	App->resource->ImportTextureToModel("checkboxBG.png", PINKY_ASSETS_AUX "UI\\", *(static_cast<UI_Checkbox*>
+		(prueba3->GetComponentUI(UI_TYPE::CHECKBOX))->bgImg->gameObject));
+	App->resource->ImportTextureToModel("checkmark.png", PINKY_ASSETS_AUX "UI\\", *(static_cast<UI_Checkbox*>
+		(prueba3->GetComponentUI(UI_TYPE::CHECKBOX))->cmImg->gameObject));
+
 	prueba = nullptr;
 	prueba2 = nullptr;
 

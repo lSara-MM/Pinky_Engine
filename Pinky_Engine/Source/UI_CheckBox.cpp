@@ -12,6 +12,7 @@ UI_Checkbox::UI_Checkbox(GameObject* g) : C_UI(UI_TYPE::BUTTON, C_TYPE::UI, g, "
 	disabledColor = { 1, 1, 1, 1 };
 
 	bgImg = nullptr;
+	cmImg = nullptr;
 }
 
 UI_Checkbox::~UI_Checkbox()
