@@ -43,7 +43,7 @@ public:
 	FT_Library ft;
 	FT_Face face;
 
-	std::map<GLchar, Character*> characters;
+	std::map<GLchar, Character> characters;
 };
 
 class UI_Text : public C_UI
