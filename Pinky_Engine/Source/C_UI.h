@@ -21,6 +21,7 @@ struct UIBounds
 	AABB local_aabb;//local AABB
 
 	bool InitBuffers();
+	void RegenerateVBO();
 	void DeleteBuffers();
 };
 

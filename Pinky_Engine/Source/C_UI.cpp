@@ -170,6 +170,8 @@ void C_UI::Draw(bool game)
 	{
 		glPopMatrix();
 	}
+
+	boundsDrawn = nullptr;
 }
 
 void C_UI::DebugDraw()
@@ -299,8 +301,6 @@ void C_UI::UpdateUITransform()
 	boundsEditor->uvs[1] = float2(0, 1);
 	boundsEditor->uvs[0] = float2(1, 1);
 
-	boundsEditor->InitBuffers();
-	boundsGame->InitBuffers();
 
 	/*if (!gameObject->vChildren.empty())
 	{
@@ -392,8 +392,8 @@ void C_UI::Drag(float dt)
 	boundsEditor->uvs[1] = float2(0, 1);
 	boundsEditor->uvs[0] = float2(1, 1);
 
-	boundsEditor->InitBuffers();
-	boundsGame->InitBuffers();
+	boundsEditor->RegenerateVBO();
+	boundsGame->RegenerateVBO();
 
 	//if (!gameObject->vChildren.empty())
 	//{
@@ -456,6 +456,12 @@ bool UIBounds::InitBuffers()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float2) * 4, uvs, GL_STATIC_DRAW);
 
 	return true;
+}
+
+void UIBounds::RegenerateVBO()
+{
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * 4, vertex, GL_STATIC_DRAW);
 }
 
 void UIBounds::DeleteBuffers()

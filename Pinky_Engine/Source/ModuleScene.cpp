@@ -103,6 +103,7 @@ bool ModuleScene::Start()
 
 	prueba = nullptr;
 	prueba2 = nullptr;
+	prueba3 = nullptr;
 
 	return true;
 }

@@ -127,6 +127,8 @@ void UI_Text::Draw(bool game)
 	{
 		glPopMatrix();
 	}
+
+	boundsDrawn = nullptr;
 }
 
 Font::Font(std::string name, std::string fontPath, int size)

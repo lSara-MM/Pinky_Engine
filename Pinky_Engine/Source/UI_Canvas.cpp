@@ -80,6 +80,6 @@ void UI_Canvas::UpdateUITransform()
 	boundsEditor->uvs[1] = float2(1, 0);
 	boundsEditor->uvs[0] = float2(0, 0);
 
-	boundsEditor->InitBuffers();
+	boundsEditor->RegenerateVBO();
 }
 

@@ -164,4 +164,6 @@ void UI_Image::Draw(bool game)
 	{
 		glPopMatrix();
 	}
+
+	boundsDrawn = nullptr;
 }
