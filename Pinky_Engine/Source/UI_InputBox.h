@@ -24,12 +24,11 @@ public:
 	float fontSize;
 
 	int maxChars;
-
 	UI_Text* displayText;
-	bool writing;
 
 private:
 	//color
 	Color disabledColor;
+	bool isWriting;
 };
 #endif // __UI_INPUTBOX_H__

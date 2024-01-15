@@ -25,7 +25,6 @@ void UI_Image::ShowInInspector()
 	// --- Set ImGui ids ---
 	std::string checkbox = name.c_str();
 	std::string header = name.c_str();
-	std::string toogle = "Checkered##";
 	bool exists = true;
 
 	checkbox.insert(checkbox.begin(), 2, '#');
@@ -39,6 +38,8 @@ void UI_Image::ShowInInspector()
 	if (ImGui::CollapsingHeader(header.c_str(), &exists, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		if (!isActive) { ImGui::BeginDisabled(); }
+
+		ImGui::Checkbox("Draggeable", &draggable);
 
 		// Change Texture
 		if (ImGui::BeginCombo("##Texture", mat->tex->name.c_str()))
@@ -62,7 +63,7 @@ void UI_Image::ShowInInspector()
 		ImGui::SameLine();
 		ImGuiCustom::HelpMarker("If the current texture has only one instance you will not be able to change it back unless a that texture is imported to scene");
 
-		if (ImGuiCustom::ToggleButton(toogle.c_str(), &mat->checkered))
+		if (ImGuiCustom::ToggleButton("Checkered##", &mat->checkered))
 		{
 
 		}

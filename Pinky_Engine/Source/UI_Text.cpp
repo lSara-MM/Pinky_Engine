@@ -42,6 +42,8 @@ void UI_Text::ShowInInspector()
 	{
 		if (!isActive) { ImGui::BeginDisabled(); }
 
+		ImGui::Checkbox("Draggeable", &draggable);
+
 		ImGui::InputTextMultiline(name.c_str(), &text, ImVec2(0, 0), ImGuiInputTextFlags_AllowTabInput);
 		//ImGui::InputText(name.c_str(), &text, ImGuiInputTextFlags_EnterReturnsTrue);
 		ImGui::Dummy(ImVec2(0, 10));

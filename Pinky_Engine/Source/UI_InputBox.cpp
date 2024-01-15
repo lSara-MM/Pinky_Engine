@@ -18,7 +18,7 @@ UI_InputBox::UI_InputBox(GameObject* g) : C_UI(UI_TYPE::INPUTBOX, C_TYPE::UI, g,
 	text = "uwu";
 	maxChars = 10;
 
-	writing = false;
+	isWriting = false;
 }
 
 UI_InputBox::~UI_InputBox()
@@ -32,7 +32,7 @@ update_status UI_InputBox::Update(float dt)
 
 	if (state == UI_STATE::NORMAL)
 	{
-		writing = false;
+		isWriting = false;
 	}
 	return ret;
 }
@@ -55,6 +55,12 @@ void UI_InputBox::ShowInInspector()
 	if (ImGui::CollapsingHeader(header.c_str(), &exists, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		if (!isActive) { ImGui::BeginDisabled(); }
+
+		ImGui::Checkbox("Draggeable", &draggable);
+
+		if (ImGuiCustom::ToggleButton("Writing##", &isWriting))
+		{
+		}
 
 		ImGui::Text("Text");
 		ImGui::InputTextMultiline("##input", &text, ImVec2(0, 0), ImGuiInputTextFlags_AllowTabInput);
@@ -80,15 +86,14 @@ void UI_InputBox::ShowInInspector()
 
 void UI_InputBox::OnSelected()
 {
-	if (!writing)
+	if (!isWriting)
 	{
-		writing = true;
+		isWriting = true;
 		App->input->SetInputActive(text);
-		LOG("aaa");
 	}
 	else if (!App->input->GetInputActive())
 	{
-		writing = false;
+		isWriting = false;
 		state = UI_STATE::NORMAL;
 	}
 }

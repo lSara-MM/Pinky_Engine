@@ -45,7 +45,8 @@ void UI_Button::ShowInInspector()
 			{
 				image->color = disabledColor;
 			}
-		}
+		} ImGui::SameLine();
+		ImGui::Checkbox("Draggeable", &draggable);
 
 		ImGui::ColorEdit4("Normal color", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Focused color", (float*)&focusedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);

@@ -257,12 +257,14 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 		App->scene->rootNode->Update(dt);
 
-		for (auto i = 0; i < listUI.size(); i++)
+		for (auto i = listUI.size() - 1; i >= 0; i--)
 		{
 			if (listUI[i]->isActive)
 			{
 				listUI[i]->Draw(true);
 			}
+
+			if (i == 0) { break; }
 		}
 
 		glBindTexture(GL_TEXTURE_2D, 0);
