@@ -14,6 +14,7 @@ public:
 	~UI_Checkbox();
 
 	void ShowInInspector();
+	void Draw(bool game) override {};
 
 	void OnNormal() override;
 	void OnFocused() override;

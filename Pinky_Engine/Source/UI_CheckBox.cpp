@@ -6,7 +6,7 @@ UI_Checkbox::UI_Checkbox(GameObject* g) : C_UI(UI_TYPE::CHECKBOX, C_TYPE::UI, g,
 	isInteractable = true;
 	isChecked = true;
 
-	focusedColor = { 0, 1, 0, 1 };
+	focusedColor = { 0, 1, 0, 1 };//TODO: posa checkbox black?
 	pressedColor = { 1, 0, 1, 1 };
 	selectedColor = { 0, 0, 1, 1 };
 	disabledColor = { 1, 1, 1, 1 };
@@ -87,6 +87,6 @@ void UI_Checkbox::OnRelease()
 	if (isInteractable)
 	{
 		isChecked = !isChecked;
-		cmImg->isActive = isChecked;
+		bgImg->isActive = isChecked;
 	}
 }

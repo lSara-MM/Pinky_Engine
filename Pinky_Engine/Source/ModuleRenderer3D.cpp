@@ -209,7 +209,10 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	for (auto i = 0; i < listUI.size(); i++)
 	{
-		listUI[i]->Draw(false);
+		if (listUI[i]->isActive)
+		{
+			listUI[i]->Draw(false);
+		}
 	}
 
 	if (App->editor->raycast)
@@ -256,7 +259,10 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 		for (auto i = 0; i < listUI.size(); i++)
 		{
-			listUI[i]->Draw(true);
+			if (listUI[i]->isActive)
+			{
+				listUI[i]->Draw(true);
+			}
 		}
 
 		glBindTexture(GL_TEXTURE_2D, 0);
