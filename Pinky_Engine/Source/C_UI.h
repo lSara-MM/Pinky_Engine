@@ -72,6 +72,7 @@ public:
 	void DrawOBB();
 	void UpdateBoundingBoxes();
 	void Drag(float dt);
+	void FadeUI(float dt);
 
 public:
 	UI_TYPE UI_type;
@@ -89,6 +90,7 @@ public:
 	OBB obb;//global OB
 
 	bool draggable;
+	bool fade;
 
 	UIBounds* bounds;
 };

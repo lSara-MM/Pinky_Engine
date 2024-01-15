@@ -57,22 +57,39 @@ void UI_Button::ShowInInspector()
 void UI_Button::OnNormal()
 {
 	draggable = false;
-	image->color = color;
+	image->fade = false;
+	if (!image->fade)
+	{
+		image->color = color;
+	}
 }
 
 void UI_Button::OnFocused()
 {
-	image->color = focusedColor;
+	if (!image->fade)
+	{
+		image->color = focusedColor;
+	}
 }
 
 void UI_Button::OnPressed()
 {
-	image->color = pressedColor;
 	draggable = true;
+	image->fade = true;
+
+	if (!image->fade)
+	{
+		image->color = pressedColor;//TODO: prueba fade
+	}
 }
 
 void UI_Button::OnSelected()
 {
 	draggable = false;
-	image->color = selectedColor;
+	image->fade = false;
+
+	if (!image->fade)
+	{
+		image->color = selectedColor;
+	}
 }

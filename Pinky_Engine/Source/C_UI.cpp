@@ -14,6 +14,7 @@ C_UI::C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n, Color c, int w,
 	color = c;
 
 	draggable = false;
+	fade = false;
 
 	float3 position = gameObject->transform->position;
 
@@ -354,6 +355,29 @@ void C_UI::Drag(float dt)
 	bounds->uvs[0] = float2(0, 0);
 
 	bounds->InitBuffers();
+}
+
+void C_UI::FadeUI(float dt)
+{
+	if (color.a < 0)
+	{
+		gameObject->isActive = false;
+	}
+	else
+	{
+		color.a -= 0.1 * dt;
+	}
+
+	if (!gameObject->vChildren.empty())
+	{
+		for (auto i = 0; i < gameObject->vChildren.size(); i++)
+		{
+			if (gameObject->vChildren[i]->GetComponentByType(C_TYPE::UI) != nullptr)
+			{
+				static_cast<C_UI*>(gameObject->vChildren[i]->GetComponentByType(C_TYPE::UI))->FadeUI(dt);
+			}
+		}
+	}
 }
 
 bool UIBounds::InitBuffers()

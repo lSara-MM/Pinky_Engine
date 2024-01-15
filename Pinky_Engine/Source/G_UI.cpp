@@ -59,6 +59,10 @@ update_status G_UI::Update(float dt)
 					{
 						static_cast<C_UI*>(vComponents[i])->Drag(dt);
 					}
+					if (static_cast<C_UI*>(vComponents[i])->fade)
+					{
+						static_cast<C_UI*>(vComponents[i])->FadeUI(dt);
+					}
 				}
 			}
 
