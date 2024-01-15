@@ -89,6 +89,12 @@ void UI_Text::Draw(bool game)
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bounds->EBO);
 
+	//alpha material
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+
 	glColor4f(color.r, color.g, color.b, color.a);
 
 	// Textures
