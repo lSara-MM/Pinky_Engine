@@ -1,7 +1,7 @@
 #include "UI_Checkbox.h"
 #include "GameObject.h"
 
-UI_Checkbox::UI_Checkbox(GameObject* g) : C_UI(UI_TYPE::BUTTON, C_TYPE::UI, g, "Checkbox")
+UI_Checkbox::UI_Checkbox(GameObject* g) : C_UI(UI_TYPE::CHECKBOX, C_TYPE::UI, g, "Checkbox")
 {
 	isInteractable = true;
 	isChecked = true;

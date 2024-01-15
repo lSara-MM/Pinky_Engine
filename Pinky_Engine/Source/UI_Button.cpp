@@ -76,4 +76,3 @@ void UI_Button::OnSelected()
 	draggable = false;
 	image->color = selectedColor;
 }
-
