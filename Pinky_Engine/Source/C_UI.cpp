@@ -37,6 +37,8 @@ C_UI::C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n, int w, int h, i
 		posY = globalPos.y;
 	}
 
+	scaleBounds = scale;
+
 	boundsEditor = new UIBounds;
 	boundsGame = new UIBounds;
 
@@ -56,15 +58,15 @@ C_UI::C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n, int w, int h, i
 	boundsGame->index[4] = 1;
 	boundsGame->index[5] = 3;
 
-	boundsEditor->vertex[0] = float3(position.x, position.y + height, 0);
-	boundsEditor->vertex[1] = float3(position.x + width, position.y + height, 0);
+	boundsEditor->vertex[0] = float3(position.x, position.y + (height * scaleBounds.y), 0);
+	boundsEditor->vertex[1] = float3(position.x + (width * scaleBounds.x), position.y + ((height * scaleBounds.y) * scaleBounds.y), 0);
 	boundsEditor->vertex[2] = float3(position.x, position.y, 0);
-	boundsEditor->vertex[3] = float3(position.x + width, position.y, 0);
+	boundsEditor->vertex[3] = float3(position.x + (width * scaleBounds.x), position.y, 0);
 
-	boundsGame->vertex[0] = float3(posX, posY + height, 0);
-	boundsGame->vertex[1] = float3(posX + width, posY + height, 0);
+	boundsGame->vertex[0] = float3(posX, posY + (height * scaleBounds.y), 0);
+	boundsGame->vertex[1] = float3(posX + (width * scaleBounds.x), posY + (height * scaleBounds.y), 0);
 	boundsGame->vertex[2] = float3(posX, posY, 0);
-	boundsGame->vertex[3] = float3(posX + width, posY, 0);
+	boundsGame->vertex[3] = float3(posX + (width * scaleBounds.x), posY, 0);
 
 	boundsGame->uvs[0] = float2(0, 0);
 	boundsGame->uvs[1] = float2(1, 0);
@@ -183,9 +185,9 @@ void C_UI::DebugDraw()
 	float3 position = gameObject->transform->position;
 
 	float3 v1 = float3(position.x, position.y, position.z);
-	float3 v2 = float3(position.x + width, position.y, position.z);
-	float3 v3 = float3(position.x, position.y + height, position.z);
-	float3 v4 = float3(position.x + width, position.y + height, position.z);
+	float3 v2 = float3(position.x + (width * scaleBounds.x), position.y, position.z);
+	float3 v3 = float3(position.x, position.y + (height * scaleBounds.y), position.z);
+	float3 v4 = float3(position.x + (width * scaleBounds.x), position.y + (height * scaleBounds.y), position.z);
 
 	glVertex3f(v1.x, v1.y, v1.z);
 	glVertex3f(v2.x, v2.y, v2.z);
@@ -263,8 +265,8 @@ void C_UI::StateLogic()
 
 bool C_UI::MouseCheck(float2 mouse)
 {
-	return (mouse.x >= posX / App->editor->gameViewSize.x && mouse.x <= (posX + width) / App->editor->gameViewSize.x
-		&& mouse.y >= (posY + 21.25) / App->editor->gameViewSize.y && mouse.y <= (posY + 21.25 + height) / App->editor->gameViewSize.y);
+	return (mouse.x >= posX / App->editor->gameViewSize.x && mouse.x <= (posX + (width * scaleBounds.x)) / App->editor->gameViewSize.x
+		&& mouse.y >= (posY + 21.25) / App->editor->gameViewSize.y && mouse.y <= (posY + 21.25 + (height * scaleBounds.y)) / App->editor->gameViewSize.y);
 }
 
 void C_UI::UpdateUITransform()
@@ -275,21 +277,20 @@ void C_UI::UpdateUITransform()
 	float3 scale;
 
 	gameObject->transform->globalMatrix.Decompose(globalPos, rot, scale);
-	width *= scale.x;//TODO: ta mal
-	height *= scale.y;
 
 	posX = globalPos.x;//TODO: arreglar
 	posY = globalPos.y;
+	scaleBounds = scale;
 
-	boundsEditor->vertex[0] = float3(position.x, position.y + height, 0);
-	boundsEditor->vertex[1] = float3(position.x + width, position.y + height, 0);
+	boundsEditor->vertex[0] = float3(position.x, position.y + ((height * scaleBounds.y) * scale.y), 0);
+	boundsEditor->vertex[1] = float3(position.x + (width * scaleBounds.x), position.y + ((height * scaleBounds.y) * scale.y), 0);
 	boundsEditor->vertex[2] = float3(position.x, position.y, 0);
-	boundsEditor->vertex[3] = float3(position.x + width, position.y, 0);
+	boundsEditor->vertex[3] = float3(position.x + (width * scaleBounds.x), position.y, 0);
 
-	boundsGame->vertex[0] = float3(posX, posY + height, 0);
-	boundsGame->vertex[1] = float3(posX + width, posY + height, 0);
+	boundsGame->vertex[0] = float3(posX, posY + (height * scaleBounds.y), 0);
+	boundsGame->vertex[1] = float3(posX + (width * scaleBounds.x), posY + (height * scaleBounds.y), 0);
 	boundsGame->vertex[2] = float3(posX, posY, 0);
-	boundsGame->vertex[3] = float3(posX + width, posY, 0);
+	boundsGame->vertex[3] = float3(posX + (width * scaleBounds.x), posY, 0);
 
 	boundsEditor->uvs[0] = float2(0, 0);
 	boundsEditor->uvs[1] = float2(1, 0);
@@ -366,6 +367,7 @@ void C_UI::Drag(float dt)
 	posX += movementX;
 	posY += movementY;
 
+
 	float3 globalPos;
 	Quat rot;
 	float3 scale;
@@ -373,17 +375,19 @@ void C_UI::Drag(float dt)
 	gameObject->transform->SetPosition(float3(gameObject->transform->position.x + movementX, gameObject->transform->position.y + movementY, 0));
 	gameObject->transform->globalMatrix.Decompose(globalPos, rot, scale);
 
+	scaleBounds = scale;
+
 	float3 position = gameObject->transform->position;
 
-	boundsEditor->vertex[0] = float3(position.x + movementX, position.y + height + movementY, 0);
-	boundsEditor->vertex[1] = float3(position.x + width + movementX, position.y + height + movementY, 0);
+	boundsEditor->vertex[0] = float3(position.x + movementX, position.y + (height * scaleBounds.y) + movementY, 0);
+	boundsEditor->vertex[1] = float3(position.x + (width * scaleBounds.x) + movementX, position.y + (height * scaleBounds.y) + movementY, 0);
 	boundsEditor->vertex[2] = float3(position.x + movementX, position.y + movementY, 0);
-	boundsEditor->vertex[3] = float3(position.x + width + movementX, position.y + movementY, 0);
+	boundsEditor->vertex[3] = float3(position.x + (width * scaleBounds.x) + movementX, position.y + movementY, 0);
 
-	boundsGame->vertex[0] = float3(posX, posY + height, 0);
-	boundsGame->vertex[1] = float3(posX + width, posY + height, 0);
+	boundsGame->vertex[0] = float3(posX, posY + (height * scaleBounds.y), 0);
+	boundsGame->vertex[1] = float3(posX + (width * scaleBounds.x), posY + (height * scaleBounds.y), 0);
 	boundsGame->vertex[2] = float3(posX, posY, 0);
-	boundsGame->vertex[3] = float3(posX + width, posY, 0);
+	boundsGame->vertex[3] = float3(posX + (width * scaleBounds.x), posY, 0);
 
 	boundsEditor->uvs[0] = float2(0, 0);
 	boundsEditor->uvs[1] = float2(1, 0);
