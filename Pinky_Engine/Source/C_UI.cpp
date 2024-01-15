@@ -1,5 +1,8 @@
 #include "C_UI.h"
 #include "GameObject.h"
+#include "G_UI.h"
+
+#include "UI_Canvas.h"
 
 #include "Application.h"
 #include "ModuleEditor.h"
@@ -202,7 +205,7 @@ void C_UI::StateLogic()
 	if (App->editor->g->HoveredWindow != nullptr)
 	{
 		std::string name = App->editor->g->HoveredWindow->Name;
-		if (name == "Game")
+		if (name == "Game" && !static_cast<G_UI*>(gameObject)->canvas->fade)
 		{
 			float2 mousePos = float2(App->editor->mouse.x, App->editor->mouse.y);
 
@@ -419,6 +422,7 @@ void C_UI::FadeUI(float dt)
 	if (color.a <= 0)
 	{
 		gameObject->isActive = false;
+		App->scene->crossHair = true;
 	}
 	else
 	{

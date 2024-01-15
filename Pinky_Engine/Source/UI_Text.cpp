@@ -22,8 +22,7 @@ UI_Text::UI_Text(GameObject* g, int w, int h, int x, int y) : C_UI(UI_TYPE::TEXT
 
 UI_Text::~UI_Text()
 {
-	//RELEASE_ARRAY(font->index);
-	//RELEASE(font);
+	font = nullptr;
 }
 
 void UI_Text::ShowInInspector()

@@ -139,7 +139,8 @@ bool Application::CleanUp()
 	TimeManager::CleanUp();
 	RELEASE(randomLCG);
 	RELEASE(fs);
-	RELEASE(parson);
+	// TODO: wtf peta?
+	//RELEASE(parson);
 	return ret;
 }
 

@@ -174,6 +174,7 @@ bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y)
 		UI_Button* comp = new UI_Button(this, w, h, x, y);
 		vComponents.push_back(comp);
 		comp->image = static_cast<UI_Image*>(GetComponentUI(UI_TYPE::IMAGE));
+		comp->displayText = static_cast<UI_Text*>(aux->GetComponentUI(UI_TYPE::TEXT));
 	
 		name = "Button";
 
@@ -220,6 +221,7 @@ bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y)
 		break;
 	case UI_TYPE::CHECKBOX:
 	{
+		// TODO: Maybe put all this references to the other components in the constructor
 		// Unity-like
 		// Toggle background
 		G_UI* aux = new G_UI(UI_TYPE::IMAGE, this, w, h);
@@ -239,6 +241,7 @@ bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y)
 		vComponents.push_back(comp);
 		comp->bgImg = static_cast<UI_Image*>(aux->GetComponentUI(UI_TYPE::IMAGE));
 		comp->cmImg = static_cast<UI_Image*>(aux2->GetComponentUI(UI_TYPE::IMAGE));
+		comp->displayText = static_cast<UI_Text*>(aux3->GetComponentUI(UI_TYPE::TEXT));
 
 		name = "Checkbox";
 

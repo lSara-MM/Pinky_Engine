@@ -4,7 +4,9 @@
 
 #include "Globals.h"
 #include "C_UI.h"
+
 #include "UI_Image.h"
+#include "UI_Text.h"
 
 class UI_Checkbox : public C_UI
 {
@@ -30,6 +32,9 @@ public:
 
 	UI_Image* bgImg;
 	UI_Image* cmImg;
+
+	std::string text;
+	UI_Text* displayText;
 
 	// TODO: fix this
 	bool defaultFunction1;

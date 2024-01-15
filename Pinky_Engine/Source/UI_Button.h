@@ -4,7 +4,9 @@
 
 #include "Globals.h"
 #include "C_UI.h"
+
 #include "UI_Image.h"
+#include "UI_Text.h"
 
 class UI_Button : public C_UI
 {
@@ -24,6 +26,9 @@ public:
 public:
 	bool isInteractable;
 	UI_Image* image;
+
+	std::string text;
+	UI_Text* displayText;
 
 	// TODO: fix this
 	bool defaultFunction;

@@ -6,6 +6,9 @@
 #include "C_Mesh.h"
 #include "C_Material.h"
 #include "C_Camera.h"
+
+#include "UI_Image.h"
+
 #include "External Libraries/ImGuizmo/ImGuizmo.h"
 
 // If parent == nullptr --> its the root node
@@ -388,7 +391,45 @@ Component* GameObject::GetComponentByType(C_TYPE type)
 
 bool GameObject::ChangeComponentResource(Resource* oldResource, Resource* newResource, Component& comp)
 {
-	if (oldResource->GetType() == newResource->GetType())
+	if (newResource == nullptr)
+	{
+		switch (oldResource->GetType())
+		{
+		case R_TYPE::MESH:
+			mesh->mesh = nullptr;
+			break;
+		case R_TYPE::TEXTURE:
+
+			if (comp.type == C_TYPE::MATERIAL)
+			{
+				static_cast<C_Material*>(&comp)->tex = nullptr;
+			}
+			else
+			{
+				static_cast<UI_Image*>(&comp)->mat->tex = nullptr;
+			}
+			break;
+		case R_TYPE::PREFAB:
+			break;
+		case R_TYPE::SCENE:
+			break;
+		case R_TYPE::NONE:
+			break;
+		default:
+			break;
+		}
+
+		if (oldResource->count <= 1)
+		{
+			ClearVec(oldResource->vComponents);
+			App->resource->vPendingToDelete.push_back(oldResource);
+		}
+		else
+		{
+			App->resource->AddResource(oldResource, false);
+		}
+	}
+	else if (oldResource->GetType() == newResource->GetType())
 	{
 		if (oldResource->count <= 1)
 		{
@@ -411,10 +452,10 @@ bool GameObject::ChangeComponentResource(Resource* oldResource, Resource* newRes
 		case R_TYPE::TEXTURE:
 			//static_cast<C_Material*>(GetComponentByType(C_TYPE::MATERIAL))->tex = static_cast<R_Texture*>(newResource);
 			//newResource->vComponents.push_back(static_cast<C_Material*>(GetComponentByType(C_TYPE::MATERIAL)));
-			
+
 			static_cast<C_Material*>(&comp)->tex = static_cast<R_Texture*>(newResource);
 			newResource->vComponents.push_back(&comp);
-			
+
 			break;
 		case R_TYPE::PREFAB:
 			break;

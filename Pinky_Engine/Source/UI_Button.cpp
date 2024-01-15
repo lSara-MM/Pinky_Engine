@@ -1,5 +1,8 @@
 #include "UI_Button.h"
 #include "GameObject.h"
+#include "G_UI.h"
+
+#include "UI_Canvas.h"
 
 UI_Button::UI_Button(GameObject* g, int w, int h, int x, int y) : C_UI(UI_TYPE::BUTTON, C_TYPE::UI, g, "Button", w, h, x, y)
 {
@@ -12,6 +15,7 @@ UI_Button::UI_Button(GameObject* g, int w, int h, int x, int y) : C_UI(UI_TYPE::
 
 	image = nullptr;
 	defaultFunction = false;
+	displayText = nullptr;
 }
 
 UI_Button::~UI_Button()
@@ -49,6 +53,10 @@ void UI_Button::ShowInInspector()
 		} ImGui::SameLine();
 		ImGui::Checkbox("Draggeable", &draggable);
 
+		ImGui::Dummy(ImVec2(0, 10));
+		ImGui::Text(text.c_str());
+		ImGui::Dummy(ImVec2(0, 10));
+
 		ImGui::ColorEdit4("Normal color", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Focused color", (float*)&focusedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Pressed color", (float*)&pressedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
@@ -77,48 +85,29 @@ void UI_Button::ShowInInspector()
 
 void UI_Button::OnNormal()
 {
-	draggable = false;
-	image->fade = false;
-	if (!image->fade)
-	{
-		image->color = color;
-	}
+	image->color = color;
 }
 
 void UI_Button::OnFocused()
 {
-	if (!image->fade)
-	{
-		image->color = focusedColor;
-	}
+
+	image->color = focusedColor;
 }
 
 void UI_Button::OnPressed()
 {
-	draggable = true;
-	image->fade = true;
-
-	if (!image->fade)
-	{
-		image->color = pressedColor; //TODO: prueba fade
-	}
+	image->color = pressedColor;
 }
 
 void UI_Button::OnSelected()
 {
-	draggable = false;
-	image->fade = false;
-
-	if (!image->fade)
-	{
-		image->color = selectedColor;
-	}
+	image->color = selectedColor;
 }
 
 void UI_Button::OnRelease()
 {
 	if (defaultFunction)
 	{
-		// TODO: hacer que se haga el fade aqui
+		static_cast<G_UI*>(gameObject)->canvas->fade = true;
 	}
 }

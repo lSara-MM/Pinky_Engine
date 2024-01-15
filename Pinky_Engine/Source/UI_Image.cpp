@@ -40,28 +40,30 @@ void UI_Image::ShowInInspector()
 		if (!isActive) { ImGui::BeginDisabled(); }
 
 		ImGui::Checkbox("Draggeable", &draggable);
-
-		// Change Texture
-		if (ImGui::BeginCombo("##Texture", mat->tex->name.c_str()))
+		if (mat->tex != nullptr)
 		{
-			for (int i = 0; i < App->resource->vTexturesResources.size(); i++)
+			// Change Texture
+			if (ImGui::BeginCombo("##Texture", mat->tex->name.c_str()))
 			{
-				const bool is_selected = (App->resource->vTexturesResources[i] == mat->tex);
-				if (ImGui::Selectable(App->resource->vTexturesResources[i]->name.c_str(), is_selected))
+				for (int i = 0; i < App->resource->vTexturesResources.size(); i++)
 				{
-					gameObject->ChangeComponentResource(mat->tex, App->resource->vTexturesResources[i], *mat);
-				}
+					const bool is_selected = (App->resource->vTexturesResources[i] == mat->tex);
+					if (ImGui::Selectable(App->resource->vTexturesResources[i]->name.c_str(), is_selected))
+					{
+						gameObject->ChangeComponentResource(mat->tex, App->resource->vTexturesResources[i], *mat);
+					}
 
-				// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-				if (is_selected)
-				{
-					ImGui::SetItemDefaultFocus();
+					// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+					if (is_selected)
+					{
+						ImGui::SetItemDefaultFocus();
+					}
 				}
+				ImGui::EndCombo();
 			}
-			ImGui::EndCombo();
+			ImGui::SameLine();
+			ImGuiCustom::HelpMarker("If the current texture has only one instance you will not be able to change it back unless a that texture is imported to scene");
 		}
-		ImGui::SameLine();
-		ImGuiCustom::HelpMarker("If the current texture has only one instance you will not be able to change it back unless a that texture is imported to scene");
 
 		if (ImGuiCustom::ToggleButton("Checkered##", &mat->checkered))
 		{
@@ -92,79 +94,86 @@ void UI_Image::ShowInInspector()
 	}
 	ImGui::SameLine();
 
-	if (!exists) { gameObject->RemoveComponent(this); }
+	// TODO: to test
+	if (!exists) 
+	{
+		gameObject->ChangeComponentResource(mat->tex, nullptr, *this);
+	}
 }
 
 void UI_Image::Draw(bool game)
 {
-	UIBounds* boundsDrawn = nullptr;
-
-	if (game)
+	if (mat != nullptr && mat->tex != nullptr)
 	{
-		boundsDrawn = boundsGame;
+		UIBounds* boundsDrawn = nullptr;
 
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(0.0, App->editor->gameViewSize.x, App->editor->gameViewSize.y, 0.0, 1.0, -1.0);//TODO: orginal con 0,0 bien en pantalla pero mueve al revés
-		//glOrtho(App->editor->GameViewSize.x, 0.0, 0.0, App->editor->GameViewSize.y, 1.0, -1.0);
+		if (game)
+		{
+			boundsDrawn = boundsGame;
 
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			glOrtho(0.0, App->editor->gameViewSize.x, App->editor->gameViewSize.y, 0.0, 1.0, -1.0);//TODO: orginal con 0,0 bien en pantalla pero mueve al revés
+			//glOrtho(App->editor->GameViewSize.x, 0.0, 0.0, App->editor->GameViewSize.y, 1.0, -1.0);
+
+			glMatrixMode(GL_MODELVIEW);
+			glLoadIdentity();
+		}
+
+		else
+		{
+			boundsDrawn = boundsEditor;
+
+			glPushMatrix();
+			glMultMatrixf(gameObject->transform->GetGLTransform());
+		}
+
+		glEnableClientState(GL_VERTEX_ARRAY);
+
+		//normals
+		glEnableClientState(GL_NORMAL_ARRAY);
+
+		//texture
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+		// Mesh buffers
+		glBindBuffer(GL_ARRAY_BUFFER, boundsDrawn->VBO);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
+		glBindVertexArray(0);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, boundsDrawn->EBO);
+
+		//alpha material
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_ALPHA_TEST);
+		glAlphaFunc(GL_GREATER, 0.0f);
+
+		glColor4f(color.r, color.g, color.b, color.a);
+
+		// Textures
+		glBindBuffer(GL_ARRAY_BUFFER, boundsDrawn->id_tex_uvs);
+		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+		glActiveTexture(GL_TEXTURE0);
+
+		(!mat->checkered) ? glBindTexture(GL_TEXTURE_2D, (mat->tex->tex_id))
+			: glBindTexture(GL_TEXTURE_2D, App->renderer3D->texture_checker);
+
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
+
+		// Clean textures
+		glBindTexture(GL_TEXTURE_2D, 0); // Cleanning bind buffer;
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_NORMAL_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+		if (!game)
+		{
+			glPopMatrix();
+		}
+
+		boundsDrawn = nullptr;
 	}
-
-	else
-	{
-		boundsDrawn = boundsEditor;
-
-		glPushMatrix();
-		glMultMatrixf(gameObject->transform->GetGLTransform());
-	}
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-
-	//normals
-	glEnableClientState(GL_NORMAL_ARRAY);
-
-	//texture
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	// Mesh buffers
-	glBindBuffer(GL_ARRAY_BUFFER, boundsDrawn->VBO);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glBindVertexArray(0);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, boundsDrawn->EBO);
-
-	//alpha material
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_ALPHA_TEST);
-	glAlphaFunc(GL_GREATER, 0.0f);
-
-	glColor4f(color.r, color.g, color.b, color.a);
-
-	// Textures
-	glBindBuffer(GL_ARRAY_BUFFER, boundsDrawn->id_tex_uvs);
-	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-	glActiveTexture(GL_TEXTURE0);
-
-	(!mat->checkered) ? glBindTexture(GL_TEXTURE_2D, (mat->tex->tex_id))
-		: glBindTexture(GL_TEXTURE_2D, App->renderer3D->texture_checker);
-
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
-
-	// Clean textures
-	glBindTexture(GL_TEXTURE_2D, 0); // Cleanning bind buffer;
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	
-	if (!game)
-	{
-		glPopMatrix();
-	}
-
-	boundsDrawn = nullptr;
 }

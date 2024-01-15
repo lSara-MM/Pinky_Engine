@@ -16,6 +16,8 @@ UI_Checkbox::UI_Checkbox(GameObject* g, int w, int h, int x, int y) : C_UI(UI_TY
 
 	bgImg = nullptr;
 	cmImg = nullptr;
+
+	displayText = nullptr;
 }
 
 UI_Checkbox::~UI_Checkbox()
@@ -61,6 +63,10 @@ void UI_Checkbox::ShowInInspector()
 			cmImg->isActive = isChecked;
 		}
 
+		ImGui::Dummy(ImVec2(0, 10));
+		ImGui::Text(text.c_str());
+		ImGui::Dummy(ImVec2(0, 10));
+		
 		ImGui::ColorEdit4("Normal color", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Focused color", (float*)&focusedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Pressed color", (float*)&pressedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);

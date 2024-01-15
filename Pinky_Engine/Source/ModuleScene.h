@@ -29,6 +29,9 @@ public:
 	G_UI* GetCanvas();
 	void SetCanvas(G_UI* newCanvas = nullptr);
 
+private:
+	void ImportDefaultScene();
+
 public:
 	GameObject* rootNode;
 
@@ -40,7 +43,10 @@ public:
 
 	GameObject* mainCamera;
 
+	//
+	bool crossHair;
+	G_UI* f1;
+
 private:
 	G_UI* canvas;
-
 };

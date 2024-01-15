@@ -178,10 +178,6 @@ bool ModuleRenderer3D::Start()
 {
 	// Projection matrix for
 	editorCam->OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
-	C_Camera* cam = (C_Camera*)App->scene->mainCamera->GetComponentByType(C_TYPE::CAM);
-	cam->isGameCam = true;
-	cam->SetAsMain(cam->isGameCam);
-	cam = nullptr;
 	return true;
 }
 
@@ -209,7 +205,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	for (auto i = 0; i < listUI.size(); i++)
 	{
-		if (listUI[i]->isActive)
+		if (listUI[i]->gameObject->isActive && listUI[i]->isActive)
 		{
 			listUI[i]->Draw(false);
 		}
@@ -262,7 +258,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		{
 			for (auto i = listUI.size() - 1; i >= 0; i--)
 			{
-				if (listUI[i]->isActive)
+				if (listUI[i]->gameObject->isActive && listUI[i]->isActive)
 				{
 					listUI[i]->Draw(true);
 				}
@@ -288,6 +284,9 @@ bool ModuleRenderer3D::CleanUp()
 	LOG("Destroying 3D Renderer");
 
 	ai::DisableDebug();
+
+	//RELEASE_ARRAY(defaultFont->index);
+	RELEASE(defaultFont);
 
 	SDL_GL_DeleteContext(context);
 	return true;

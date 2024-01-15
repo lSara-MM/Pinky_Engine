@@ -37,7 +37,7 @@ public:
 	//Handle all camera input, used in editor (isHovered)
 	void CameraInput();
 	LineSegment localrayCam;
-	C_Camera* MainCamera;//TODO: eliminat = nullptr
+	C_Camera* MainCamera;
 	float3 objectReference;
 
 private:
