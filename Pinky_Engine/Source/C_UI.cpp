@@ -301,6 +301,8 @@ void C_UI::UpdateUITransform()
 	boundsEditor->uvs[1] = float2(0, 1);
 	boundsEditor->uvs[0] = float2(1, 1);
 
+	boundsEditor->RegenerateVBO();
+	boundsGame->RegenerateVBO();
 
 	/*if (!gameObject->vChildren.empty())
 	{
