@@ -90,3 +90,9 @@ void UI_Checkbox::OnRelease()
 		bgImg->isActive = isChecked;
 	}
 }
+
+void UI_Checkbox::CheckVSync()
+{
+	App->renderer3D->vsync = isChecked;
+	App->renderer3D->SetVsync(App->renderer3D->vsync);
+}

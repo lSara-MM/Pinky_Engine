@@ -22,6 +22,8 @@ public:
 	void OnSelected() override;
 	void OnRelease() override;
 
+	void CheckVSync();
+
 public:
 	bool isInteractable;
 	bool isChecked;
