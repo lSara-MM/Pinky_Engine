@@ -19,10 +19,14 @@ public:
 	void OnFocused() override;
 	void OnPressed() override;
 	void OnSelected() override;
+	void OnRelease() override;
 
 public:
 	bool isInteractable;
 	UI_Image* image;
+
+	// TODO: fix this
+	bool defaultFunction;
 
 private:
 	//color

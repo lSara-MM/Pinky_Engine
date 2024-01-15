@@ -11,6 +11,7 @@ UI_Button::UI_Button(GameObject* g, int w, int h, int x, int y) : C_UI(UI_TYPE::
 	disabledColor = { 1, 1, 1, 1 };
 
 	image = nullptr;
+	defaultFunction = false;
 }
 
 UI_Button::~UI_Button()
@@ -54,6 +55,19 @@ void UI_Button::ShowInInspector()
 		ImGui::ColorEdit4("Selected color", (float*)&selectedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Disabled color", (float*)&disabledColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 
+		{
+			ImGui::Dummy(ImVec2(0, 10));
+			ImGui::Text("Funtion: "); ImGui::SameLine();
+			if (defaultFunction)
+			{
+				ImGui::Text("void FadeUI(float dt)");
+			}
+			else
+			{
+				ImGui::Text("<null>");
+			}
+		}
+
 		if (!isActive) { ImGui::EndDisabled(); }
 	}
 	ImGui::SameLine();
@@ -86,7 +100,7 @@ void UI_Button::OnPressed()
 
 	if (!image->fade)
 	{
-		image->color = pressedColor;//TODO: prueba fade
+		image->color = pressedColor; //TODO: prueba fade
 	}
 }
 
@@ -98,5 +112,13 @@ void UI_Button::OnSelected()
 	if (!image->fade)
 	{
 		image->color = selectedColor;
+	}
+}
+
+void UI_Button::OnRelease()
+{
+	if (defaultFunction)
+	{
+		// TODO: hacer que se haga el fade aqui
 	}
 }

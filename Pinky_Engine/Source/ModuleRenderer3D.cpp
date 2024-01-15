@@ -257,6 +257,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 		App->scene->rootNode->Update(dt);
 
+		// TODO: preguntar porque el out of range este raro
 		for (auto i = listUI.size() - 1; i >= 0; i--)
 		{
 			if (listUI[i]->isActive)

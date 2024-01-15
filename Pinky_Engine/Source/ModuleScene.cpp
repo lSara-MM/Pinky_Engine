@@ -22,6 +22,7 @@
 #include "G_UI.h"
 #include "UI_Canvas.h"
 #include "UI_Image.h"
+#include "UI_Button.h"
 #include "UI_CheckBox.h"
 
 
@@ -90,20 +91,29 @@ bool ModuleScene::Start()
 	App->resource->ImportToSceneV("street2.fbx", PINKY_ASSETS_AUX "3dObject\\street\\");
 	//App->resource->ImportToScene("Baker_house.dds", PINKY_ASSETS_AUX "3dObject\\baker_house\\");
 
-	G_UI* prueba = new G_UI(UI_TYPE::CANVAS);
-	G_UI* prueba2 = new G_UI(UI_TYPE::IMAGE, App->scene->rootNode, 784, 660);
+	G_UI* UI_Element = new G_UI(UI_TYPE::CANVAS);
+	G_UI* UI_Element2 = new G_UI(UI_TYPE::IMAGE, App->scene->rootNode, 784, 660);
 
-	App->resource->ImportTextureToModel("intro_bg.png", PINKY_ASSETS_AUX "UI\\", *prueba2);
+	App->resource->ImportTextureToModel("intro_bg.png", PINKY_ASSETS_AUX "UI\\", *UI_Element2);
 
-	G_UI* prueba3 = new G_UI(UI_TYPE::CHECKBOX, App->scene->rootNode, 100, 100, 300, 300);
+	// VSync
+	G_UI* UI_Element3 = new G_UI(UI_TYPE::CHECKBOX, App->scene->rootNode, 100, 100, 300, 300);
 	App->resource->ImportTextureToModel("checkboxBG.png", PINKY_ASSETS_AUX "UI\\", *(static_cast<UI_Checkbox*>
-		(prueba3->GetComponentUI(UI_TYPE::CHECKBOX))->bgImg->gameObject));
+		(UI_Element3->GetComponentUI(UI_TYPE::CHECKBOX))->bgImg->gameObject));
 	App->resource->ImportTextureToModel("checkmark.png", PINKY_ASSETS_AUX "UI\\", *(static_cast<UI_Checkbox*>
-		(prueba3->GetComponentUI(UI_TYPE::CHECKBOX))->cmImg->gameObject));
+		(UI_Element3->GetComponentUI(UI_TYPE::CHECKBOX))->cmImg->gameObject));
+	static_cast<UI_Checkbox*>(UI_Element3->GetComponentUI(UI_TYPE::CHECKBOX))->defaultFunction1 = true;
 
-	prueba = nullptr;
-	prueba2 = nullptr;
-	prueba3 = nullptr;
+
+	G_UI* UI_Element4 = new G_UI(UI_TYPE::BUTTON, App->scene->rootNode, 100, 100, 300, 300);
+	App->resource->ImportTextureToModel("checkboxBG.png", PINKY_ASSETS_AUX "UI\\", *UI_Element4);
+
+	static_cast<UI_Button*> (UI_Element4->GetComponentUI(UI_TYPE::BUTTON))->defaultFunction = true;
+
+	UI_Element = nullptr;
+	UI_Element2 = nullptr;
+	UI_Element3 = nullptr;
+	UI_Element4 = nullptr;
 
 	return true;
 }

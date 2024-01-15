@@ -58,9 +58,7 @@ void UI_InputBox::ShowInInspector()
 
 		ImGui::Checkbox("Draggeable", &draggable);
 
-		if (ImGuiCustom::ToggleButton("Writing##", &isWriting))
-		{
-		}
+		ImGuiCustom::ToggleButton("Writing##", &isWriting);
 
 		ImGui::Text("Text");
 		ImGui::InputTextMultiline("##input", &text, ImVec2(0, 0), ImGuiInputTextFlags_AllowTabInput);

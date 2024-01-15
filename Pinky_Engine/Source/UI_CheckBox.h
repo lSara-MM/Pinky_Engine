@@ -31,6 +31,9 @@ public:
 	UI_Image* bgImg;
 	UI_Image* cmImg;
 
+	// TODO: fix this
+	bool defaultFunction1;
+	bool defaultFunction2;
 private:
 	//color
 	Color focusedColor;

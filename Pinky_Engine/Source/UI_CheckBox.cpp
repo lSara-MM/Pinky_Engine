@@ -66,7 +66,25 @@ void UI_Checkbox::ShowInInspector()
 		ImGui::ColorEdit4("Pressed color", (float*)&pressedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Selected color", (float*)&selectedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Disabled color", (float*)&disabledColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
-
+		
+		{
+			ImGui::Dummy(ImVec2(0, 10));
+			ImGui::Text("Funtion: "); ImGui::SameLine();
+			if (defaultFunction1)
+			{
+				ImGui::Text("void CheckVSync()");
+			}
+			else if (defaultFunction2)
+			{
+				// TODO: set draggeable
+				ImGui::Text("void FadeUI(float dtd)");
+			}
+			else
+			{
+				ImGui::Text("<null>");
+			}
+		}
+		
 		if (!isActive) { ImGui::EndDisabled(); }
 	}
 	ImGui::SameLine();
@@ -100,6 +118,16 @@ void UI_Checkbox::OnRelease()
 	{
 		isChecked = !isChecked;
 		bgImg->isActive = isChecked;
+
+		if (defaultFunction1)
+		{
+			CheckVSync();
+		}
+		if (defaultFunction2)
+		{
+			// TODO: draggeable
+			CheckVSync();
+		}
 	}
 }
 
