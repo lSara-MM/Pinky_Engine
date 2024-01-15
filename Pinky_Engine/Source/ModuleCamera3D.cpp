@@ -277,13 +277,13 @@ bool ModuleCamera3D::CheckTriangleIntersectionUI()
 			float4x4 object_transform = iterator->second->gameObject->transform->GetGlobalTransform();
 			localrayCam.Transform(object_transform.Inverted());
 
-			float3 vec1 = iterator->second->bounds->vertex[0];
-			float3 vec2 = iterator->second->bounds->vertex[1];
-			float3 vec3 = iterator->second->bounds->vertex[2];
+			float3 vec1 = iterator->second->boundsEditor->vertex[0];
+			float3 vec2 = iterator->second->boundsEditor->vertex[1];
+			float3 vec3 = iterator->second->boundsEditor->vertex[2];
 
-			float3 vec4 = iterator->second->bounds->vertex[2];
-			float3 vec5 = iterator->second->bounds->vertex[3];
-			float3 vec6 = iterator->second->bounds->vertex[1];
+			float3 vec4 = iterator->second->boundsEditor->vertex[2];
+			float3 vec5 = iterator->second->boundsEditor->vertex[3];
+			float3 vec6 = iterator->second->boundsEditor->vertex[1];
 
 			Triangle tri1(vec1, vec2, vec3);
 			Triangle tri2(vec4, vec5, vec6);

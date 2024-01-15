@@ -222,17 +222,17 @@ bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y)
 	{
 		// Unity-like
 		// Toggle background
-		G_UI* aux = new G_UI(UI_TYPE::IMAGE, this, w, h, x, y);
+		G_UI* aux = new G_UI(UI_TYPE::IMAGE, this, w, h);
 		aux->name = "Background";
 		aux->ReParent(this);
 
 		// Checkmark
-		G_UI* aux2 = new G_UI(UI_TYPE::IMAGE, this, w, h, x, y);
+		G_UI* aux2 = new G_UI(UI_TYPE::IMAGE, this, w, h);
 		aux2->name = "Checkmark";
 		aux2->ReParent(aux);
 
 		// Label
-		G_UI* aux3 = new G_UI(UI_TYPE::TEXT, this, w, h, x, y);
+		G_UI* aux3 = new G_UI(UI_TYPE::TEXT, this, w, h);
 		aux3->ReParent(this);
 
 		UI_Checkbox* comp = new UI_Checkbox(this, w, h, x, y);

@@ -38,41 +38,51 @@ C_UI::C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n, int w, int h, i
 		posY = localPos.y;
 	}
 
-	bounds = new UIBounds;
+	boundsEditor = new UIBounds;
+	boundsGame = new UIBounds;
 
-	bounds->index = new uint[6];
-	bounds->index[0] = 0;
-	bounds->index[1] = 1;
-	bounds->index[2] = 2;
-	bounds->index[3] = 2;
-	bounds->index[4] = 1;
-	bounds->index[5] = 3;
+	boundsEditor->index = new uint[6];
+	boundsEditor->index[0] = 0;
+	boundsEditor->index[1] = 1;
+	boundsEditor->index[2] = 2;
+	boundsEditor->index[3] = 2;
+	boundsEditor->index[4] = 1;
+	boundsEditor->index[5] = 3;
 
-	bounds->vertex[0] = float3(position.x, position.y + height, localPos.z);
-	bounds->vertex[1] = float3(position.x + width, position.y + height, localPos.z);
-	bounds->vertex[3] = float3(position.x + width, position.y, localPos.z);
-	bounds->vertex[2] = float3(position.x, position.y, localPos.z);
+	boundsGame->index = new uint[6];
+	boundsGame->index[0] = 0;
+	boundsGame->index[1] = 1;
+	boundsGame->index[2] = 2;
+	boundsGame->index[3] = 2;
+	boundsGame->index[4] = 1;
+	boundsGame->index[5] = 3;
 
-	//bounds->vertex[0] = float3(posX, posY + height, localPos.z);
-	//bounds->vertex[1] = float3(posX + width, posY + height, localPos.z);//TODO: necesario?
-	//bounds->vertex[3] = float3(posX + width, posY, localPos.z);
-	//bounds->vertex[2] = float3(posX, posY, localPos.z);
+	boundsEditor->vertex[0] = float3(position.x, position.y + height, 0);
+	boundsEditor->vertex[1] = float3(position.x + width, position.y + height, 0);
+	boundsEditor->vertex[2] = float3(position.x, position.y, 0);
+	boundsEditor->vertex[3] = float3(position.x + width, position.y, 0);
 
-	bounds->uvs[0] = float2(0, 0);
-	bounds->uvs[1] = float2(1, 0);
-	bounds->uvs[2] = float2(0, 1);
-	bounds->uvs[3] = float2(1, 1);
+	boundsGame->vertex[0] = float3(posX, posY + height, 0);
+	boundsGame->vertex[1] = float3(posX + width, posY + height, 0);
+	boundsGame->vertex[2] = float3(posX, posY, 0);
+	boundsGame->vertex[3] = float3(posX + width, posY, 0);
 
-	bounds->uvs[3] = float2(0, 0);
-	bounds->uvs[2] = float2(1, 0);
-	bounds->uvs[1] = float2(0, 1);
-	bounds->uvs[0] = float2(1, 1);
+	boundsGame->uvs[0] = float2(0, 0);
+	boundsGame->uvs[1] = float2(1, 0);
+	boundsGame->uvs[2] = float2(0, 1);
+	boundsGame->uvs[3] = float2(1, 1);
 
-	bounds->InitBuffers();
+	boundsEditor->uvs[3] = float2(0, 0);
+	boundsEditor->uvs[2] = float2(1, 0);
+	boundsEditor->uvs[1] = float2(0, 1);
+	boundsEditor->uvs[0] = float2(1, 1);
+
+	boundsEditor->InitBuffers();
+	boundsGame->InitBuffers();
 
 	//Mouse pick
 	local_aabb.SetNegativeInfinity();
-	local_aabb.Enclose((float3*)bounds->vertex, 4);
+	local_aabb.Enclose((float3*)boundsEditor->vertex, 4);
 	obb = local_aabb;
 	obb.Transform(gameObject->transform->GetGlobalTransform());
 	global_aabb.SetNegativeInfinity();
@@ -81,9 +91,11 @@ C_UI::C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n, int w, int h, i
 
 C_UI::~C_UI()
 {
-	bounds->DeleteBuffers();
+	boundsEditor->DeleteBuffers();
+	boundsGame->DeleteBuffers();
 	//RELEASE(bounds->index);TODO: peta
-	RELEASE(bounds);
+	RELEASE(boundsEditor);
+	RELEASE(boundsGame);
 }
 
 update_status C_UI::Update(float dt)
@@ -95,12 +107,11 @@ update_status C_UI::Update(float dt)
 
 void C_UI::Draw(bool game)
 {
+	UIBounds* boundsDrawn = nullptr;
+
 	if (game)
 	{
-		bounds->uvs[0] = float2(0, 0);
-		bounds->uvs[1] = float2(1, 0);
-		bounds->uvs[2] = float2(0, 1);
-		bounds->uvs[3] = float2(1, 1);
+		boundsDrawn = boundsGame;
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
@@ -113,10 +124,8 @@ void C_UI::Draw(bool game)
 
 	else
 	{
-		bounds->uvs[3] = float2(0, 0);
-		bounds->uvs[2] = float2(1, 0);
-		bounds->uvs[1] = float2(0, 1);
-		bounds->uvs[0] = float2(1, 1);
+		boundsDrawn = boundsEditor;
+
 		glPushMatrix();
 		glMultMatrixf(gameObject->transform->GetGLTransform());
 	}
@@ -130,11 +139,11 @@ void C_UI::Draw(bool game)
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	// Mesh buffers
-	glBindBuffer(GL_ARRAY_BUFFER, bounds->VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, boundsDrawn->VBO);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 	glBindVertexArray(0);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bounds->EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, boundsDrawn->EBO);
 
 	//alpha material
 	glEnable(GL_BLEND);
@@ -145,7 +154,7 @@ void C_UI::Draw(bool game)
 	glColor4f(color.r, color.g, color.b, color.a);
 
 	// Textures
-	glBindBuffer(GL_ARRAY_BUFFER, bounds->id_tex_uvs);
+	glBindBuffer(GL_ARRAY_BUFFER, boundsDrawn->id_tex_uvs);
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 	glActiveTexture(GL_TEXTURE0);
 
@@ -268,25 +277,43 @@ void C_UI::UpdateUITransform()
 	width *= scale.x;//TODO: ta mal
 	height *= scale.y;
 
-	posX = position.x;//TODO: arreglar
-	posY = position.y;
+	posX = localPos.x;//TODO: arreglar
+	posY = localPos.y;
 
-	bounds->vertex[0] = float3(position.x, position.y + height, localPos.z);
-	bounds->vertex[1] = float3(position.x + width, position.y + height, localPos.z);
-	bounds->vertex[3] = float3(position.x + width, position.y, localPos.z);
-	bounds->vertex[2] = float3(position.x, position.y, localPos.z);
+	boundsEditor->vertex[0] = float3(position.x, position.y + height, 0);
+	boundsEditor->vertex[1] = float3(position.x + width, position.y + height, 0);
+	boundsEditor->vertex[2] = float3(position.x, position.y, 0);
+	boundsEditor->vertex[3] = float3(position.x + width, position.y, 0);
 
-	//bounds->vertex[0] = float3(posX, posY + height, localPos.z);
-	//bounds->vertex[1] = float3(posX + width, posY + height, localPos.z);//TODO: necesario?
-	//bounds->vertex[3] = float3(posX + width, posY, localPos.z);
-	//bounds->vertex[2] = float3(posX, posY, localPos.z);
+	boundsGame->vertex[0] = float3(posX, posY + height, 0);
+	boundsGame->vertex[1] = float3(posX + width, posY + height, 0);
+	boundsGame->vertex[2] = float3(posX, posY, 0);
+	boundsGame->vertex[3] = float3(posX + width, posY, 0);
 
-	bounds->uvs[2] = float2(0, 1);
-	bounds->uvs[3] = float2(1, 1);
-	bounds->uvs[1] = float2(1, 0);
-	bounds->uvs[0] = float2(0, 0);
+	boundsEditor->uvs[0] = float2(0, 0);
+	boundsEditor->uvs[1] = float2(1, 0);
+	boundsEditor->uvs[2] = float2(0, 1);
+	boundsEditor->uvs[3] = float2(1, 1);
 
-	bounds->InitBuffers();
+
+	boundsEditor->uvs[3] = float2(0, 0);
+	boundsEditor->uvs[2] = float2(1, 0);
+	boundsEditor->uvs[1] = float2(0, 1);
+	boundsEditor->uvs[0] = float2(1, 1);
+
+	boundsEditor->InitBuffers();
+	boundsGame->InitBuffers();
+
+	if (!gameObject->vChildren.empty())
+	{
+		for (auto i = 0; i < gameObject->vChildren.size(); i++)
+		{
+			if (gameObject->vChildren[i]->GetComponentByType(C_TYPE::UI) != nullptr)
+			{
+				static_cast<C_UI*>(gameObject->vChildren[i]->GetComponentByType(C_TYPE::UI))->UpdateUITransform();
+			}
+		}
+	}
 }
 
 void C_UI::DrawABB()
@@ -324,7 +351,7 @@ void C_UI::DrawOBB()
 void C_UI::UpdateBoundingBoxes()
 {
 	local_aabb.SetNegativeInfinity();
-	local_aabb.Enclose((float3*)bounds->vertex, 4);
+	local_aabb.Enclose((float3*)boundsEditor->vertex, 4);
 	obb = local_aabb;
 	obb.Transform(gameObject->transform->GetGlobalTransform());
 	global_aabb.SetNegativeInfinity();
@@ -338,7 +365,6 @@ void C_UI::Drag(float dt)
 	posX += movementX;
 	posY += movementY;
 
-
 	float4x4 localTransform = gameObject->transform->GetLocalTransform();
 	float3 localPos;
 	Quat rot;
@@ -349,22 +375,39 @@ void C_UI::Drag(float dt)
 
 	float3 position = gameObject->transform->position;
 
-	bounds->vertex[0] = float3(position.x + movementX, position.y + height + movementY, localPos.z);
-	bounds->vertex[1] = float3(position.x + width + movementX, position.y + height + movementY, localPos.z);
-	bounds->vertex[3] = float3(position.x + width + movementX, position.y + movementY, localPos.z);
-	bounds->vertex[2] = float3(position.x + movementX, position.y + movementY, localPos.z);
+	boundsEditor->vertex[0] = float3(position.x + movementX, position.y + height + movementY, 0);
+	boundsEditor->vertex[1] = float3(position.x + width + movementX, position.y + height + movementY, 0);
+	boundsEditor->vertex[2] = float3(position.x + movementX, position.y + movementY, 0);
+	boundsEditor->vertex[3] = float3(position.x + width + movementX, position.y + movementY, 0);
 
-	//bounds->vertex[0] = float3(posX, posY + height, localPos.z);
-	//bounds->vertex[1] = float3(posX + width, posY + height, localPos.z);//TODO: necesario?
-	//bounds->vertex[3] = float3(posX + width, posY, localPos.z);
-	//bounds->vertex[2] = float3(posX, posY, localPos.z);
+	boundsGame->vertex[0] = float3(posX, posY + height, 0);
+	boundsGame->vertex[1] = float3(posX + width, posY + height, 0);
+	boundsGame->vertex[2] = float3(posX, posY, 0);
+	boundsGame->vertex[3] = float3(posX + width, posY, 0);
 
-	bounds->uvs[2] = float2(0, 1);
-	bounds->uvs[3] = float2(1, 1);
-	bounds->uvs[1] = float2(1, 0);
-	bounds->uvs[0] = float2(0, 0);
+	boundsEditor->uvs[0] = float2(0, 0);
+	boundsEditor->uvs[1] = float2(1, 0);
+	boundsEditor->uvs[2] = float2(0, 1);
+	boundsEditor->uvs[3] = float2(1, 1);
 
-	bounds->InitBuffers();
+	boundsEditor->uvs[3] = float2(0, 0);
+	boundsEditor->uvs[2] = float2(1, 0);
+	boundsEditor->uvs[1] = float2(0, 1);
+	boundsEditor->uvs[0] = float2(1, 1);
+
+	boundsEditor->InitBuffers();
+	boundsGame->InitBuffers();
+
+	if (!gameObject->vChildren.empty())
+	{
+		for (auto i = 0; i < gameObject->vChildren.size(); i++)
+		{
+			if (gameObject->vChildren[i]->GetComponentByType(C_TYPE::UI) != nullptr)
+			{
+				static_cast<C_UI*>(gameObject->vChildren[i]->GetComponentByType(C_TYPE::UI))->Drag(dt);
+			}
+		}
+	}
 }
 
 void C_UI::FadeUI(float dt)

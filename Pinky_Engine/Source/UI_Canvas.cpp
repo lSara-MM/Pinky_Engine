@@ -70,16 +70,16 @@ void UI_Canvas::UpdateUITransform()
 	width = App->editor->gameViewSize.x;
 	height = App->editor->gameViewSize.y;
 
-	bounds->vertex[0] = float3(posX, posY, 0);
-	bounds->vertex[1] = float3(posX + width, posY, 0);
-	bounds->vertex[2] = float3(posX, posY + height, 0);
-	bounds->vertex[3] = float3(posX + width, posY + height, 0);
+	boundsEditor->vertex[0] = float3(posX, posY, 0);
+	boundsEditor->vertex[1] = float3(posX + width, posY, 0);
+	boundsEditor->vertex[2] = float3(posX, posY + height, 0);
+	boundsEditor->vertex[3] = float3(posX + width, posY + height, 0);
 
-	bounds->uvs[2] = float2(0, 1);
-	bounds->uvs[3] = float2(1, 1);
-	bounds->uvs[1] = float2(1, 0);
-	bounds->uvs[0] = float2(0, 0);
+	boundsEditor->uvs[2] = float2(0, 1);
+	boundsEditor->uvs[3] = float2(1, 1);
+	boundsEditor->uvs[1] = float2(1, 0);
+	boundsEditor->uvs[0] = float2(0, 0);
 
-	bounds->InitBuffers();
+	boundsEditor->InitBuffers();
 }
 

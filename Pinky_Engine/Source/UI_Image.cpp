@@ -96,8 +96,12 @@ void UI_Image::ShowInInspector()
 
 void UI_Image::Draw(bool game)
 {
+	UIBounds* boundsDrawn = nullptr;
+
 	if (game)
 	{
+		boundsDrawn = boundsGame;
+
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glOrtho(0.0, App->editor->gameViewSize.x, App->editor->gameViewSize.y, 0.0, 1.0, -1.0);//TODO: orginal con 0,0 bien en pantalla pero mueve al revés
@@ -109,6 +113,8 @@ void UI_Image::Draw(bool game)
 
 	else
 	{
+		boundsDrawn = boundsEditor;
+
 		glPushMatrix();
 		glMultMatrixf(gameObject->transform->GetGLTransform());
 	}
@@ -122,11 +128,11 @@ void UI_Image::Draw(bool game)
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	// Mesh buffers
-	glBindBuffer(GL_ARRAY_BUFFER, bounds->VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, boundsDrawn->VBO);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 	glBindVertexArray(0);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bounds->EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, boundsDrawn->EBO);
 
 	//alpha material
 	glEnable(GL_BLEND);
@@ -137,7 +143,7 @@ void UI_Image::Draw(bool game)
 	glColor4f(color.r, color.g, color.b, color.a);
 
 	// Textures
-	glBindBuffer(GL_ARRAY_BUFFER, bounds->id_tex_uvs);
+	glBindBuffer(GL_ARRAY_BUFFER, boundsDrawn->id_tex_uvs);
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 	glActiveTexture(GL_TEXTURE0);
 

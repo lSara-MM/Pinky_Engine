@@ -94,6 +94,7 @@ public:
 	bool draggable;
 	bool fade;
 
-	UIBounds* bounds;
+	UIBounds* boundsEditor;
+	UIBounds* boundsGame;
 };
 #endif // __UI_H__
