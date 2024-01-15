@@ -22,6 +22,8 @@ UI_Text::UI_Text(GameObject* g, int w, int h, int x, int y) : C_UI(UI_TYPE::TEXT
 
 UI_Text::~UI_Text()
 {
+	//RELEASE_ARRAY(font->index);
+	//RELEASE(font);
 }
 
 void UI_Text::ShowInInspector()
@@ -187,7 +189,8 @@ Font::Font(std::string name, std::string fontPath)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		// now store character for later use
-		Character* character = new Character{
+		Character* character = new Character
+		{
 			texture,
 			float2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
 			float2(face->glyph->bitmap_left, face->glyph->bitmap_top),

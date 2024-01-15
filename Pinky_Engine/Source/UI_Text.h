@@ -11,7 +11,8 @@
 #include "External Libraries/FreeType/include/freetype/ftglyph.h"
 #pragma comment(lib, "Source/External Libraries/FreeType/libx86/freetype.lib")
 
-struct Character {
+struct Character 
+{
 	GLuint textureID;
 	float2  size;       
 	float2  bearing;    
