@@ -111,7 +111,7 @@ void UI_Text::Draw(bool game)
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 	glActiveTexture(GL_TEXTURE0);
 
-	GLuint a = font->GetCharacterTexID('p');
+	GLuint a = font->GetCharacterTexID(text[0]);
 	glBindTexture(GL_TEXTURE_2D, a);
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
@@ -139,64 +139,76 @@ Font::Font(std::string name, std::string fontPath)
 	// 128 --> number of characters in a font
 	FT_Set_Pixel_Sizes(face, 0, 128);
 
-    // disable byte-alignment restriction
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	// disable byte-alignment restriction
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    // load first 128 characters of ASCII set
-    for (unsigned char c = 0; c < 128; c++)
-    {
-        // Load character glyph 
-        if (FT_Load_Char(face, c, FT_LOAD_RENDER))
-        {
+	// load first 128 characters of ASCII set
+	for (unsigned char c = 0; c < 128; c++)
+	{
+		// Load character glyph 
+		if (FT_Load_Char(face, c, FT_LOAD_RENDER))
+		{
 			LOG("[ERROR] Failed to load glyph");
-            continue;
-        }
+			continue;
+		}
 
-        // generate texture
-        GLuint texture;
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glTexImage2D(
-            GL_TEXTURE_2D,
-            0,
-            GL_RED,
-            face->glyph->bitmap.width,
-            face->glyph->bitmap.rows,
-            0,
-            GL_RED,
-            GL_UNSIGNED_BYTE,
-            face->glyph->bitmap.buffer
-        );
+		// generate texture
+		GLuint texture;
+		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
 
-        // set texture options
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        
+		// Allocate a new buffer for RGBA data
+		GLubyte* rgbaBuffer = new GLubyte[4 * face->glyph->bitmap.width * face->glyph->bitmap.rows];
+
+		// Copy the glyph data into the RGBA buffer
+		for (int y = 0; y < face->glyph->bitmap.rows; ++y)
+		{
+			for (int x = 0; x < face->glyph->bitmap.width; ++x)
+			{
+				GLubyte value = face->glyph->bitmap.buffer[y * face->glyph->bitmap.width + x];
+				rgbaBuffer[4 * (y * face->glyph->bitmap.width + x)] = value;  // Red
+				rgbaBuffer[4 * (y * face->glyph->bitmap.width + x) + 1] = value;  // Green
+				rgbaBuffer[4 * (y * face->glyph->bitmap.width + x) + 2] = value;  // Blue
+				rgbaBuffer[4 * (y * face->glyph->bitmap.width + x) + 3] = value;  // Alpha
+			}
+		}
+
+		// Use the RGBA buffer for texture data
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, face->glyph->bitmap.width, face->glyph->bitmap.rows, 0,
+			GL_RGBA, GL_UNSIGNED_BYTE, rgbaBuffer);
+
+		// Clean up the temporary buffer
+		delete[] rgbaBuffer;
+
+		// set texture options
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
 		// now store character for later use
-        Character* character = new Character{
-            texture,
-            float2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-            float2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-            static_cast<unsigned int>(face->glyph->advance.x)
-        };
+		Character* character = new Character{
+			texture,
+			float2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
+			float2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+			static_cast<unsigned int>(face->glyph->advance.x)
+		};
 
-        characters.insert(std::pair<GLchar, Character*>(c, character));
-    }
+		characters.insert(std::pair<GLchar, Character*>(c, character));
+	}
 
-    // destroy FreeType once we're finished
-    FT_Done_Face(face);
-    FT_Done_FreeType(ft);
+	// destroy FreeType once we're finished
+	FT_Done_Face(face);
+	FT_Done_FreeType(ft);
 }
 
 bool Font::InitFont(std::string name, std::string fontPath)
 {
-    if (FT_Init_FreeType(&ft))
-    {
-        LOG("[ERROR] Could not init FreeType Library");
-        return false;
-    }
+	if (FT_Init_FreeType(&ft))
+	{
+		LOG("[ERROR] Could not init FreeType Library");
+		return false;
+	}
 
 	if (FT_New_Face(ft, (fontPath + "/" + name).c_str(), 0, &face))
 	{
