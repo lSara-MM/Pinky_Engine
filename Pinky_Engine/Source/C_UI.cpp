@@ -409,7 +409,7 @@ void C_UI::Drag(float dt)
 
 void C_UI::FadeUI(float dt)
 {
-	if (color.a < 0)
+	if (color.a <= 0)
 	{
 		gameObject->isActive = false;
 	}
