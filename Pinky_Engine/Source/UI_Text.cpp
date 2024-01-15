@@ -16,7 +16,8 @@ UI_Text::UI_Text(GameObject* g, int w, int h, int x, int y) : C_UI(UI_TYPE::TEXT
 {
 	text = "Hello World";
 	font = App->renderer3D->defaultFont;
-	
+
+	fontSize = 21;
 }
 
 UI_Text::~UI_Text()
@@ -131,12 +132,12 @@ void UI_Text::Draw(bool game)
 	boundsDrawn = nullptr;
 }
 
-Font::Font(std::string name, std::string fontPath, int size)
+Font::Font(std::string name, std::string fontPath)
 {
 	InitFont(name, fontPath);
 
-	fontSize = size;
-	FT_Set_Pixel_Sizes(face, 0, fontSize);
+	// 128 --> number of characters in a font
+	FT_Set_Pixel_Sizes(face, 0, 128);
 
     // disable byte-alignment restriction
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -150,6 +151,7 @@ Font::Font(std::string name, std::string fontPath, int size)
 			LOG("[ERROR] Failed to load glyph");
             continue;
         }
+
         // generate texture
         GLuint texture;
         glGenTextures(1, &texture);
@@ -165,25 +167,27 @@ Font::Font(std::string name, std::string fontPath, int size)
             GL_UNSIGNED_BYTE,
             face->glyph->bitmap.buffer
         );
+
         // set texture options
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        // now store character for later use
+        
+		// now store character for later use
         Character* character = new Character{
             texture,
             float2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
             float2(face->glyph->bitmap_left, face->glyph->bitmap_top),
             static_cast<unsigned int>(face->glyph->advance.x)
         };
-        Characters.insert(std::pair<GLchar, Character*>(c, character));
+
+        characters.insert(std::pair<GLchar, Character*>(c, character));
     }
 
     // destroy FreeType once we're finished
     FT_Done_Face(face);
     FT_Done_FreeType(ft);
-
 }
 
 bool Font::InitFont(std::string name, std::string fontPath)
@@ -204,14 +208,14 @@ bool Font::InitFont(std::string name, std::string fontPath)
 
 GLuint Font::GetCharacterTexID(GLchar character)
 {
-	for (std::map<GLchar, Character*>::const_iterator it = Characters.begin(); it != Characters.end(); it++)
+	for (std::map<GLchar, Character*>::const_iterator it = characters.begin(); it != characters.end(); it++)
 	{
 		if ((*it).first == character)
 		{
-			GLuint id = (*it).second->TextureID;
+			GLuint id = (*it).second->textureID;
 			return id;
 		}
 	}
 
-	return GLuint();
+	return 0;
 }
