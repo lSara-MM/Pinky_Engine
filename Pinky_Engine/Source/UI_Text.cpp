@@ -62,76 +62,146 @@ void UI_Text::ShowInInspector()
 
 void UI_Text::Draw(bool game)
 {
-	UIBounds* boundsDrawn = nullptr;
+	float space = 0;
 
-	if (game)
+	for (size_t i = 0; i < text.length(); i++)
 	{
-		boundsDrawn = boundsGame;
+		//character container
+		UIBounds boundsEditor = UIBounds();
+		UIBounds boundsGame = UIBounds();
 
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(0.0, App->editor->gameViewSize.x, App->editor->gameViewSize.y, 0.0, 1.0, -1.0);//TODO: orginal con 0,0 bien en pantalla pero mueve al revés
-		//glOrtho(App->editor->GameViewSize.x, 0.0, 0.0, App->editor->GameViewSize.y, 1.0, -1.0);
+		boundsEditor.index = new uint[6];
+		boundsEditor.index[0] = 0;
+		boundsEditor.index[1] = 1;
+		boundsEditor.index[2] = 2;
+		boundsEditor.index[3] = 2;
+		boundsEditor.index[4] = 1;
+		boundsEditor.index[5] = 3;
 
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
+		boundsGame.index = new uint[6];
+		boundsGame.index[0] = 0;
+		boundsGame.index[1] = 1;
+		boundsGame.index[2] = 2;
+		boundsGame.index[3] = 2;
+		boundsGame.index[4] = 1;
+		boundsGame.index[5] = 3;
+
+		float3 position = gameObject->transform->position;
+
+		auto itr = font->characters.find(text[i]);
+
+		if (itr != font->characters.end())
+		{
+			if (i != 0)
+			{
+				auto itr2 = font->characters.find(text[i - 1]);
+				space += itr2->second->size.x;
+			}
+
+			if (itr->first == ' ')
+			{
+				space += fontSize;
+			}
+
+			boundsEditor.vertex[0] = float3(position.x + space, position.y + (fontSize * scaleBounds.y), 0);
+			boundsEditor.vertex[1] = float3(position.x + space + (itr->second->size.x * scaleBounds.x), position.y + (fontSize * scaleBounds.y), 0);
+			boundsEditor.vertex[2] = float3(position.x + space, position.y, 0);
+			boundsEditor.vertex[3] = float3(position.x + space + (itr->second->size.x * scaleBounds.x), position.y, 0);
+
+			boundsGame.vertex[0] = float3(posX + space, posY + (fontSize * scaleBounds.y), 0);
+			boundsGame.vertex[1] = float3(posX + space + (itr->second->size.x * scaleBounds.x), posY + (fontSize * scaleBounds.y), 0);
+			boundsGame.vertex[2] = float3(posX + space, posY, 0);
+			boundsGame.vertex[3] = float3(posX + space + (itr->second->size.x * scaleBounds.x), posY, 0);
+
+			boundsGame.uvs[0] = float2(0, 1);
+			boundsGame.uvs[1] = float2(1, 1);
+			boundsGame.uvs[2] = float2(0, 0);
+			boundsGame.uvs[3] = float2(1, 0);
+
+			boundsEditor.uvs[0] = float2(1, 0);
+			boundsEditor.uvs[1] = float2(0, 0);
+			boundsEditor.uvs[2] = float2(1, 1);
+			boundsEditor.uvs[3] = float2(0, 1);
+
+			boundsEditor.InitBuffers();
+			boundsGame.InitBuffers();
+
+			UIBounds boundsDrawn = UIBounds();
+
+			if (game)
+			{
+				boundsDrawn = boundsGame;
+
+				glMatrixMode(GL_PROJECTION);
+				glLoadIdentity();
+				glOrtho(0.0, App->editor->gameViewSize.x, App->editor->gameViewSize.y, 0.0, 1.0, -1.0);//TODO: orginal con 0,0 bien en pantalla pero mueve al revés
+				//glOrtho(App->editor->GameViewSize.x, 0.0, 0.0, App->editor->GameViewSize.y, 1.0, -1.0);
+
+				glMatrixMode(GL_MODELVIEW);
+				glLoadIdentity();
+			}
+
+			else
+			{
+				boundsDrawn = boundsEditor;
+
+				glPushMatrix();
+				glMultMatrixf(gameObject->transform->GetGLTransform());
+			}
+
+			glEnableClientState(GL_VERTEX_ARRAY);
+
+			//normals
+			glEnableClientState(GL_NORMAL_ARRAY);
+
+			//texture
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+			// Mesh buffers
+			glBindBuffer(GL_ARRAY_BUFFER, boundsDrawn.VBO);
+			glVertexPointer(3, GL_FLOAT, 0, NULL);
+			glBindVertexArray(0);
+
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, boundsDrawn.EBO);
+
+			//alpha material
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glEnable(GL_ALPHA_TEST);
+			glAlphaFunc(GL_GREATER, 0.0f);
+
+			glColor4f(color.r, color.g, color.b, color.a);
+
+			// Textures
+			glBindBuffer(GL_ARRAY_BUFFER, boundsDrawn.id_tex_uvs);
+			glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+			glActiveTexture(GL_TEXTURE0);
+
+			glBindTexture(GL_TEXTURE_2D, itr->second->textureID);
+
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
+
+			// Clean textures
+			glBindTexture(GL_TEXTURE_2D, 0); // Cleanning bind buffer;
+			glDisableClientState(GL_VERTEX_ARRAY);
+			glDisableClientState(GL_NORMAL_ARRAY);
+			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+			if (!game)
+			{
+				glPopMatrix();
+			}
+
+			boundsEditor.DeleteBuffers();
+			boundsGame.DeleteBuffers();
+			RELEASE_ARRAY(boundsEditor.index);
+			RELEASE_ARRAY(boundsGame.index);
+		}
+
+
 	}
-
-	else
-	{
-		boundsDrawn = boundsEditor;
-
-		glPushMatrix();
-		glMultMatrixf(gameObject->transform->GetGLTransform());
-	}
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-
-	//normals
-	glEnableClientState(GL_NORMAL_ARRAY);
-
-	//texture
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	// Mesh buffers
-	glBindBuffer(GL_ARRAY_BUFFER, boundsDrawn->VBO);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glBindVertexArray(0);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, boundsDrawn->EBO);
-
-	//alpha material
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_ALPHA_TEST);
-	glAlphaFunc(GL_GREATER, 0.0f);
-
-	glColor4f(color.r, color.g, color.b, color.a);
-
-	// Textures
-	glBindBuffer(GL_ARRAY_BUFFER, boundsDrawn->id_tex_uvs);
-	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-	glActiveTexture(GL_TEXTURE0);
-
-	GLuint a = font->GetCharacterTexID(text[0]);
-	glBindTexture(GL_TEXTURE_2D, a);
-
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
-
-	// Clean textures
-	glBindTexture(GL_TEXTURE_2D, 0); // Cleanning bind buffer;
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-
-	if (!game)
-	{
-		glPopMatrix();
-	}
-
-	boundsDrawn = nullptr;
 }
 
 Font::Font(std::string name, std::string fontPath)
@@ -194,7 +264,7 @@ Font::Font(std::string name, std::string fontPath)
 			texture,
 			float2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
 			float2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-			static_cast<unsigned int>(face->glyph->advance.x)
+			static_cast<unsigned int>(face->glyph->advance.x),
 		};
 
 		characters.insert(std::pair<GLchar, Character*>(c, character));
