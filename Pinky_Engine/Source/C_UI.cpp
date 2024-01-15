@@ -4,7 +4,7 @@
 #include "Application.h"
 #include "ModuleEditor.h"
 
-C_UI::C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n, Color c, int w, int h, int x, int y) : Component(t, n, g)
+C_UI::C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n, int w, int h, int x, int y, Color c) : Component(t, n, g)
 {
 	UI_type = ui_t;
 	state = UI_STATE::NORMAL;
@@ -15,6 +15,9 @@ C_UI::C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n, Color c, int w,
 
 	draggable = false;
 	fade = false;
+
+	gameObject->transform->SetPosition(float3(x, y, 0));
+	gameObject->transform->UpdateGlobalMatrix();
 
 	float3 position = gameObject->transform->position;
 

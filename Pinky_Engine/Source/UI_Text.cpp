@@ -12,7 +12,7 @@
 
 //#include "STB_Text.h"
 
-UI_Text::UI_Text(GameObject* g) : C_UI(UI_TYPE::TEXT, C_TYPE::UI, g, "Text")
+UI_Text::UI_Text(GameObject* g, int w, int h, int x, int y) : C_UI(UI_TYPE::TEXT, C_TYPE::UI, g, "Text", w, h, x, y)
 {
 	text = "Hello World";
 	font = App->renderer3D->defaultFont;

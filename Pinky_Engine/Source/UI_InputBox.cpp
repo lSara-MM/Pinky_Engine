@@ -10,7 +10,7 @@
 //
 #include "External Libraries/ImGui/imgui_custom.h"
 
-UI_InputBox::UI_InputBox(GameObject* g) : C_UI(UI_TYPE::INPUTBOX, C_TYPE::UI, g, "Input Box")
+UI_InputBox::UI_InputBox(GameObject* g, int w, int h, int x, int y) : C_UI(UI_TYPE::INPUTBOX, C_TYPE::UI, g, "Input Box", w, h, x, y)
 {
 	displayText = nullptr;
 	fontSize = 21;

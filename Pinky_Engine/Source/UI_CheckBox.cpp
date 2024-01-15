@@ -3,7 +3,8 @@
 
 #include "External Libraries/ImGui/imgui_custom.h"
 
-UI_Checkbox::UI_Checkbox(GameObject* g) : C_UI(UI_TYPE::CHECKBOX, C_TYPE::UI, g, "Checkbox")
+
+UI_Checkbox::UI_Checkbox(GameObject* g, int w, int h, int x, int y) : C_UI(UI_TYPE::CHECKBOX, C_TYPE::UI, g, "Checkbox", w, h, x, y)
 {
 	isInteractable = true;
 	isChecked = true;

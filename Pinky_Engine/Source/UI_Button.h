@@ -10,7 +10,7 @@ class UI_Button : public C_UI
 {
 public:
 
-	UI_Button(GameObject* g);
+	UI_Button(GameObject* g, int w, int h, int x, int y);
 	~UI_Button();
 
 	void ShowInInspector();

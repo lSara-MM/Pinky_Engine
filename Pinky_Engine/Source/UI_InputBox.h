@@ -10,7 +10,7 @@ class UI_InputBox : public C_UI
 {
 public:
 
-	UI_InputBox(GameObject* g);
+	UI_InputBox(GameObject* g, int w, int h, int x, int y);
 	~UI_InputBox();
 
 	update_status Update(float dt) override;

@@ -8,11 +8,11 @@
 
 #include "ModuleScene.h"
 
-G_UI::G_UI(UI_TYPE t, GameObject* pParent) : GameObject("", pParent)
+G_UI::G_UI(UI_TYPE t, GameObject* pParent, int w, int h, int x, int y) : GameObject("", pParent)
 {
 	//RemoveComponent(transform);//TODO: fer amb altre transform
 	canvas = nullptr;
-	AddUIComponent(t);
+	AddUIComponent(t, w, h, x, y);
 
 	//AddComponent(C_TYPE::MESH, nullptr, ai::POLY_PRIMITIVE_TYPE::PLANE);
 	mesh = nullptr;
@@ -107,7 +107,7 @@ std::vector<C_UI*> G_UI::GetComponentsUI_ByType(UI_TYPE type)
 	return vec;
 }
 
-bool G_UI::AddUIComponent(UI_TYPE type)
+bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y)
 {
 	bool ret = true;
 
@@ -131,7 +131,7 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 	break;
 	case UI_TYPE::IMAGE:
 	{
-		UI_Image* comp = new UI_Image(this);
+		UI_Image* comp = new UI_Image(this, w, h, x, y);
 		vComponents.push_back(comp);
 
 		name = "Image";
@@ -148,7 +148,7 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 	break;
 	case UI_TYPE::TEXT:
 	{
-		UI_Text* comp = new UI_Text(this);
+		UI_Text* comp = new UI_Text(this, w, h, x, y);
 		vComponents.push_back(comp);
 
 		name = "Text";
@@ -166,12 +166,12 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 	case UI_TYPE::BUTTON:
 	{
 		// Unity-like
-		AddUIComponent(UI_TYPE::IMAGE);
+		AddUIComponent(UI_TYPE::IMAGE, w, h, x, y);
 
-		G_UI* aux = new G_UI(UI_TYPE::TEXT, this);
+		G_UI* aux = new G_UI(UI_TYPE::TEXT, this, w, h, x, y);
 		aux->ReParent(this);
 
-		UI_Button* comp = new UI_Button(this);
+		UI_Button* comp = new UI_Button(this, w, h, x, y);
 		vComponents.push_back(comp);
 		comp->image = static_cast<UI_Image*>(GetComponentUI(UI_TYPE::IMAGE));
 	
@@ -191,9 +191,9 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 	case UI_TYPE::INPUTBOX:
 	{
 		// Unity-like
-		AddUIComponent(UI_TYPE::IMAGE);
+		AddUIComponent(UI_TYPE::IMAGE, w, h, x, y);
 
-		G_UI* aux = new G_UI(UI_TYPE::TEXT, this);
+		G_UI* aux = new G_UI(UI_TYPE::TEXT, this, w, h, x, y);
 		aux->ReParent(this);
 
 		//new G_UI(UI_TYPE::IMAGE, this);
@@ -201,7 +201,7 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 		//AddUIComponent(UI_TYPE::IMAGE);
 		//AddUIComponent(UI_TYPE::TEXT);
 
-		UI_InputBox* comp = new UI_InputBox(this);
+		UI_InputBox* comp = new UI_InputBox(this, w, h, x, y);
 		vComponents.push_back(comp);
 		comp->displayText = static_cast<UI_Text*>(aux->GetComponentUI(UI_TYPE::TEXT));
 
@@ -222,20 +222,20 @@ bool G_UI::AddUIComponent(UI_TYPE type)
 	{
 		// Unity-like
 		// Toggle background
-		G_UI* aux = new G_UI(UI_TYPE::IMAGE, this);
+		G_UI* aux = new G_UI(UI_TYPE::IMAGE, this, w, h, x, y);
 		aux->name = "Background";
 		aux->ReParent(this);
 
 		// Checkmark
-		G_UI* aux2 = new G_UI(UI_TYPE::IMAGE, this);
+		G_UI* aux2 = new G_UI(UI_TYPE::IMAGE, this, w, h, x, y);
 		aux2->name = "Checkmark";
 		aux2->ReParent(aux);
 
 		// Label
-		G_UI* aux3 = new G_UI(UI_TYPE::TEXT, this);
+		G_UI* aux3 = new G_UI(UI_TYPE::TEXT, this, w, h, x, y);
 		aux3->ReParent(this);
 
-		UI_Checkbox* comp = new UI_Checkbox(this);
+		UI_Checkbox* comp = new UI_Checkbox(this, w, h, x, y);
 		vComponents.push_back(comp);
 		comp->bgImg = static_cast<UI_Image*>(aux->GetComponentUI(UI_TYPE::IMAGE));
 		comp->cmImg = static_cast<UI_Image*>(aux2->GetComponentUI(UI_TYPE::IMAGE));

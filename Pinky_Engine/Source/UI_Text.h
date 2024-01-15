@@ -44,7 +44,7 @@ class UI_Text : public C_UI
 {
 public:
 
-	UI_Text(GameObject* g);
+	UI_Text(GameObject* g, int w, int h, int x, int y);
 	~UI_Text();
 
 	void ShowInInspector();

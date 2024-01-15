@@ -91,11 +91,11 @@ bool ModuleScene::Start()
 	//App->resource->ImportToScene("Baker_house.dds", PINKY_ASSETS_AUX "3dObject\\baker_house\\");
 
 	G_UI* prueba = new G_UI(UI_TYPE::CANVAS);
-	G_UI* prueba2 = new G_UI(UI_TYPE::IMAGE);
+	G_UI* prueba2 = new G_UI(UI_TYPE::IMAGE, App->scene->rootNode, 784, 660);
 
 	App->resource->ImportTextureToModel("intro_bg.png", PINKY_ASSETS_AUX "UI\\", *prueba2);
 
-	G_UI* prueba3 = new G_UI(UI_TYPE::CHECKBOX);
+	G_UI* prueba3 = new G_UI(UI_TYPE::CHECKBOX, App->scene->rootNode, 100, 100, 300, 300);
 	App->resource->ImportTextureToModel("checkboxBG.png", PINKY_ASSETS_AUX "UI\\", *(static_cast<UI_Checkbox*>
 		(prueba3->GetComponentUI(UI_TYPE::CHECKBOX))->bgImg->gameObject));
 	App->resource->ImportTextureToModel("checkmark.png", PINKY_ASSETS_AUX "UI\\", *(static_cast<UI_Checkbox*>

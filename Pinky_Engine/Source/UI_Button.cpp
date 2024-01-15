@@ -1,7 +1,7 @@
 #include "UI_Button.h"
 #include "GameObject.h"
 
-UI_Button::UI_Button(GameObject* g) : C_UI(UI_TYPE::BUTTON, C_TYPE::UI, g, "Button")
+UI_Button::UI_Button(GameObject* g, int w, int h, int x, int y) : C_UI(UI_TYPE::BUTTON, C_TYPE::UI, g, "Button", w, h, x, y)
 {
 	isInteractable = true;
 
