@@ -16,6 +16,11 @@ UI_InputBox::UI_InputBox(GameObject* g, int x, int y, int w, int h) : C_UI(UI_TY
 	fontSize = 21;
 	image = nullptr;
 
+	focusedColor = { 0, 1, 0, 1 };
+	pressedColor = { 1, 0, 1, 1 };
+	selectedColor = { 0.2, 0.2, 1, 1 };
+	disabledColor = { 1, 1, 1, 1 };
+
 	text = "uwu";
 	maxChars = 10;
 
