@@ -159,6 +159,7 @@
 * [SDL](https://www.libsdl.org/index.php)
 * [mmgr](https://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml)
 * [Deviceld](https://github.com/GameTechDev/gpudetect)
+* [FreeType](https://freetype.org/)
 
 # Github links
 
