@@ -38,6 +38,7 @@ ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, sta
 	f1 = nullptr;
 
 	//
+	menu = nullptr;
 	crossHair = false;
 	street = true;
 	mainScreen = 0;
@@ -122,20 +123,11 @@ update_status ModuleScene::Update(float dt)
 		}
 	}
 
-	// Open menu
+	// Open/Close menu
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN && !ImGui::GetIO().WantTextInput && !App->input->GetInputActive())
 	{
-		// Delete all selected go
-		if (!hierarchy->GetSelectedGOs().empty())
-		{
-			for (auto j = 0; j < hierarchy->GetSelectedGOs().size(); j++)
-			{
-				hierarchy->GetSelectedGOs()[j]->pParent->DeleteChild(hierarchy->GetSelectedGOs()[j]);
-			}
-
-			hierarchy->SetSelected(nullptr);
-			inspector->SetSelected(nullptr);
-		}
+		inspector->SetActiveState(menu, !menu->isActive);
+		menu->isActive = !menu->isActive;
 	}
 
 	return UPDATE_CONTINUE;
@@ -278,7 +270,6 @@ void ModuleScene::ImportDefaultScene()
 			static_cast<UI_Checkbox*>(UI_Element3->GetComponentUI(UI_TYPE::CHECKBOX))->defaultFunction1 = true;
 			static_cast<UI_Checkbox*>(UI_Element3->GetComponentUI(UI_TYPE::CHECKBOX))->displayText->text = "VSync";
 			static_cast<UI_Checkbox*>(UI_Element3->GetComponentUI(UI_TYPE::CHECKBOX))->displayText->color = { 0, 0, 0, 1 };
-			UI_Element3->isActive = false;
 
 			// Draggeable
 			G_UI* UI_Element4 = new G_UI(UI_TYPE::CHECKBOX, UI_Element2, App->editor->gameViewSize.x / 2 - 300, 200);
@@ -287,6 +278,7 @@ void ModuleScene::ImportDefaultScene()
 			App->resource->ImportTextureToModel("checkmark.png", PINKY_ASSETS_AUX "UI\\", *(static_cast<UI_Checkbox*>
 				(UI_Element4->GetComponentUI(UI_TYPE::CHECKBOX))->cmImg->gameObject));
 			static_cast<UI_Checkbox*>(UI_Element4->GetComponentUI(UI_TYPE::CHECKBOX))->defaultFunction2 = true;
+			static_cast<UI_Checkbox*>(UI_Element4->GetComponentUI(UI_TYPE::CHECKBOX))->isChecked = false;
 			static_cast<UI_Checkbox*>(UI_Element4->GetComponentUI(UI_TYPE::CHECKBOX))->displayText->text = "Draggeable";
 			static_cast<UI_Checkbox*>(UI_Element4->GetComponentUI(UI_TYPE::CHECKBOX))->displayText->color = { 0, 0, 0, 1 };
 
@@ -305,6 +297,7 @@ void ModuleScene::ImportDefaultScene()
 			UI_Element5 = nullptr;
 
 			mainScreen = 2;
+			menu = canvas;
 		}
 	}
 }

@@ -21,6 +21,9 @@ UI_Checkbox::UI_Checkbox(GameObject* g, int x, int y, int w, int h) : C_UI(UI_TY
 	cmImg = nullptr;
 
 	displayText = nullptr;
+
+	defaultFunction1 = false;
+	defaultFunction2 = false;
 }
 
 UI_Checkbox::~UI_Checkbox()
@@ -60,7 +63,7 @@ void UI_Checkbox::ShowInInspector()
 			}
 		}	ImGui::SameLine();
 		ImGui::Checkbox("Draggeable", &isDraggable);
-		
+
 		if (ImGuiCustom::ToggleButton("Checked##", &isChecked))
 		{
 			cmImg->isActive = isChecked;
@@ -69,13 +72,13 @@ void UI_Checkbox::ShowInInspector()
 		ImGui::Dummy(ImVec2(0, 10));
 		ImGui::Text(text.c_str());
 		ImGui::Dummy(ImVec2(0, 10));
-		
+
 		ImGui::ColorEdit4("Normal color", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Focused color", (float*)&focusedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Pressed color", (float*)&pressedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Selected color", (float*)&selectedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Disabled color", (float*)&disabledColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
-		
+
 		{
 			ImGui::Dummy(ImVec2(0, 10));
 			ImGui::Text("Funtion: "); ImGui::SameLine();
@@ -93,7 +96,7 @@ void UI_Checkbox::ShowInInspector()
 				ImGui::Text("<null>");
 			}
 		}
-		
+
 		if (!isActive) { ImGui::EndDisabled(); }
 	}
 	ImGui::SameLine();
@@ -126,7 +129,7 @@ void UI_Checkbox::OnRelease()
 	if (isInteractable)
 	{
 		isChecked = !isChecked;
-		bgImg->isActive = isChecked;
+		cmImg->isActive = isChecked;
 
 		if (defaultFunction1)
 		{
@@ -147,6 +150,7 @@ void UI_Checkbox::CheckVSync()
 
 void UI_Checkbox::CheckDraggeable()
 {
+	LOG("drag");
 	if (static_cast<G_UI*>(gameObject->pParent)->GetComponentUI(UI_TYPE::IMAGE) != nullptr)
 	{
 		static_cast<G_UI*>(gameObject->pParent)->GetComponentUI(UI_TYPE::IMAGE)->isDraggable = isChecked;
