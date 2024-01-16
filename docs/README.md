@@ -15,8 +15,7 @@ Pinky Engine is a Game Engine made by Andreu Nosàs Soler and Sara Qiao Martíne
 
 | Sara Qiao Martínez Mauri | Andreu Nosàs Soler |
 | ----------- | ----------- |
-| ![Fallout series](https://external-preview.redd.it/f8P_i_fMd-mPtdVyRiFMKOy88ciPVew4CGU9YmJ_W7s.jpg?width=640&crop=smart&auto=webp&s=51194a7f6424204858a10b688b1b05565caa826f) | ![Mass Effect 2007](http://cdn3.whatculture.com/wp-content/uploads/2015/11/3ehM1gNO.gif)|
-| [![lSara-MM - ✧](https://img.shields.io/static/v1?label=lSara-MM&message=✧&color=blue&logo=github)](https://github.com/lSara-MM "Go to GitHub repo") <br> - GameObjects <br>  - Custom File Format <br> - Resource Manager <br> - Scene Serialization <br>  - Engine Windows <br>  - Component Mesh <br>  - Component Material <br>  - UI Components | [![AndyCubico - ✻](https://img.shields.io/static/v1?label=AndyCubico&message=✻&color=blue&logo=github)](https://github.com/AndyCubico "Go to GitHub repo") <br> - Frustum & Frustum Culling <br> - Mouse Picking <br> - Camera <br> - Component Transform <br>  - UI Components <br>  - Viewports <br> - Gizmos <br> - Play/Stop mode
+| [![lSara-MM - ✧](https://img.shields.io/static/v1?label=lSara-MM&message=✧&color=blue&logo=github)](https://github.com/lSara-MM "Go to GitHub repo") <br> - GameObjects <br>  - Custom File Format <br> - Resource Manager <br> - Scene Serialization <br>  - Engine Windows <br>  - Component Mesh <br>  - Component Material <br> - UI component pattern <br>  - UI Components | [![AndyCubico - ✻](https://img.shields.io/static/v1?label=AndyCubico&message=✻&color=blue&logo=github)](https://github.com/AndyCubico "Go to GitHub repo") <br> - Frustum & Frustum Culling <br> - Mouse Picking <br> - Component Camera <br> - Component Transform <br>  - Guizmos <br>  - Viewports <br> - UI Components <br> - UI logic <br> - Play/Stop mode
 
 
 ## Core Sub-Systems
@@ -42,6 +41,7 @@ Scene rendering time was reduced with camera culling, camera frustum, and AABB b
 
 
 # High-level System: User Interface
+
 System to render a variety of widgets on screen. It follows a component patern like the normal game objects, with each component inthereting from the base class C_UI. 
 
 ## UI Game Objects/Widgets: 
@@ -63,6 +63,8 @@ It is formed by two Games Objects:
     * Option to change the texture
     * It can call custom functions (like the fade in the demo)
       
+![engineGif2](https://github.com/lSara-MM/Pinky_Engine/assets/99950309/5e01bd9e-487e-4c09-b3fb-2761cf250ee2)
+
 ### ↦ Input Box
 Allows player to input any text when selected :
   * Input box Game Object holds the logic and has the same states as button
@@ -85,8 +87,12 @@ Composed of multiple Game Objects:
 	to the next scene
 	* Next scene has the town of the second assignment and a crosshair in the middle of the screen
 	* Pressing F1 in this scene opens up a menu, with a checkbox to drag the window and to toggle Vsync
+   
+ ![engineGif1](https://github.com/lSara-MM/Pinky_Engine/assets/99950309/aeeeec42-293a-43a0-9d52-6e0c3bf3bb00)
+
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/dJmOgvL1sJY?si=99HFYbOXOEplq2HC" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
 
 
 ## 5. References
