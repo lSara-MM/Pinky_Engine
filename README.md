@@ -113,7 +113,7 @@
 * Wireframe toggle to enable and disable showing the wireframe of all meshes
 * Raycast toggle to debug the raycast used in mouse picking
 
-# High-level System
+# High-level System: User Interface
 * System to render a variety of widgets on screen
 * UI Game Objects/Widgets: 
 	* Canvas: 
