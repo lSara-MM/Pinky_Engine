@@ -48,7 +48,7 @@ public:
 	ResourcesManager* rm;
 
 	GameObject* mainCamera;
-
+	std::vector<G_UI*> vCanvas;
 	//
 	G_UI* f1;
 
@@ -63,4 +63,6 @@ private:
 
 	bool street;
 	bool loaded;
+
+	int selectedUI;
 };
