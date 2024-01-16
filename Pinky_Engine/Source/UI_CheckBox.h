@@ -18,11 +18,11 @@ public:
 	void ShowInInspector();
 	void Draw(bool game) override {};
 
-	void OnNormal() override;
-	void OnFocused() override;
-	void OnPressed() override;
-	void OnSelected() override;
-	void OnRelease() override;
+	void OnNormal();
+	void OnFocused();
+	void OnPressed();
+	void OnSelected();
+	void OnRelease();
 
 	void CheckVSync();
 	void CheckDraggeable();

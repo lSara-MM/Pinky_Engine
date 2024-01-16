@@ -17,7 +17,7 @@ public:
 
 	void ShowInInspector();
 
-	void OnSelected() override;
+	void OnSelected();
 
 public:
 	std::string text;

@@ -26,6 +26,11 @@ G_UI::~G_UI()
 
 update_status G_UI::Update(float dt)
 {
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN && !ImGui::GetIO().WantTextInput && !App->input->GetInputActive())
+	{
+		LOG("Break!");
+	}
+
 	update_status ret = UPDATE_CONTINUE;
 
 	if (isActive)
@@ -186,6 +191,7 @@ bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y, GameObject* 
 
 		G_UI* aux = new G_UI(UI_TYPE::TEXT, this, w, h, 20, h/2);
 		aux->ReParent(this);
+		aux->canvas = static_cast<G_UI*>(pParent)->canvas;
 
 		UI_Button* comp = new UI_Button(this, x, y, w, h);
 		vComponents.push_back(comp);
@@ -220,6 +226,7 @@ bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y, GameObject* 
 
 		G_UI* aux = new G_UI(UI_TYPE::TEXT, this, w, h, x, y);
 		aux->ReParent(this);
+		aux->canvas = static_cast<G_UI*>(pParent)->canvas;
 
 		//new G_UI(UI_TYPE::IMAGE, this);
 
@@ -259,15 +266,18 @@ bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y, GameObject* 
 		G_UI* aux = new G_UI(UI_TYPE::IMAGE, this, w, h);
 		aux->name = "Background";
 		aux->ReParent(this);
+		aux->canvas = static_cast<G_UI*>(pParent)->canvas;
 
 		// Checkmark
 		G_UI* aux2 = new G_UI(UI_TYPE::IMAGE, this, w, h);
 		aux2->name = "Checkmark";
 		aux2->ReParent(aux);
+		aux2->canvas = static_cast<G_UI*>(pParent)->canvas;
 
 		// Label
 		G_UI* aux3 = new G_UI(UI_TYPE::TEXT, this, w, h);
 		aux3->ReParent(this);
+		aux3->canvas = static_cast<G_UI*>(pParent)->canvas;
 
 		UI_Checkbox* comp = new UI_Checkbox(this, x, y, w, h);
 		vComponents.push_back(comp);

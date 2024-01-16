@@ -286,7 +286,7 @@ void ModuleScene::ImportDefaultScene()
 			App->resource->ImportTextureToModel("crosshair.png", PINKY_ASSETS_AUX "UI\\", *UI_Element);
 
 			// VSync
-			G_UI* UI_Element3 = new G_UI(UI_TYPE::CHECKBOX, UI_Element2, 300, 300);
+			G_UI* UI_Element3 = new G_UI(UI_TYPE::CHECKBOX, UI_Element2, 200, 200);
 			App->resource->ImportTextureToModel("checkboxBG.png", PINKY_ASSETS_AUX "UI\\", *(static_cast<UI_Checkbox*>
 				(UI_Element3->GetComponentUI(UI_TYPE::CHECKBOX))->bgImg->gameObject));
 			App->resource->ImportTextureToModel("checkmark.png", PINKY_ASSETS_AUX "UI\\", *(static_cast<UI_Checkbox*>
@@ -296,7 +296,7 @@ void ModuleScene::ImportDefaultScene()
 			UI_Element3->isActive = false;
 
 			// Draggeable
-			G_UI* UI_Element4 = new G_UI(UI_TYPE::CHECKBOX, UI_Element2, 300, 300);
+			G_UI* UI_Element4 = new G_UI(UI_TYPE::CHECKBOX, UI_Element2, 200, 500);
 			App->resource->ImportTextureToModel("checkboxBG.png", PINKY_ASSETS_AUX "UI\\", *(static_cast<UI_Checkbox*>
 				(UI_Element4->GetComponentUI(UI_TYPE::CHECKBOX))->bgImg->gameObject));
 			App->resource->ImportTextureToModel("checkmark.png", PINKY_ASSETS_AUX "UI\\", *(static_cast<UI_Checkbox*>
