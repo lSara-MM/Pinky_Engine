@@ -231,7 +231,7 @@ void ModuleScene::LoadFirstScene()
 
 void ModuleScene::ImportDefaultMainScreen()
 {
-	App->parson->LoadScene(ASSETS_AUX "MainScreen");
+	App->parson->LoadScene(ASSETS_AUX "MainScreen.pnk");
 
 	G_UI* UI_Element = new G_UI(UI_TYPE::CANVAS);
 
