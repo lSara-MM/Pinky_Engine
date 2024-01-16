@@ -13,7 +13,7 @@
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	MainCamera = new C_Camera();
-	MainCamera->frustum.pos = float3(50.0f, 30.0f, -65.0f);
+	MainCamera->frustum.pos = float3(391.667f, 125.464f, 678.825f);
 	MainCamera->LookAt(float3(0.0f, 0.0f, 0.0f));
 	MainCamera->frustum.farPlaneDistance = 1000.0f;
 	Reference = float3(0.0f, 0.0f, 0.0f);
