@@ -59,6 +59,8 @@ public:
 
 	void Draw(bool game) override;
 
+	void ChangeFontSize();
+
 public:
 	std::string text;
 	Font* font;
@@ -67,5 +69,8 @@ public:
 
 	UIBounds* boundsEditor;
 	UIBounds* boundsGame;
+	
+private:
+	float space;
 };
 #endif // __UI_TEXT_H__

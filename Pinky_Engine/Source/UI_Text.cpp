@@ -50,6 +50,7 @@ UI_Text::UI_Text(GameObject* g, int x, int y, int w, int h) : C_UI(UI_TYPE::TEXT
 	boundsGame->InitBuffers();
 
 	fontSize = 21;
+	space = 0;
 }
 
 UI_Text::~UI_Text()
@@ -89,7 +90,7 @@ void UI_Text::ShowInInspector()
 		ImGui::Dummy(ImVec2(0, 10));
 
 		ImGui::Text("Font Size");
-		if (ImGui::DragFloat("##FontSize", &fontSize, 0.1f, 0, 0, "%.1f"))
+		if (ImGui::DragFloat("##FontSize", (fontSize < 0) ? &(fontSize = 0) : &fontSize, 0.1f, 0, 0, "%.1f"))
 		{
 		}
 		ImGui::ColorEdit4("Color", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
@@ -103,9 +104,8 @@ void UI_Text::ShowInInspector()
 
 void UI_Text::Draw(bool game)
 {
-	float space = 0;
-
 	UIBounds* boundsDrawn = nullptr;
+	space = 0;
 
 	for (size_t i = 0; i < text.length(); i++)
 	{
@@ -203,6 +203,48 @@ void UI_Text::Draw(bool game)
 			{
 				glPopMatrix();
 			}
+		}
+	}
+
+	boundsDrawn = nullptr;
+}
+
+void UI_Text::ChangeFontSize()
+{
+	UIBounds* boundsDrawn = nullptr;
+	space = 0;
+
+	for (size_t i = 0; i < text.length(); i++)
+	{
+		float3 position = gameObject->transform->position;
+
+		auto itr = font->mCharacters.find(text[i]);
+
+		if (itr != font->mCharacters.end())
+		{
+			if (i != 0)
+			{
+				auto itr2 = font->mCharacters.find(text[i - 1]);
+				space += itr2->second->size.x;
+			}
+
+			if (itr->first == ' ')
+			{
+				space += fontSize;
+			}
+
+			boundsEditor->vertex[0] = float3(position.x + space, position.y + (fontSize * scaleBounds.y), 0);
+			boundsEditor->vertex[1] = float3(position.x + space + (itr->second->size.x * scaleBounds.x), position.y + (fontSize * scaleBounds.y), 0);
+			boundsEditor->vertex[2] = float3(position.x + space, position.y, 0);
+			boundsEditor->vertex[3] = float3(position.x + space + (itr->second->size.x * scaleBounds.x), position.y, 0);
+
+			boundsGame->vertex[0] = float3(posX + space, posY + (fontSize * scaleBounds.y), 0);
+			boundsGame->vertex[1] = float3(posX + space + (itr->second->size.x * scaleBounds.x), posY + (fontSize * scaleBounds.y), 0);
+			boundsGame->vertex[2] = float3(posX + space, posY, 0);
+			boundsGame->vertex[3] = float3(posX + space + (itr->second->size.x * scaleBounds.x), posY, 0);
+
+			boundsEditor->RegenerateVBO();
+			boundsGame->RegenerateVBO();
 		}
 	}
 
