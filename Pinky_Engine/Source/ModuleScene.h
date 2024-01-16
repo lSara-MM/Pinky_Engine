@@ -54,6 +54,7 @@ public:
 
 private:
 	G_UI* canvas;
+	G_UI* menu;
 
 	bool street;
 	bool loaded;
