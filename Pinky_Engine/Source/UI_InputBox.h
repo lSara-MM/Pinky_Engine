@@ -5,6 +5,7 @@
 #include "Globals.h"
 #include "C_UI.h"
 #include "UI_Text.h"
+#include "UI_Image.h"
 
 class UI_InputBox : public C_UI
 {
@@ -22,6 +23,7 @@ public:
 public:
 	std::string text;
 	float fontSize;
+	UI_Image* image;
 
 	int maxChars;
 	UI_Text* displayText;

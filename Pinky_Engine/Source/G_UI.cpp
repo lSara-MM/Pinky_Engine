@@ -267,6 +267,7 @@ bool G_UI::AddUIComponent(UI_TYPE type, int x, int y, GameObject* parent)
 		}
 		canvas = static_cast<G_UI*>(pParent)->canvas;
 		comp->displayText = static_cast<UI_Text*>(aux->GetComponentUI(UI_TYPE::TEXT));
+		comp->image = static_cast<UI_Image*>(GetComponentUI(UI_TYPE::IMAGE));
 
 		comp = nullptr;
 		aux = nullptr;

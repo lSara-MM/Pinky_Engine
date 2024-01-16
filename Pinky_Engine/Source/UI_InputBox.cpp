@@ -14,6 +14,7 @@ UI_InputBox::UI_InputBox(GameObject* g, int x, int y, int w, int h) : C_UI(UI_TY
 {
 	displayText = nullptr;
 	fontSize = 21;
+	image = nullptr;
 
 	text = "uwu";
 	maxChars = 10;
@@ -24,6 +25,7 @@ UI_InputBox::UI_InputBox(GameObject* g, int x, int y, int w, int h) : C_UI(UI_TY
 UI_InputBox::~UI_InputBox()
 {
 	displayText = nullptr;
+	image = nullptr;
 }
 
 update_status UI_InputBox::Update(float dt)
@@ -88,10 +90,13 @@ void UI_InputBox::OnSelected()
 	{
 		isWriting = true;
 		App->input->SetInputActive(text);
+		image->color = disabledColor;
+		
 	}
 	else if (!App->input->GetInputActive())
 	{
 		isWriting = false;
 		state = UI_STATE::NORMAL;
+		image->color = color;
 	}
 }

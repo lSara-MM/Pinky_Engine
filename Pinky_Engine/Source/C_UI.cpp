@@ -382,7 +382,7 @@ void C_UI::UpdateBoundingBoxes()
 void C_UI::Drag(float dt)
 {
 	int movementX = App->input->GetMouseXMotion() * dt * 30;
-	int movementY = App->input->GetMouseYMotion() * dt * 30;
+	int movementY = -App->input->GetMouseYMotion() * dt * 30;
 	posX += movementX;
 	posY += movementY;
 
