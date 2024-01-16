@@ -285,7 +285,7 @@ void C_UI::OnPressed()
 
 void C_UI::OnRelease()
 {
-	isDraggable = false;
+	isDragging = false;
 }
 
 void C_UI::OnSelected()
@@ -452,7 +452,8 @@ void C_UI::FadeUI(float dt)
 	}
 	else
 	{
-		color.a -= 0.1 * dt;
+		//color.a -= 0.1 * dt;
+		color.a -= 1 * dt;
 	}
 
 	if (!gameObject->vChildren.empty())

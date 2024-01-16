@@ -2,6 +2,8 @@
 #include "GameObject.h"
 #include "G_UI.h"
 
+#include "UI_Image.h"
+
 #include "External Libraries/ImGui/imgui_custom.h"
 
 
@@ -145,8 +147,8 @@ void UI_Checkbox::CheckVSync()
 
 void UI_Checkbox::CheckDraggeable()
 {
-	if (static_cast<G_UI*>(gameObject->pParent)->GetComponentUI(UI_TYPE::CANVAS) != nullptr)
+	if (static_cast<G_UI*>(gameObject->pParent)->GetComponentUI(UI_TYPE::IMAGE) != nullptr)
 	{
-
+		static_cast<G_UI*>(gameObject->pParent)->GetComponentUI(UI_TYPE::IMAGE)->isDraggable = isChecked;
 	}
 }
