@@ -251,8 +251,20 @@ void ProjectFiles::FilesMouseEvents(std::string currentFile, std::string current
 		if (ImGui::MenuItem("Import to Scene"))
 		{
 			//App->resource->pendingToLoadScene = true;
-			App->resource->sceneFileName = currentFile;
-			App->resource->ImportToSceneV(currentFile, selectedFileFullPath + "/");
+
+			if (currentFile == "MainScreen.pnk")
+			{
+				App->scene->ImportDefaultMainScreen();
+			}
+			else if (currentFile == "Street.pnk")
+			{
+				App->scene->ImportDefaultScene();
+			}
+			else
+			{
+				App->resource->sceneFileName = currentFile;
+				App->resource->ImportToSceneV(currentFile, selectedFileFullPath + "/");
+			}
 		}
 		//if (ImGui::MenuItem("Create File (WIP)", NULL, false, false))	// TODO:
 		//{

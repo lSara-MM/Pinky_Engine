@@ -457,6 +457,9 @@ void ParsingJSON::ComponentsFromMeta(std::string node_name, GameObject& go, int 
 		go.AddComponent(comp);
 	}
 	break;
+	case C_TYPE::UI:
+		return;
+		break;
 	case C_TYPE::NONE:
 		break;
 	default:

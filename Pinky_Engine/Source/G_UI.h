@@ -21,7 +21,7 @@ public:
 	std::vector<C_UI*> GetComponentsUI_ByType(UI_TYPE type);
 	//std::vector<C_UI*> GetComponentsUI_ByType(UI_TYPE type);
 
-	bool AddUIComponent(UI_TYPE type, int w, int h, int x, int y);
+	bool AddUIComponent(UI_TYPE type, int w, int h, int x, int y, GameObject* parent = App->scene->rootNode);
 
 public:
 	UI_Canvas* canvas;

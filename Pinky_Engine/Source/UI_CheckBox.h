@@ -25,6 +25,7 @@ public:
 	void OnRelease() override;
 
 	void CheckVSync();
+	void CheckDraggeable();
 
 public:
 	bool isInteractable;

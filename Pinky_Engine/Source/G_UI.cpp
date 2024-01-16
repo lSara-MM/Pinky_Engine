@@ -12,7 +12,7 @@ G_UI::G_UI(UI_TYPE t, GameObject* pParent, int w, int h, int x, int y) : GameObj
 {
 	//RemoveComponent(transform);//TODO: fer amb altre transform
 	canvas = nullptr;
-	AddUIComponent(t, w, h, x, y);
+	AddUIComponent(t, w, h, x, y, pParent);
 
 	//AddComponent(C_TYPE::MESH, nullptr, ai::POLY_PRIMITIVE_TYPE::PLANE);
 	mesh = nullptr;
@@ -107,7 +107,7 @@ std::vector<C_UI*> G_UI::GetComponentsUI_ByType(UI_TYPE type)
 	return vec;
 }
 
-bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y)
+bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y, GameObject* parent)
 {
 	bool ret = true;
 
@@ -140,7 +140,15 @@ bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y)
 		{
 			App->scene->SetCanvas(new G_UI(UI_TYPE::CANVAS));
 		}
-		ReParent(App->scene->GetCanvas());
+
+		if (parent == App->scene->rootNode)
+		{
+			ReParent(App->scene->GetCanvas());
+		}
+		else
+		{
+			ReParent(parent);
+		}
 		canvas = static_cast<G_UI*>(pParent)->canvas;
 
 		comp = nullptr;
@@ -157,7 +165,15 @@ bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y)
 		{
 			App->scene->SetCanvas(new G_UI(UI_TYPE::CANVAS));
 		}
-		ReParent(App->scene->GetCanvas());
+
+		if (parent == App->scene->rootNode)
+		{
+			ReParent(App->scene->GetCanvas());
+		}
+		else
+		{
+			ReParent(parent);
+		}
 		canvas = static_cast<G_UI*>(pParent)->canvas;
 
 		comp = nullptr;
@@ -182,7 +198,15 @@ bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y)
 		{
 			App->scene->SetCanvas(new G_UI(UI_TYPE::CANVAS));
 		}
-		ReParent(App->scene->GetCanvas());
+
+		if (parent == App->scene->rootNode)
+		{
+			ReParent(App->scene->GetCanvas());
+		}
+		else
+		{
+			ReParent(parent);
+		}
 		canvas = static_cast<G_UI*>(pParent)->canvas;
 
 		comp = nullptr;
@@ -212,7 +236,15 @@ bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y)
 		{
 			App->scene->SetCanvas(new G_UI(UI_TYPE::CANVAS));
 		}
-		ReParent(App->scene->GetCanvas());
+
+		if (parent == App->scene->rootNode)
+		{
+			ReParent(App->scene->GetCanvas());
+		}
+		else
+		{
+			ReParent(parent);
+		}
 		canvas = static_cast<G_UI*>(pParent)->canvas;
 
 		comp = nullptr;
@@ -249,7 +281,15 @@ bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y)
 		{
 			App->scene->SetCanvas(new G_UI(UI_TYPE::CANVAS));
 		}
-		ReParent(App->scene->GetCanvas());
+
+		if (parent == App->scene->rootNode)
+		{
+			ReParent(App->scene->GetCanvas());
+		}
+		else
+		{
+			ReParent(parent);
+		}
 		canvas = static_cast<G_UI*>(pParent)->canvas;
 
 		comp = nullptr;

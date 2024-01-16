@@ -1,5 +1,6 @@
 #include "UI_Checkbox.h"
 #include "GameObject.h"
+#include "G_UI.h"
 
 #include "External Libraries/ImGui/imgui_custom.h"
 
@@ -131,8 +132,7 @@ void UI_Checkbox::OnRelease()
 		}
 		if (defaultFunction2)
 		{
-			// TODO: draggeable
-			CheckVSync();
+			CheckDraggeable();
 		}
 	}
 }
@@ -141,4 +141,12 @@ void UI_Checkbox::CheckVSync()
 {
 	App->renderer3D->vsync = isChecked;
 	App->renderer3D->SetVsync(App->renderer3D->vsync);
+}
+
+void UI_Checkbox::CheckDraggeable()
+{
+	if (static_cast<G_UI*>(gameObject->pParent)->GetComponentUI(UI_TYPE::CANVAS) != nullptr)
+	{
+
+	}
 }
