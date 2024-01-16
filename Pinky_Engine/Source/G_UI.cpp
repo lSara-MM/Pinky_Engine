@@ -307,14 +307,17 @@ bool G_UI::AddUIComponent(UI_TYPE type, int x, int y, GameObject* parent)
 		aux2->ReParent(aux);
 		aux2->canvas = static_cast<G_UI*>(pParent)->canvas;
 
+		float widthCheck = aux->GetComponentUI(UI_TYPE::IMAGE)->width;
+		float heightCheck = aux->GetComponentUI(UI_TYPE::IMAGE)->height;
+
 		// Label
-		G_UI* aux3 = new G_UI(UI_TYPE::TEXT, this);
+		G_UI* aux3 = new G_UI(UI_TYPE::TEXT, this, widthCheck * 1.2, heightCheck * 0.4);
 		aux3->GetComponentUI(UI_TYPE::TEXT)->width = w;
 		aux3->GetComponentUI(UI_TYPE::TEXT)->height = h;
 		aux3->ReParent(this);
 		aux3->canvas = static_cast<G_UI*>(pParent)->canvas;
 
-		UI_Checkbox* comp = new UI_Checkbox(this, x, y, static_cast<C_UI*>(aux->GetComponentUI(UI_TYPE::IMAGE))->width, static_cast<C_UI*>(aux->GetComponentUI(UI_TYPE::IMAGE))->height);
+		UI_Checkbox* comp = new UI_Checkbox(this, x, y, widthCheck, heightCheck);
 		vComponents.push_back(comp);
 
 		name = "Checkbox";

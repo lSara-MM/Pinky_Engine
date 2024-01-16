@@ -127,8 +127,11 @@ update_status ModuleScene::Update(float dt)
 	// Open/Close menu
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN && !ImGui::GetIO().WantTextInput && !App->input->GetInputActive())
 	{
-		inspector->SetActiveState(menu, !menu->isActive);
-		menu->isActive = !menu->isActive;
+		if (menu != nullptr)
+		{
+			inspector->SetActiveState(menu, !menu->isActive);
+			menu->isActive = !menu->isActive;
+		}
 	}
 
 	return UPDATE_CONTINUE;
@@ -237,14 +240,14 @@ void ModuleScene::ImportDefaultScene()
 			G_UI* UI_Element0 = new G_UI(UI_TYPE::CANVAS, rootNode, App->editor->gameViewSize.x / 2 - 150, App->editor->gameViewSize.y / 2 - 150);
 
 			// Image bg
-			G_UI* UI_Element2 = new G_UI(UI_TYPE::IMAGE, UI_Element0, App->editor->gameViewSize.x / 2 - 300, App->editor->gameViewSize.y / 2 - 300);
+			G_UI* UI_Element2 = new G_UI(UI_TYPE::IMAGE, UI_Element0, 71, 94);
 			//App->resource->ImportTextureToModel("crosshair.png", PINKY_ASSETS_AUX "UI\\", *UI_Element2);
-			static_cast<UI_Image*>(UI_Element2->GetComponentUI(UI_TYPE::IMAGE))->width = 600;
-			static_cast<UI_Image*>(UI_Element2->GetComponentUI(UI_TYPE::IMAGE))->height = 600;
+			static_cast<UI_Image*>(UI_Element2->GetComponentUI(UI_TYPE::IMAGE))->width = 650;
+			static_cast<UI_Image*>(UI_Element2->GetComponentUI(UI_TYPE::IMAGE))->height = 500;
 			static_cast<UI_Image*>(UI_Element2->GetComponentUI(UI_TYPE::IMAGE))->color = { 0.5, 0, 0.5, 0.95 };
 
 			// VSync
-			G_UI* UI_Element3 = new G_UI(UI_TYPE::CHECKBOX, UI_Element2, App->editor->gameViewSize.x / 2 - 300, 140);
+			G_UI* UI_Element3 = new G_UI(UI_TYPE::CHECKBOX, UI_Element2, 43, 267.4);
 			App->resource->ImportTextureToModel("checkboxBG.png", PINKY_ASSETS_AUX "UI\\", *(static_cast<UI_Checkbox*>
 				(UI_Element3->GetComponentUI(UI_TYPE::CHECKBOX))->bgImg->gameObject));
 			App->resource->ImportTextureToModel("checkmark.png", PINKY_ASSETS_AUX "UI\\", *(static_cast<UI_Checkbox*>
@@ -254,7 +257,7 @@ void ModuleScene::ImportDefaultScene()
 			static_cast<UI_Checkbox*>(UI_Element3->GetComponentUI(UI_TYPE::CHECKBOX))->displayText->color = { 0, 0, 0, 1 };
 
 			// Draggeable
-			G_UI* UI_Element4 = new G_UI(UI_TYPE::CHECKBOX, UI_Element2, App->editor->gameViewSize.x / 2 - 300, 200);
+			G_UI* UI_Element4 = new G_UI(UI_TYPE::CHECKBOX, UI_Element2, 43, 95.4);
 			App->resource->ImportTextureToModel("checkboxBG.png", PINKY_ASSETS_AUX "UI\\", *(static_cast<UI_Checkbox*>
 				(UI_Element4->GetComponentUI(UI_TYPE::CHECKBOX))->bgImg->gameObject));
 			App->resource->ImportTextureToModel("checkmark.png", PINKY_ASSETS_AUX "UI\\", *(static_cast<UI_Checkbox*>
@@ -264,7 +267,7 @@ void ModuleScene::ImportDefaultScene()
 			static_cast<UI_Checkbox*>(UI_Element4->GetComponentUI(UI_TYPE::CHECKBOX))->displayText->text = "Draggeable";
 			static_cast<UI_Checkbox*>(UI_Element4->GetComponentUI(UI_TYPE::CHECKBOX))->displayText->color = { 0, 0, 0, 1 };
 
-			G_UI* UI_Element5 = new G_UI(UI_TYPE::TEXT, UI_Element2, App->editor->gameViewSize.x / 4, 130);
+			G_UI* UI_Element5 = new G_UI(UI_TYPE::TEXT, UI_Element2, 189.7, 432.9);
 			static_cast<UI_Text*>(UI_Element5->GetComponentUI(UI_TYPE::TEXT))->text = "MENU";
 
 			//
@@ -296,7 +299,7 @@ void ModuleScene::LoadUI()
 	static_cast<UI_Image*>(UI_Element2->GetComponentUI(UI_TYPE::IMAGE))->width = 784;
 	static_cast<UI_Image*>(UI_Element2->GetComponentUI(UI_TYPE::IMAGE))->height = 660;
 
-	G_UI* UI_Element4 = new G_UI(UI_TYPE::BUTTON, rootNode, 250, 300);
+	G_UI* UI_Element4 = new G_UI(UI_TYPE::BUTTON, rootNode, 250, 74);
 	App->resource->ImportTextureToModel("button.png", PINKY_ASSETS_AUX "UI\\", *UI_Element4);
 	static_cast<UI_Button*> (UI_Element4->GetComponentUI(UI_TYPE::BUTTON))->defaultFunction = true;
 	static_cast<UI_Button*> (UI_Element4->GetComponentUI(UI_TYPE::BUTTON))->displayText->text = " UWU";
