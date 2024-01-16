@@ -110,7 +110,6 @@ void UI_Text::Draw(bool game)
 	for (size_t i = 0; i < text.length(); i++)
 	{
 		float3 position = gameObject->transform->position;
-		
 
 		auto itr = font->mCharacters.find(text[i]);
 
@@ -121,7 +120,7 @@ void UI_Text::Draw(bool game)
 			if (i != 0)
 			{
 				auto itr2 = font->mCharacters.find(text[i - 1]);
-				space = space + itr2->second->size.x * (fontSize / 98);
+				space = space + itr2->second->size.x * (fontSize / 98) + (fontSize / 5);
 			}
 
 			if (itr->first == ' ')
