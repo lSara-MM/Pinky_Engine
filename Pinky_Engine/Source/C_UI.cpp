@@ -222,7 +222,8 @@ void C_UI::StateLogic()
 				break;
 			case UI_STATE::FOCUSED:	// On hover
 				OnFocused();
-				if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+				if ((App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN) ||
+					(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !ImGui::GetIO().WantTextInput && !App->input->GetInputActive()))
 				{
 					state = UI_STATE::PRESSED;
 				}
@@ -233,7 +234,8 @@ void C_UI::StateLogic()
 				break;
 			case UI_STATE::PRESSED: // On hold
 				OnPressed();
-				if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && MouseCheck(mousePos))
+				if ((App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && MouseCheck(mousePos)) ||
+					(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP && !ImGui::GetIO().WantTextInput && !App->input->GetInputActive()))
 				{
 					state = UI_STATE::RELEASE;
 				}
@@ -248,7 +250,8 @@ void C_UI::StateLogic()
 				break;
 			case UI_STATE::SELECTED:
 				OnSelected();
-				if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && MouseCheck(mousePos))
+				if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && MouseCheck(mousePos) ||
+					(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !ImGui::GetIO().WantTextInput && !App->input->GetInputActive()))
 				{
 					state = UI_STATE::PRESSED;
 				}
@@ -291,9 +294,14 @@ void C_UI::OnSelected()
 {
 }
 
+void C_UI::SetState(UI_STATE uiState)
+{
+	state = uiState;
+}
+
 bool C_UI::MouseCheck(float2 mouse)
 {
-	mouse.y = (App->editor->gameViewSize.y - (mouse.y * App->editor->gameViewSize.y))/ App->editor->gameViewSize.y;
+	mouse.y = (App->editor->gameViewSize.y - (mouse.y * App->editor->gameViewSize.y)) / App->editor->gameViewSize.y;
 
 	return (mouse.x >= posX / App->editor->gameViewSize.x && mouse.x <= (posX + (width * scaleBounds.x)) / App->editor->gameViewSize.x
 		&& mouse.y >= (posY - 20) / App->editor->gameViewSize.y && mouse.y <= (posY - 20 + (height * scaleBounds.y)) / App->editor->gameViewSize.y);

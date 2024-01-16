@@ -68,6 +68,7 @@ public:
 	virtual void OnPressed();
 	virtual void OnRelease();
 	virtual void OnSelected();
+	void SetState(UI_STATE uiState);
 	bool MouseCheck(float2 mouse);
 
 	virtual void UpdateUITransform();
