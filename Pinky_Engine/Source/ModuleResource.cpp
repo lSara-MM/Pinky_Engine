@@ -91,7 +91,6 @@ update_status ModuleResource::FinishUpdate(float dt)
 bool ModuleResource::CleanUp()
 {
 	LOG("Cleaning resources");
-
 	return true;
 }
 

@@ -23,6 +23,7 @@
 #include "UI_Canvas.h"
 #include "UI_Image.h"
 #include "UI_Button.h"
+#include "UI_InputBox.h"
 #include "UI_CheckBox.h"
 
 
@@ -206,50 +207,13 @@ void ModuleScene::LoadFirstScene()
 	App->resource->ImportToSceneV("street2.fbx", PINKY_ASSETS_AUX "3dObject\\street\\");
 	App->parson->SaveScene("Street");
 
-	G_UI* UI_Element = new G_UI(UI_TYPE::CANVAS);
-
-	G_UI* UI_Element2 = new G_UI(UI_TYPE::IMAGE, rootNode);
-	App->resource->ImportTextureToModel("intro_bg.png", PINKY_ASSETS_AUX "UI\\", *UI_Element2);
-	static_cast<UI_Image*>(UI_Element2->GetComponentUI(UI_TYPE::IMAGE))->width = 784;
-	static_cast<UI_Image*>(UI_Element2->GetComponentUI(UI_TYPE::IMAGE))->height = 660;
-
-	G_UI* UI_Element4 = new G_UI(UI_TYPE::BUTTON, rootNode, 300, 300);
-	App->resource->ImportTextureToModel("button.png", PINKY_ASSETS_AUX "UI\\", *UI_Element4);
-	static_cast<UI_Button*> (UI_Element4->GetComponentUI(UI_TYPE::BUTTON))->defaultFunction = true;
-
-	G_UI* UI_Element5 = new G_UI(UI_TYPE::INPUTBOX, rootNode, 300, 300);
-	App->resource->ImportTextureToModel("inputBox.png", PINKY_ASSETS_AUX "UI\\", *UI_Element5);
-
-	UI_Element = nullptr;
-	UI_Element2 = nullptr;
-	UI_Element4 = nullptr;
-	UI_Element5 = nullptr;
-	mainScreen = 1;
+	LoadUI();
 }
 
 void ModuleScene::ImportDefaultMainScreen()
 {
 	App->parson->LoadScene(ASSETS_AUX "MainScreen.pnk");
-
-	G_UI* UI_Element = new G_UI(UI_TYPE::CANVAS);
-
-	G_UI* UI_Element2 = new G_UI(UI_TYPE::IMAGE, rootNode);
-	App->resource->ImportTextureToModel("intro_bg.png", PINKY_ASSETS_AUX "UI\\", *UI_Element2);
-	static_cast<UI_Image*>(UI_Element2->GetComponentUI(UI_TYPE::IMAGE))->width = 784;
-	static_cast<UI_Image*>(UI_Element2->GetComponentUI(UI_TYPE::IMAGE))->height = 660;
-
-	G_UI* UI_Element4 = new G_UI(UI_TYPE::BUTTON, rootNode, 300, 300);
-	App->resource->ImportTextureToModel("button.png", PINKY_ASSETS_AUX "UI\\", *UI_Element4);
-	static_cast<UI_Button*> (UI_Element4->GetComponentUI(UI_TYPE::BUTTON))->defaultFunction = true;
-
-	G_UI* UI_Element5 = new G_UI(UI_TYPE::INPUTBOX, rootNode, 300, 300);
-	App->resource->ImportTextureToModel("inputBox.png", PINKY_ASSETS_AUX "UI\\", *UI_Element5);
-
-	UI_Element = nullptr;
-	UI_Element2 = nullptr;
-	UI_Element4 = nullptr;
-	UI_Element5 = nullptr;
-	mainScreen = 1;
+	LoadUI();
 }
 
 void ModuleScene::ImportDefaultScene()
@@ -321,4 +285,33 @@ void ModuleScene::ImportDefaultScene()
 			mainScreen = 2;
 		}
 	}
+}
+
+void ModuleScene::LoadUI()
+{
+	G_UI* UI_Element = new G_UI(UI_TYPE::CANVAS);
+
+	G_UI* UI_Element2 = new G_UI(UI_TYPE::IMAGE, rootNode);
+	App->resource->ImportTextureToModel("intro_bg.png", PINKY_ASSETS_AUX "UI\\", *UI_Element2);
+	static_cast<UI_Image*>(UI_Element2->GetComponentUI(UI_TYPE::IMAGE))->width = 784;
+	static_cast<UI_Image*>(UI_Element2->GetComponentUI(UI_TYPE::IMAGE))->height = 660;
+
+	G_UI* UI_Element4 = new G_UI(UI_TYPE::BUTTON, rootNode, 250, 300);
+	App->resource->ImportTextureToModel("button.png", PINKY_ASSETS_AUX "UI\\", *UI_Element4);
+	static_cast<UI_Button*> (UI_Element4->GetComponentUI(UI_TYPE::BUTTON))->defaultFunction = true;
+	static_cast<UI_Button*> (UI_Element4->GetComponentUI(UI_TYPE::BUTTON))->displayText->text = " UWU";
+
+	G_UI* UI_Element5 = new G_UI(UI_TYPE::TEXT, UI_Element2, 250, 220);
+	static_cast<UI_Text*>(UI_Element5->GetComponentUI(UI_TYPE::TEXT))->text = "Write here:";
+
+	G_UI* UI_Element6 = new G_UI(UI_TYPE::INPUTBOX, rootNode, 250, 150);
+	App->resource->ImportTextureToModel("inputBox.png", PINKY_ASSETS_AUX "UI\\", *UI_Element6);
+	static_cast<UI_InputBox*>(UI_Element6->GetComponentUI(UI_TYPE::INPUTBOX))->text = "I";
+
+	UI_Element = nullptr;
+	UI_Element2 = nullptr;
+	UI_Element4 = nullptr;
+	UI_Element5 = nullptr;
+	UI_Element6 = nullptr;
+	mainScreen = 1;
 }

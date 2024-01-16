@@ -88,6 +88,10 @@ void UI_Text::ShowInInspector()
 		//ImGui::InputText(name.c_str(), &text, ImGuiInputTextFlags_EnterReturnsTrue);
 		ImGui::Dummy(ImVec2(0, 10));
 
+		ImGui::Text("Font Size");
+		if (ImGui::DragFloat("##FontSize", &fontSize, 0.1f, 0, 0, "%.1f"))
+		{
+		}
 		ImGui::ColorEdit4("Color", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 
 		if (!isActive) { ImGui::EndDisabled(); }

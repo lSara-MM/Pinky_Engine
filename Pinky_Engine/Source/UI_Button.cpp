@@ -85,12 +85,18 @@ void UI_Button::ShowInInspector()
 
 void UI_Button::OnNormal()
 {
-	image->color = color;
+	if (isInteractable)
+	{
+		image->color = color;
+	}
+	else
+	{
+		image->color = disabledColor;
+	}
 }
 
 void UI_Button::OnFocused()
 {
-
 	image->color = focusedColor;
 }
 

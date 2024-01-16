@@ -33,6 +33,7 @@ public:
 	void LoadFirstScene();
 	void ImportDefaultMainScreen();
 	void ImportDefaultScene();
+	void LoadUI();
 
 public:
 	GameObject* rootNode;

@@ -106,7 +106,16 @@ void UI_Checkbox::ShowInInspector()
 
 void UI_Checkbox::OnNormal()
 {
-	bgImg->color = color;
+	if (isInteractable)
+	{
+		bgImg->color = color;
+		cmImg->color = color;
+	}
+	else
+	{
+		bgImg->color = disabledColor;
+		cmImg->color = disabledColor;
+	}
 }
 
 void UI_Checkbox::OnFocused()

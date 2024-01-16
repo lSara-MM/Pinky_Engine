@@ -18,7 +18,11 @@ public:
 
 	void ShowInInspector();
 
+	void OnNormal();
+	void OnFocused();
+	void OnPressed();
 	void OnSelected();
+	void OnRelease();
 
 public:
 	std::string text;
@@ -30,7 +34,11 @@ public:
 
 private:
 	//color
+	Color focusedColor;
+	Color pressedColor;
+	Color selectedColor;
 	Color disabledColor;
+
 	bool isWriting;
 };
 #endif // __UI_INPUTBOX_H__

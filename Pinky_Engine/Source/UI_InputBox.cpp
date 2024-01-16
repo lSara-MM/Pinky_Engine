@@ -35,7 +35,10 @@ update_status UI_InputBox::Update(float dt)
 	if (state == UI_STATE::NORMAL)
 	{
 		isWriting = false;
+		App->input->SetInputActive(text, false);
 	}
+	
+	if (text != displayText->text) { displayText->text = text; }
 	return ret;
 }
 
@@ -64,7 +67,6 @@ void UI_InputBox::ShowInInspector()
 
 		ImGui::Text("Text");
 		ImGui::InputTextMultiline("##input", &text, ImVec2(0, 0), ImGuiInputTextFlags_AllowTabInput);
-		if (text != displayText->text) { displayText->text = text; }
 
 		ImGui::Dummy(ImVec2(0, 10));
 
@@ -75,6 +77,7 @@ void UI_InputBox::ShowInInspector()
 		}
 
 		ImGui::ColorEdit4("Normal color", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
+		ImGui::ColorEdit4("Selected color", (float*)&selectedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 		ImGui::ColorEdit4("Disabled color", (float*)&disabledColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);
 
 		if (!isActive) { ImGui::EndDisabled(); }
@@ -84,19 +87,37 @@ void UI_InputBox::ShowInInspector()
 	if (!exists) { gameObject->RemoveComponent(this); }
 }
 
+void UI_InputBox::OnNormal()
+{
+	image->color = color;
+}
+
+void UI_InputBox::OnFocused()
+{
+	image->color = focusedColor;
+}
+
+void UI_InputBox::OnPressed()
+{
+	image->color = pressedColor;
+}
+
 void UI_InputBox::OnSelected()
 {
 	if (!isWriting)
 	{
 		isWriting = true;
 		App->input->SetInputActive(text);
-		image->color = disabledColor;
-		
+
+		image->color = selectedColor;
 	}
 	else if (!App->input->GetInputActive())
 	{
 		isWriting = false;
 		state = UI_STATE::NORMAL;
-		image->color = color;
 	}
+}
+
+void UI_InputBox::OnRelease()
+{
 }
