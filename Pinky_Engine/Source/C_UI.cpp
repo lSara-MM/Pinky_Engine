@@ -293,8 +293,10 @@ void C_UI::OnSelected()
 
 bool C_UI::MouseCheck(float2 mouse)
 {
+	mouse.y = (App->editor->gameViewSize.y - (mouse.y * App->editor->gameViewSize.y))/ App->editor->gameViewSize.y;
+
 	return (mouse.x >= posX / App->editor->gameViewSize.x && mouse.x <= (posX + (width * scaleBounds.x)) / App->editor->gameViewSize.x
-		&& mouse.y >= posY / App->editor->gameViewSize.y && mouse.y <= (posY  + (height * scaleBounds.y)) / App->editor->gameViewSize.y);
+		&& mouse.y >= (posY - 20) / App->editor->gameViewSize.y && mouse.y <= (posY - 20 + (height * scaleBounds.y)) / App->editor->gameViewSize.y);
 }
 
 void C_UI::UpdateUITransform()
