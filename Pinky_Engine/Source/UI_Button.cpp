@@ -4,7 +4,7 @@
 
 #include "UI_Canvas.h"
 
-UI_Button::UI_Button(GameObject* g, int w, int h, int x, int y) : C_UI(UI_TYPE::BUTTON, C_TYPE::UI, g, "Button", w, h, x, y)
+UI_Button::UI_Button(GameObject* g, int x, int y, int w, int h) : C_UI(UI_TYPE::BUTTON, C_TYPE::UI, g, "Button", x, y, w, h)
 {
 	isInteractable = true;
 
@@ -51,7 +51,7 @@ void UI_Button::ShowInInspector()
 				image->color = disabledColor;
 			}
 		} ImGui::SameLine();
-		ImGui::Checkbox("Draggeable", &draggable);
+		ImGui::Checkbox("Draggeable", &isDraggable);
 
 		ImGui::Dummy(ImVec2(0, 10));
 		ImGui::Text(text.c_str());

@@ -12,7 +12,7 @@
 
 //#include "STB_Text.h"
 
-UI_Text::UI_Text(GameObject* g, int w, int h, int x, int y) : C_UI(UI_TYPE::TEXT, C_TYPE::UI, g, "Text", w, h, x, y)
+UI_Text::UI_Text(GameObject* g, int x, int y, int w, int h) : C_UI(UI_TYPE::TEXT, C_TYPE::UI, g, "Text", x, y, w, h)
 {
 	text = "Hello World";
 	font = App->renderer3D->defaultFont;
@@ -82,7 +82,7 @@ void UI_Text::ShowInInspector()
 	{
 		if (!isActive) { ImGui::BeginDisabled(); }
 
-		ImGui::Checkbox("Draggeable", &draggable);
+		ImGui::Checkbox("Draggeable", &isDraggable);
 
 		ImGui::InputTextMultiline(name.c_str(), &text, ImVec2(0, 0), ImGuiInputTextFlags_AllowTabInput);
 		//ImGui::InputText(name.c_str(), &text, ImGuiInputTextFlags_EnterReturnsTrue);

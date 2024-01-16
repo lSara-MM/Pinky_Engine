@@ -13,7 +13,7 @@ class UI_Canvas;
 class G_UI : public GameObject
 {
 public:
-	G_UI(UI_TYPE t, GameObject* pParent = App->scene->rootNode, int w = 200, int h = 100, int x = 0, int y = 0);
+	G_UI(UI_TYPE t, GameObject* pParent = App->scene->rootNode, int w = 0, int h = 0, int x = 0, int y = 0);
 	~G_UI();
 
 	update_status Update(float dt);

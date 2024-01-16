@@ -50,8 +50,8 @@ public:
 class UI_Text : public C_UI
 {
 public:
-
-	UI_Text(GameObject* g, int w, int h, int x, int y);
+	// x = 0, y = 0, w = 200, y = 50
+	UI_Text(GameObject* g, int x = 0, int y = 0, int w = 200, int h = 50);
 	~UI_Text();
 
 	void ShowInInspector();

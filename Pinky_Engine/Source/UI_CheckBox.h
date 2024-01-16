@@ -11,8 +11,8 @@
 class UI_Checkbox : public C_UI
 {
 public:
-
-	UI_Checkbox(GameObject* g, int w, int h, int x, int y);
+	// x = 0, y = 0, w = 170, y = 20
+	UI_Checkbox(GameObject* g, int x = 0, int y = 0, int w = 170, int h = 20);
 	~UI_Checkbox();
 
 	void ShowInInspector();

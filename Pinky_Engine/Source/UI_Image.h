@@ -9,8 +9,8 @@
 class UI_Image : public C_UI
 {
 public:
-
-	UI_Image(GameObject* g, int w, int h, int x, int y);
+	// x = 0, y = 0, w = 100, y = 100
+	UI_Image(GameObject* g, int x = 0, int y = 0, int w = 100, int h = 100);
 	~UI_Image();
 
 	void ShowInInspector();

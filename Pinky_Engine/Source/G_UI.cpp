@@ -58,7 +58,7 @@ update_status G_UI::Update(float dt)
 
 					static_cast<C_UI*>(vComponents[i])->UpdateUITransform();
 
-					if (static_cast<C_UI*>(vComponents[i])->draggable)
+					if (static_cast<C_UI*>(vComponents[i])->isDragging)
 					{
 						static_cast<C_UI*>(vComponents[i])->Drag(dt);
 					}

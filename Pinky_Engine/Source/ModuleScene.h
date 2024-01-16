@@ -49,4 +49,5 @@ public:
 
 private:
 	G_UI* canvas;
+	bool street;
 };

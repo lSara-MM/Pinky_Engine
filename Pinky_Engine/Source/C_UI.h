@@ -52,7 +52,7 @@ enum class UI_TYPE
 class C_UI : public Component
 {
 public:
-	C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n = "UI", int w = 200, int h = 100, int x = 0, int y = 0, Color c = { 1,1,1,1 });
+	C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n = "UI", int x = 0, int y = 0, int w = 200, int h = 100, Color c = { 1, 1, 1, 1 });
 	~C_UI();
 
 	virtual update_status Update(float dt);
@@ -63,11 +63,11 @@ public:
 
 	//UI logic
 	void StateLogic();
-	virtual void OnNormal() {};
-	virtual void OnFocused() {};
-	virtual void OnPressed() {};
-	virtual void OnRelease() {};
-	virtual void OnSelected() {};
+	virtual void OnNormal();
+	virtual void OnFocused();
+	virtual void OnPressed();
+	virtual void OnRelease();
+	virtual void OnSelected();
 	bool MouseCheck(float2 mouse);
 
 	virtual void UpdateUITransform();
@@ -93,7 +93,8 @@ public:
 	AABB global_aabb;//global AABB
 	OBB obb;//global OB
 
-	bool draggable;
+	bool isDragging;
+	bool isDraggable;
 	bool fade;
 
 	UIBounds* boundsEditor;

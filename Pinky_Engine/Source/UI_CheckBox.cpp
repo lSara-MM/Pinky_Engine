@@ -4,7 +4,7 @@
 #include "External Libraries/ImGui/imgui_custom.h"
 
 
-UI_Checkbox::UI_Checkbox(GameObject* g, int w, int h, int x, int y) : C_UI(UI_TYPE::CHECKBOX, C_TYPE::UI, g, "Checkbox", w, h, x, y)
+UI_Checkbox::UI_Checkbox(GameObject* g, int x, int y, int w, int h) : C_UI(UI_TYPE::CHECKBOX, C_TYPE::UI, g, "Checkbox", x, y, w, h)
 {
 	isInteractable = true;
 	isChecked = true;
@@ -56,7 +56,7 @@ void UI_Checkbox::ShowInInspector()
 				cmImg->color = disabledColor;
 			}
 		}	ImGui::SameLine();
-		ImGui::Checkbox("Draggeable", &draggable);
+		ImGui::Checkbox("Draggeable", &isDraggable);
 		
 		if (ImGuiCustom::ToggleButton("Checked##", &isChecked))
 		{

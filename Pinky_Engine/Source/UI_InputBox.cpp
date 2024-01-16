@@ -10,7 +10,7 @@
 //
 #include "External Libraries/ImGui/imgui_custom.h"
 
-UI_InputBox::UI_InputBox(GameObject* g, int w, int h, int x, int y) : C_UI(UI_TYPE::INPUTBOX, C_TYPE::UI, g, "Input Box", w, h, x, y)
+UI_InputBox::UI_InputBox(GameObject* g, int x, int y, int w, int h) : C_UI(UI_TYPE::INPUTBOX, C_TYPE::UI, g, "Input Box", x, y, w, h)
 {
 	displayText = nullptr;
 	fontSize = 21;
@@ -56,7 +56,7 @@ void UI_InputBox::ShowInInspector()
 	{
 		if (!isActive) { ImGui::BeginDisabled(); }
 
-		ImGui::Checkbox("Draggeable", &draggable);
+		ImGui::Checkbox("Draggeable", &isDraggable);
 
 		ImGuiCustom::ToggleButton("Writing##", &isWriting);
 

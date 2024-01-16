@@ -7,7 +7,7 @@
 #include "Application.h"
 #include "ModuleEditor.h"
 
-C_UI::C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n, int w, int h, int x, int y, Color c) : Component(t, n, g)
+C_UI::C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n, int x, int y, int w, int h, Color c) : Component(t, n, g)
 {
 	UI_type = ui_t;
 	state = UI_STATE::NORMAL;
@@ -16,7 +16,8 @@ C_UI::C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n, int w, int h, i
 	height = h;
 	color = c;
 
-	draggable = false;
+	isDragging = false;
+	isDraggable = false;
 	fade = false;
 
 	gameObject->transform->SetPosition(float3(x, y, 0));
@@ -264,6 +265,31 @@ void C_UI::StateLogic()
 			}
 		}
 	}
+}
+
+void C_UI::OnNormal()
+{
+}
+
+void C_UI::OnFocused()
+{
+}
+
+void C_UI::OnPressed()
+{
+	if (isDraggable)
+	{
+		isDragging = true;
+	}
+}
+
+void C_UI::OnRelease()
+{
+	isDraggable = false;
+}
+
+void C_UI::OnSelected()
+{
 }
 
 bool C_UI::MouseCheck(float2 mouse)
