@@ -86,6 +86,11 @@ public:
 
 	//Raycast mousepicking
 	bool raycast;
+
+	//Time
+	bool changeTimeState;
+	TimeManager::PlayState currentTimeState;
+
 private:
 
 	std::vector<ImGuiWindows*> vImGuiWindows;
@@ -127,9 +132,5 @@ private:
 
 	//Snap Guizmo
 	float snapValue;
-
-	//Time
-	bool changeTimeState;
-	TimeManager::PlayState currentTimeState;
 
 };

@@ -132,7 +132,7 @@ update_status ModuleScene::Update(float dt)
 	}
 
 	// Open/Close menu
-	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN && !ImGui::GetIO().WantTextInput && !App->input->GetInputActive())
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN && !ImGui::GetIO().WantTextInput && !App->input->GetInputActive() && TimeManager::IsOnPlay())
 	{
 		if (menu != nullptr)
 		{

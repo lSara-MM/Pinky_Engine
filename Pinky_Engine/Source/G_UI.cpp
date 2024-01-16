@@ -58,7 +58,11 @@ update_status G_UI::Update(float dt)
 			{
 				if (vComponents[i]->type == C_TYPE::UI)
 				{
-					static_cast<C_UI*>(vComponents[i])->StateLogic();
+					if (TimeManager::IsOnPlay())
+					{
+						static_cast<C_UI*>(vComponents[i])->StateLogic();
+					}
+
 					static_cast<C_UI*>(vComponents[i])->Update(dt);
 
 					static_cast<C_UI*>(vComponents[i])->UpdateUITransform();
