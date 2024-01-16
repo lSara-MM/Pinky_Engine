@@ -296,25 +296,25 @@ bool G_UI::AddUIComponent(UI_TYPE type, int x, int y, GameObject* parent)
 		// TODO: Maybe put all this references to the other components in the constructor
 		// Unity-like
 		// Toggle background
-		G_UI* aux = new G_UI(UI_TYPE::IMAGE, this, x, y);
+		G_UI* aux = new G_UI(UI_TYPE::IMAGE, this);
 		aux->name = "Background";
 		aux->ReParent(this);
 		aux->canvas = static_cast<G_UI*>(pParent)->canvas;
 
 		// Checkmark
-		G_UI* aux2 = new G_UI(UI_TYPE::IMAGE, this, x, y);
+		G_UI* aux2 = new G_UI(UI_TYPE::IMAGE, this);
 		aux2->name = "Checkmark";
 		aux2->ReParent(aux);
 		aux2->canvas = static_cast<G_UI*>(pParent)->canvas;
 
 		// Label
-		G_UI* aux3 = new G_UI(UI_TYPE::TEXT, this, x, y);
+		G_UI* aux3 = new G_UI(UI_TYPE::TEXT, this);
 		aux3->GetComponentUI(UI_TYPE::TEXT)->width = w;
 		aux3->GetComponentUI(UI_TYPE::TEXT)->height = h;
 		aux3->ReParent(this);
 		aux3->canvas = static_cast<G_UI*>(pParent)->canvas;
 
-		UI_Checkbox* comp = new UI_Checkbox(this, x, y);
+		UI_Checkbox* comp = new UI_Checkbox(this, x, y, static_cast<C_UI*>(aux->GetComponentUI(UI_TYPE::IMAGE))->width, static_cast<C_UI*>(aux->GetComponentUI(UI_TYPE::IMAGE))->height);
 		vComponents.push_back(comp);
 
 		name = "Checkbox";
