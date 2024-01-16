@@ -61,7 +61,7 @@ It is formed by two Games Objects:
     * Option to change the texture
     * It can call custom functions (like the fade in the demo)
       
-![engineGif2](https://github.com/lSara-MM/Pinky_Engine/assets/99950309/5e01bd9e-487e-4c09-b3fb-2761cf250ee2)
+![buttonShow](https://github.com/lSara-MM/Pinky_Engine/assets/99950309/fd209ec1-f3c2-4d4a-9bc1-8a0982685493)
 
 ### ↦ Input Box
 Allows player to input any text when selected :
