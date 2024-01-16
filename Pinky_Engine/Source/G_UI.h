@@ -13,7 +13,7 @@ class UI_Canvas;
 class G_UI : public GameObject
 {
 public:
-	G_UI(UI_TYPE t, GameObject* pParent = App->scene->rootNode, int x = 0, int y = 0, int w = 100, int h = 100);
+	G_UI(UI_TYPE t, GameObject* pParent = App->scene->rootNode, int x = 0, int y = 0);
 	~G_UI();
 
 	update_status Update(float dt);
@@ -21,7 +21,7 @@ public:
 	std::vector<C_UI*> GetComponentsUI_ByType(UI_TYPE type);
 	//std::vector<C_UI*> GetComponentsUI_ByType(UI_TYPE type);
 
-	bool AddUIComponent(UI_TYPE type, int w, int h, int x, int y, GameObject* parent = App->scene->rootNode);
+	bool AddUIComponent(UI_TYPE type, int x, int y, GameObject* parent = App->scene->rootNode);
 
 public:
 	UI_Canvas* canvas;

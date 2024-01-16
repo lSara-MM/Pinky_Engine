@@ -208,16 +208,22 @@ void ModuleScene::LoadFirstScene()
 
 	G_UI* UI_Element = new G_UI(UI_TYPE::CANVAS);
 
-	G_UI* UI_Element2 = new G_UI(UI_TYPE::IMAGE, rootNode, 0, 0, 784, 660);
+	G_UI* UI_Element2 = new G_UI(UI_TYPE::IMAGE, rootNode);
 	App->resource->ImportTextureToModel("intro_bg.png", PINKY_ASSETS_AUX "UI\\", *UI_Element2);
+	static_cast<UI_Image*>(UI_Element2->GetComponentUI(UI_TYPE::IMAGE))->width = 784;
+	static_cast<UI_Image*>(UI_Element2->GetComponentUI(UI_TYPE::IMAGE))->height = 660;
 
-	G_UI* UI_Element4 = new G_UI(UI_TYPE::BUTTON, rootNode, 300, 300, 100, 100);
+	G_UI* UI_Element4 = new G_UI(UI_TYPE::BUTTON, rootNode, 300, 300);
 	App->resource->ImportTextureToModel("button.png", PINKY_ASSETS_AUX "UI\\", *UI_Element4);
 	static_cast<UI_Button*> (UI_Element4->GetComponentUI(UI_TYPE::BUTTON))->defaultFunction = true;
+
+	G_UI* UI_Element5 = new G_UI(UI_TYPE::INPUTBOX, rootNode, 300, 300);
+	App->resource->ImportTextureToModel("inputBox.png", PINKY_ASSETS_AUX "UI\\", *UI_Element5);
 
 	UI_Element = nullptr;
 	UI_Element2 = nullptr;
 	UI_Element4 = nullptr;
+	UI_Element5 = nullptr;
 	mainScreen = 1;
 }
 
@@ -227,16 +233,22 @@ void ModuleScene::ImportDefaultMainScreen()
 
 	G_UI* UI_Element = new G_UI(UI_TYPE::CANVAS);
 
-	G_UI* UI_Element2 = new G_UI(UI_TYPE::IMAGE, rootNode, 0, 0, 784, 660);
+	G_UI* UI_Element2 = new G_UI(UI_TYPE::IMAGE, rootNode);
 	App->resource->ImportTextureToModel("intro_bg.png", PINKY_ASSETS_AUX "UI\\", *UI_Element2);
+	static_cast<UI_Image*>(UI_Element2->GetComponentUI(UI_TYPE::IMAGE))->width = 784;
+	static_cast<UI_Image*>(UI_Element2->GetComponentUI(UI_TYPE::IMAGE))->height = 660;
 
-	G_UI* UI_Element4 = new G_UI(UI_TYPE::BUTTON, rootNode, 300, 300, 100, 100);
+	G_UI* UI_Element4 = new G_UI(UI_TYPE::BUTTON, rootNode, 300, 300);
 	App->resource->ImportTextureToModel("button.png", PINKY_ASSETS_AUX "UI\\", *UI_Element4);
 	static_cast<UI_Button*> (UI_Element4->GetComponentUI(UI_TYPE::BUTTON))->defaultFunction = true;
+
+	G_UI* UI_Element5 = new G_UI(UI_TYPE::INPUTBOX, rootNode, 300, 300);
+	App->resource->ImportTextureToModel("inputBox.png", PINKY_ASSETS_AUX "UI\\", *UI_Element5);
 
 	UI_Element = nullptr;
 	UI_Element2 = nullptr;
 	UI_Element4 = nullptr;
+	UI_Element5 = nullptr;
 	mainScreen = 1;
 }
 
@@ -253,13 +265,19 @@ void ModuleScene::ImportDefaultScene()
 		if (!App->resource->pendingToLoadScene)
 		{
 			crossHair = false;
-			G_UI* UI_Element = new G_UI(UI_TYPE::IMAGE, rootNode, App->editor->gameViewSize.x / 2 - 150, App->editor->gameViewSize.y / 2 - 150, 300, 300);
+			G_UI* UI_Element = new G_UI(UI_TYPE::IMAGE, rootNode, App->editor->gameViewSize.x / 2 - 150, App->editor->gameViewSize.y / 2 - 150);
 			App->resource->ImportTextureToModel("crosshair.png", PINKY_ASSETS_AUX "UI\\", *UI_Element);
+			static_cast<UI_Image*>(UI_Element->GetComponentUI(UI_TYPE::IMAGE))->width = 300;
+			static_cast<UI_Image*>(UI_Element->GetComponentUI(UI_TYPE::IMAGE))->height = 300;
 
-			G_UI* UI_Element0 = new G_UI(UI_TYPE::CANVAS, rootNode, App->editor->gameViewSize.x / 2 - 150, App->editor->gameViewSize.y / 2 - 150, 300, 300);
+			G_UI* UI_Element0 = new G_UI(UI_TYPE::CANVAS, rootNode, App->editor->gameViewSize.x / 2 - 150, App->editor->gameViewSize.y / 2 - 150);
 
-			G_UI* UI_Element2 = new G_UI(UI_TYPE::IMAGE, UI_Element0, App->editor->gameViewSize.x / 2 - 300, App->editor->gameViewSize.y / 2 - 300, 600, 600);
-			App->resource->ImportTextureToModel("crosshair.png", PINKY_ASSETS_AUX "UI\\", *UI_Element);
+			// Image bg
+			G_UI* UI_Element2 = new G_UI(UI_TYPE::IMAGE, UI_Element0, App->editor->gameViewSize.x / 2 - 300, App->editor->gameViewSize.y / 2 - 300);
+			//App->resource->ImportTextureToModel("crosshair.png", PINKY_ASSETS_AUX "UI\\", *UI_Element2);
+			static_cast<UI_Image*>(UI_Element2->GetComponentUI(UI_TYPE::IMAGE))->width = 600;
+			static_cast<UI_Image*>(UI_Element2->GetComponentUI(UI_TYPE::IMAGE))->height = 600;
+			static_cast<UI_Image*>(UI_Element2->GetComponentUI(UI_TYPE::IMAGE))->color = { 0.5, 0, 0.5, 0.95 };
 
 			// VSync
 			G_UI* UI_Element3 = new G_UI(UI_TYPE::CHECKBOX, UI_Element2, App->editor->gameViewSize.x / 2 - 300, 140);
@@ -290,6 +308,10 @@ void ModuleScene::ImportDefaultScene()
 			UI_Element0->isActive = false;
 
 			//
+			canvas = (G_UI*)UI_Element->canvas->gameObject;
+			menu = UI_Element0;
+			//
+			UI_Element0 = nullptr;
 			UI_Element = nullptr;
 			UI_Element2 = nullptr;
 			UI_Element3 = nullptr;
@@ -297,7 +319,6 @@ void ModuleScene::ImportDefaultScene()
 			UI_Element5 = nullptr;
 
 			mainScreen = 2;
-			menu = canvas;
 		}
 	}
 }

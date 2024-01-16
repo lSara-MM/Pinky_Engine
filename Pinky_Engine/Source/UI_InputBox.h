@@ -9,8 +9,8 @@
 class UI_InputBox : public C_UI
 {
 public:
-	// x = 0, y = 0, w = 170, y = 30
-	UI_InputBox(GameObject* g, int x = 0, int y = 0, int w = 170, int h = 30);
+	// x = 0, y = 0, w = 300, y = 50
+	UI_InputBox(GameObject* g, int x = 0, int y = 0, int w = 300, int h = 50);
 	~UI_InputBox();
 
 	update_status Update(float dt) override;

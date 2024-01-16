@@ -70,7 +70,7 @@ void UI_Checkbox::ShowInInspector()
 		}
 
 		ImGui::Dummy(ImVec2(0, 10));
-		ImGui::Text(text.c_str());
+		ImGui::Text("Text: %s", displayText->text.c_str());
 		ImGui::Dummy(ImVec2(0, 10));
 
 		ImGui::ColorEdit4("Normal color", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar);

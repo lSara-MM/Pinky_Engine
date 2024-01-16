@@ -34,7 +34,6 @@ public:
 	UI_Image* bgImg;
 	UI_Image* cmImg;
 
-	std::string text;
 	UI_Text* displayText;
 
 	// TODO: fix this
