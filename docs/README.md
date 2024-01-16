@@ -85,7 +85,10 @@ Composed of multiple Game Objects:
 	to the next scene
 	* Next scene has the town of the second assignment and a crosshair in the middle of the screen
 	* Pressing F1 in this scene opens up a menu, with a checkbox to drag the window and to toggle Vsync
-   
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/dJmOgvL1sJY?si=99HFYbOXOEplq2HC" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+
 ## 5. References
 - [defining-dialogue-systems](https://www.gamedeveloper.com/design/defining-dialogue-systems)
 
