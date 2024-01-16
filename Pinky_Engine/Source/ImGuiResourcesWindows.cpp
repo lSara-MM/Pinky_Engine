@@ -259,6 +259,7 @@ void ProjectFiles::FilesMouseEvents(std::string currentFile, std::string current
 			else if (currentFile == "Street.pnk")
 			{
 				App->scene->ImportDefaultScene();
+				App->scene->crossHair = true;
 			}
 			else
 			{

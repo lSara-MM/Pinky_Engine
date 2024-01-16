@@ -347,7 +347,15 @@ void ModuleScene::ImportDefaultScene()
 			UI_Element4 = nullptr;
 			UI_Element5 = nullptr;
 
-			mainScreen = 2;
+			if (!TimeManager::IsOnPlay())
+			{
+				mainScreen = 2;
+			}
+			else
+			{
+				mainScreen = 1;
+			}
+			loaded = false;
 		}
 	}
 }
