@@ -18,7 +18,7 @@ UI_InputBox::UI_InputBox(GameObject* g, int x, int y, int w, int h) : C_UI(UI_TY
 
 	focusedColor = { 0, 1, 0, 1 };
 	pressedColor = { 1, 0, 1, 1 };
-	selectedColor = { 0.2, 0.2, 1, 1 };
+	selectedColor = { 1.0f, 0.081f, 1.0f, 1.0f };
 	disabledColor = { 1, 1, 1, 1 };
 
 	text = "uwu";

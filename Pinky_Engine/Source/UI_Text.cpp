@@ -110,15 +110,18 @@ void UI_Text::Draw(bool game)
 	for (size_t i = 0; i < text.length(); i++)
 	{
 		float3 position = gameObject->transform->position;
+		
 
 		auto itr = font->mCharacters.find(text[i]);
 
 		if (itr != font->mCharacters.end())
 		{
+			float sizeX = itr->second->size.x * (fontSize / 98);
+
 			if (i != 0)
 			{
 				auto itr2 = font->mCharacters.find(text[i - 1]);
-				space += itr2->second->size.x;
+				space = space + itr2->second->size.x * (fontSize / 98);
 			}
 
 			if (itr->first == ' ')
@@ -127,14 +130,14 @@ void UI_Text::Draw(bool game)
 			}
 
 			boundsEditor->vertex[0] = float3(position.x + space, position.y + (fontSize * scaleBounds.y), 0);
-			boundsEditor->vertex[1] = float3(position.x + space + (itr->second->size.x * scaleBounds.x), position.y + (fontSize * scaleBounds.y), 0);
+			boundsEditor->vertex[1] = float3(position.x + space + (sizeX * scaleBounds.x), position.y + (fontSize * scaleBounds.y), 0);
 			boundsEditor->vertex[2] = float3(position.x + space, position.y, 0);
-			boundsEditor->vertex[3] = float3(position.x + space + (itr->second->size.x * scaleBounds.x), position.y, 0);
+			boundsEditor->vertex[3] = float3(position.x + space + (sizeX * scaleBounds.x), position.y, 0);
 
 			boundsGame->vertex[0] = float3(posX + space, posY + (fontSize * scaleBounds.y), 0);
-			boundsGame->vertex[1] = float3(posX + space + (itr->second->size.x * scaleBounds.x), posY + (fontSize * scaleBounds.y), 0);
+			boundsGame->vertex[1] = float3(posX + space + (sizeX * scaleBounds.x), posY + (fontSize * scaleBounds.y), 0);
 			boundsGame->vertex[2] = float3(posX + space, posY, 0);
-			boundsGame->vertex[3] = float3(posX + space + (itr->second->size.x * scaleBounds.x), posY, 0);
+			boundsGame->vertex[3] = float3(posX + space + (sizeX * scaleBounds.x), posY, 0);
 
 			boundsEditor->RegenerateVBO();
 			boundsGame->RegenerateVBO();

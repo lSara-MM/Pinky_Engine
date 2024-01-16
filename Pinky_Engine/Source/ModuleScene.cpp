@@ -302,7 +302,8 @@ void ModuleScene::LoadUI()
 	G_UI* UI_Element4 = new G_UI(UI_TYPE::BUTTON, rootNode, 250, 74);
 	App->resource->ImportTextureToModel("button.png", PINKY_ASSETS_AUX "UI\\", *UI_Element4);
 	static_cast<UI_Button*> (UI_Element4->GetComponentUI(UI_TYPE::BUTTON))->defaultFunction = true;
-	static_cast<UI_Button*> (UI_Element4->GetComponentUI(UI_TYPE::BUTTON))->displayText->text = " UWU";
+	static_cast<UI_Button*> (UI_Element4->GetComponentUI(UI_TYPE::BUTTON))->displayText->text = "UWU";
+	static_cast<UI_Button*> (UI_Element4->GetComponentUI(UI_TYPE::BUTTON))->displayText->color = { 1.0, 1.0, 0.0 , 1.0};
 
 	G_UI* UI_Element5 = new G_UI(UI_TYPE::TEXT, UI_Element2, 250, 220);
 	static_cast<UI_Text*>(UI_Element5->GetComponentUI(UI_TYPE::TEXT))->text = "Write here:";
