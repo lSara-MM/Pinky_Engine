@@ -29,6 +29,8 @@ public:
 	G_UI* GetCanvas();
 	void SetCanvas(G_UI* newCanvas = nullptr);
 
+	bool TabNavigate();
+
 	// TODO: remove when UI save/load works
 	void LoadFirstScene();
 	void ImportDefaultMainScreen();

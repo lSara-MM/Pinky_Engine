@@ -134,6 +134,11 @@ update_status ModuleScene::Update(float dt)
 		}
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN) 
+	{
+		TabNavigate();
+	}
+
 	return UPDATE_CONTINUE;
 }
 
@@ -176,6 +181,44 @@ G_UI* ModuleScene::GetCanvas()
 void ModuleScene::SetCanvas(G_UI* newCanvas)
 {
 	canvas = newCanvas;
+}
+
+bool ModuleScene::TabNavigate()
+{
+	//Get UI elements to navigate
+	std::vector<C_UI*> listUI;
+	App->renderer3D->GetUIGOs(App->scene->rootNode, listUI);
+
+	for (auto i = 0; i < listUI.size(); i++)
+	{
+		if (std::find(App->scene->hierarchy->vSelectedGOs.begin(),
+			App->scene->hierarchy->vSelectedGOs.end(), listUI[i]->gameObject) != App->scene->hierarchy->vSelectedGOs.end())
+		{
+			if (listUI[i] == listUI[listUI.size()-1])
+			{
+				App->scene->hierarchy->vSelectedGOs.clear();
+				App->scene->hierarchy->SetSelected(listUI[0]->gameObject);
+
+				listUI[i]->SetState(UI_STATE::NORMAL);
+				listUI[0]->SetState(UI_STATE::SELECTED);
+			}
+
+			else
+			{
+				App->scene->hierarchy->vSelectedGOs.clear();
+				App->scene->hierarchy->SetSelected(listUI[i + 1]->gameObject);
+
+				listUI[i]->SetState(UI_STATE::NORMAL);
+				listUI[i + 1]->SetState(UI_STATE::SELECTED);
+			}
+			return true;
+		}
+	}
+
+	App->scene->hierarchy->SetSelected(listUI[0]->gameObject);
+	listUI[0]->SetState(UI_STATE::SELECTED);
+
+	return false;
 }
 
 void ModuleScene::LoadFirstScene()
@@ -267,7 +310,7 @@ void ModuleScene::ImportDefaultScene()
 			static_cast<UI_Checkbox*>(UI_Element4->GetComponentUI(UI_TYPE::CHECKBOX))->displayText->text = "Draggeable";
 			static_cast<UI_Checkbox*>(UI_Element4->GetComponentUI(UI_TYPE::CHECKBOX))->displayText->color = { 0, 0, 0, 1 };
 
-			G_UI* UI_Element5 = new G_UI(UI_TYPE::TEXT, UI_Element2, 189.7, 432.9);
+			G_UI* UI_Element5 = new G_UI(UI_TYPE::TEXT, UI_Element2, 275, 432.9);
 			static_cast<UI_Text*>(UI_Element5->GetComponentUI(UI_TYPE::TEXT))->text = "MENU";
 
 			//
