@@ -107,13 +107,13 @@ void UI_Text::Draw(bool game)
 	{
 		float3 position = gameObject->transform->position;
 
-		auto itr = font->characters.find(text[i]);
+		auto itr = font->mCharacters.find(text[i]);
 
-		if (itr != font->characters.end())
+		if (itr != font->mCharacters.end())
 		{
 			if (i != 0)
 			{
-				auto itr2 = font->characters.find(text[i - 1]);
+				auto itr2 = font->mCharacters.find(text[i - 1]);
 				space += itr2->second->size.x;
 			}
 
@@ -268,12 +268,22 @@ Font::Font(std::string name, std::string fontPath)
 			static_cast<unsigned int>(face->glyph->advance.x),
 		};
 
-		characters.insert(std::pair<GLchar, Character*>(c, character));
+		mCharacters.insert(std::pair<GLchar, Character*>(c, character));
 	}
 
 	// destroy FreeType once we're finished
 	FT_Done_Face(face);
 	FT_Done_FreeType(ft);
+}
+
+Font::~Font()
+{
+	for (unsigned char c = 0; c < 128; ++c)
+	{
+		RELEASE(mCharacters[c]);
+	}
+
+	mCharacters.clear();
 }
 
 bool Font::InitFont(std::string name, std::string fontPath)
@@ -294,7 +304,7 @@ bool Font::InitFont(std::string name, std::string fontPath)
 
 GLuint Font::GetCharacterTexID(GLchar character)
 {
-	for (std::map<GLchar, Character*>::const_iterator it = characters.begin(); it != characters.end(); it++)
+	for (std::map<GLchar, Character*>::const_iterator it = mCharacters.begin(); it != mCharacters.end(); it++)
 	{
 		if ((*it).first == character)
 		{

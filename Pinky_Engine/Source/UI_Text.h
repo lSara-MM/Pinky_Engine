@@ -23,6 +23,7 @@ struct Font
 {
 public:
 	Font(std::string name, std::string fontPath);
+	~Font();
 
 	bool InitFont(std::string name, std::string fontPath);
 	GLuint GetCharacterTexID(GLchar character);
@@ -44,7 +45,7 @@ public:
 	FT_Library ft;
 	FT_Face face;
 
-	std::map<char, Character*> characters;
+	std::map<char, Character*> mCharacters;
 };
 
 class UI_Text : public C_UI
