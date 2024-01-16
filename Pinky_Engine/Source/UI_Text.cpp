@@ -36,15 +36,15 @@ UI_Text::UI_Text(GameObject* g, int x, int y, int w, int h) : C_UI(UI_TYPE::TEXT
 	boundsGame->index[4] = 1;
 	boundsGame->index[5] = 3;
 
-	boundsGame->uvs[3] = float2(0, 1);
-	boundsGame->uvs[2] = float2(1, 1);
-	boundsGame->uvs[1] = float2(0, 0);
-	boundsGame->uvs[0] = float2(1, 0);
+	boundsEditor->uvs[3] = float2(1, 1);
+	boundsEditor->uvs[2] = float2(0, 1);
+	boundsEditor->uvs[1] = float2(1, 0);
+	boundsEditor->uvs[0] = float2(0, 0);
 
-	boundsEditor->uvs[0] = float2(1, 0);
-	boundsEditor->uvs[1] = float2(0, 0);
-	boundsEditor->uvs[2] = float2(1, 1);
-	boundsEditor->uvs[3] = float2(0, 1);
+	boundsGame->uvs[3] = float2(1, 1);
+	boundsGame->uvs[2] = float2(0, 1);
+	boundsGame->uvs[1] = float2(1, 0);
+	boundsGame->uvs[0] = float2(0, 0);
 
 	boundsEditor->InitBuffers();
 	boundsGame->InitBuffers();
