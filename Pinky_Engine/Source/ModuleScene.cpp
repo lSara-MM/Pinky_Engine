@@ -263,32 +263,34 @@ void ModuleScene::ImportDefaultScene()
 			crossHair = false;
 			G_UI* UI_Element = new G_UI(UI_TYPE::IMAGE, rootNode, App->editor->gameViewSize.x / 2 - 150, App->editor->gameViewSize.y / 2 - 150, 300, 300);
 			App->resource->ImportTextureToModel("crosshair.png", PINKY_ASSETS_AUX "UI\\", *UI_Element);
-			
+
 			G_UI* UI_Element0 = new G_UI(UI_TYPE::CANVAS, rootNode, App->editor->gameViewSize.x / 2 - 150, App->editor->gameViewSize.y / 2 - 150, 300, 300);
 
 			G_UI* UI_Element2 = new G_UI(UI_TYPE::IMAGE, UI_Element0, App->editor->gameViewSize.x / 2 - 300, App->editor->gameViewSize.y / 2 - 300, 600, 600);
 			App->resource->ImportTextureToModel("crosshair.png", PINKY_ASSETS_AUX "UI\\", *UI_Element);
 
 			// VSync
-			G_UI* UI_Element3 = new G_UI(UI_TYPE::CHECKBOX, UI_Element2, 200, 200);
+			G_UI* UI_Element3 = new G_UI(UI_TYPE::CHECKBOX, UI_Element2, App->editor->gameViewSize.x / 2 - 300, 140);
 			App->resource->ImportTextureToModel("checkboxBG.png", PINKY_ASSETS_AUX "UI\\", *(static_cast<UI_Checkbox*>
 				(UI_Element3->GetComponentUI(UI_TYPE::CHECKBOX))->bgImg->gameObject));
 			App->resource->ImportTextureToModel("checkmark.png", PINKY_ASSETS_AUX "UI\\", *(static_cast<UI_Checkbox*>
 				(UI_Element3->GetComponentUI(UI_TYPE::CHECKBOX))->cmImg->gameObject));
 			static_cast<UI_Checkbox*>(UI_Element3->GetComponentUI(UI_TYPE::CHECKBOX))->defaultFunction1 = true;
 			static_cast<UI_Checkbox*>(UI_Element3->GetComponentUI(UI_TYPE::CHECKBOX))->displayText->text = "VSync";
+			static_cast<UI_Checkbox*>(UI_Element3->GetComponentUI(UI_TYPE::CHECKBOX))->displayText->color = { 0, 0, 0, 1 };
 			UI_Element3->isActive = false;
 
 			// Draggeable
-			G_UI* UI_Element4 = new G_UI(UI_TYPE::CHECKBOX, UI_Element2, 200, 500);
+			G_UI* UI_Element4 = new G_UI(UI_TYPE::CHECKBOX, UI_Element2, App->editor->gameViewSize.x / 2 - 300, 200);
 			App->resource->ImportTextureToModel("checkboxBG.png", PINKY_ASSETS_AUX "UI\\", *(static_cast<UI_Checkbox*>
 				(UI_Element4->GetComponentUI(UI_TYPE::CHECKBOX))->bgImg->gameObject));
 			App->resource->ImportTextureToModel("checkmark.png", PINKY_ASSETS_AUX "UI\\", *(static_cast<UI_Checkbox*>
 				(UI_Element4->GetComponentUI(UI_TYPE::CHECKBOX))->cmImg->gameObject));
 			static_cast<UI_Checkbox*>(UI_Element4->GetComponentUI(UI_TYPE::CHECKBOX))->defaultFunction2 = true;
 			static_cast<UI_Checkbox*>(UI_Element4->GetComponentUI(UI_TYPE::CHECKBOX))->displayText->text = "Draggeable";
+			static_cast<UI_Checkbox*>(UI_Element4->GetComponentUI(UI_TYPE::CHECKBOX))->displayText->color = { 0, 0, 0, 1 };
 
-			G_UI* UI_Element5 = new G_UI(UI_TYPE::TEXT, UI_Element2, App->editor->gameViewSize.x / 2 - 300, App->editor->gameViewSize.y / 2 - 300);
+			G_UI* UI_Element5 = new G_UI(UI_TYPE::TEXT, UI_Element2, App->editor->gameViewSize.x / 4, 130);
 			static_cast<UI_Text*>(UI_Element5->GetComponentUI(UI_TYPE::TEXT))->text = "MENU";
 
 			//
