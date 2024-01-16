@@ -34,12 +34,24 @@ void TimeManager::Play()
 		gameTimer->Start();
 		break;
 	case TimeManager::PlayState::PLAY:
-
-		// TODO: Maybe put this in a function so it can be called anywhere?
 		App->resource->sceneFileName = SCENES_TEMP_PATH "Scene_Temp" SCENE_EXT;
-		App->resource->pendingToLoadScene = true;
 		state = PlayState::EDITOR;
 		gameTime = 0.0F;
+
+		switch (App->scene->mainScreen)
+		{
+		case 0:
+			App->resource->pendingToLoadScene = true;
+			break;
+		case 1:
+			App->scene->ImportDefaultMainScreen();
+			break;
+		case 2:
+			App->scene->ImportDefaultScene();
+			break;
+		default:
+			break;
+		}
 		break;
 	case TimeManager::PlayState::PAUSE:
 		state = PlayState::PLAY;

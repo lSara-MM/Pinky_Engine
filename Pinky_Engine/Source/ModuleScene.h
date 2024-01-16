@@ -29,7 +29,9 @@ public:
 	G_UI* GetCanvas();
 	void SetCanvas(G_UI* newCanvas = nullptr);
 
-private:
+	// TODO: remove when UI save/load works
+	void LoadFirstScene();
+	void ImportDefaultMainScreen();
 	void ImportDefaultScene();
 
 public:
@@ -44,10 +46,15 @@ public:
 	GameObject* mainCamera;
 
 	//
-	bool crossHair;
 	G_UI* f1;
+
+	//
+	bool crossHair;
+	int mainScreen;
 
 private:
 	G_UI* canvas;
+
 	bool street;
+	bool loaded;
 };
