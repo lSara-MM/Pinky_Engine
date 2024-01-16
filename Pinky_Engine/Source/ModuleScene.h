@@ -9,6 +9,7 @@
 
 #include "ImGuiWindows.h"
 #include "ImGuiResourcesWindows.h"
+#include "UI_Image.h"
 
 class GameObject;
 class G_UI;
@@ -58,6 +59,7 @@ public:
 private:
 	G_UI* canvas;
 	G_UI* menu;
+	UI_Image* bgImage;
 
 	bool street;
 	bool loaded;

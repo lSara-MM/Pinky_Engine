@@ -324,6 +324,7 @@ bool G_UI::AddUIComponent(UI_TYPE type, int x, int y, GameObject* parent)
 
 		comp->bgImg = static_cast<UI_Image*>(aux->GetComponentUI(UI_TYPE::IMAGE));
 		comp->cmImg = static_cast<UI_Image*>(aux2->GetComponentUI(UI_TYPE::IMAGE));
+		comp->cmImg->isActive = false;
 		comp->displayText = static_cast<UI_Text*>(aux3->GetComponentUI(UI_TYPE::TEXT));
 
 		comp = nullptr;

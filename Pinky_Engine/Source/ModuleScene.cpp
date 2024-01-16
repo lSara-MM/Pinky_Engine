@@ -38,6 +38,7 @@ ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, sta
 	canvas = nullptr;
 	f1 = nullptr;
 
+	bgImage = nullptr;
 	//
 	menu = nullptr;
 	crossHair = false;
@@ -124,6 +125,12 @@ update_status ModuleScene::Update(float dt)
 		}
 	}
 
+	if (bgImage != nullptr)
+	{
+		bgImage->width = App->editor->gameViewSize.x;
+		bgImage->height = App->editor->gameViewSize.y;
+	}
+
 	// Open/Close menu
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN && !ImGui::GetIO().WantTextInput && !App->input->GetInputActive())
 	{
@@ -134,7 +141,7 @@ update_status ModuleScene::Update(float dt)
 		}
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN) 
+	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN)
 	{
 		TabNavigate();
 	}
@@ -168,6 +175,7 @@ bool ModuleScene::CleanUp()
 	console = nullptr;
 	project = nullptr;
 	rm = nullptr;
+	bgImage = nullptr;
 
 	RELEASE(rootNode);
 	return true;
@@ -194,7 +202,7 @@ bool ModuleScene::TabNavigate()
 		if (std::find(App->scene->hierarchy->vSelectedGOs.begin(),
 			App->scene->hierarchy->vSelectedGOs.end(), listUI[i]->gameObject) != App->scene->hierarchy->vSelectedGOs.end())
 		{
-			if (listUI[i] == listUI[listUI.size()-1])
+			if (listUI[i] == listUI[listUI.size() - 1])
 			{
 				App->scene->hierarchy->vSelectedGOs.clear();
 				App->scene->hierarchy->SetSelected(listUI[0]->gameObject);
@@ -339,14 +347,16 @@ void ModuleScene::LoadUI()
 
 	G_UI* UI_Element2 = new G_UI(UI_TYPE::IMAGE, rootNode);
 	App->resource->ImportTextureToModel("intro_bg.png", PINKY_ASSETS_AUX "UI\\", *UI_Element2);
+	bgImage = static_cast<UI_Image*>(UI_Element2->GetComponentUI(UI_TYPE::IMAGE));
 	static_cast<UI_Image*>(UI_Element2->GetComponentUI(UI_TYPE::IMAGE))->width = 784;
 	static_cast<UI_Image*>(UI_Element2->GetComponentUI(UI_TYPE::IMAGE))->height = 660;
+
 
 	G_UI* UI_Element4 = new G_UI(UI_TYPE::BUTTON, rootNode, 250, 74);
 	App->resource->ImportTextureToModel("button.png", PINKY_ASSETS_AUX "UI\\", *UI_Element4);
 	static_cast<UI_Button*> (UI_Element4->GetComponentUI(UI_TYPE::BUTTON))->defaultFunction = true;
 	static_cast<UI_Button*> (UI_Element4->GetComponentUI(UI_TYPE::BUTTON))->displayText->text = "UWU";
-	static_cast<UI_Button*> (UI_Element4->GetComponentUI(UI_TYPE::BUTTON))->displayText->color = { 1.0, 1.0, 0.0 , 1.0};
+	static_cast<UI_Button*> (UI_Element4->GetComponentUI(UI_TYPE::BUTTON))->displayText->color = { 1.0, 1.0, 0.0 , 1.0 };
 
 	G_UI* UI_Element5 = new G_UI(UI_TYPE::TEXT, UI_Element2, 250, 220);
 	static_cast<UI_Text*>(UI_Element5->GetComponentUI(UI_TYPE::TEXT))->text = "Write here:";
