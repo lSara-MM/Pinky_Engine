@@ -1,13 +1,11 @@
-# Pinky Engine
-C++ Game Engine
+# Pinky Engine ![Pinky](https://github.com/lSara-MM/Pinky_Engine/assets/93879867/ed391b11-5df6-4e11-956c-bab93c571d51)
 
-[![PinkyEngine - Download](https://img.shields.io/static/v1?label=PinkyEngine&message=Download&color=blue&logo=github)](https://github.com/lSara-MM/Pinky_Engine/releases/download/v.0.2/Pinky_Engine_v.0.2.zip "Download Engine") <t> [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/lSara-MM/Pinky_Engine)
+[![PinkyEngine - Download](https://img.shields.io/static/v1?label=PinkyEngine&message=Download&color=blue&logo=github)](https://github.com/lSara-MM/Pinky_Engine/releases/download/v.1.0/Pinky_Engine_v.1.0.zip "Download Engine") 
+[![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/lSara-MM/Pinky_Engine)
 
 ## About Pinky Engine
 
 Pinky Engine is a Game Engine made by Andreu Nosàs Soler and Sara Qiao Martínez Mauri, as part of a college assignment from CITM (UPC) University, Terrassa, for the 3D engines subject during 3rd year of Game Design and Game Development degree.
-
-![Pinky](https://github.com/lSara-MM/Pinky_Engine/assets/93879867/ed391b11-5df6-4e11-956c-bab93c571d51)
 
 ![image](https://github.com/lSara-MM/Pinky_Engine/assets/93879867/3dbef10b-5e6b-4caf-b42c-89cf877f54ad)
 
