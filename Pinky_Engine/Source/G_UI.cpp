@@ -8,11 +8,11 @@
 
 #include "ModuleScene.h"
 
-G_UI::G_UI(UI_TYPE t, GameObject* pParent, int w, int h, int x, int y) : GameObject("", pParent)
+G_UI::G_UI(UI_TYPE t, GameObject* pParent, int x, int y, int w, int h) : GameObject("", pParent)
 {
 	//RemoveComponent(transform);//TODO: fer amb altre transform
 	canvas = nullptr;
-	AddUIComponent(t, w, h, x, y, pParent);
+	AddUIComponent(t, x, y, w, h, pParent);
 
 	//AddComponent(C_TYPE::MESH, nullptr, ai::POLY_PRIMITIVE_TYPE::PLANE);
 	mesh = nullptr;
@@ -112,7 +112,7 @@ std::vector<C_UI*> G_UI::GetComponentsUI_ByType(UI_TYPE type)
 	return vec;
 }
 
-bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y, GameObject* parent)
+bool G_UI::AddUIComponent(UI_TYPE type, int x, int y, int w, int h, GameObject* parent)
 {
 	bool ret = true;
 
@@ -187,9 +187,9 @@ bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y, GameObject* 
 	case UI_TYPE::BUTTON:
 	{
 		// Unity-like
-		AddUIComponent(UI_TYPE::IMAGE, w, h, x, y);
+		AddUIComponent(UI_TYPE::IMAGE, x, y, w, h);
 
-		G_UI* aux = new G_UI(UI_TYPE::TEXT, this, w, h, 20, h/2);
+		G_UI* aux = new G_UI(UI_TYPE::TEXT, this, 20, h / 2, w, h);
 		aux->ReParent(this);
 		aux->canvas = static_cast<G_UI*>(pParent)->canvas;
 
@@ -222,9 +222,9 @@ bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y, GameObject* 
 	case UI_TYPE::INPUTBOX:
 	{
 		// Unity-like
-		AddUIComponent(UI_TYPE::IMAGE, w, h, x, y);
+		AddUIComponent(UI_TYPE::IMAGE, x, y, w, h);
 
-		G_UI* aux = new G_UI(UI_TYPE::TEXT, this, w, h, x, y);
+		G_UI* aux = new G_UI(UI_TYPE::TEXT, this, x, y, w, h);
 		aux->ReParent(this);
 		aux->canvas = static_cast<G_UI*>(pParent)->canvas;
 
@@ -263,19 +263,19 @@ bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y, GameObject* 
 		// TODO: Maybe put all this references to the other components in the constructor
 		// Unity-like
 		// Toggle background
-		G_UI* aux = new G_UI(UI_TYPE::IMAGE, this, w, h);
+		G_UI* aux = new G_UI(UI_TYPE::IMAGE, this, x, y, w, h);
 		aux->name = "Background";
 		aux->ReParent(this);
 		aux->canvas = static_cast<G_UI*>(pParent)->canvas;
 
 		// Checkmark
-		G_UI* aux2 = new G_UI(UI_TYPE::IMAGE, this, w, h);
+		G_UI* aux2 = new G_UI(UI_TYPE::IMAGE, this, x, y, w, h);
 		aux2->name = "Checkmark";
 		aux2->ReParent(aux);
 		aux2->canvas = static_cast<G_UI*>(pParent)->canvas;
 
 		// Label
-		G_UI* aux3 = new G_UI(UI_TYPE::TEXT, this, w, h);
+		G_UI* aux3 = new G_UI(UI_TYPE::TEXT, this, x, y, w, h);
 		aux3->ReParent(this);
 		aux3->canvas = static_cast<G_UI*>(pParent)->canvas;
 

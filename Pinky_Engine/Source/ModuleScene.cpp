@@ -79,22 +79,6 @@ bool ModuleScene::Start()
 
 	LoadFirstScene();
 
-	//
-	App->resource->ImportToSceneV("street2.fbx", PINKY_ASSETS_AUX "3dObject\\street\\");
-	App->parson->SaveScene("Street");
-
-	G_UI* UI_Element = new G_UI(UI_TYPE::CANVAS);
-
-	G_UI* UI_Element2 = new G_UI(UI_TYPE::IMAGE, rootNode, 0, 0, 784, 660);
-	App->resource->ImportTextureToModel("intro_bg.png", PINKY_ASSETS_AUX "UI\\", *UI_Element2);
-
-	G_UI* UI_Element4 = new G_UI(UI_TYPE::BUTTON, rootNode, 300, 300, 100, 100);
-	App->resource->ImportTextureToModel("button.png", PINKY_ASSETS_AUX "UI\\", *UI_Element4);
-	static_cast<UI_Button*> (UI_Element4->GetComponentUI(UI_TYPE::BUTTON))->defaultFunction = true;
-
-	UI_Element = nullptr;
-	UI_Element2 = nullptr;
-	UI_Element4 = nullptr;
 	return true;
 }
 
