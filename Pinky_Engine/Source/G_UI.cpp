@@ -277,6 +277,21 @@ bool G_UI::AddUIComponent(UI_TYPE type, int x, int y, GameObject* parent)
 		int w = 170;
 		int h = 20;
 
+		if (App->scene->GetCanvas() == nullptr)
+		{
+			App->scene->SetCanvas(new G_UI(UI_TYPE::CANVAS));
+		}
+
+		if (parent == App->scene->rootNode)
+		{
+			ReParent(App->scene->GetCanvas());
+		}
+		else
+		{
+			ReParent(parent);
+		}
+		canvas = static_cast<G_UI*>(pParent)->canvas;
+
 		// TODO: Maybe put all this references to the other components in the constructor
 		// Unity-like
 		// Toggle background
@@ -302,22 +317,6 @@ bool G_UI::AddUIComponent(UI_TYPE type, int x, int y, GameObject* parent)
 		vComponents.push_back(comp);
 
 		name = "Checkbox";
-
-		if (App->scene->GetCanvas() == nullptr)
-		{
-			App->scene->SetCanvas(new G_UI(UI_TYPE::CANVAS));
-		}
-
-		if (parent == App->scene->rootNode)
-		{
-			ReParent(App->scene->GetCanvas());
-		}
-		else
-		{
-			ReParent(parent);
-		}
-		canvas = static_cast<G_UI*>(pParent)->canvas;
-
 
 		comp->bgImg = static_cast<UI_Image*>(aux->GetComponentUI(UI_TYPE::IMAGE));
 		comp->cmImg = static_cast<UI_Image*>(aux2->GetComponentUI(UI_TYPE::IMAGE));
