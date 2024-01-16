@@ -40,6 +40,52 @@ This method is used in the time management as well. On _Play_, it saves a tempor
 ### ↦ Camera
 Scene rendering time was reduced with camera culling, camera frustum, and AABB boxes to discard all the meshes outside the camera view.
 
+
+# High-level System: User Interface
+System to render a variety of widgets on screen. It follows a component patern like the normal game objects, with each component inthereting from the base class C_UI. 
+
+## UI Game Objects/Widgets: 
+
+### ↦ Canvas 
+Surface that represents the game window. What is inside of it will be rendered to game. It is automatically created when any UI Game Object is created and there is no canvas on scene.
+
+### ↦ Image 
+Displays an image. Options to change its colour and the texture attached to it
+### ↦ Text 
+Widget that renders the desired text ("Hello World" by default). Option to change the font colour and size.
+
+### ↦ Button
+It is formed by two Games Objects:
+  * Text: if the user desires to input a text
+  * Button: holds the logic of the button with the following states: Normal, Focusd, Pressed, Selected and Release
+    * Option to change the colours of each state 
+    * Option to change the colour of the texture
+    * Option to change the texture
+    * It can call custom functions (like the fade in the demo)
+      
+### ↦ Input Box
+Allows player to input any text when selected :
+  * Input box Game Object holds the logic and has the same states as button
+  * Text Game Object to store the input text (and be able to move it around)
+  * It has the option to put a character limit
+    
+### ↦ Checkbox 
+Composed of multiple Game Objects:
+	* Checkbox as the parent of the rest holds the logic to disable the checkmark and execute a desired function
+	* Text if user wants to put a label to the widget
+	* Background behind the checkmark
+	* Checkmark, changes when the Checkbox parent is changed
+	* As with button, option to change the colours of the states and of the textures
+ 
+* All of the UI Game Objects can be navigated through with tab (change the selected one)
+* Logic of all the UI works only in play mode
+* Buttons allow input from the keyboard (spacebar)
+* There is a demo that shows the functionality of all the Widgets:
+	* Main menu with a fullscreen background, with an imput box and a button to start, when pressed fades away
+	to the next scene
+	* Next scene has the town of the second assignment and a crosshair in the middle of the screen
+	* Pressing F1 in this scene opens up a menu, with a checkbox to drag the window and to toggle Vsync
+   
 ## 5. References
 - [defining-dialogue-systems](https://www.gamedeveloper.com/design/defining-dialogue-systems)
 
