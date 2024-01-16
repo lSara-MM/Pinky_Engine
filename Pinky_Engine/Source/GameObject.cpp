@@ -37,6 +37,7 @@ GameObject::GameObject(std::string n, GameObject* parent, bool start_enabled)
 	// ---
 	selected = false;
 	hidden = false;
+	isUI = false;
 
 	mesh = nullptr;
 	camera = nullptr;

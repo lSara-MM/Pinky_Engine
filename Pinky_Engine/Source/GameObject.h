@@ -67,6 +67,7 @@ public:
 
 	bool selected;
 	bool hidden;
+	bool isUI;
 	//Discard mesh if the global AABB is outside frustum
 	bool isCulled;
 

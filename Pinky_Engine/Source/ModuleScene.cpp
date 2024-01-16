@@ -73,6 +73,7 @@ bool ModuleScene::Init()
 	project = new ProjectFiles(4);
 	App->editor->AddWindow(project);
 
+	selectedUI = 0;
 	return ret;
 }
 
@@ -195,38 +196,48 @@ bool ModuleScene::TabNavigate()
 {
 	//Get UI elements to navigate
 	std::vector<C_UI*> listUI;
-	App->renderer3D->GetUIGOs(App->scene->rootNode, listUI);
 
-	for (auto i = 0; i < listUI.size(); i++)
+	for (int i = 0; i < vCanvas.size(); ++i)
 	{
-		if (std::find(App->scene->hierarchy->vSelectedGOs.begin(),
-			App->scene->hierarchy->vSelectedGOs.end(), listUI[i]->gameObject) != App->scene->hierarchy->vSelectedGOs.end())
+		for (int k = 0; k < vCanvas[i]->vChildren.size(); ++k)
 		{
-			if (listUI[i] == listUI[listUI.size() - 1])
+			for (int j = 0; j < vCanvas[i]->vChildren[k]->vComponents.size(); ++j)
 			{
-				App->scene->hierarchy->vSelectedGOs.clear();
-				App->scene->hierarchy->SetSelected(listUI[0]->gameObject);
-
-				listUI[i]->SetState(UI_STATE::NORMAL);
-				listUI[0]->SetState(UI_STATE::SELECTED);
+				if (static_cast<C_UI*>(vCanvas[i]->vChildren[k]->vComponents[j])->UI_type == UI_TYPE::BUTTON
+					|| static_cast<C_UI*>(vCanvas[i]->vChildren[k]->vComponents[j])->UI_type == UI_TYPE::CHECKBOX ||
+					static_cast<C_UI*>(vCanvas[i]->vChildren[k]->vComponents[j])->UI_type == UI_TYPE::INPUTBOX)
+				{
+					listUI.push_back(static_cast<C_UI*>(vCanvas[i]->vChildren[k]->vComponents[j]));
+				}
 			}
-
-			else
-			{
-				App->scene->hierarchy->vSelectedGOs.clear();
-				App->scene->hierarchy->SetSelected(listUI[i + 1]->gameObject);
-
-				listUI[i]->SetState(UI_STATE::NORMAL);
-				listUI[i + 1]->SetState(UI_STATE::SELECTED);
-			}
-			return true;
 		}
 	}
 
-	App->scene->hierarchy->SetSelected(listUI[0]->gameObject);
-	listUI[0]->SetState(UI_STATE::SELECTED);
+	for (auto i = 0; i < listUI.size(); i++)
+	{
+		if (selectedUI == listUI.size() - 1)
+		{
+			App->scene->hierarchy->SetSelected(listUI[0]->gameObject);
 
-	return false;
+			listUI[selectedUI]->SetState(UI_STATE::NORMAL);
+			listUI[0]->SetState(UI_STATE::SELECTED);
+
+			selectedUI = 0;
+		}
+
+		else
+		{
+			App->scene->hierarchy->SetSelected(listUI[selectedUI + 1]->gameObject);
+
+			listUI[selectedUI]->SetState(UI_STATE::NORMAL);
+			listUI[selectedUI + 1]->SetState(UI_STATE::SELECTED);
+
+			selectedUI += 1;
+		}
+		return true;
+	}
+
+	return true;
 }
 
 void ModuleScene::LoadFirstScene()

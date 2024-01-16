@@ -3,7 +3,7 @@
 
 UI_Canvas::UI_Canvas(GameObject* g, int w, int h) : C_UI(UI_TYPE::CANVAS, C_TYPE::UI, g, "Canvas")
 {
-
+	App->scene->vCanvas.push_back((G_UI*)gameObject);
 }
 
 UI_Canvas::~UI_Canvas()
