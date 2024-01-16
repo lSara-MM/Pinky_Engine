@@ -85,7 +85,7 @@ bool ModuleEditor::Init()
 
 	//// OpenGL configuration
 	depthTest = true;
-	cullFace = true;
+	cullFace = false;
 	lightning = true;
 	colorMaterial = true;
 	texture2D = true;

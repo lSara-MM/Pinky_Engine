@@ -10,7 +10,7 @@
 //
 #include "External Libraries/ImGui/imgui_custom.h"
 
-UI_Image::UI_Image(GameObject* g, int x, int y, int w, int h) : C_UI(UI_TYPE::IMAGE, C_TYPE::UI, g, "Image", x, y, w, h)
+UI_Image::UI_Image(GameObject* g, int w, int h, int x, int y) : C_UI(UI_TYPE::IMAGE, C_TYPE::UI, g, "Image", w, h, x, y)
 {
 	mat = new C_Material();
 }
@@ -113,8 +113,7 @@ void UI_Image::Draw(bool game)
 
 			glMatrixMode(GL_PROJECTION);
 			glLoadIdentity();
-			glOrtho(0.0, App->editor->gameViewSize.x, App->editor->gameViewSize.y, 0.0, 1.0, -1.0);//TODO: orginal con 0,0 bien en pantalla pero mueve al revés
-			//glOrtho(App->editor->GameViewSize.x, 0.0, 0.0, App->editor->GameViewSize.y, 1.0, -1.0);
+			glOrtho(0.0, App->editor->gameViewSize.x, 0.0, App->editor->gameViewSize.y, 1.0, -1.0);
 
 			glMatrixMode(GL_MODELVIEW);
 			glLoadIdentity();

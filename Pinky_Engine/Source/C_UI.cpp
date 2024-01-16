@@ -72,15 +72,15 @@ C_UI::C_UI(UI_TYPE ui_t, C_TYPE t, GameObject* g, std::string n, int x, int y, i
 	boundsGame->vertex[2] = float3(posX, posY, 0);
 	boundsGame->vertex[3] = float3(posX + (width * scaleBounds.x), posY, 0);
 
-	boundsGame->uvs[0] = float2(0, 0);
-	boundsGame->uvs[1] = float2(1, 0);
-	boundsGame->uvs[2] = float2(0, 1);
-	boundsGame->uvs[3] = float2(1, 1);
+	boundsGame->uvs[0] = float2(0, 1);
+	boundsGame->uvs[1] = float2(1, 1);
+	boundsGame->uvs[2] = float2(0, 0);
+	boundsGame->uvs[3] = float2(1, 0);
 
-	boundsEditor->uvs[3] = float2(0, 0);
-	boundsEditor->uvs[2] = float2(1, 0);
-	boundsEditor->uvs[1] = float2(0, 1);
-	boundsEditor->uvs[0] = float2(1, 1);
+	boundsEditor->uvs[0] = float2(0, 1);
+	boundsEditor->uvs[1] = float2(1, 1);
+	boundsEditor->uvs[2] = float2(0, 0);
+	boundsEditor->uvs[3] = float2(1, 0);
 
 	boundsEditor->InitBuffers();
 	boundsGame->InitBuffers();
@@ -121,8 +121,7 @@ void C_UI::Draw(bool game)
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0.0, App->editor->gameViewSize.x, App->editor->gameViewSize.y, 0.0, 1.0, -1.0);//TODO: orginal con 0,0 bien en pantalla pero mueve al revés
-		//glOrtho(App->editor->GameViewSize.x, 0.0, 0.0, App->editor->GameViewSize.y, 1.0, -1.0);
+		glOrtho(0.0, App->editor->gameViewSize.x, 0.0, App->editor->gameViewSize.y, 1.0, -1.0);
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
@@ -295,7 +294,7 @@ void C_UI::OnSelected()
 bool C_UI::MouseCheck(float2 mouse)
 {
 	return (mouse.x >= posX / App->editor->gameViewSize.x && mouse.x <= (posX + (width * scaleBounds.x)) / App->editor->gameViewSize.x
-		&& mouse.y >= (posY + 21.25) / App->editor->gameViewSize.y && mouse.y <= (posY + 21.25 + (height * scaleBounds.y)) / App->editor->gameViewSize.y);
+		&& mouse.y >= (posY + 200) / App->editor->gameViewSize.y && mouse.y <= (posY + 200 + (height * scaleBounds.y)) / App->editor->gameViewSize.y);
 }
 
 void C_UI::UpdateUITransform()
@@ -320,17 +319,6 @@ void C_UI::UpdateUITransform()
 	boundsGame->vertex[1] = float3(posX + (width * scaleBounds.x), posY + (height * scaleBounds.y), 0);
 	boundsGame->vertex[2] = float3(posX, posY, 0);
 	boundsGame->vertex[3] = float3(posX + (width * scaleBounds.x), posY, 0);
-
-	boundsEditor->uvs[0] = float2(0, 0);
-	boundsEditor->uvs[1] = float2(1, 0);
-	boundsEditor->uvs[2] = float2(0, 1);
-	boundsEditor->uvs[3] = float2(1, 1);
-
-
-	boundsEditor->uvs[3] = float2(0, 0);
-	boundsEditor->uvs[2] = float2(1, 0);
-	boundsEditor->uvs[1] = float2(0, 1);
-	boundsEditor->uvs[0] = float2(1, 1);
 
 	boundsEditor->RegenerateVBO();
 	boundsGame->RegenerateVBO();
@@ -417,16 +405,6 @@ void C_UI::Drag(float dt)
 	boundsGame->vertex[1] = float3(posX + (width * scaleBounds.x), posY + (height * scaleBounds.y), 0);
 	boundsGame->vertex[2] = float3(posX, posY, 0);
 	boundsGame->vertex[3] = float3(posX + (width * scaleBounds.x), posY, 0);
-
-	boundsEditor->uvs[0] = float2(0, 0);
-	boundsEditor->uvs[1] = float2(1, 0);
-	boundsEditor->uvs[2] = float2(0, 1);
-	boundsEditor->uvs[3] = float2(1, 1);
-
-	boundsEditor->uvs[3] = float2(0, 0);
-	boundsEditor->uvs[2] = float2(1, 0);
-	boundsEditor->uvs[1] = float2(0, 1);
-	boundsEditor->uvs[0] = float2(1, 1);
 
 	boundsEditor->RegenerateVBO();
 	boundsGame->RegenerateVBO();

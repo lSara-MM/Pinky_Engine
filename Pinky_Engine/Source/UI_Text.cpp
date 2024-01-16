@@ -36,10 +36,10 @@ UI_Text::UI_Text(GameObject* g, int x, int y, int w, int h) : C_UI(UI_TYPE::TEXT
 	boundsGame->index[4] = 1;
 	boundsGame->index[5] = 3;
 
-	boundsGame->uvs[0] = float2(0, 1);
-	boundsGame->uvs[1] = float2(1, 1);
-	boundsGame->uvs[2] = float2(0, 0);
-	boundsGame->uvs[3] = float2(1, 0);
+	boundsGame->uvs[3] = float2(0, 1);
+	boundsGame->uvs[2] = float2(1, 1);
+	boundsGame->uvs[1] = float2(0, 0);
+	boundsGame->uvs[0] = float2(1, 0);
 
 	boundsEditor->uvs[0] = float2(1, 0);
 	boundsEditor->uvs[1] = float2(0, 0);
@@ -141,8 +141,7 @@ void UI_Text::Draw(bool game)
 
 				glMatrixMode(GL_PROJECTION);
 				glLoadIdentity();
-				glOrtho(0.0, App->editor->gameViewSize.x, App->editor->gameViewSize.y, 0.0, 1.0, -1.0);//TODO: orginal con 0,0 bien en pantalla pero mueve al revés
-				//glOrtho(App->editor->GameViewSize.x, 0.0, 0.0, App->editor->GameViewSize.y, 1.0, -1.0);
+				glOrtho(0.0, App->editor->gameViewSize.x, 0.0, App->editor->gameViewSize.y, 1.0, -1.0);
 
 				glMatrixMode(GL_MODELVIEW);
 				glLoadIdentity();

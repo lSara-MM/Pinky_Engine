@@ -131,7 +131,7 @@ bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y, GameObject* 
 	break;
 	case UI_TYPE::IMAGE:
 	{
-		UI_Image* comp = new UI_Image(this, w, h, x, y);
+		UI_Image* comp = new UI_Image(this, x, y, w, h);
 		vComponents.push_back(comp);
 
 		name = "Image";
@@ -156,7 +156,7 @@ bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y, GameObject* 
 	break;
 	case UI_TYPE::TEXT:
 	{
-		UI_Text* comp = new UI_Text(this, w, h, x, y);
+		UI_Text* comp = new UI_Text(this, x, y, w, h);
 		vComponents.push_back(comp);
 
 		name = "Text";
@@ -184,10 +184,10 @@ bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y, GameObject* 
 		// Unity-like
 		AddUIComponent(UI_TYPE::IMAGE, w, h, x, y);
 
-		G_UI* aux = new G_UI(UI_TYPE::TEXT, this, w, h, x, y);
+		G_UI* aux = new G_UI(UI_TYPE::TEXT, this, w, h, 20, h/2);
 		aux->ReParent(this);
 
-		UI_Button* comp = new UI_Button(this, w, h, x, y);
+		UI_Button* comp = new UI_Button(this, x, y, w, h);
 		vComponents.push_back(comp);
 		comp->image = static_cast<UI_Image*>(GetComponentUI(UI_TYPE::IMAGE));
 		comp->displayText = static_cast<UI_Text*>(aux->GetComponentUI(UI_TYPE::TEXT));
@@ -226,7 +226,7 @@ bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y, GameObject* 
 		//AddUIComponent(UI_TYPE::IMAGE);
 		//AddUIComponent(UI_TYPE::TEXT);
 
-		UI_InputBox* comp = new UI_InputBox(this, w, h, x, y);
+		UI_InputBox* comp = new UI_InputBox(this, x, y, w, h);
 		vComponents.push_back(comp);
 		comp->displayText = static_cast<UI_Text*>(aux->GetComponentUI(UI_TYPE::TEXT));
 
@@ -269,7 +269,7 @@ bool G_UI::AddUIComponent(UI_TYPE type, int w, int h, int x, int y, GameObject* 
 		G_UI* aux3 = new G_UI(UI_TYPE::TEXT, this, w, h);
 		aux3->ReParent(this);
 
-		UI_Checkbox* comp = new UI_Checkbox(this, w, h, x, y);
+		UI_Checkbox* comp = new UI_Checkbox(this, x, y, w, h);
 		vComponents.push_back(comp);
 		comp->bgImg = static_cast<UI_Image*>(aux->GetComponentUI(UI_TYPE::IMAGE));
 		comp->cmImg = static_cast<UI_Image*>(aux2->GetComponentUI(UI_TYPE::IMAGE));
