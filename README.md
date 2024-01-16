@@ -131,6 +131,7 @@
 	* Input Box: allows player to input any text when selected :
 		* Input box Game Object holds the logic and has the same states as button
 		* Text Game Object to store the input text (and be able to move it around)
+		* It has the option to put a character limit
 	* Checkbox: composed of multiple Game Objects:
 		* Checkbox as the parent of the rest holds the logic to disable the checkmark and execute a desired function
 		* Text if user wants to put a label to the widget
