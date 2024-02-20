@@ -15,6 +15,7 @@ public:
 
 	void ShowInInspector();
 	void Draw(bool game) override;
+	update_status Update(float dt);
 
 public:
 	C_Material* mat;

@@ -89,6 +89,42 @@ void UI_Text::ShowInInspector()
 		//ImGui::InputText(name.c_str(), &text, ImGuiInputTextFlags_EnterReturnsTrue);
 		ImGui::Dummy(ImVec2(0, 10));
 
+		if (ImGui::Button("change font1"))
+		{
+			//RELEASE(font);
+			font = new Font("Arial.ttf", "PinkyAssets\\Fonts");
+		}
+		if (ImGui::Button("change eglantineVar2"))
+		{
+			//RELEASE(font);
+			font = new Font("eglantineVar2.ttf", "PinkyAssets\\Fonts");
+		}
+		if (ImGui::Button("change comic"))
+		{
+			//RELEASE(font);
+			font = new Font("comic.ttf", "PinkyAssets\\Fonts");
+		}
+		if (ImGui::Button("change times"))
+		{
+			//RELEASE(font);
+			font = new Font("times.ttf", "PinkyAssets\\Fonts");
+		}
+		if (ImGui::Button("change consola"))
+		{
+			//RELEASE(font);
+			font = new Font("consola.ttf", "PinkyAssets\\Fonts");
+		}
+		if (ImGui::Button("change Drawing with markers"))
+		{
+			//RELEASE(font);
+			font = new Font("Drawing with markers.ttf", "PinkyAssets\\Fonts");
+		}
+		if (ImGui::Button("change Cat Paw"))
+		{
+			//RELEASE(font);
+			font = new Font("Cat Paw.otf", "PinkyAssets\\Fonts");
+		}
+
 		ImGui::Text("Font Size");
 		if (ImGui::DragFloat("##FontSize", (fontSize < 0) ? &(fontSize = 0) : &fontSize, 0.1f, 0, 0, "%.1f"))
 		{

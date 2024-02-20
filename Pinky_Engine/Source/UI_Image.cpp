@@ -176,3 +176,8 @@ void UI_Image::Draw(bool game)
 		boundsDrawn = nullptr;
 	}
 }
+
+update_status UI_Image::Update(float dt)
+{
+	return update_status();
+}
