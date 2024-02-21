@@ -116,7 +116,7 @@ std::string ModuleResource::ImportFileToEngine(const char* fileDir)
 	//}
 	//App->parson->CreateFile(tempName, fileExt, fileDir);
 
-	App->fs->DuplicateFile(fileDir, App->scene->project->selectedDir.c_str(), finalPath);
+	App->fs->DuplicateFile(fileDir, App->scene->project->selectedDirFullPath.c_str(), finalPath);
 
 	return filePath;
 }

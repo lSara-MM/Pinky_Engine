@@ -14,11 +14,11 @@ public:
 	~ProjectFiles();
 
 	void ShowWindow();
-	void ShowDir(std::string directory);
+	void ShowDir(std::string directory, std::string dir);
 	void ShowDirectories(std::string directory);
 
 	bool TreeNode(std::string currentDir, ImGuiTreeNodeFlags node_flags, bool finalDir);
-	void DirsMouseEvents(std::string current, std::vector<std::string> files);
+	void DirsMouseEvents(std::string current, std::vector<std::string> files, std::string dir);
 
 	void FilesMouseEvents(std::string currentFile, std::string currentDir);
 
@@ -26,9 +26,9 @@ public:
 
 public:
 	std::string selectedDir;
+	std::string selectedDirFullPath;
 	std::vector<std::string> vSelectedDirFiles;
 
-	std::string selectedFileFullPath;
 	std::string selectedFile;
 };
 
