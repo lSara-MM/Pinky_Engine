@@ -81,7 +81,8 @@ bool ModuleScene::Start()
 {
 	LOG("Starting scene");
 
-	LoadFirstScene();
+	rootNode = new GameObject("Scene", nullptr);
+	//LoadFirstScene();
 
 	return true;
 }
@@ -156,13 +157,13 @@ update_status ModuleScene::PostUpdate(float dt)
 	update_status ret = UPDATE_CONTINUE;
 
 	// TODO: 
-	ImportDefaultScene();
+	//ImportDefaultScene();
 
-	if (street)
+	/*if (street)
 	{
 		rootNode->DeleteChild(rootNode->vChildren[1]);
 		street = false;
-	}
+	}*/
 	return ret;
 }
 
@@ -242,8 +243,6 @@ bool ModuleScene::TabNavigate()
 
 void ModuleScene::LoadFirstScene()
 {
-	rootNode = new GameObject("Scene", nullptr);
-
 	std::array<std::string, 4> components = { "Cube", "Sphere", "Cylinder", "Plane" };
 	for (int i = 0; i < components.size(); i++)
 	{
