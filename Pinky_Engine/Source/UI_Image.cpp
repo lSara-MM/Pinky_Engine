@@ -71,6 +71,15 @@ void UI_Image::ShowInInspector()
 		}
 		ImGui::SetItemTooltip("Use checkered texture");
 
+
+		ImGui::Text("Image Width: %d", width);
+		ImGui::Text("Image Height: %d", height);
+
+		if (ImGui::Button("Set Native Size", ImVec2(110, 30)))
+		{
+			SetNativeSize();
+		}
+
 		if (mat->tex != nullptr)
 		{
 			if (mat->tex->assetsFile != "")
@@ -180,4 +189,10 @@ void UI_Image::Draw(bool game)
 update_status UI_Image::Update(float dt)
 {
 	return update_status();
+}
+
+void UI_Image::SetNativeSize()
+{
+	width = mat->tex->tex_width;
+	height = mat->tex->tex_height;
 }

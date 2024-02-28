@@ -205,7 +205,7 @@ void ModuleInput::HandleInput(SDL_Event event)
 	}
 
 	// Submit and change the corresponding string
-	else if((event.key.keysym.sym == SDLK_RETURN) && !strToChange->empty())
+	else if((event.key.keysym.sym == SDLK_RETURN && event.key.keysym.sym == SDLK_TAB) && !strToChange->empty())
 	{
 		//strToChange->erase(strToChange->length() - 1);
 		getInput_B = false;

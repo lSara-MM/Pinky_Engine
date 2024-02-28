@@ -82,7 +82,7 @@ bool ModuleScene::Start()
 	LOG("Starting scene");
 
 	rootNode = new GameObject("Scene", nullptr);
-	//LoadFirstScene();
+	LoadFirstScene();
 
 	return true;
 }
@@ -157,13 +157,13 @@ update_status ModuleScene::PostUpdate(float dt)
 	update_status ret = UPDATE_CONTINUE;
 
 	// TODO: 
-	//ImportDefaultScene();
+	ImportDefaultScene();
 
-	/*if (street)
+	if (street)
 	{
 		rootNode->DeleteChild(rootNode->vChildren[1]);
 		street = false;
-	}*/
+	}
 	return ret;
 }
 
